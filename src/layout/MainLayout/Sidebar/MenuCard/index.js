@@ -105,14 +105,14 @@ const MenuCard = () => {
                                     variant="subtitle1"
                                     sx={{ color: theme.palette.mode === 'dark' ? theme.palette.dark.light : theme.palette.primary[800] }}
                                 >
-                                    Get Extra Space
+                                    Over 10M Points
                                 </Typography>
                             }
-                            secondary={<Typography variant="caption"> 28/23 GB</Typography>}
+                            secondary={<Typography variant="caption"> for every reporter</Typography>}
                         />
                     </ListItem>
                 </List>
-                <LinearProgressWithLabel value={80} />
+                {/* <LinearProgressWithLabel value={80} /> */}
             </CardContent>
         </CardStyle>
     );

@@ -12,13 +12,13 @@ const icons = { IconBug, IconKey };
 const pages = {
     id: 'pages',
     title: <FormattedMessage id="pages" />,
-    caption: <FormattedMessage id="pages-caption" />,
+    caption: <FormattedMessage id="Dashboard" />,
     icon: icons.IconKey,
     type: 'group',
     children: [
         {
             id: 'maintenance',
-            title: <FormattedMessage id="maintenance" />,
+            title: <FormattedMessage id="maintenancexx" />,
             type: 'collapse',
             icon: icons.IconBug,
             children: [
