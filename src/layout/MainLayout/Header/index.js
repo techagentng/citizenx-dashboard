@@ -94,7 +94,7 @@ const Header = () => {
             </Box> */}
 
             {/* profile */}
-            <ProfileSection sx={{ml:4}} />
+            <ProfileSection />
 
             {/* mobile header */}
             <Box sx={{ display: { xs: 'block', sm: 'none' } }}>

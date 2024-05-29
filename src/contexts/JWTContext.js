@@ -133,7 +133,7 @@ export const JWTProvider = ({ children }) => {
 
     const logout = async () => {
         try {
-            await axios.post('/auth/logout');
+            await axios.post('/logout');
         } catch (error) {
             console.error('Logout error:', error);
         }
