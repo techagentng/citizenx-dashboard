@@ -131,7 +131,12 @@ export const JWTProvider = ({ children }) => {
         window.localStorage.setItem('users', JSON.stringify(users));
     };
 
-    const logout = () => {
+    const logout = async () => {
+        try {
+            await axios.post('/auth/logout');
+        } catch (error) {
+            console.error('Logout error:', error);
+        }
         setSession(null);
         dispatch({ type: LOGOUT });
     };
