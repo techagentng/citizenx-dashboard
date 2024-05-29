@@ -9,9 +9,9 @@ import LogoSection from '../LogoSection';
 import SearchSection from './SearchSection';
 import MobileSection from './MobileSection';
 import ProfileSection from './ProfileSection';
-import FullScreenSection from './FullScreenSection';
-import LocalizationSection from './LocalizationSection';
-import MegaMenuSection from './MegaMenuSection';
+// import FullScreenSection from './FullScreenSection';
+// import LocalizationSection from './LocalizationSection';
+// import MegaMenuSection from './MegaMenuSection';
 import NotificationSection from './NotificationSection';
 
 import { useDispatch, useSelector } from 'store';
@@ -76,25 +76,25 @@ const Header = () => {
             <Box sx={{ flexGrow: 1 }} />
 
             {/* mega-menu */}
-            <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
+            {/* <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
                 <MegaMenuSection />
-            </Box>
+            </Box> */}
 
             {/* live customization & localization */}
-            <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
+            {/* <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
                 <LocalizationSection />
-            </Box>
+            </Box> */}
 
             {/* notification */}
             <NotificationSection />
 
             {/* full sceen toggler */}
-            <Box sx={{ display: { xs: 'none', lg: 'block' } }}>
+            {/* <Box sx={{ display: { xs: 'none', lg: 'block' } }}>
                 <FullScreenSection />
-            </Box>
+            </Box> */}
 
             {/* profile */}
-            <ProfileSection />
+            <ProfileSection sx={{ml:4}} />
 
             {/* mobile header */}
             <Box sx={{ display: { xs: 'block', sm: 'none' } }}>

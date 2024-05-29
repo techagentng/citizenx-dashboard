@@ -37,6 +37,7 @@ import User1 from 'assets/images/users/user-round.svg';
 // assets
 import { IconLogout, IconSettings, IconUser } from '@tabler/icons-react';
 import useConfig from 'hooks/useConfig';
+import { logoutUser } from 'services/userService';
 
 // ==============================|| PROFILE MENU ||============================== //
 
@@ -48,7 +49,7 @@ const ProfileSection = () => {
     // const [sdm, setSdm] = useState(true);
     const [notification, setNotification] = useState(false);
     const [selectedIndex, setSelectedIndex] = useState(-1);
-    const { logout, user } = useAuth();
+    const { user } = useAuth();
     const [open, setOpen] = useState(false);
     /**
      * anchorRef is used on different components and specifying one type leads to other components throwing an error
@@ -56,9 +57,10 @@ const ProfileSection = () => {
     const anchorRef = useRef(null);
     const handleLogout = async () => {
         try {
-            await logout();
+            await logoutUser(); // Call the logoutUser function
+            console.log('Logout successful'); // Log a success message
         } catch (err) {
-            console.error(err);
+            console.error('Logout failed:', err); // Log any errors that occur during logout
         }
     };
 
