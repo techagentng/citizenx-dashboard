@@ -67,7 +67,7 @@ export const JWTProvider = ({ children }) => {
                         type: LOGIN,
                         payload: {
                             isLoggedIn: true,
-                            data
+                            user: data
                         }
                     });
                     console.log('User is logged in and state is set.');
