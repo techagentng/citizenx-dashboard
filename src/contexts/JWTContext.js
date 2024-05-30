@@ -61,13 +61,13 @@ export const JWTProvider = ({ children }) => {
                     console.log('Token is valid.');
                     setSession(serviceToken);
                     const response = await axios.get('/me');
-                    console.log('API response:', response);
-                    const { username } = response.data.data;
+                    const { data } = response.data;
+                    console.log('API response:', data.name);
                     dispatch({
                         type: LOGIN,
                         payload: {
                             isLoggedIn: true,
-                            username
+                            data
                         }
                     });
                     console.log('User is logged in and state is set.');
@@ -90,13 +90,13 @@ export const JWTProvider = ({ children }) => {
 
     const login = async (email, password) => {
         const response = await axios.post('/auth/login', { email, password });
-        const { access_token, refresh_token, username } = response.data.data;
+        const { access_token, refresh_token, user } = response.data;
         setSession(access_token);
         dispatch({
             type: LOGIN,
             payload: {
                 isLoggedIn: true,
-                username
+                user
             }
         });
         localStorage.setItem('refreshToken', refresh_token);
