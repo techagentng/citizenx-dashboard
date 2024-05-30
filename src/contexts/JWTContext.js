@@ -61,13 +61,13 @@ export const JWTProvider = ({ children }) => {
                     console.log('Token is valid.');
                     setSession(serviceToken);
                     const response = await axios.get('/me');
-                    const { data } = response.data;
-                    console.log('API response:', data.name);
+                    const { user } = response.data;
+                    console.log('API response:', user.name);
                     dispatch({
                         type: LOGIN,
                         payload: {
                             isLoggedIn: true,
-                            user: data
+                            user
                         }
                     });
                     console.log('User is logged in and state is set.');
