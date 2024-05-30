@@ -82,19 +82,23 @@ const JWTRegister = ({ ...others }) => {
 
             <Formik
                 initialValues={{
-                    email: '',
-                    password: '',
-                    firstName: '',
-                    lastName: '',
+                    fullName: 'Nnah kenneth',
+                    userName: 'knoi',
+                    telephone: '090887655',
+                    email: 't@gmail.com',
+                    password: 'kenneth1',
                     submit: null
                 }}
                 validationSchema={Yup.object().shape({
+                    fullName: Yup.string().max(255).required('Full Name is required'),
+                    userName: Yup.string().max(255).required('Username is required'),
+                    telephone: Yup.string().max(15).required('Phone number is required'),
                     email: Yup.string().email('Must be a valid email').max(255).required('Email is required'),
                     password: Yup.string().max(255).required('Password is required')
                 })}
                 onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
                     try {
-                        await register(values.email, values.password, values.firstName, values.lastName);
+                        await register(values.fullName, values.userName, values.telephone, values.email, values.password);
                         if (scriptedRef.current) {
                             setStatus({ success: true });
                             setSubmitting(false);
@@ -112,7 +116,7 @@ const JWTRegister = ({ ...others }) => {
 
                             setTimeout(() => {
                                 navigate('/login', { replace: true });
-                            }, 1500);
+                            }, 3);
                         }
                     } catch (err) {
                         console.error(err);
@@ -130,11 +134,11 @@ const JWTRegister = ({ ...others }) => {
                             <Grid item xs={12} sm={6}>
                                 <TextField
                                     fullWidth
-                                    label="First Name"
+                                    label="Full Name"
                                     margin="normal"
-                                    name="firstName"
+                                    name="fullName"
                                     type="text"
-                                    value={values.firstName}
+                                    value={values.fullName}
                                     onBlur={handleBlur}
                                     onChange={handleChange}
                                     sx={{ ...theme.typography.customInput }}
@@ -143,34 +147,55 @@ const JWTRegister = ({ ...others }) => {
                             <Grid item xs={12} sm={6}>
                                 <TextField
                                     fullWidth
-                                    label="Last Name"
+                                    label="User Name"
                                     margin="normal"
-                                    name="lastName"
+                                    name="userName"
                                     type="text"
-                                    value={values.lastName}
+                                    value={values.userName}
                                     onBlur={handleBlur}
                                     onChange={handleChange}
                                     sx={{ ...theme.typography.customInput }}
                                 />
                             </Grid>
                         </Grid>
-                        <FormControl fullWidth error={Boolean(touched.email && errors.email)} sx={{ ...theme.typography.customInput }}>
-                            <InputLabel htmlFor="outlined-adornment-email-register">Email Address / Username</InputLabel>
-                            <OutlinedInput
-                                id="outlined-adornment-email-register"
-                                type="email"
-                                value={values.email}
-                                name="email"
-                                onBlur={handleBlur}
-                                onChange={handleChange}
-                                inputProps={{}}
-                            />
-                            {touched.email && errors.email && (
-                                <FormHelperText error id="standard-weight-helper-text--register">
-                                    {errors.email}
-                                </FormHelperText>
-                            )}
-                        </FormControl>
+                        <Grid container spacing={matchDownSM ? 0 : 2}>
+                            <Grid item xs={12} sm={6}>
+                                <TextField
+                                    fullWidth
+                                    label="Telephone"
+                                    margin="normal"
+                                    name="telephone"
+                                    type="text"
+                                    value={values.telephone}
+                                    onBlur={handleBlur}
+                                    onChange={handleChange}
+                                    sx={{ ...theme.typography.customInput }}
+                                />
+                            </Grid>
+                            <Grid item xs={12} sm={6}>
+                                <FormControl
+                                    fullWidth
+                                    error={Boolean(touched.email && errors.email)}
+                                    sx={{ ...theme.typography.customInput }}
+                                >
+                                    <InputLabel htmlFor="outlined-adornment-email">Email Address</InputLabel>
+                                    <OutlinedInput
+                                        id="outlined-adornment-email"
+                                        type="email"
+                                        value={values.email}
+                                        name="email"
+                                        onBlur={handleBlur}
+                                        onChange={handleChange}
+                                        label="Email Address"
+                                    />
+                                    {touched.email && errors.email && (
+                                        <FormHelperText error id="standard-weight-helper-text-email">
+                                            {errors.email}
+                                        </FormHelperText>
+                                    )}
+                                </FormControl>
+                            </Grid>
+                        </Grid>
 
                         <FormControl
                             fullWidth

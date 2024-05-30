@@ -48,8 +48,13 @@ const ProfileSection = () => {
     // const [sdm, setSdm] = useState(true);
     const [notification, setNotification] = useState(false);
     const [selectedIndex, setSelectedIndex] = useState(-1);
-    const { logout, data } = useAuth();
+    const { logout, user } = useAuth();
     const [open, setOpen] = useState(false);
+
+    useEffect(() => {
+        console.log('User data:', user);
+    }, [user]);
+    console.log('useauth xxxxxxxxxxxxxxxxx', user);
     /**
      * anchorRef is used on different components and specifying one type leads to other components throwing an error
      * */
@@ -162,10 +167,10 @@ const ProfileSection = () => {
                                                 <Stack direction="row" spacing={0.5} alignItems="center">
                                                     <Typography variant="h4">Good Morning,</Typography>
                                                     <Typography component="span" variant="h4" sx={{ fontWeight: 400 }}>
-                                                        {data?.name}
+                                                        {user?.name}
                                                     </Typography>
                                                 </Stack>
-                                                <Typography variant="subtitle2">{data?.email}</Typography>
+                                                <Typography variant="subtitle2">{user?.email}</Typography>
                                             </Stack>
                                             {/* <OutlinedInput
                                                 sx={{ width: '100%', pr: 1, pl: 2, my: 2 }}

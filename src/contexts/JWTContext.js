@@ -2,8 +2,8 @@ import PropTypes from 'prop-types';
 import { createContext, useEffect, useReducer } from 'react';
 
 // third-party
-import { Chance } from 'chance';
-import jwtDecode from 'jwt-decode';
+// import { Chance } from 'chance';
+// import jwtDecode from 'jwt-decode';
 
 // reducer - state management
 import { LOGIN, LOGOUT } from 'store/actions';
@@ -13,7 +13,7 @@ import accountReducer from 'store/accountReducer';
 import Loader from 'ui-component/Loader';
 import axios from 'utils/axios';
 
-const chance = new Chance();
+// const chance = new Chance();
 
 // constant
 const initialState = {
@@ -22,28 +22,24 @@ const initialState = {
     user: null
 };
 
-const verifyToken = (serviceToken) => {
-    if (!serviceToken) {
-        return false;
-    }
-    try {
-        const decoded = jwtDecode(serviceToken);
-        return decoded.exp > Date.now() / 1000;
-    } catch (error) {
-        console.error('Token verification error:', error);
-        return false;
-    }
-};
+// const verifyToken = (serviceToken) => {
+//     if (!serviceToken) {
+//         return false;
+//     }
+//     const decoded = jwtDecode(serviceToken);
+//     /**
+//      * Property 'exp' does not exist on type '<T = unknown>(token, options?: JwtDecodeOptions | undefined) => T'.
+//      */
+//     return decoded.exp > Date.now() / 1000;
+// };
 
 const setSession = (serviceToken) => {
     if (serviceToken) {
         localStorage.setItem('serviceToken', serviceToken);
         axios.defaults.headers.common.Authorization = `Bearer ${serviceToken}`;
-        console.log('Token set in Local Storage:', localStorage.getItem('serviceToken')); // Log the token after setting it
     } else {
         localStorage.removeItem('serviceToken');
         delete axios.defaults.headers.common.Authorization;
-        console.log('Token removed from Local Storage');
     }
 };
 
@@ -57,29 +53,21 @@ export const JWTProvider = ({ children }) => {
         const init = async () => {
             try {
                 const serviceToken = window.localStorage.getItem('serviceToken');
-                console.log('Service Token from Local Storage on Init:', serviceToken);
-                if (serviceToken && verifyToken(serviceToken)) {
-                    console.log('Token is valid.');
+                if (serviceToken) {
                     setSession(serviceToken);
                     const response = await axios.get('/me');
-                    const { user } = response.data;
-                    console.log('API response:', user);
+                    const { data } = response.data;
                     dispatch({
                         type: LOGIN,
-                        payload: {
-                            isLoggedIn: true,
-                            user
-                        }
+                        payload: { user: data }
                     });
-                    console.log('User is logged in and state is set.');
                 } else {
-                    console.log('Token is invalid or missing. Logging out.');
                     dispatch({
                         type: LOGOUT
                     });
                 }
             } catch (err) {
-                console.error('Initialization error:', err);
+                console.error(err);
                 dispatch({
                     type: LOGOUT
                 });
@@ -90,51 +78,40 @@ export const JWTProvider = ({ children }) => {
     }, []);
 
     const login = async (email, password) => {
-        try {
-            const response = await axios.post('/auth/login', { email, password });
-            const { access_token, refresh_token, user } = response.data.data;
-            setSession(access_token);
-            console.log("accessTxxxxxxxxxxxxxxxxxxxxxxxx", access_token)
-            dispatch({
-                type: LOGIN,
-                payload: {
-                    isLoggedIn: true,
-                    user
-                }
-            });
-            localStorage.setItem('refreshToken', refresh_token);
-            console.log('Service Token in Local Storage after Login:', localStorage.getItem('serviceToken')); // Verify storage
-        } catch (error) {
-            console.error('Login error:', error);
-        }
+        const response = await axios.post('/auth/login', { email, password });
+        const { access_token, data } = response.data.data;
+        setSession(access_token);
+        dispatch({
+            type: LOGIN,
+            payload: {
+                isLoggedIn: true,
+                data
+            }
+        });
     };
 
-    const register = async (email, password, firstName, lastName) => {
-        // todo: this flow need to be recode as it not verified
-        const id = chance.bb_pin();
-        const response = await axios.post('/auth/signup', {
-            id,
-            email,
-            password,
-            firstName,
-            lastName
-        });
-        let users = response.data;
+    const register = async (fullName, userName, telephone, email, password) => {
+        try {
+            const response = await axios.post('/auth/signup', {
+                fullName,
+                userName,
+                telephone,
+                email,
+                password
+            });
+            console.log('Registration response:', response);
+            let user = response.data.data; // Correctly access the nested data
 
-        if (window.localStorage.getItem('users') !== undefined && window.localStorage.getItem('users') !== null) {
-            const localUsers = window.localStorage.getItem('users');
-            users = [
-                ...JSON.parse(localUsers),
-                {
-                    id,
-                    email,
-                    password,
-                    name: `${firstName} ${lastName}`
-                }
-            ];
+            if (window.localStorage.getItem('users')) {
+                let storedUsers = JSON.parse(window.localStorage.getItem('users'));
+                storedUsers.push(user);
+                window.localStorage.setItem('users', JSON.stringify(storedUsers));
+            } else {
+                window.localStorage.setItem('users', JSON.stringify([user]));
+            }
+        } catch (error) {
+            console.error('Registration error:', error);
         }
-
-        window.localStorage.setItem('users', JSON.stringify(users));
     };
 
     const logout = async () => {
