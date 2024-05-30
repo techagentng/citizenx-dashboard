@@ -11,7 +11,7 @@ import PopularCard from './PopularCard';
 // import TotalOrderLineChartCard from './TotalOrderLineChartCard';
 // import TotalIncomeDarkCard from './TotalIncomeDarkCard';
 // import TotalIncomeLightCard from './TotalIncomeLightCard';
-import TotalGrowthBarChart from './TotalGrowthBarChart';
+// import TotalGrowthBarChart from './TotalGrowthBarChart';
 import { gridSpacing } from 'store/constant';
 
 // ==============================|| SAMPLE PAGE ||============================== //
@@ -37,7 +37,7 @@ const SamplePage = ({ isLoading }) => (
         <MainCard>
             <Grid container spacing={gridSpacing}>
                 <Grid item xs={12} md={10}>
-                    <TotalGrowthBarChart isLoading={isLoading} />
+                    {/* <TotalGrowthBarChart isLoading={isLoading} /> */}
                 </Grid>
                 <Grid item xs={12} md={2}>
                     <PopularCard isLoading={isLoading} />

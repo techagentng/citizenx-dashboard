@@ -7,9 +7,10 @@ import NavMotion from 'layout/NavMotion';
 import Loadable from 'ui-component/Loadable';
 
 // login routing
-const AuthLogin = Loadable(lazy(() => import('views/pages/authentication/Login3')));
+// const AuthLogin = Loadable(lazy(() => import('views/pages/authentication/Login3')));
 const AuthRegister = Loadable(lazy(() => import('views/pages/authentication/Register3')));
 const AuthForgotPassword = Loadable(lazy(() => import('views/pages/authentication/ForgotPassword3')));
+const SamplePage = Loadable(lazy(() => import('views/sample-page')));
 
 // ==============================|| AUTH ROUTING ||============================== //
 
@@ -25,11 +26,11 @@ const LoginRoutes = {
     children: [
         {
             path: '/',
-            element: <AuthLogin />
+            element: <SamplePage />
         },
         {
             path: '/login',
-            element: <AuthLogin />
+            element: <SamplePage />
         },
         {
             path: '/register',

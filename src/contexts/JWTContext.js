@@ -43,6 +43,7 @@ const setSession = (serviceToken) => {
     } else {
         localStorage.removeItem('serviceToken');
         delete axios.defaults.headers.common.Authorization;
+        console.log('Token removed from Local Storage');
     }
 };
 
@@ -62,7 +63,7 @@ export const JWTProvider = ({ children }) => {
                     setSession(serviceToken);
                     const response = await axios.get('/me');
                     const { user } = response.data;
-                    console.log('API response:', user.name);
+                    console.log('API response:', user);
                     dispatch({
                         type: LOGIN,
                         payload: {
@@ -89,18 +90,23 @@ export const JWTProvider = ({ children }) => {
     }, []);
 
     const login = async (email, password) => {
-        const response = await axios.post('/auth/login', { email, password });
-        const { access_token, refresh_token, user } = response.data;
-        setSession(access_token);
-        dispatch({
-            type: LOGIN,
-            payload: {
-                isLoggedIn: true,
-                user
-            }
-        });
-        localStorage.setItem('refreshToken', refresh_token);
-        console.log('Service Token in Local Storage:', localStorage.getItem('serviceToken')); // Verify storage
+        try {
+            const response = await axios.post('/auth/login', { email, password });
+            const { access_token, refresh_token, user } = response.data.data;
+            setSession(access_token);
+            console.log("accessTxxxxxxxxxxxxxxxxxxxxxxxx", access_token)
+            dispatch({
+                type: LOGIN,
+                payload: {
+                    isLoggedIn: true,
+                    user
+                }
+            });
+            localStorage.setItem('refreshToken', refresh_token);
+            console.log('Service Token in Local Storage after Login:', localStorage.getItem('serviceToken')); // Verify storage
+        } catch (error) {
+            console.error('Login error:', error);
+        }
     };
 
     const register = async (email, password, firstName, lastName) => {
