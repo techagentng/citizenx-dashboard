@@ -100,7 +100,8 @@ export const JWTProvider = ({ children }) => {
                 password
             });
             console.log('Registration response:', response);
-            let user = response.data.data; // Correctly access the nested data
+
+            let user = response.data.data;
 
             if (window.localStorage.getItem('users')) {
                 let storedUsers = JSON.parse(window.localStorage.getItem('users'));
@@ -109,8 +110,11 @@ export const JWTProvider = ({ children }) => {
             } else {
                 window.localStorage.setItem('users', JSON.stringify([user]));
             }
+
+            return response; // Return the entire response
         } catch (error) {
-            console.error('Registration error:', error.errors);
+            console.error('Registration error:', error);
+            throw error; // Throw the error to be caught by the caller
         }
     };
 
