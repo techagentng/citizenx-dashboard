@@ -13,6 +13,7 @@ import PopularCard from './PopularCard';
 // import TotalIncomeLightCard from './TotalIncomeLightCard';
 // import TotalGrowthBarChart from './TotalGrowthBarChart';
 import { gridSpacing } from 'store/constant';
+// import MarkersPopups from 'ui-component/third-party/map/';
 
 // ==============================|| SAMPLE PAGE ||============================== //
 
@@ -38,6 +39,13 @@ const SamplePage = ({ isLoading }) => (
             <Grid container spacing={gridSpacing}>
                 <Grid item xs={12} md={10}>
                     {/* <TotalGrowthBarChart isLoading={isLoading} /> */}
+                    {/* <MainCard title="Markers & Popups">
+                        <MarkersPopups
+                            {...mapConfiguration}
+                            data={countries}
+                            mapStyle={theme.palette.mode === 'dark' ? MAPBOX_THEMES.dark : MAPBOX_THEMES.light}
+                        />
+                    </MainCard> */}
                 </Grid>
                 <Grid item xs={12} md={2}>
                     <PopularCard isLoading={isLoading} />

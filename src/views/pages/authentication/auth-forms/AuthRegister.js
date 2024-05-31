@@ -102,9 +102,9 @@ const JWTRegister = ({ ...others }) => {
                         console.log('Response receivedREG:', response);
 
                         if (scriptedRef.current) {
-                            if (response && response.errors) {
+                            if (errors) {
                                 // If there are errors in the response, set them and mark registration as unsuccessful
-                                setErrors({ submit: response.errors });
+                                setErrors({ submit: errors });
                                 setStatus({ success: false });
                                 setSubmitting(false);
                             } else {
@@ -119,7 +119,7 @@ const JWTRegister = ({ ...others }) => {
                                         alert: {
                                             color: 'success'
                                         },
-                                        close: false // Changed to true to close the snackbar automatically after showing success message
+                                        close: true // Automatically close the snackbar
                                     })
                                 );
                                 setTimeout(() => {
@@ -128,17 +128,22 @@ const JWTRegister = ({ ...others }) => {
                             }
                         }
                     } catch (err) {
-                        console.error('Registration errorxxxxxxxxx:', err.errors);
+                        console.error('Registration error:', err);
+
                         if (scriptedRef.current) {
                             // Check if the error is an Axios error with a response
-                            if (err.errors) {
-                                console.log('this happened');
+                            if (err.response && err.response.data && err.response.data.errors) {
                                 // Set the errors received from the server
+                                setErrors({ submit: err.response.data.errors });
+                            } else if (err.errors) {
+                                // Handle case where errors are in a different format
                                 setErrors({ submit: err.errors });
+                            } else {
+                                // Handle other types of errors
+                                setStatus({ success: true });
+                                navigate('/login', { replace: true });
                             }
-                            // Handle other types of errors
-                            setErrors({ submit: 'An unexpected error occurred222' });
-                            navigate('/login', { replace: true });
+
                             setStatus({ success: false });
                             setSubmitting(false);
                         }
