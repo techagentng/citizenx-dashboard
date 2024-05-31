@@ -121,8 +121,12 @@ const JWTRegister = ({ ...others }) => {
                     } catch (err) {
                         console.error(err);
                         if (scriptedRef.current) {
+                            if (err.response && err.response.data && err.response.data.errors) {
+                                setErrors(err.response.data.errors);
+                            } else {
+                                setErrors({ submit: 'An unexpected error occurred' });
+                            }
                             setStatus({ success: false });
-                            setErrors({ submit: err.message });
                             setSubmitting(false);
                         }
                     }
@@ -142,6 +146,8 @@ const JWTRegister = ({ ...others }) => {
                                     onBlur={handleBlur}
                                     onChange={handleChange}
                                     sx={{ ...theme.typography.customInput }}
+                                    error={Boolean(touched.fullName && errors.fullName)}
+                                    helperText={touched.fullName && errors.fullName}
                                 />
                             </Grid>
                             <Grid item xs={12} sm={6}>
@@ -155,6 +161,8 @@ const JWTRegister = ({ ...others }) => {
                                     onBlur={handleBlur}
                                     onChange={handleChange}
                                     sx={{ ...theme.typography.customInput }}
+                                    error={Boolean(touched.userName && errors.userName)}
+                                    helperText={touched.userName && errors.userName}
                                 />
                             </Grid>
                         </Grid>
@@ -170,6 +178,8 @@ const JWTRegister = ({ ...others }) => {
                                     onBlur={handleBlur}
                                     onChange={handleChange}
                                     sx={{ ...theme.typography.customInput }}
+                                    error={Boolean(touched.userName && errors.userName)}
+                                    helperText={touched.userName && errors.userName}
                                 />
                             </Grid>
                             <Grid item xs={12} sm={6}>
