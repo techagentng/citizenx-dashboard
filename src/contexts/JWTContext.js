@@ -88,6 +88,7 @@ export const JWTProvider = ({ children }) => {
                 data
             }
         });
+        return response;
     };
 
     const register = async (fullName, userName, telephone, email, password) => {
