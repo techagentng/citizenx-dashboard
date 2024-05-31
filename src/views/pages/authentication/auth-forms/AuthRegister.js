@@ -98,36 +98,68 @@ const JWTRegister = ({ ...others }) => {
                 })}
                 onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
                     try {
-                        await register(values.fullName, values.userName, values.telephone, values.email, values.password);
+                        const response = await register(values.fullName, values.userName, values.telephone, values.email, values.password);
                         if (scriptedRef.current) {
-                            setStatus({ success: true });
-                            setSubmitting(false);
-                            dispatch(
-                                openSnackbar({
-                                    open: true,
-                                    message: 'Your registration has been successfully completed.',
-                                    variant: 'alert',
-                                    alert: {
-                                        color: 'success'
-                                    },
-                                    close: false
-                                })
-                            );
-
-                            setTimeout(() => {
-                                navigate('/login', { replace: true });
-                            }, 3);
+                            if (response.data.errors) {
+                                // If there are errors in the response, set them and mark registration as unsuccessful
+                                setErrors({ submit: response.data.errors });
+                                setStatus({ success: false });
+                                setSubmitting(false);
+                            } else {
+                                // If no errors, display success message and redirect
+                                setStatus({ success: true });
+                                setSubmitting(false);
+                                dispatch(
+                                    openSnackbar({
+                                        open: true,
+                                        message: 'Your registration has been successfully completed.',
+                                        variant: 'alert',
+                                        alert: {
+                                            color: 'success'
+                                        },
+                                        close: true // Changed to true to close the snackbar automatically after showing success message
+                                    })
+                                );
+                                setTimeout(() => {
+                                    navigate('/login', { replace: true });
+                                }, 3000);
+                            }
                         }
                     } catch (err) {
-                        console.error(err);
+                        console.error('Registration error:', err);
+
                         if (scriptedRef.current) {
-                            if (err.response && err.response.data && err.response.data.errors) {
-                                setErrors(err.response.data.errors);
+                            // Check if the error is an Axios error with a response
+                            if (err.response) {
+                                const { data, errors, message, status } = err;
+
+                                // Now you have access to individual fields
+                                console.log('Data:', data);
+                                console.log('Errors:', errors);
+                                console.log('Message:', message);
+                                console.log('Status:', status);
+
+                                // Use the extracted fields as needed
+                                if (errors) {
+                                    setErrors({ submit: errors });
+                                } else {
+                                    setErrors({ submit: 'An unexpected error occurred' });
+                                }
+                                setStatus({ success: false });
+                                setSubmitting(false);
+                            } else if (err.request) {
+                                // The request was made but no response was received
+                                console.log('No response received:', err.request);
+                                setErrors({ submit: 'No response from server. Please try again later.' });
+                                setStatus({ success: false });
+                                setSubmitting(false);
                             } else {
-                                setErrors({ submit: 'An unexpected error occurred' });
+                                // Something happened in setting up the request that triggered an Error
+                                console.log('Error in setting up request:', err.message);
+                                setErrors({ submit: 'An unexpected error occurred.' });
+                                setStatus({ success: false });
+                                setSubmitting(false);
                             }
-                            setStatus({ success: false });
-                            setSubmitting(false);
                         }
                     }
                 }}

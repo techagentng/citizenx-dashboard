@@ -110,7 +110,7 @@ export const JWTProvider = ({ children }) => {
                 window.localStorage.setItem('users', JSON.stringify([user]));
             }
         } catch (error) {
-            console.error('Registration error:', error);
+            console.error('Registration error:', error.errors);
         }
     };
 
