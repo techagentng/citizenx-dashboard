@@ -1,11 +1,12 @@
 // import other from './other';
 // import pages from './pages';
-import samplePage from './sample-page';
+import dashboard from './dashboard';
+import settings from './settings';
 
 // ==============================|| MENU ITEMS ||============================== //
 
 const menuItems = {
-    items: [samplePage]
+    items: [dashboard, settings]
 };
 
 export default menuItems;

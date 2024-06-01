@@ -9,6 +9,7 @@ import { linearProgressClasses } from '@mui/material/LinearProgress';
 // assets
 import TableChartOutlinedIcon from '@mui/icons-material/TableChartOutlined';
 
+
 // styles
 const BorderLinearProgress = styled(LinearProgress)(({ theme }) => ({
     height: 10,
@@ -108,7 +109,7 @@ const MenuCard = () => {
                                     Over 10M Points
                                 </Typography>
                             }
-                            secondary={<Typography variant="caption"> for every reporter</Typography>}
+                            secondary={<Typography variant="caption"> for graps daily</Typography>}
                         />
                     </ListItem>
                 </List>

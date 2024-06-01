@@ -48,12 +48,18 @@ const ProfileSection = () => {
     // const [sdm, setSdm] = useState(true);
     const [notification, setNotification] = useState(false);
     const [selectedIndex, setSelectedIndex] = useState(-1);
-    const { logout, user } = useAuth();
+    const { logout } = useAuth();
+    const [user, setUser] = useState(null);
     const [open, setOpen] = useState(false);
 
     useEffect(() => {
-        console.log('User data:', user);
-    }, [user]);
+        console.log('User data:', user?.name);
+        const userData = localStorage.getItem('user');
+        if (userData) {
+            // Parse the JSON string back to an object
+            setUser(JSON.parse(userData));
+        }
+    }, []);
     console.log('useauth xxxxxxxxxxxxxxxxx', user);
     /**
      * anchorRef is used on different components and specifying one type leads to other components throwing an error
