@@ -7,7 +7,7 @@ import Loadable from 'ui-component/Loadable';
 
 // sample page routing
 const Dashboard = Loadable(lazy(() => import('views/dashboard')));
-const AppMap = Loadable(lazy(() => import('views/application/map')));
+const Settings = Loadable(lazy(() => import('views/dashboard/Profile')));
 const Reports = Loadable(lazy(() => import('views/reports')));
 // ==============================|| MAIN ROUTING ||============================== //
 
@@ -28,12 +28,12 @@ const MainRoutes = {
             element: <Dashboard />
         },
         {
-            path: '/settings',
-            element: <AppMap />
-        },
-        {
             path: '/reports',
             element: <Reports />
+        },
+        {
+            path: '/settings',
+            element: <Settings />
         }
     ]
 };

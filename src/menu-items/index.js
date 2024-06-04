@@ -7,7 +7,7 @@ import reports from './reports';
 // ==============================|| MENU ITEMS ||============================== //
 
 const menuItems = {
-    items: [dashboard, settings, reports]
+    items: [dashboard, reports, settings]
 };
 
 export default menuItems;
