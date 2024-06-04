@@ -59,8 +59,8 @@ const ProfileSection = () => {
             // Parse the JSON string back to an object
             setUser(JSON.parse(userData));
         }
-    }, []);
-    console.log('useauth xxxxxxxxxxxxxxxxx', user);
+    }, [user?.name]);
+
     /**
      * anchorRef is used on different components and specifying one type leads to other components throwing an error
      * */

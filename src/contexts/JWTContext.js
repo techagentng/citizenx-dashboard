@@ -56,8 +56,13 @@ export const JWTProvider = ({ children }) => {
                 if (serviceToken) {
                     setSession(serviceToken);
                     const response = await axios.get('/me');
+                    const isOnLine = await axios.get('/user/is_online');
+
+                    const { valid } = isOnLine.data;
                     const { data } = response.data;
                     localStorage.setItem('user', JSON.stringify(data));
+                    localStorage.setItem('online', JSON.stringify(valid));
+
                     dispatch({
                         type: LOGIN,
                         payload: { user: data }

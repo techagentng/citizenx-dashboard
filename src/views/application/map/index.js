@@ -1,140 +1,35 @@
-// // material-ui
-// import { useTheme } from '@mui/material/styles';
-// import { Grid } from '@mui/material';
+// src/NigeriaMap.js
 
-// // project-import
-// import MainCard from 'ui-component/cards/MainCard';
-// import MapContainerStyled from 'ui-component/third-party/map/MapContainerStyled';
+import React from 'react';
+import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
+import 'leaflet/dist/leaflet.css';
+import L from 'leaflet';
 
-// import ClustersMap from './maps/clusters-map';
-// import ChangeTheme from './maps/change-theme';
-// import DraggableMarker from './maps/draggable-marker';
-// import GeoJSONAnimation from './maps/GeoJSONAnimation';
-// import Heatmap from './maps/heatmap';
-// import HighlightByFilter from './maps/HighlightByFilter';
-// import InteractionMap from './maps/interaction-map';
-// import MarkersPopups from './maps/MarkersPopups';
-// import SideBySide from './maps/side-by-side';
-// import ViewportAnimation from './maps/viewport-animation';
+// Fix the default icon issue
+delete L.Icon.Default.prototype._getIconUrl;
 
-// import { cities, countries } from 'data/location';
+L.Icon.Default.mergeOptions({
+  iconRetinaUrl: require('leaflet/dist/images/marker-icon-2x.png').default,
+  iconUrl: require('leaflet/dist/images/marker-icon.png').default,
+  shadowUrl: require('leaflet/dist/images/marker-shadow.png').default,
+});
 
-// const MAPBOX_THEMES = {
-//     light: 'mapbox://styles/mapbox/light-v10',
-//     dark: 'mapbox://styles/mapbox/dark-v10',
-//     streets: 'mapbox://styles/mapbox/streets-v11',
-//     outdoors: 'mapbox://styles/mapbox/outdoors-v11',
-//     satellite: 'mapbox://styles/mapbox/satellite-v9',
-//     satelliteStreets: 'mapbox://styles/mapbox/satellite-streets-v11'
-// };
+const NigeriaMap = () => {
+  const nigeriaPosition = [9.0820, 8.6753]; // Latitude and Longitude for Nigeria
 
-// const mapConfiguration = {
-//     mapboxAccessToken: process.env.REACT_APP_MAPBOX_ACCESS_TOKEN,
-//     minZoom: 1
-// };
+  return (
+    <MapContainer center={nigeriaPosition} zoom={6} style={{ height: '100vh', width: '100%' }}>
+      <TileLayer
+        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+      />
+      <Marker position={nigeriaPosition}>
+        <Popup>
+          Nigeria
+        </Popup>
+      </Marker>
+    </MapContainer>
+  );
+};
 
-// // ==============================|| MAP ||============================== //
-
-// const Map = () => {
-//     const theme = useTheme();
-
-//     return (
-//         <Grid container spacing={3}>
-//             <Grid item xs={12}>
-//                 <MainCard title="Theme Variants">
-//                     <MapContainerStyled>
-//                         <ChangeTheme {...mapConfiguration} themes={MAPBOX_THEMES} />
-//                     </MapContainerStyled>
-//                 </MainCard>
-//             </Grid>
-//             <Grid item xs={12} md={6}>
-//                 <MainCard title="Markers & Popups">
-//                     <MapContainerStyled>
-//                         <MarkersPopups
-//                             {...mapConfiguration}
-//                             data={countries}
-//                             mapStyle={theme.palette.mode === 'dark' ? MAPBOX_THEMES.dark : MAPBOX_THEMES.light}
-//                         />
-//                     </MapContainerStyled>
-//                 </MainCard>
-//             </Grid>
-//             <Grid item xs={12} md={6}>
-//                 <MainCard title="Draggable Marker">
-//                     <MapContainerStyled>
-//                         <DraggableMarker
-//                             {...mapConfiguration}
-//                             mapStyle={theme.palette.mode === 'dark' ? MAPBOX_THEMES.dark : MAPBOX_THEMES.light}
-//                         />
-//                     </MapContainerStyled>
-//                 </MainCard>
-//             </Grid>
-//             <Grid item xs={12}>
-//                 <MainCard title="Geo JSON Animation">
-//                     <MapContainerStyled>
-//                         <GeoJSONAnimation {...mapConfiguration} mapStyle={MAPBOX_THEMES.satelliteStreets} />
-//                     </MapContainerStyled>
-//                 </MainCard>
-//             </Grid>
-//             <Grid item xs={12}>
-//                 <MainCard title="Clusters">
-//                     <MapContainerStyled>
-//                         <ClustersMap
-//                             {...mapConfiguration}
-//                             mapStyle={theme.palette.mode === 'dark' ? MAPBOX_THEMES.dark : MAPBOX_THEMES.light}
-//                         />
-//                     </MapContainerStyled>
-//                 </MainCard>
-//             </Grid>
-//             <Grid item xs={12}>
-//                 <MainCard title="Interaction">
-//                     <MapContainerStyled>
-//                         <InteractionMap
-//                             {...mapConfiguration}
-//                             mapStyle={theme.palette.mode === 'dark' ? MAPBOX_THEMES.dark : MAPBOX_THEMES.light}
-//                         />
-//                     </MapContainerStyled>
-//                 </MainCard>
-//             </Grid>
-//             <Grid item xs={12}>
-//                 <MainCard title="Viewport Animation">
-//                     <MapContainerStyled>
-//                         <ViewportAnimation
-//                             {...mapConfiguration}
-//                             data={cities.filter((city) => city.state === 'Gujarat')}
-//                             mapStyle={MAPBOX_THEMES.outdoors}
-//                         />
-//                     </MapContainerStyled>
-//                 </MainCard>
-//             </Grid>
-//             <Grid item xs={12} md={6}>
-//                 <MainCard title="Highlight By Filter">
-//                     <MapContainerStyled>
-//                         <HighlightByFilter
-//                             {...mapConfiguration}
-//                             mapStyle={theme.palette.mode === 'dark' ? MAPBOX_THEMES.dark : MAPBOX_THEMES.light}
-//                         />
-//                     </MapContainerStyled>
-//                 </MainCard>
-//             </Grid>
-//             <Grid item xs={12} md={6}>
-//                 <MainCard title="Heatmap">
-//                     <MapContainerStyled>
-//                         <Heatmap
-//                             {...mapConfiguration}
-//                             mapStyle={theme.palette.mode === 'dark' ? MAPBOX_THEMES.dark : MAPBOX_THEMES.light}
-//                         />
-//                     </MapContainerStyled>
-//                 </MainCard>
-//             </Grid>
-//             <Grid item xs={12}>
-//                 <MainCard title="Side By Side">
-//                     <MapContainerStyled>
-//                         <SideBySide {...mapConfiguration} />
-//                     </MapContainerStyled>
-//                 </MainCard>
-//             </Grid>
-//         </Grid>
-//     );
-// };
-
-// export default Map;
+export default NigeriaMap;

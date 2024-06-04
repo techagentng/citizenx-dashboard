@@ -4,21 +4,19 @@
 import { FormattedMessage } from 'react-intl';
 
 // assets
-// import { IconHome } from '@tabler/icons-react';
-import { IconSettings } from '@tabler/icons-react';
-
+import { IconReport } from '@tabler/icons-react';
 
 // ==============================|| MENU ITEMS - SAMPLE PAGE ||============================== //
 
 const icons = {
-    IconSettings
+    IconReport
 };
-const settings = {
-    id: 'settings',
-    title: <FormattedMessage id="Settings" />,
-    icon: icons.IconSettings,
+const reportPage = {
+    id: 'reports',
+    title: <FormattedMessage id="Reports" />,
+    icon: icons.IconReport,
     type: 'group',
-    url: '/settings'
+    url: '/reports'
 };
 
-export default settings;
+export default reportPage;
