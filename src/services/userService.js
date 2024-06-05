@@ -52,22 +52,26 @@ export const getAllReportsToday = () => {
     });
 };
 
-export const getOlineUser = () => {
+export const getOnlineUsers = () => {
     return new Promise((resolve, reject) => {
+        const serviceToken = localStorage.getItem('serviceToken');
+        console.log('getOnlineUsers called'); // Log when function is called
         axios
-            .get(`${process.env.REACT_APP_API_URL}/user/is_online`, {
+            .get(`${process.env.REACT_APP_API_URL}/users/online`, {
                 headers: {
                     Authorization: `Bearer ${serviceToken}`
                 }
             })
             .then((response) => {
+                console.log('API response:', response.data); // Log the entire response data
                 if (response) {
-                    resolve(response.data.data);
+                    resolve(response.data.data);  // Extract the count from the data property
                 } else {
                     reject(new Error('No data found'));
                 }
             })
             .catch((error) => {
+                console.log('API error:', error); // Log any errors
                 reject(error);
             });
     });
