@@ -1,6 +1,6 @@
 import LAYOUT_CONST from 'constant';
 
-export const DASHBOARD_PATH = '/';
+export const DASHBOARD_PATH = '/dashboard';
 export const HORIZONTAL_MAX_ITEM = 7;
 
 const config = {
