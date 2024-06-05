@@ -10,7 +10,6 @@ import {
     Grid,
     IconButton,
     InputAdornment,
-    Rating,
     Table,
     TableBody,
     TableCell,
@@ -27,9 +26,8 @@ import {
 import { visuallyHidden } from '@mui/utils';
 
 // project imports
-import ReviewEdit from './ReviewEdit';
 import MainCard from 'ui-component/cards/MainCard';
-import Chip from 'ui-component/extended/Chip';
+// import Chip from 'ui-component/extended/Chip';
 import { useDispatch, useSelector } from 'store';
 import { getProductReviews } from 'store/slices/customer';
 
@@ -68,46 +66,15 @@ function stableSort(array, comparator) {
 
 // table header options
 const headCells = [
-    {
-        id: 'name',
-        numeric: false,
-        label: 'Product Name',
-        align: 'left'
-    },
-    {
-        id: 'author',
-        numeric: true,
-        label: 'Author',
-        align: 'left'
-    },
-    {
-        id: 'review',
-        numeric: true,
-        label: 'Review',
-        align: 'left'
-    },
-    {
-        id: 'rating',
-        numeric: true,
-        label: 'Rating',
-        align: 'center'
-    },
-    {
-        id: 'date',
-        numeric: true,
-        label: 'Date',
-        align: 'center'
-    },
-    {
-        id: 'status',
-        numeric: false,
-        label: 'Status',
-        align: 'center'
-    }
+    { id: 'id', numeric: false, label: 'Report ID', align: 'left' },
+    { id: 'fullname', numeric: false, label: 'Full Name', align: 'left' },
+    { id: 'date_of_incidence', numeric: false, label: 'Date of Incidence', align: 'left' },
+    { id: 'report_type', numeric: false, label: 'Report Type', align: 'left' },
+    { id: 'description', numeric: false, label: 'Description', align: 'left' },
+    { id: 'created_at', numeric: false, label: 'Created At', align: 'left' }
 ];
 
-// ==============================|| TABLE HEADER ||============================== //
-
+// table header component
 function EnhancedTableHead({ onSelectAllClick, order, orderBy, numSelected, rowCount, onRequestSort, theme, selected }) {
     const createSortHandler = (property) => (event) => {
         onRequestSort(event, property);
@@ -122,9 +89,7 @@ function EnhancedTableHead({ onSelectAllClick, order, orderBy, numSelected, rowC
                         indeterminate={numSelected > 0 && numSelected < rowCount}
                         checked={rowCount > 0 && numSelected === rowCount}
                         onChange={onSelectAllClick}
-                        inputProps={{
-                            'aria-label': 'select all desserts'
-                        }}
+                        inputProps={{ 'aria-label': 'select all reports' }}
                     />
                 </TableCell>
                 {numSelected > 0 && (
@@ -177,8 +142,7 @@ EnhancedTableHead.propTypes = {
     rowCount: PropTypes.number.isRequired
 };
 
-// ==============================|| TABLE HEADER TOOLBAR ||============================== //
-
+// table header toolbar component
 const EnhancedTableToolbar = ({ numSelected }) => (
     <Toolbar
         sx={{
@@ -196,7 +160,7 @@ const EnhancedTableToolbar = ({ numSelected }) => (
             </Typography>
         ) : (
             <Typography variant="h6" id="tableTitle">
-                Nutrition
+                Incident Reports
             </Typography>
         )}
         <Box sx={{ flexGrow: 1 }} />
@@ -214,32 +178,24 @@ EnhancedTableToolbar.propTypes = {
     numSelected: PropTypes.number.isRequired
 };
 
-// ==============================|| PRODUCT REVIEW LIST ||============================== //
-
-const ProductReviewList = () => {
+// main component
+const IncidentReportList = () => {
     const theme = useTheme();
     const dispatch = useDispatch();
 
-    // open dialog to edit review
-    const [open, setOpen] = React.useState(false);
-    const handleClickOpenDialog = () => {
-        setOpen(true);
-    };
-    const handleCloseDialog = () => {
-        setOpen(false);
-    };
-
     const [order, setOrder] = React.useState('asc');
-    const [orderBy, setOrderBy] = React.useState('calories');
+    const [orderBy, setOrderBy] = React.useState('created_at');
     const [selected, setSelected] = React.useState([]);
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(5);
     const [search, setSearch] = React.useState('');
     const [rows, setRows] = React.useState([]);
+    
     const { productreviews } = useSelector((state) => state.customer);
     React.useEffect(() => {
         dispatch(getProductReviews());
     }, [dispatch]);
+    
     React.useEffect(() => {
         setRows(productreviews);
     }, [productreviews]);
@@ -251,8 +207,7 @@ const ProductReviewList = () => {
         if (newString) {
             const newRows = rows.filter((row) => {
                 let matches = true;
-
-                const properties = ['name', 'author', 'review'];
+                const properties = ['id', 'fullname', 'date_of_incidence', 'report_type', 'description', 'created_at'];
                 let containsQuery = false;
 
                 properties.forEach((property) => {
@@ -283,7 +238,7 @@ const ProductReviewList = () => {
             if (selected.length > 0) {
                 setSelected([]);
             } else {
-                const newSelectedId = rows.map((n) => n.name);
+                const newSelectedId = rows.map((n) => n.id);
                 setSelected(newSelectedId);
             }
             return;
@@ -291,12 +246,12 @@ const ProductReviewList = () => {
         setSelected([]);
     };
 
-    const handleClick = (event, name) => {
-        const selectedIndex = selected.indexOf(name);
+    const handleClick = (event, id) => {
+        const selectedIndex = selected.indexOf(id);
         let newSelected = [];
 
         if (selectedIndex === -1) {
-            newSelected = newSelected.concat(selected, name);
+            newSelected = newSelected.concat(selected, id);
         } else if (selectedIndex === 0) {
             newSelected = newSelected.concat(selected.slice(1));
         } else if (selectedIndex === selected.length - 1) {
@@ -317,12 +272,12 @@ const ProductReviewList = () => {
         setPage(0);
     };
 
-    const isSelected = (name) => selected.indexOf(name) !== -1;
+    const isSelected = (id) => selected.indexOf(id) !== -1;
 
     const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
 
     return (
-        <MainCard title="Product Review" content={false}>
+        <MainCard title="Manage Reports" content={false}>
             <CardContent>
                 <Grid container justifyContent="space-between" alignItems="center" spacing={2}>
                     <Grid item xs={12} sm={6}>
@@ -335,7 +290,7 @@ const ProductReviewList = () => {
                                 )
                             }}
                             onChange={handleSearch}
-                            placeholder="Search Product"
+                            placeholder="Search Reports"
                             value={search}
                             size="small"
                         />
@@ -360,7 +315,6 @@ const ProductReviewList = () => {
                 </Grid>
             </CardContent>
 
-            {/* table */}
             <TableContainer>
                 <Table sx={{ minWidth: 750 }} aria-labelledby="tableTitle">
                     <EnhancedTableHead
@@ -377,9 +331,7 @@ const ProductReviewList = () => {
                         {stableSort(rows, getComparator(order, orderBy))
                             .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                             .map((row, index) => {
-                                /** Make sure no display bugs if row isn't an OrderData object */
-                                if (typeof row === 'number') return null;
-                                const isItemSelected = isSelected(row.name);
+                                const isItemSelected = isSelected(row.id);
                                 const labelId = `enhanced-table-checkbox-${index}`;
 
                                 return (
@@ -391,46 +343,28 @@ const ProductReviewList = () => {
                                         key={index}
                                         selected={isItemSelected}
                                     >
-                                        <TableCell padding="checkbox" onClick={(event) => handleClick(event, row.name)} sx={{ pl: 3 }}>
+                                        <TableCell padding="checkbox" onClick={(event) => handleClick(event, row.id)} sx={{ pl: 3 }}>
                                             <Checkbox
                                                 color="primary"
                                                 checked={isItemSelected}
-                                                inputProps={{
-                                                    'aria-labelledby': labelId
-                                                }}
+                                                inputProps={{ 'aria-labelledby': labelId }}
                                             />
                                         </TableCell>
-                                        <TableCell
-                                            component="th"
-                                            id={labelId}
-                                            scope="row"
-                                            onClick={(event) => handleClick(event, row.name)}
-                                            sx={{ cursor: 'pointer' }}
-                                        >
-                                            <Typography
-                                                variant="body2"
-                                                sx={{ color: theme.palette.mode === 'dark' ? 'grey.600' : 'grey.900' }}
-                                            >
-                                                {' '}
-                                                {row.name}{' '}
+                                        <TableCell component="th" id={labelId} scope="row" onClick={(event) => handleClick(event, row.id)} sx={{ cursor: 'pointer' }}>
+                                            <Typography variant="body2" sx={{ color: theme.palette.mode === 'dark' ? 'grey.600' : 'grey.900' }}>
+                                                {row.id}
                                             </Typography>
                                         </TableCell>
-                                        <TableCell>{row.author}</TableCell>
-                                        <TableCell>{row.review}</TableCell>
-                                        <TableCell align="center">
-                                            <Rating name="read-only" value={row.rating} precision={0.5} readOnly />
-                                        </TableCell>
-                                        <TableCell align="center">{row.date}</TableCell>
-                                        <TableCell align="center">
-                                            {row.status === 1 && <Chip label="Complete" chipcolor="success" size="small" />}
-                                            {row.status === 2 && <Chip label="Processing" chipcolor="orange" size="small" />}
-                                            {row.status === 3 && <Chip label="Confirm" chipcolor="primary" size="small" />}
-                                        </TableCell>
+                                        <TableCell>{row.fullname}</TableCell>
+                                        <TableCell>{row.date_of_incidence}</TableCell>
+                                        <TableCell>{row.report_type}</TableCell>
+                                        <TableCell>{row.description}</TableCell>
+                                        <TableCell>{row.created_at}</TableCell>
                                         <TableCell align="center" sx={{ pr: 3 }}>
                                             <IconButton color="primary" size="large" aria-label="view">
                                                 <VisibilityTwoToneIcon sx={{ fontSize: '1.3rem' }} />
                                             </IconButton>
-                                            <IconButton color="secondary" onClick={handleClickOpenDialog} size="large" aria-label="edit">
+                                            <IconButton color="secondary" size="large" aria-label="edit">
                                                 <EditTwoToneIcon sx={{ fontSize: '1.3rem' }} />
                                             </IconButton>
                                         </TableCell>
@@ -438,22 +372,14 @@ const ProductReviewList = () => {
                                 );
                             })}
                         {emptyRows > 0 && (
-                            <TableRow
-                                style={{
-                                    height: 53 * emptyRows
-                                }}
-                            >
-                                <TableCell colSpan={6} />
+                            <TableRow style={{ height: 53 * emptyRows }}>
+                                <TableCell colSpan={8} />
                             </TableRow>
                         )}
                     </TableBody>
                 </Table>
-
-                {/* review edit dialog */}
-                <ReviewEdit open={open} handleCloseDialog={handleCloseDialog} />
             </TableContainer>
 
-            {/* table pagination */}
             <TablePagination
                 rowsPerPageOptions={[5, 10, 25]}
                 component="div"
@@ -467,4 +393,4 @@ const ProductReviewList = () => {
     );
 };
 
-export default ProductReviewList;
+export default IncidentReportList;

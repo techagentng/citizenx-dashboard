@@ -65,7 +65,7 @@ export function getCustomers() {
 export function getOrders() {
     return async () => {
         try {
-            const response = await axios.get('/api/customer/order/list');
+            const response = await axios.get('/');
             dispatch(slice.actions.getOrdersSuccess(response.data.orders));
         } catch (error) {
             dispatch(slice.actions.hasError(error));
@@ -87,8 +87,8 @@ export function getProducts() {
 export function getProductReviews() {
     return async () => {
         try {
-            const response = await axios.get('/api/customer/product/reviews');
-            dispatch(slice.actions.getProductReviewsSuccess(response.data.productreviews));
+            const response = await axios.get('/incident_reports');
+            dispatch(slice.actions.getProductReviewsSuccess(response.data.incident_reports));
         } catch (error) {
             dispatch(slice.actions.hasError(error));
         }

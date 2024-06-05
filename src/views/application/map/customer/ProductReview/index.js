@@ -1,7 +1,5 @@
 import PropTypes from 'prop-types';
 import * as React from 'react';
-
-// material-ui
 import { useTheme } from '@mui/material/styles';
 import {
     Box,
@@ -25,15 +23,11 @@ import {
     Typography
 } from '@mui/material';
 import { visuallyHidden } from '@mui/utils';
-
-// project imports
 import ReviewEdit from './ReviewEdit';
 import MainCard from 'ui-component/cards/MainCard';
 import Chip from 'ui-component/extended/Chip';
 import { useDispatch, useSelector } from 'store';
 import { getProductReviews } from 'store/slices/customer';
-
-// assets
 import DeleteIcon from '@mui/icons-material/Delete';
 import FilterListIcon from '@mui/icons-material/FilterListTwoTone';
 import PrintIcon from '@mui/icons-material/PrintTwoTone';
@@ -42,7 +36,6 @@ import SearchIcon from '@mui/icons-material/Search';
 import VisibilityTwoToneIcon from '@mui/icons-material/VisibilityTwoTone';
 import EditTwoToneIcon from '@mui/icons-material/EditTwoTone';
 
-// table sort
 function descendingComparator(a, b, orderBy) {
     if (b[orderBy] < a[orderBy]) {
         return -1;
@@ -66,47 +59,14 @@ function stableSort(array, comparator) {
     return stabilizedThis.map((el) => el[0]);
 }
 
-// table header options
 const headCells = [
-    {
-        id: 'name',
-        numeric: false,
-        label: 'Product Name',
-        align: 'left'
-    },
-    {
-        id: 'author',
-        numeric: true,
-        label: 'Author',
-        align: 'left'
-    },
-    {
-        id: 'review',
-        numeric: true,
-        label: 'Review',
-        align: 'left'
-    },
-    {
-        id: 'rating',
-        numeric: true,
-        label: 'Rating',
-        align: 'center'
-    },
-    {
-        id: 'date',
-        numeric: true,
-        label: 'Date',
-        align: 'center'
-    },
-    {
-        id: 'status',
-        numeric: false,
-        label: 'Status',
-        align: 'center'
-    }
+    { id: 'name', numeric: false, label: 'Product Name', align: 'left' },
+    { id: 'author', numeric: true, label: 'Author', align: 'left' },
+    { id: 'review', numeric: true, label: 'Review', align: 'left' },
+    { id: 'rating', numeric: true, label: 'Rating', align: 'center' },
+    { id: 'date', numeric: true, label: 'Date', align: 'center' },
+    { id: 'status', numeric: false, label: 'Status', align: 'center' }
 ];
-
-// ==============================|| TABLE HEADER ||============================== //
 
 function EnhancedTableHead({ onSelectAllClick, order, orderBy, numSelected, rowCount, onRequestSort, theme, selected }) {
     const createSortHandler = (property) => (event) => {
@@ -122,9 +82,7 @@ function EnhancedTableHead({ onSelectAllClick, order, orderBy, numSelected, rowC
                         indeterminate={numSelected > 0 && numSelected < rowCount}
                         checked={rowCount > 0 && numSelected === rowCount}
                         onChange={onSelectAllClick}
-                        inputProps={{
-                            'aria-label': 'select all desserts'
-                        }}
+                        inputProps={{ 'aria-label': 'select all desserts' }}
                     />
                 </TableCell>
                 {numSelected > 0 && (
@@ -177,19 +135,8 @@ EnhancedTableHead.propTypes = {
     rowCount: PropTypes.number.isRequired
 };
 
-// ==============================|| TABLE HEADER TOOLBAR ||============================== //
-
 const EnhancedTableToolbar = ({ numSelected }) => (
-    <Toolbar
-        sx={{
-            p: 0,
-            pl: 1,
-            pr: 1,
-            ...(numSelected > 0 && {
-                color: (theme) => theme.palette.secondary.main
-            })
-        }}
-    >
+    <Toolbar sx={{ p: 0, pl: 1, pr: 1, ...(numSelected > 0 && { color: (theme) => theme.palette.secondary.main }) }}>
         {numSelected > 0 ? (
             <Typography color="inherit" variant="h4">
                 {numSelected} Selected
@@ -214,21 +161,12 @@ EnhancedTableToolbar.propTypes = {
     numSelected: PropTypes.number.isRequired
 };
 
-// ==============================|| PRODUCT REVIEW LIST ||============================== //
-
 const ProductReviewList = () => {
     const theme = useTheme();
     const dispatch = useDispatch();
+    const { productreviews } = useSelector((state) => state.customer);
 
-    // open dialog to edit review
     const [open, setOpen] = React.useState(false);
-    const handleClickOpenDialog = () => {
-        setOpen(true);
-    };
-    const handleCloseDialog = () => {
-        setOpen(false);
-    };
-
     const [order, setOrder] = React.useState('asc');
     const [orderBy, setOrderBy] = React.useState('calories');
     const [selected, setSelected] = React.useState([]);
@@ -236,13 +174,24 @@ const ProductReviewList = () => {
     const [rowsPerPage, setRowsPerPage] = React.useState(5);
     const [search, setSearch] = React.useState('');
     const [rows, setRows] = React.useState([]);
-    const { productreviews } = useSelector((state) => state.customer);
+
     React.useEffect(() => {
         dispatch(getProductReviews());
     }, [dispatch]);
+
     React.useEffect(() => {
-        setRows(productreviews);
+        if (Array.isArray(productreviews)) {
+            console.log('Product Reviews:', productreviews);
+            setRows(productreviews);
+        }
     }, [productreviews]);
+
+    const handleClickOpenDialog = () => {
+        setOpen(true);
+    };
+    const handleCloseDialog = () => {
+        setOpen(false);
+    };
 
     const handleSearch = (event) => {
         const newString = event?.target.value;
@@ -251,12 +200,11 @@ const ProductReviewList = () => {
         if (newString) {
             const newRows = rows.filter((row) => {
                 let matches = true;
-
                 const properties = ['name', 'author', 'review'];
                 let containsQuery = false;
 
                 properties.forEach((property) => {
-                    if (row[property].toString().toLowerCase().includes(newString.toString().toLowerCase())) {
+                    if (row[property] && row[property].toString().toLowerCase().includes(newString.toString().toLowerCase())) {
                         containsQuery = true;
                     }
                 });
@@ -280,12 +228,8 @@ const ProductReviewList = () => {
 
     const handleSelectAllClick = (event) => {
         if (event.target.checked) {
-            if (selected.length > 0) {
-                setSelected([]);
-            } else {
-                const newSelectedId = rows.map((n) => n.name);
-                setSelected(newSelectedId);
-            }
+            const newSelectedId = rows.map((n) => n.name);
+            setSelected(newSelectedId);
             return;
         }
         setSelected([]);
@@ -304,7 +248,6 @@ const ProductReviewList = () => {
         } else if (selectedIndex > 0) {
             newSelected = newSelected.concat(selected.slice(0, selectedIndex), selected.slice(selectedIndex + 1));
         }
-
         setSelected(newSelected);
     };
 
@@ -313,34 +256,34 @@ const ProductReviewList = () => {
     };
 
     const handleChangeRowsPerPage = (event) => {
-        setRowsPerPage(parseInt(event?.target.value, 10));
+        setRowsPerPage(parseInt(event.target.value, 10));
         setPage(0);
     };
 
     const isSelected = (name) => selected.indexOf(name) !== -1;
 
-    const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
+    const emptyRows = rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage);
 
     return (
-        <MainCard title="Product Review" content={false}>
+        <MainCard content={false}>
             <CardContent>
-                <Grid container justifyContent="space-between" alignItems="center" spacing={2}>
-                    <Grid item xs={12} sm={6}>
+                <Grid container alignItems="center" justifyContent="space-between" spacing={2}>
+                    <Grid item>
                         <TextField
                             InputProps={{
                                 startAdornment: (
                                     <InputAdornment position="start">
-                                        <SearchIcon fontSize="small" />
+                                        <SearchIcon />
                                     </InputAdornment>
                                 )
                             }}
                             onChange={handleSearch}
-                            placeholder="Search Product"
+                            placeholder="Search Review"
                             value={search}
                             size="small"
                         />
                     </Grid>
-                    <Grid item xs={12} sm={6} sx={{ textAlign: 'right' }}>
+                    <Grid item>
                         <Tooltip title="Copy">
                             <IconButton size="large">
                                 <FileCopyIcon />
@@ -360,25 +303,22 @@ const ProductReviewList = () => {
                 </Grid>
             </CardContent>
 
-            {/* table */}
             <TableContainer>
-                <Table sx={{ minWidth: 750 }} aria-labelledby="tableTitle">
+                <Table>
                     <EnhancedTableHead
+                        theme={theme}
                         numSelected={selected.length}
                         order={order}
                         orderBy={orderBy}
                         onSelectAllClick={handleSelectAllClick}
                         onRequestSort={handleRequestSort}
                         rowCount={rows.length}
-                        theme={theme}
                         selected={selected}
                     />
                     <TableBody>
-                        {stableSort(rows, getComparator(order, orderBy))
+                        {Array.isArray(rows) && stableSort(rows, getComparator(order, orderBy))
                             .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                             .map((row, index) => {
-                                /** Make sure no display bugs if row isn't an OrderData object */
-                                if (typeof row === 'number') return null;
                                 const isItemSelected = isSelected(row.name);
                                 const labelId = `enhanced-table-checkbox-${index}`;
 
@@ -388,49 +328,36 @@ const ProductReviewList = () => {
                                         role="checkbox"
                                         aria-checked={isItemSelected}
                                         tabIndex={-1}
-                                        key={index}
+                                        key={row.name}
                                         selected={isItemSelected}
                                     >
-                                        <TableCell padding="checkbox" onClick={(event) => handleClick(event, row.name)} sx={{ pl: 3 }}>
+                                        <TableCell padding="checkbox" sx={{ pl: 3 }}>
                                             <Checkbox
                                                 color="primary"
+                                                onClick={(event) => handleClick(event, row.name)}
                                                 checked={isItemSelected}
-                                                inputProps={{
-                                                    'aria-labelledby': labelId
-                                                }}
+                                                inputProps={{ 'aria-labelledby': labelId }}
                                             />
                                         </TableCell>
-                                        <TableCell
-                                            component="th"
-                                            id={labelId}
-                                            scope="row"
-                                            onClick={(event) => handleClick(event, row.name)}
-                                            sx={{ cursor: 'pointer' }}
-                                        >
-                                            <Typography
-                                                variant="body2"
-                                                sx={{ color: theme.palette.mode === 'dark' ? 'grey.600' : 'grey.900' }}
-                                            >
-                                                {' '}
-                                                {row.name}{' '}
-                                            </Typography>
+                                        <TableCell component="th" id={labelId} scope="row" padding="none">
+                                            {row.name}
                                         </TableCell>
-                                        <TableCell>{row.author}</TableCell>
-                                        <TableCell>{row.review}</TableCell>
+                                        <TableCell align="left">{row.author}</TableCell>
+                                        <TableCell align="left">{row.review}</TableCell>
                                         <TableCell align="center">
-                                            <Rating name="read-only" value={row.rating} precision={0.5} readOnly />
+                                            <Rating size="small" name="read-only" value={row.rating} readOnly precision={0.5} />
                                         </TableCell>
                                         <TableCell align="center">{row.date}</TableCell>
                                         <TableCell align="center">
-                                            {row.status === 1 && <Chip label="Complete" chipcolor="success" size="small" />}
-                                            {row.status === 2 && <Chip label="Processing" chipcolor="orange" size="small" />}
-                                            {row.status === 3 && <Chip label="Confirm" chipcolor="primary" size="small" />}
+                                            {row.status === 1 && <Chip chipcolor="success" label="Approved" size="small" />}
+                                            {row.status === 2 && <Chip chipcolor="orange" label="Pending" size="small" />}
+                                            {row.status === 3 && <Chip chipcolor="error" label="Rejected" size="small" />}
                                         </TableCell>
-                                        <TableCell align="center" sx={{ pr: 3 }}>
-                                            <IconButton color="primary" size="large" aria-label="view">
+                                        <TableCell align="center">
+                                            <IconButton color="primary" size="large" onClick={handleClickOpenDialog}>
                                                 <VisibilityTwoToneIcon sx={{ fontSize: '1.3rem' }} />
                                             </IconButton>
-                                            <IconButton color="secondary" onClick={handleClickOpenDialog} size="large" aria-label="edit">
+                                            <IconButton color="secondary" size="large" onClick={handleClickOpenDialog}>
                                                 <EditTwoToneIcon sx={{ fontSize: '1.3rem' }} />
                                             </IconButton>
                                         </TableCell>
@@ -438,22 +365,13 @@ const ProductReviewList = () => {
                                 );
                             })}
                         {emptyRows > 0 && (
-                            <TableRow
-                                style={{
-                                    height: 53 * emptyRows
-                                }}
-                            >
-                                <TableCell colSpan={6} />
+                            <TableRow style={{ height: 53 * emptyRows }}>
+                                <TableCell colSpan={8} />
                             </TableRow>
                         )}
                     </TableBody>
                 </Table>
-
-                {/* review edit dialog */}
-                <ReviewEdit open={open} handleCloseDialog={handleCloseDialog} />
             </TableContainer>
-
-            {/* table pagination */}
             <TablePagination
                 rowsPerPageOptions={[5, 10, 25]}
                 component="div"
@@ -463,6 +381,7 @@ const ProductReviewList = () => {
                 onPageChange={handleChangePage}
                 onRowsPerPageChange={handleChangeRowsPerPage}
             />
+            <ReviewEdit open={open} handleCloseDialog={handleCloseDialog} />
         </MainCard>
     );
 };
