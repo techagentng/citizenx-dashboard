@@ -7,10 +7,10 @@ import {
     Box,
     CardContent,
     Checkbox,
+    Fab,
     Grid,
     IconButton,
     InputAdornment,
-    Rating,
     Table,
     TableBody,
     TableCell,
@@ -27,11 +27,10 @@ import {
 import { visuallyHidden } from '@mui/utils';
 
 // project imports
-import ReviewEdit from './ReviewEdit';
+import ProductAdd from './ProductAdd';
 import MainCard from 'ui-component/cards/MainCard';
-import Chip from 'ui-component/extended/Chip';
 import { useDispatch, useSelector } from 'store';
-import { getProductReviews } from 'store/slices/customer';
+import { getProducts } from 'store/slices/customer';
 
 // assets
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -39,8 +38,8 @@ import FilterListIcon from '@mui/icons-material/FilterListTwoTone';
 import PrintIcon from '@mui/icons-material/PrintTwoTone';
 import FileCopyIcon from '@mui/icons-material/FileCopyTwoTone';
 import SearchIcon from '@mui/icons-material/Search';
-import VisibilityTwoToneIcon from '@mui/icons-material/VisibilityTwoTone';
-import EditTwoToneIcon from '@mui/icons-material/EditTwoTone';
+import AddIcon from '@mui/icons-material/AddTwoTone';
+import MoreHorizOutlinedIcon from '@mui/icons-material/MoreHorizOutlined';
 
 // table sort
 function descendingComparator(a, b, orderBy) {
@@ -69,28 +68,28 @@ function stableSort(array, comparator) {
 // table header options
 const headCells = [
     {
+        id: 'id',
+        numeric: true,
+        label: 'ID',
+        align: 'center'
+    },
+    {
         id: 'name',
         numeric: false,
         label: 'Product Name',
         align: 'left'
     },
     {
-        id: 'author',
-        numeric: true,
-        label: 'Author',
+        id: 'category',
+        numeric: false,
+        label: 'Category',
         align: 'left'
     },
     {
-        id: 'review',
+        id: 'price',
         numeric: true,
-        label: 'Review',
-        align: 'left'
-    },
-    {
-        id: 'rating',
-        numeric: true,
-        label: 'Rating',
-        align: 'center'
+        label: 'Price',
+        align: 'right'
     },
     {
         id: 'date',
@@ -99,10 +98,10 @@ const headCells = [
         align: 'center'
     },
     {
-        id: 'status',
-        numeric: false,
-        label: 'Status',
-        align: 'center'
+        id: 'qty',
+        numeric: true,
+        label: 'QTY',
+        align: 'right'
     }
 ];
 
@@ -146,7 +145,7 @@ function EnhancedTableHead({ onSelectAllClick, order, orderBy, numSelected, rowC
                                 onClick={createSortHandler(headCell.id)}
                             >
                                 {headCell.label}
-                                {orderBy === headCell.id ? (
+                                {orderBy === headCell?.id ? (
                                     <Box component="span" sx={visuallyHidden}>
                                         {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
                                     </Box>
@@ -214,13 +213,13 @@ EnhancedTableToolbar.propTypes = {
     numSelected: PropTypes.number.isRequired
 };
 
-// ==============================|| PRODUCT REVIEW LIST ||============================== //
+// ==============================|| PRODUCT LIST ||============================== //
 
-const ProductReviewList = () => {
+const ProductList = () => {
     const theme = useTheme();
     const dispatch = useDispatch();
 
-    // open dialog to edit review
+    // show a right sidebar when clicked on new product
     const [open, setOpen] = React.useState(false);
     const handleClickOpenDialog = () => {
         setOpen(true);
@@ -236,13 +235,13 @@ const ProductReviewList = () => {
     const [rowsPerPage, setRowsPerPage] = React.useState(5);
     const [search, setSearch] = React.useState('');
     const [rows, setRows] = React.useState([]);
-    const { productreviews } = useSelector((state) => state.customer);
+    const { products } = useSelector((state) => state.customer);
     React.useEffect(() => {
-        dispatch(getProductReviews());
+        dispatch(getProducts());
     }, [dispatch]);
     React.useEffect(() => {
-        setRows(productreviews);
-    }, [productreviews]);
+        setRows(products);
+    }, [products]);
 
     const handleSearch = (event) => {
         const newString = event?.target.value;
@@ -252,7 +251,7 @@ const ProductReviewList = () => {
             const newRows = rows.filter((row) => {
                 let matches = true;
 
-                const properties = ['name', 'author', 'review'];
+                const properties = ['name', 'category', 'price', 'qty', 'id'];
                 let containsQuery = false;
 
                 properties.forEach((property) => {
@@ -268,7 +267,7 @@ const ProductReviewList = () => {
             });
             setRows(newRows);
         } else {
-            setRows(productreviews);
+            setRows(products);
         }
     };
 
@@ -318,11 +317,10 @@ const ProductReviewList = () => {
     };
 
     const isSelected = (name) => selected.indexOf(name) !== -1;
-
     const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
 
     return (
-        <MainCard title="Product Review" content={false}>
+        <MainCard title="Product List" content={false}>
             <CardContent>
                 <Grid container justifyContent="space-between" alignItems="center" spacing={2}>
                     <Grid item xs={12} sm={6}>
@@ -356,6 +354,19 @@ const ProductReviewList = () => {
                                 <FilterListIcon />
                             </IconButton>
                         </Tooltip>
+
+                        {/* product add & dialog */}
+                        <Tooltip title="Add Product">
+                            <Fab
+                                color="primary"
+                                size="small"
+                                onClick={handleClickOpenDialog}
+                                sx={{ boxShadow: 'none', ml: 1, width: 32, height: 32, minHeight: 32 }}
+                            >
+                                <AddIcon fontSize="small" />
+                            </Fab>
+                        </Tooltip>
+                        <ProductAdd open={open} handleCloseDialog={handleCloseDialog} />
                     </Grid>
                 </Grid>
             </CardContent>
@@ -391,7 +402,7 @@ const ProductReviewList = () => {
                                         key={index}
                                         selected={isItemSelected}
                                     >
-                                        <TableCell padding="checkbox" onClick={(event) => handleClick(event, row.name)} sx={{ pl: 3 }}>
+                                        <TableCell padding="checkbox" sx={{ pl: 3 }} onClick={(event) => handleClick(event, row.name)}>
                                             <Checkbox
                                                 color="primary"
                                                 checked={isItemSelected}
@@ -401,6 +412,7 @@ const ProductReviewList = () => {
                                             />
                                         </TableCell>
                                         <TableCell
+                                            align="center"
                                             component="th"
                                             id={labelId}
                                             scope="row"
@@ -408,30 +420,35 @@ const ProductReviewList = () => {
                                             sx={{ cursor: 'pointer' }}
                                         >
                                             <Typography
-                                                variant="body2"
+                                                variant="subtitle1"
+                                                sx={{ color: theme.palette.mode === 'dark' ? 'grey.600' : 'grey.900' }}
+                                            >
+                                                {' '}
+                                                #{row.id}{' '}
+                                            </Typography>
+                                        </TableCell>
+                                        <TableCell
+                                            component="th"
+                                            id={labelId}
+                                            scope="row"
+                                            onClick={(event) => handleClick(event, row.name)}
+                                            sx={{ cursor: 'pointer' }}
+                                        >
+                                            <Typography
+                                                variant="subtitle1"
                                                 sx={{ color: theme.palette.mode === 'dark' ? 'grey.600' : 'grey.900' }}
                                             >
                                                 {' '}
                                                 {row.name}{' '}
                                             </Typography>
                                         </TableCell>
-                                        <TableCell>{row.author}</TableCell>
-                                        <TableCell>{row.review}</TableCell>
-                                        <TableCell align="center">
-                                            <Rating name="read-only" value={row.rating} precision={0.5} readOnly />
-                                        </TableCell>
+                                        <TableCell>{row.category}</TableCell>
+                                        <TableCell align="right">{row.price}$</TableCell>
                                         <TableCell align="center">{row.date}</TableCell>
-                                        <TableCell align="center">
-                                            {row.status === 1 && <Chip label="Complete" chipcolor="success" size="small" />}
-                                            {row.status === 2 && <Chip label="Processing" chipcolor="orange" size="small" />}
-                                            {row.status === 3 && <Chip label="Confirm" chipcolor="primary" size="small" />}
-                                        </TableCell>
+                                        <TableCell align="right">{row.qty}</TableCell>
                                         <TableCell align="center" sx={{ pr: 3 }}>
-                                            <IconButton color="primary" size="large" aria-label="view">
-                                                <VisibilityTwoToneIcon sx={{ fontSize: '1.3rem' }} />
-                                            </IconButton>
-                                            <IconButton color="secondary" onClick={handleClickOpenDialog} size="large" aria-label="edit">
-                                                <EditTwoToneIcon sx={{ fontSize: '1.3rem' }} />
+                                            <IconButton size="large" aria-label="more options">
+                                                <MoreHorizOutlinedIcon sx={{ fontSize: '1.3rem' }} />
                                             </IconButton>
                                         </TableCell>
                                     </TableRow>
@@ -448,9 +465,6 @@ const ProductReviewList = () => {
                         )}
                     </TableBody>
                 </Table>
-
-                {/* review edit dialog */}
-                <ReviewEdit open={open} handleCloseDialog={handleCloseDialog} />
             </TableContainer>
 
             {/* table pagination */}
@@ -467,4 +481,4 @@ const ProductReviewList = () => {
     );
 };
 
-export default ProductReviewList;
+export default ProductList;

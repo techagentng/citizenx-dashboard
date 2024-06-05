@@ -25,7 +25,7 @@ const NigeriaMap = () => {
       />
       <Marker position={nigeriaPosition}>
         <Popup>
-          Nigeria
+          Nigeriaxx
         </Popup>
       </Marker>
     </MapContainer>
