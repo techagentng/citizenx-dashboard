@@ -39,6 +39,8 @@ import FileCopyIcon from '@mui/icons-material/FileCopyTwoTone';
 import SearchIcon from '@mui/icons-material/Search';
 import VisibilityTwoToneIcon from '@mui/icons-material/VisibilityTwoTone';
 import EditTwoToneIcon from '@mui/icons-material/EditTwoTone';
+import EarningCard from './EarningCard';
+import EarningIcon from 'assets/images/icons/earning.svg';
 
 // table sort
 function descendingComparator(a, b, orderBy) {
@@ -295,6 +297,14 @@ const IncidentReportList = () => {
                             size="small"
                         />
                     </Grid>
+                    <Grid container spacing={2} sx={{mt:4}}>
+          <Grid item xs={3}>
+            <EarningCard count="30" details="Today's Report" icon={EarningIcon} />
+          </Grid>
+          <Grid item xs={3}>
+            <EarningCard count="6" details="Total Users" icon={EarningIcon} />
+          </Grid>
+        </Grid>
                     <Grid item xs={12} sm={6} sx={{ textAlign: 'right' }}>
                         <Tooltip title="Copy">
                             <IconButton size="large">
