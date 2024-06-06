@@ -192,12 +192,12 @@ const IncidentReportList = () => {
     const [rowsPerPage, setRowsPerPage] = React.useState(5);
     const [search, setSearch] = React.useState('');
     const [rows, setRows] = React.useState([]);
-    
+console.log("xxxxxxxxxxxxxxxxxxxxxxxxrooooow", rows)
     const { productreviews } = useSelector((state) => state.customer);
     React.useEffect(() => {
         dispatch(getProductReviews());
     }, [dispatch]);
-    
+
     React.useEffect(() => {
         setRows(productreviews);
     }, [productreviews]);
@@ -282,7 +282,15 @@ const IncidentReportList = () => {
         <MainCard title="Manage Reports" content={false}>
             <CardContent>
                 <Grid container justifyContent="space-between" alignItems="center" spacing={2}>
-                    <Grid item xs={12} sm={6}>
+                    <Grid container spacing={2} sx={{ mt: 4 }}>
+                        <Grid item xs={3}>
+                            <EarningCard count="30" details="Today's Report" icon={EarningIcon} />
+                        </Grid>
+                        <Grid item xs={3}>
+                            <EarningCard count="6" details="Total Users" icon={EarningIcon} />
+                        </Grid>
+                    </Grid>
+                    <Grid item xs={12} sm={6} sx={{ textAlign: 'left' }}>
                         <TextField
                             InputProps={{
                                 startAdornment: (
@@ -297,14 +305,6 @@ const IncidentReportList = () => {
                             size="small"
                         />
                     </Grid>
-                    <Grid container spacing={2} sx={{mt:4}}>
-          <Grid item xs={3}>
-            <EarningCard count="30" details="Today's Report" icon={EarningIcon} />
-          </Grid>
-          <Grid item xs={3}>
-            <EarningCard count="6" details="Total Users" icon={EarningIcon} />
-          </Grid>
-        </Grid>
                     <Grid item xs={12} sm={6} sx={{ textAlign: 'right' }}>
                         <Tooltip title="Copy">
                             <IconButton size="large">
@@ -360,8 +360,17 @@ const IncidentReportList = () => {
                                                 inputProps={{ 'aria-labelledby': labelId }}
                                             />
                                         </TableCell>
-                                        <TableCell component="th" id={labelId} scope="row" onClick={(event) => handleClick(event, row.id)} sx={{ cursor: 'pointer' }}>
-                                            <Typography variant="body2" sx={{ color: theme.palette.mode === 'dark' ? 'grey.600' : 'grey.900' }}>
+                                        <TableCell
+                                            component="th"
+                                            id={labelId}
+                                            scope="row"
+                                            onClick={(event) => handleClick(event, row.id)}
+                                            sx={{ cursor: 'pointer' }}
+                                        >
+                                            <Typography
+                                                variant="body2"
+                                                sx={{ color: theme.palette.mode === 'dark' ? 'grey.600' : 'grey.900' }}
+                                            >
                                                 {row.id}
                                             </Typography>
                                         </TableCell>
