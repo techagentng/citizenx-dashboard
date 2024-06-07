@@ -62,7 +62,7 @@ const CardWrapper = styled(MainCard)(({ theme }) => ({
 
 // ===========================|| DASHBOARD DEFAULT - EARNING CARD ||=========================== //
 
-const EarningCard = ({ isLoading }) => {
+const EarningCard = ({ isLoading, count, detail }) => {
     const theme = useTheme();
 
     const [anchorEl, setAnchorEl] = React.useState(null);
@@ -152,7 +152,7 @@ const EarningCard = ({ isLoading }) => {
                                 <Grid container alignItems="center">
                                     <Grid item>
                                         <Typography sx={{ fontSize: '2.125rem', fontWeight: 500, mr: 1, mt: 1.75, mb: 0.75 }}>
-                                            8
+                                            {count}
                                         </Typography>
                                     </Grid>
                                     <Grid item>
@@ -177,7 +177,7 @@ const EarningCard = ({ isLoading }) => {
                                         color: theme.palette.mode === 'dark' ? theme.palette.text.secondary : theme.palette.secondary[200]
                                     }}
                                 >
-                                    details
+                                    {detail}
                                 </Typography>
                             </Grid>
                         </Grid>

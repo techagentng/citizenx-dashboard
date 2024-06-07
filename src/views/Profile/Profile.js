@@ -1,19 +1,52 @@
-// material-ui
+import React, { useState, useEffect } from 'react';
 import { Avatar, Button, Grid, Stack, TextField, Typography } from '@mui/material';
-
-// project imports
 import useAuth from 'hooks/useAuth';
 import SubCard from 'ui-component/cards/SubCard';
 import AnimateButton from 'ui-component/extended/AnimateButton';
 import { gridSpacing } from 'store/constant';
-
-// assets
-import Avatar1 from 'assets/images/users/avatar-1.png';
-
-// ==============================|| PROFILE 3 - PROFILE ||============================== //
-
+import { uploadProfileImage } from 'services/userService'; // Add getProfileImage
+import Avatarr from 'ui-component/extended/Avatar';
 const Profile = () => {
+    const [selectedFile, setSelectedFile] = useState(null);
+    const [avatarSrc, setAvatarSrc] = useState('');
     const { user } = useAuth();
+
+    useEffect(() => {
+        const userData = localStorage.getItem('user');
+        if (userData) {
+            const user = JSON.parse(userData);
+            if (user.profileImage) {
+                const profileImagePath = user.profileImage; // e.g., "./uploadImage/27_cx-logo.png"
+
+                const fullImageUrl = `${process.env.REACT_APP_API_URL}/${profileImagePath}`;
+                setAvatarSrc(fullImageUrl);
+                console.log(fullImageUrl);
+            } else {
+                // Optionally, set a default avatar here if profileImage is not available
+                setAvatarSrc(Avatarr);
+            }
+        }
+    }, []);
+
+    const handleFileChange = (event) => {
+        setSelectedFile(event.target.files[0]);
+    };
+
+    const handleUploadClick = () => {
+        if (selectedFile) {
+            uploadProfileImage(selectedFile)
+                .then((response) => {
+                    console.log(response);
+                    // Optionally, update the avatarSrc to the new uploaded file
+                    setAvatarSrc(URL.createObjectURL(selectedFile));
+                })
+                .catch((error) => {
+                    console.error('Upload failed:', error);
+                });
+        } else {
+            console.warn('No file selected');
+        }
+    };
 
     return (
         <Grid container spacing={gridSpacing}>
@@ -21,7 +54,7 @@ const Profile = () => {
                 <SubCard title="Profile Picture" contentSX={{ textAlign: 'center' }}>
                     <Grid container spacing={2}>
                         <Grid item xs={12}>
-                            <Avatar alt="User 1" src={Avatar1} sx={{ width: 100, height: 100, margin: '0 auto' }} />
+                            <Avatar alt="User 1" src={avatarSrc} sx={{ width: 100, height: 100, margin: '0 auto' }} />
                         </Grid>
                         <Grid item xs={12}>
                             <Typography variant="subtitle2" align="center">
@@ -29,10 +62,13 @@ const Profile = () => {
                             </Typography>
                         </Grid>
                         <Grid item xs={12}>
+                            <input type="file" accept="image/*" onChange={handleFileChange} style={{ display: 'none' }} id="file-input" />
                             <AnimateButton>
-                                <Button variant="contained" size="small">
-                                    Upload Avatar
-                                </Button>
+                                <label htmlFor="file-input">
+                                    <Button variant="contained" size="small" component="span" onClick={handleUploadClick}>
+                                        Choose and Upload Avatar
+                                    </Button>
+                                </label>
                             </AnimateButton>
                         </Grid>
                     </Grid>

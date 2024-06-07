@@ -7,7 +7,7 @@ import Loadable from 'ui-component/Loadable';
 
 // sample page routing
 const Dashboard = Loadable(lazy(() => import('views/dashboard')));
-const Settings = Loadable(lazy(() => import('views/dashboard/Profile')));
+const Settings = Loadable(lazy(() => import('views/Profile')));
 const Reports = Loadable(lazy(() => import('views/reports')));
 // ==============================|| MAIN ROUTING ||============================== //
 
