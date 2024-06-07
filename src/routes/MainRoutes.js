@@ -9,6 +9,7 @@ import Loadable from 'ui-component/Loadable';
 const Dashboard = Loadable(lazy(() => import('views/dashboard')));
 const Settings = Loadable(lazy(() => import('views/Profile')));
 const Reports = Loadable(lazy(() => import('views/reports')));
+const Rewards = Loadable(lazy(() => import('views/rewards')));
 // ==============================|| MAIN ROUTING ||============================== //
 
 const MainRoutes = {
@@ -30,6 +31,10 @@ const MainRoutes = {
         {
             path: '/reports',
             element: <Reports />
+        },
+        {
+            path: '/rewards',
+            element: <Rewards />
         },
         {
             path: '/settings',

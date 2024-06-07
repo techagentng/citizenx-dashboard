@@ -15,6 +15,8 @@ import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
 
+// import TotalGrowthBarChart from './TotalGrowthBarChart';
+
 // Fix the default icon issue
 // delete L.Icon.Default.prototype._getIconUrl;
 
@@ -93,6 +95,17 @@ const DashboardPage = ({ isLoading }) => {
                     </Grid>
                     <Grid item xs={12} md={2}>
                         <PopularCard isLoading={isLoading} />
+                    </Grid>
+                </Grid>
+
+                <Grid item xs={12}>
+                    <Grid container spacing={gridSpacing}>
+                        <Grid item xs={12} md={8}>
+                            {/* <TotalGrowthBarChart isLoading={isLoading} /> */}
+                        </Grid>
+                        <Grid item xs={12} md={4}>
+                            <PopularCard isLoading={isLoading} />
+                        </Grid>
                     </Grid>
                 </Grid>
             </MainCard>

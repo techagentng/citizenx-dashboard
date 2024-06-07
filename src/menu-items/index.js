@@ -3,11 +3,13 @@
 import dashboard from './dashboard';
 import settings from './settings';
 import reports from './reports';
+import rewards from './rewards';
+import users from './users';
 
 // ==============================|| MENU ITEMS ||============================== //
 
 const menuItems = {
-    items: [dashboard, reports, settings]
+    items: [dashboard, reports, rewards, users, settings]
 };
 
 export default menuItems;
