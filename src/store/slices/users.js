@@ -9,14 +9,11 @@ import { dispatch } from '../index';
 
 const initialState = {
     error: null,
-    customers: [],
-    orders: [],
-    products: [],
-    productreviews: []
+    users: [],
 };
 
 const slice = createSlice({
-    name: 'customer',
+    name: 'users',
     initialState,
     reducers: {
         // HAS ERROR
@@ -25,23 +22,8 @@ const slice = createSlice({
         },
 
         // GET CUSTOMERS
-        getCustomersSuccess(state, action) {
-            state.customers = action.payload;
-        },
-
-        // GET ORDERS
-        getOrdersSuccess(state, action) {
-            state.orders = action.payload;
-        },
-
-        // GET PRODUCTS
-        getProductsSuccess(state, action) {
-            state.products = action.payload;
-        },
-
-        // GET PRODUCT REVIEWS
-        getProductReviewsSuccess(state, action) {
-            state.productreviews = action.payload;
+        getUsersReviewSuccess(state, action) {
+            state.users = action.payload;
         }
     }
 });
@@ -84,11 +66,11 @@ export default slice.reducer;
 //     };
 // }
 
-export function getProductReviews() {
+export function getUsers() {
     return async () => {
         try {
-            const response = await axios.get('/incident_reports');
-            dispatch(slice.actions.getProductReviewsSuccess(response.data.incident_reports));
+            const response = await axios.get('/users/all');
+            dispatch(slice.actions.getUsersReviewSuccess(response.data.data));
         } catch (error) {
             dispatch(slice.actions.hasError(error));
         }

@@ -194,7 +194,6 @@ const IncidentReportList = () => {
     const [rowsPerPage, setRowsPerPage] = React.useState(5);
     const [search, setSearch] = React.useState('');
     const [rows, setRows] = React.useState([]);
-    console.log('xxxxxxxxxxxxxxxxxxxxxxxxrooooow', rows);
     const { productreviews } = useSelector((state) => state.customer);
     React.useEffect(() => {
         dispatch(getProductReviews());

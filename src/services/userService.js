@@ -105,3 +105,31 @@ export const uploadProfileImage = (file) => {
     });
 };
 
+export const getAllUsers = () => {
+    return new Promise((resolve, reject) => {
+        const serviceToken = localStorage.getItem('serviceToken');
+
+        // Assuming formData is an empty FormData object or contains necessary data
+        const formData = new FormData(); 
+
+        axios
+            .post(`${process.env.REACT_APP_API_URL}/users/all`, formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                    Authorization: `Bearer ${serviceToken}`
+                }
+            })
+            .then((response) => {
+                console.log('API response:', response.data); // Log the entire response data
+                if (response.data.status === "OK") {
+                    resolve(response.data.users);  // Adjust based on actual data structure
+                } else {
+                    reject(new Error(response.data.message || 'Failed to fetch users'));
+                }
+            })
+            .catch((error) => {
+                console.log('API error:', error); // Log any errors
+                reject(new Error(error.response?.data?.message || 'An error occurred while fetching users'));
+            });
+    });
+};

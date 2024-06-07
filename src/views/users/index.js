@@ -27,9 +27,8 @@ import { visuallyHidden } from '@mui/utils';
 
 // project imports
 import MainCard from 'ui-component/cards/MainCard';
-// import Chip from 'ui-component/extended/Chip';
 import { useDispatch, useSelector } from 'store';
-import { getProductReviews } from 'store/slices/customer';
+import { getUsers } from 'store/slices/users';
 
 // assets
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -40,9 +39,9 @@ import SearchIcon from '@mui/icons-material/Search';
 import VisibilityTwoToneIcon from '@mui/icons-material/VisibilityTwoTone';
 import EditTwoToneIcon from '@mui/icons-material/EditTwoTone';
 import EarningCard from './EarningCard';
-import EarningIcon from 'assets/images/icons/earning.svg';
 import { getAllUserCount, getAllReportsToday } from 'services/userService';
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
+import EarningIcon from 'assets/images/icons/earning.svg';
 // table sort
 function descendingComparator(a, b, orderBy) {
     if (b[orderBy] < a[orderBy]) {
@@ -69,12 +68,11 @@ function stableSort(array, comparator) {
 
 // table header options
 const headCells = [
-    { id: 'id', numeric: false, label: 'Report ID', align: 'left' },
-    { id: 'fullname', numeric: false, label: 'Full Name', align: 'left' },
-    { id: 'date_of_incidence', numeric: false, label: 'Date of Incidence', align: 'left' },
-    { id: 'report_type', numeric: false, label: 'Report Type', align: 'left' },
-    { id: 'description', numeric: false, label: 'Description', align: 'left' },
-    { id: 'created_at', numeric: false, label: 'Created At', align: 'left' }
+    { id: 'id', numeric: false, label: 'User ID', align: 'left' },
+    { id: 'name', numeric: false, label: 'Name', align: 'left' },
+    { id: 'email', numeric: false, label: 'Email', align: 'left' },
+    { id: 'role', numeric: false, label: 'Role', align: 'left' },
+    { id: 'createdAt', numeric: false, label: 'Created At', align: 'left' }
 ];
 
 // table header component
@@ -92,7 +90,7 @@ function EnhancedTableHead({ onSelectAllClick, order, orderBy, numSelected, rowC
                         indeterminate={numSelected > 0 && numSelected < rowCount}
                         checked={rowCount > 0 && numSelected === rowCount}
                         onChange={onSelectAllClick}
-                        inputProps={{ 'aria-label': 'select all reports' }}
+                        inputProps={{ 'aria-label': 'select all users' }}
                     />
                 </TableCell>
                 {numSelected > 0 && (
@@ -163,7 +161,7 @@ const EnhancedTableToolbar = ({ numSelected }) => (
             </Typography>
         ) : (
             <Typography variant="h6" id="tableTitle">
-                Incident Reports
+                Users
             </Typography>
         )}
         <Box sx={{ flexGrow: 1 }} />
@@ -185,24 +183,24 @@ EnhancedTableToolbar.propTypes = {
 const Users = () => {
     const theme = useTheme();
     const dispatch = useDispatch();
-    const [userCount, setUserCount] = useState(0);
-    // const [todayReportCount, setTodayReportCount] = useState(0);
     const [order, setOrder] = React.useState('asc');
-    const [orderBy, setOrderBy] = React.useState('created_at');
+    const [orderBy, setOrderBy] = React.useState('createdAt');
     const [selected, setSelected] = React.useState([]);
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(5);
     const [search, setSearch] = React.useState('');
     const [rows, setRows] = React.useState([]);
-    console.log('xxxxxxxxxxxxxxxxxxxxxxxxrooooow', rows);
-    const { productreviews } = useSelector((state) => state.customer);
+    const { users } = useSelector((state) => state.user);
+    const [userCount, setUserCount] = useState(0);
+    const [setTodayReportCount] = useState(0);
+
     React.useEffect(() => {
-        dispatch(getProductReviews());
+        dispatch(getUsers());
     }, [dispatch]);
 
     React.useEffect(() => {
-        setRows(productreviews);
-    }, [productreviews]);
+        setRows(users);
+    }, [users]);
 
     const handleSearch = (event) => {
         const newString = event?.target.value;
@@ -211,7 +209,7 @@ const Users = () => {
         if (newString) {
             const newRows = rows.filter((row) => {
                 let matches = true;
-                const properties = ['id', 'fullname', 'date_of_incidence', 'report_type', 'description', 'created_at'];
+                const properties = ['id', 'name', 'email', 'role', 'createdAt'];
                 let containsQuery = false;
 
                 properties.forEach((property) => {
@@ -227,7 +225,7 @@ const Users = () => {
             });
             setRows(newRows);
         } else {
-            setRows(productreviews);
+            setRows(users);
         }
     };
 
@@ -293,12 +291,11 @@ const Users = () => {
                 console.log(error.message);
             });
     }, []);
-
     return (
         <MainCard title="Manage Users" content={false}>
             <CardContent>
                 <Grid container justifyContent="space-between" alignItems="center" spacing={2}>
-                    <Grid container spacing={2} sx={{ mt: 4 }}>
+                <Grid container spacing={2} sx={{ mt: 4 }}>
                         <Grid item xs={3}>
                             <EarningCard count={userCount} detail="Total Users" icon={EarningIcon} />
                         </Grid>
@@ -313,7 +310,7 @@ const Users = () => {
                                 )
                             }}
                             onChange={handleSearch}
-                            placeholder="Search Reports"
+                            placeholder="Search Users"
                             value={search}
                             size="small"
                         />
@@ -387,11 +384,10 @@ const Users = () => {
                                                 {row.id}
                                             </Typography>
                                         </TableCell>
-                                        <TableCell>{row.fullname}</TableCell>
-                                        <TableCell>{row.date_of_incidence}</TableCell>
-                                        <TableCell>{row.report_type}</TableCell>
-                                        <TableCell>{row.description}</TableCell>
-                                        <TableCell>{row.created_at}</TableCell>
+                                        <TableCell>{row.name}</TableCell>
+                                        <TableCell>{row.email}</TableCell>
+                                        <TableCell>{row.role}</TableCell>
+                                        <TableCell>{row.createdAt}</TableCell>
                                         <TableCell align="center" sx={{ pr: 3 }}>
                                             <IconButton color="primary" size="large" aria-label="view">
                                                 <VisibilityTwoToneIcon sx={{ fontSize: '1.3rem' }} />
@@ -405,7 +401,7 @@ const Users = () => {
                             })}
                         {emptyRows > 0 && (
                             <TableRow style={{ height: 53 * emptyRows }}>
-                                <TableCell colSpan={8} />
+                                <TableCell colSpan={7} />
                             </TableRow>
                         )}
                     </TableBody>
