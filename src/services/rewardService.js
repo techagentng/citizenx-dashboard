@@ -13,7 +13,6 @@ export const getAllRewardCount = () => {
             .then((response) => {
                 if (response.status === 200) {
                     resolve(response.data.total_balance);
-                    console.log('API responsexxxx:', response.data.total_balance);
                 } else {
                     reject(new Error(response.data.message || 'Failed to fetch rewards count'));
                 }

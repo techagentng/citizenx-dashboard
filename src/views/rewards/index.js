@@ -27,23 +27,24 @@ import { visuallyHidden } from '@mui/utils';
 
 // project imports
 import MainCard from 'ui-component/cards/MainCard';
-// import Chip from 'ui-component/extended/Chip';
 import { useDispatch, useSelector } from 'store';
-import { getProductReviews } from 'store/slices/customer';
+import { getAllRewards } from 'store/slices/reward';
 
 // assets
 import DeleteIcon from '@mui/icons-material/Delete';
-import FilterListIcon from '@mui/icons-material/FilterListTwoTone';
-import PrintIcon from '@mui/icons-material/PrintTwoTone';
-import FileCopyIcon from '@mui/icons-material/FileCopyTwoTone';
+// import FilterListIcon from '@mui/icons-material/FilterListTwoTone';
+// import PrintIcon from '@mui/icons-material/PrintTwoTone';
+// import FileCopyIcon from '@mui/icons-material/FileCopyTwoTone';
 import SearchIcon from '@mui/icons-material/Search';
 import VisibilityTwoToneIcon from '@mui/icons-material/VisibilityTwoTone';
 import EditTwoToneIcon from '@mui/icons-material/EditTwoTone';
 import EarningCard from './EarningCard';
 import EarningIcon from 'assets/images/icons/earning.svg';
+import { gridSpacing } from 'store/constant';
 import { getAllRewardCount } from 'services/rewardService';
-import { useState, useEffect } from 'react';
-// table sort
+import { useEffect } from 'react';
+
+// table sort functions
 function descendingComparator(a, b, orderBy) {
     if (b[orderBy] < a[orderBy]) {
         return -1;
@@ -60,7 +61,7 @@ const getComparator = (order, orderBy) =>
 function stableSort(array, comparator) {
     const stabilizedThis = array.map((el, index) => [el, index]);
     stabilizedThis.sort((a, b) => {
-        const order = comparator(a[0], b[0]);
+        const order = comparator(a[0], a[1]);
         if (order !== 0) return order;
         return a[1] - b[1];
     });
@@ -182,10 +183,9 @@ EnhancedTableToolbar.propTypes = {
 };
 
 // main component
-const IncidentReportList = () => {
+const RewardList = () => {
     const theme = useTheme();
     const dispatch = useDispatch();
-    const [rewardCount, setRewardCount] = useState(0);
     const [order, setOrder] = React.useState('asc');
     const [orderBy, setOrderBy] = React.useState('created_at');
     const [selected, setSelected] = React.useState([]);
@@ -193,15 +193,18 @@ const IncidentReportList = () => {
     const [rowsPerPage, setRowsPerPage] = React.useState(5);
     const [search, setSearch] = React.useState('');
     const [rows, setRows] = React.useState([]);
-    console.log('xxxxxxxxxxxxxxxxxxxxxxxxrooooow', rows);
-    const { productreviews } = useSelector((state) => state.customer);
+    const [rewardCount, setRewardCount] = React.useState(0);
+    const { rewardData } = useSelector((state) => state.reward);
+
     React.useEffect(() => {
-        dispatch(getProductReviews());
+        dispatch(getAllRewards());
     }, [dispatch]);
 
     React.useEffect(() => {
-        setRows(productreviews);
-    }, [productreviews]);
+        if (rewardData) {
+            setRows(rewardData);
+        }
+    }, [rewardData]);
 
     const handleSearch = (event) => {
         const newString = event?.target.value;
@@ -214,7 +217,7 @@ const IncidentReportList = () => {
                 let containsQuery = false;
 
                 properties.forEach((property) => {
-                    if (row[property].toString().toLowerCase().includes(newString.toString().toLowerCase())) {
+                    if (row[property] && row[property].toString().toLowerCase().includes(newString.toString().toLowerCase())) {
                         containsQuery = true;
                     }
                 });
@@ -226,7 +229,7 @@ const IncidentReportList = () => {
             });
             setRows(newRows);
         } else {
-            setRows(productreviews);
+            setRows(rewardData);
         }
     };
 
@@ -262,7 +265,6 @@ const IncidentReportList = () => {
         } else if (selectedIndex > 0) {
             newSelected = newSelected.concat(selected.slice(0, selectedIndex), selected.slice(selectedIndex + 1));
         }
-
         setSelected(newSelected);
     };
 
@@ -271,18 +273,15 @@ const IncidentReportList = () => {
     };
 
     const handleChangeRowsPerPage = (event) => {
-        setRowsPerPage(parseInt(event?.target.value, 10));
+        setRowsPerPage(parseInt(event.target.value, 10));
         setPage(0);
     };
 
-    const isSelected = (id) => selected.indexOf(id) !== -1;
-
-    const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
     useEffect(() => {
-        console.log('Fetching reward count data');
-        getAllRewardCount()
-            .then((rewardCountData) => {
-                setRewardCount(rewardCountData);
+        console.log('Fetching user data, report data, and online users');
+        Promise.all([getAllRewardCount()])
+            .then(([rewardCount]) => {
+                setRewardCount(rewardCount);
             })
             .catch((error) => {
                 console.log(error.message);
@@ -290,54 +289,31 @@ const IncidentReportList = () => {
     }, []);
 
     return (
-        <MainCard title="Manage Rewards" content={false}>
+        <MainCard content={false}>
             <CardContent>
-                <Grid container justifyContent="space-between" alignItems="center" spacing={2}>
-                    <Grid container spacing={2} sx={{ mt: 4 }}>
-                        <Grid item xs={3}>
-                            <EarningCard count={rewardCount} detail="Total Reward" icon={EarningIcon} />
-                        </Grid>
-                        <Grid item xs={3}>
-                            <EarningCard count={rewardCount} detail="Total Users" icon={EarningIcon} />
-                        </Grid>
+                <Grid container spacing={gridSpacing}>
+                    <Grid item xs={3}>
+                        <EarningCard title="Total Rewards" count={rewardCount} icon={EarningIcon} />
                     </Grid>
-                    <Grid item xs={12} sm={6} sx={{ textAlign: 'left' }}>
+                    <Grid item xs={12}>
                         <TextField
+                            sx={{ width: { xs: '100%', md: '50%' } }}
                             InputProps={{
                                 startAdornment: (
                                     <InputAdornment position="start">
-                                        <SearchIcon fontSize="small" />
+                                        <SearchIcon />
                                     </InputAdornment>
                                 )
                             }}
                             onChange={handleSearch}
                             placeholder="Search Reports"
                             value={search}
-                            size="small"
                         />
-                    </Grid>
-                    <Grid item xs={12} sm={6} sx={{ textAlign: 'right' }}>
-                        <Tooltip title="Copy">
-                            <IconButton size="large">
-                                <FileCopyIcon />
-                            </IconButton>
-                        </Tooltip>
-                        <Tooltip title="Print">
-                            <IconButton size="large">
-                                <PrintIcon />
-                            </IconButton>
-                        </Tooltip>
-                        <Tooltip title="Filter">
-                            <IconButton size="large">
-                                <FilterListIcon />
-                            </IconButton>
-                        </Tooltip>
                     </Grid>
                 </Grid>
             </CardContent>
-
             <TableContainer>
-                <Table sx={{ minWidth: 750 }} aria-labelledby="tableTitle">
+                <Table aria-labelledby="tableTitle">
                     <EnhancedTableHead
                         numSelected={selected.length}
                         order={order}
@@ -349,67 +325,63 @@ const IncidentReportList = () => {
                         selected={selected}
                     />
                     <TableBody>
-                        {stableSort(rows, getComparator(order, orderBy))
-                            .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                            .map((row, index) => {
-                                const isItemSelected = isSelected(row.id);
-                                const labelId = `enhanced-table-checkbox-${index}`;
+                        {rows && rows.length > 0 ? (
+                            stableSort(rows, getComparator(order, orderBy))
+                                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                                .map((row, index) => {
+                                    const isItemSelected = selected.indexOf(row.id) !== -1;
+                                    const labelId = `enhanced-table-checkbox-${index}`;
 
-                                return (
-                                    <TableRow
-                                        hover
-                                        role="checkbox"
-                                        aria-checked={isItemSelected}
-                                        tabIndex={-1}
-                                        key={index}
-                                        selected={isItemSelected}
-                                    >
-                                        <TableCell padding="checkbox" onClick={(event) => handleClick(event, row.id)} sx={{ pl: 3 }}>
-                                            <Checkbox
-                                                color="primary"
-                                                checked={isItemSelected}
-                                                inputProps={{ 'aria-labelledby': labelId }}
-                                            />
-                                        </TableCell>
-                                        <TableCell
-                                            component="th"
-                                            id={labelId}
-                                            scope="row"
-                                            onClick={(event) => handleClick(event, row.id)}
-                                            sx={{ cursor: 'pointer' }}
+                                    return (
+                                        <TableRow
+                                            hover
+                                            role="checkbox"
+                                            aria-checked={isItemSelected}
+                                            tabIndex={-1}
+                                            key={row.id}
+                                            selected={isItemSelected}
                                         >
-                                            <Typography
-                                                variant="body2"
-                                                sx={{ color: theme.palette.mode === 'dark' ? 'grey.600' : 'grey.900' }}
-                                            >
-                                                {row.id}
-                                            </Typography>
-                                        </TableCell>
-                                        <TableCell>{row.fullname}</TableCell>
-                                        <TableCell>{row.date_of_incidence}</TableCell>
-                                        <TableCell>{row.report_type}</TableCell>
-                                        <TableCell>{row.description}</TableCell>
-                                        <TableCell>{row.created_at}</TableCell>
-                                        <TableCell align="center" sx={{ pr: 3 }}>
-                                            <IconButton color="primary" size="large" aria-label="view">
-                                                <VisibilityTwoToneIcon sx={{ fontSize: '1.3rem' }} />
-                                            </IconButton>
-                                            <IconButton color="secondary" size="large" aria-label="edit">
-                                                <EditTwoToneIcon sx={{ fontSize: '1.3rem' }} />
-                                            </IconButton>
-                                        </TableCell>
-                                    </TableRow>
-                                );
-                            })}
-                        {emptyRows > 0 && (
-                            <TableRow style={{ height: 53 * emptyRows }}>
-                                <TableCell colSpan={8} />
+                                            <TableCell padding="checkbox" sx={{ pl: 3 }}>
+                                                <Checkbox
+                                                    color="primary"
+                                                    checked={isItemSelected}
+                                                    onClick={(event) => handleClick(event, row.id)}
+                                                    inputProps={{ 'aria-labelledby': labelId }}
+                                                />
+                                            </TableCell>
+                                            <TableCell component="th" id={labelId} scope="row" padding="none">
+                                                {row.user_id}
+                                            </TableCell>
+                                            <TableCell align="left">{row.ponit}</TableCell>
+                                            <TableCell align="left">{row.balance}</TableCell>
+                                            <TableCell align="left">{row.reward_type}</TableCell>
+                                            <TableCell align="left">{row.description}</TableCell>
+                                            <TableCell align="left">{row.created_at}</TableCell>
+                                            <TableCell align="center" sx={{ pr: 3 }}>
+                                                <Tooltip title="View">
+                                                    <IconButton color="primary" size="large">
+                                                        <VisibilityTwoToneIcon sx={{ fontSize: '1.3rem' }} />
+                                                    </IconButton>
+                                                </Tooltip>
+                                                <Tooltip title="Edit">
+                                                    <IconButton color="secondary" size="large">
+                                                        <EditTwoToneIcon sx={{ fontSize: '1.3rem' }} />
+                                                    </IconButton>
+                                                </Tooltip>
+                                            </TableCell>
+                                        </TableRow>
+                                    );
+                                })
+                        ) : (
+                            <TableRow>
+                                <TableCell colSpan={7} align="center">
+                                    No Rewards Found
+                                </TableCell>
                             </TableRow>
                         )}
                     </TableBody>
                 </Table>
             </TableContainer>
-
             <TablePagination
                 rowsPerPageOptions={[5, 10, 25]}
                 component="div"
@@ -423,4 +395,4 @@ const IncidentReportList = () => {
     );
 };
 
-export default IncidentReportList;
+export default RewardList;

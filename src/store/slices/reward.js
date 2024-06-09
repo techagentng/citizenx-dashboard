@@ -9,11 +9,11 @@ import { dispatch } from '../index';
 
 const initialState = {
     error: null,
-    users: []
+    rewardData: []
 };
 
 const slice = createSlice({
-    name: 'rewards',
+    name: 'reward',
     initialState,
     reducers: {
         // HAS ERROR
@@ -21,9 +21,9 @@ const slice = createSlice({
             state.error = action.payload;
         },
 
-        // GET CUSTOMERS
+        // GET REWARDS
         getRewardSuccess(state, action) {
-            state.users = action.payload;
+            state.rewardData = action.payload;
         }
     }
 });
@@ -36,8 +36,8 @@ export default slice.reducer;
 export function getAllRewards() {
     return async () => {
         try {
-            const response = await axios.get('/rewards/all');
-            dispatch(slice.actions.getRewardSuccess(response.data.data));
+            const response = await axios.get('/rewards/list');
+            dispatch(slice.actions.getRewardSuccess(response.data));
         } catch (error) {
             dispatch(slice.actions.hasError(error));
         }
