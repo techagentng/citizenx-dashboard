@@ -69,10 +69,10 @@ function stableSort(array, comparator) {
 // table header options
 const headCells = [
     { id: 'id', numeric: false, label: 'User ID', align: 'left' },
-    { id: 'name', numeric: false, label: 'Name', align: 'left' },
+    { id: 'username', numeric: false, label: 'User Name', align: 'left' },
     { id: 'email', numeric: false, label: 'Email', align: 'left' },
-    { id: 'role', numeric: false, label: 'Role', align: 'left' },
-    { id: 'createdAt', numeric: false, label: 'Created At', align: 'left' }
+    { id: 'telephone', numeric: false, label: 'Telephone', align: 'left' },
+    { id: 'fullNamee', numeric: false, label: 'Full Name', align: 'left' }
 ];
 
 // table header component
@@ -209,7 +209,7 @@ const Users = () => {
         if (newString) {
             const newRows = rows.filter((row) => {
                 let matches = true;
-                const properties = ['id', 'name', 'email', 'role', 'createdAt'];
+                const properties = ['id', 'username', 'email', 'telephone', 'fullName'];
                 let containsQuery = false;
 
                 properties.forEach((property) => {
@@ -381,13 +381,13 @@ const Users = () => {
                                                 variant="body2"
                                                 sx={{ color: theme.palette.mode === 'dark' ? 'grey.600' : 'grey.900' }}
                                             >
-                                                {row.id}
+                                                {row.ID}
                                             </Typography>
                                         </TableCell>
-                                        <TableCell>{row.name}</TableCell>
+                                        <TableCell>{row.username}</TableCell>
                                         <TableCell>{row.email}</TableCell>
-                                        <TableCell>{row.role}</TableCell>
-                                        <TableCell>{row.createdAt}</TableCell>
+                                        <TableCell>{row.telephone}</TableCell>
+                                        <TableCell>{row.fullname}</TableCell>
                                         <TableCell align="center" sx={{ pr: 3 }}>
                                             <IconButton color="primary" size="large" aria-label="view">
                                                 <VisibilityTwoToneIcon sx={{ fontSize: '1.3rem' }} />

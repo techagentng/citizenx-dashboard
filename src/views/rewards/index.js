@@ -41,7 +41,7 @@ import VisibilityTwoToneIcon from '@mui/icons-material/VisibilityTwoTone';
 import EditTwoToneIcon from '@mui/icons-material/EditTwoTone';
 import EarningCard from './EarningCard';
 import EarningIcon from 'assets/images/icons/earning.svg';
-import { getAllUserCount, getAllReportsToday } from 'services/userService';
+import { getAllRewardCount } from 'services/rewardService';
 import { useState, useEffect } from 'react';
 // table sort
 function descendingComparator(a, b, orderBy) {
@@ -185,8 +185,7 @@ EnhancedTableToolbar.propTypes = {
 const IncidentReportList = () => {
     const theme = useTheme();
     const dispatch = useDispatch();
-    const [userCount, setUserCount] = useState(0);
-    const [todayReportCount, setTodayReportCount] = useState(0);
+    const [rewardCount, setRewardCount] = useState(0);
     const [order, setOrder] = React.useState('asc');
     const [orderBy, setOrderBy] = React.useState('created_at');
     const [selected, setSelected] = React.useState([]);
@@ -280,14 +279,10 @@ const IncidentReportList = () => {
 
     const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
     useEffect(() => {
-        console.log('Fetching user data, report data, and online users');
-        Promise.all([getAllUserCount(), getAllReportsToday()])
-            .then(([userCountData, todayReportCountData]) => {
-                console.log('User count:', userCountData);
-                console.log('Today report count:', todayReportCountData);
-
-                setUserCount(userCountData);
-                setTodayReportCount(todayReportCountData);
+        console.log('Fetching reward count data');
+        getAllRewardCount()
+            .then((rewardCountData) => {
+                setRewardCount(rewardCountData);
             })
             .catch((error) => {
                 console.log(error.message);
@@ -295,15 +290,15 @@ const IncidentReportList = () => {
     }, []);
 
     return (
-        <MainCard title="Manage Reports" content={false}>
+        <MainCard title="Manage Rewards" content={false}>
             <CardContent>
                 <Grid container justifyContent="space-between" alignItems="center" spacing={2}>
                     <Grid container spacing={2} sx={{ mt: 4 }}>
                         <Grid item xs={3}>
-                            <EarningCard count={todayReportCount} detail="Today's Report" icon={EarningIcon} />
+                            <EarningCard count={rewardCount} detail="Total Reward" icon={EarningIcon} />
                         </Grid>
                         <Grid item xs={3}>
-                            <EarningCard count={userCount} detail="Total Users" icon={EarningIcon} />
+                            <EarningCard count={rewardCount} detail="Total Users" icon={EarningIcon} />
                         </Grid>
                     </Grid>
                     <Grid item xs={12} sm={6} sx={{ textAlign: 'left' }}>
