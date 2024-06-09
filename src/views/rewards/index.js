@@ -71,8 +71,8 @@ function stableSort(array, comparator) {
 // table header options
 const headCells = [
     { id: 'id', numeric: false, label: 'Report ID', align: 'left' },
-    { id: 'account_number', numeric: false, label: 'Account Number', align: 'left' },
-    { id: 'date_of_incidence', numeric: false, label: 'Date of Incidence', align: 'left' },
+    { id: 'points', numeric: false, label: 'Reward Points', align: 'left' },
+    { id: 'account_balance', numeric: false, label: 'Account Balance', align: 'left' },
     { id: 'reward_type', numeric: false, label: 'Reward Type', align: 'left' },
     { id: 'incident_id', numeric: false, label: 'Report ID', align: 'left' },
     { id: 'created_at', numeric: false, label: 'Created At', align: 'left' }
@@ -292,12 +292,12 @@ const RewardList = () => {
         <MainCard content={false}>
             <CardContent>
                 <Grid container spacing={gridSpacing} direction="column">
-                <Grid container spacing={2} sx={{ mt: 4 }}>
+                <Grid container spacing={2} sx={{ mt: 4, ml: 2 }}>
                         <Grid item xs={3}>
-                            <EarningCard count={rewardCount} detail="Today's Report" icon={EarningIcon} />
+                            <EarningCard count={rewardCount} detail="Total Reward" icon={EarningIcon} />
                         </Grid>
                         <Grid item xs={3}>
-                            <EarningCard count={rewardCount} detail="Total Users" icon={EarningIcon} />
+                            <EarningCard count={rewardCount} detail="Total Reward" icon={EarningIcon} />
                         </Grid>
                     </Grid>
                     <Grid item xs={12} sm={6} sx={{ textAlign: 'left' }}>
@@ -357,7 +357,7 @@ const RewardList = () => {
                                             <TableCell component="th" id={labelId} scope="row" padding="none">
                                                 {row.user_id}
                                             </TableCell>
-                                            <TableCell align="left">{row.ponit}</TableCell>
+                                            <TableCell align="left">{row.point}</TableCell>
                                             <TableCell align="left">{row.balance}</TableCell>
                                             <TableCell align="left">{row.reward_type}</TableCell>
                                             <TableCell align="left">{row.incident_id}</TableCell>
