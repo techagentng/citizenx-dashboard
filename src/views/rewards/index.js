@@ -71,10 +71,10 @@ function stableSort(array, comparator) {
 // table header options
 const headCells = [
     { id: 'id', numeric: false, label: 'Report ID', align: 'left' },
-    { id: 'fullname', numeric: false, label: 'Full Name', align: 'left' },
+    { id: 'account_number', numeric: false, label: 'Account Number', align: 'left' },
     { id: 'date_of_incidence', numeric: false, label: 'Date of Incidence', align: 'left' },
-    { id: 'report_type', numeric: false, label: 'Report Type', align: 'left' },
-    { id: 'description', numeric: false, label: 'Description', align: 'left' },
+    { id: 'reward_type', numeric: false, label: 'Reward Type', align: 'left' },
+    { id: 'incident_id', numeric: false, label: 'Report ID', align: 'left' },
     { id: 'created_at', numeric: false, label: 'Created At', align: 'left' }
 ];
 
@@ -291,23 +291,28 @@ const RewardList = () => {
     return (
         <MainCard content={false}>
             <CardContent>
-                <Grid container spacing={gridSpacing}>
-                    <Grid item xs={3}>
-                        <EarningCard title="Total Rewards" count={rewardCount} icon={EarningIcon} />
+                <Grid container spacing={gridSpacing} direction="column">
+                <Grid container spacing={2} sx={{ mt: 4 }}>
+                        <Grid item xs={3}>
+                            <EarningCard count={rewardCount} detail="Today's Report" icon={EarningIcon} />
+                        </Grid>
+                        <Grid item xs={3}>
+                            <EarningCard count={rewardCount} detail="Total Users" icon={EarningIcon} />
+                        </Grid>
                     </Grid>
-                    <Grid item xs={12}>
+                    <Grid item xs={12} sm={6} sx={{ textAlign: 'left' }}>
                         <TextField
-                            sx={{ width: { xs: '100%', md: '50%' } }}
                             InputProps={{
                                 startAdornment: (
                                     <InputAdornment position="start">
-                                        <SearchIcon />
+                                        <SearchIcon fontSize="small" />
                                     </InputAdornment>
                                 )
                             }}
                             onChange={handleSearch}
                             placeholder="Search Reports"
                             value={search}
+                            size="small"
                         />
                     </Grid>
                 </Grid>
@@ -355,7 +360,7 @@ const RewardList = () => {
                                             <TableCell align="left">{row.ponit}</TableCell>
                                             <TableCell align="left">{row.balance}</TableCell>
                                             <TableCell align="left">{row.reward_type}</TableCell>
-                                            <TableCell align="left">{row.description}</TableCell>
+                                            <TableCell align="left">{row.incident_id}</TableCell>
                                             <TableCell align="left">{row.created_at}</TableCell>
                                             <TableCell align="center" sx={{ pr: 3 }}>
                                                 <Tooltip title="View">
