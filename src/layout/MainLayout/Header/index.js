@@ -60,7 +60,7 @@ const Header = () => {
                             '&:hover': {
                                 background: theme.palette.mode === 'dark' ? theme.palette.secondary.main : theme.palette.secondary.dark,
                                 color: theme.palette.mode === 'dark' ? theme.palette.secondary.light : theme.palette.secondary.light
-                            }
+                            },
                         }}
                         onClick={() => dispatch(openDrawer(!drawerOpen))}
                         color="inherit"

@@ -14,9 +14,7 @@ import { getAllUserCount, getAllReportsToday, getOnlineUsers } from 'services/us
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
-import nigeriaGeoJson from './nigeria.geo.json';
-import { GeoJSON } from 'react-leaflet';
-// import TotalGrowthBarChart from './TotalGrowthBarChart';
+import BarChart from './barchart';
 
 // Fix the default icon issue
 // delete L.Icon.Default.prototype._getIconUrl;
@@ -33,7 +31,13 @@ const DashboardPage = ({ isLoading }) => {
     const [todayReportCount, setTodayReportCount] = useState(0);
     const [onlineUsers, setOnlineUsers] = useState(0);
 
-    const nigeriaPosition = [9.082, 8.6753];
+    const nigeriaPosition = [9.082, 8.6753]; // Latitude and Longitude for Nigeria
+
+    // Bounds to show only Nigeria
+    const nigeriaBounds = [
+        [4.24, 2.6769], // Southwest corner
+        [13.8904, 14.678] // Northeast corner
+    ];
 
     // Fetch users data on component mount
     useEffect(() => {
@@ -76,15 +80,12 @@ const DashboardPage = ({ isLoading }) => {
             <MainCard>
                 <Grid container spacing={gridSpacing}>
                     <Grid item xs={12} md={10}>
+                      <BarChart/>
                         <MainCard title="Markers & Popups">
-                            <MapContainer center={nigeriaPosition} zoom={6} style={{ height: '100vh', width: '100%' }}>
+                            <MapContainer bounds={nigeriaBounds} style={{ height: '100vh', width: '100%' }}>
                                 <TileLayer
                                     url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                                     attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                                />
-                                <GeoJSON
-                                    data={nigeriaGeoJson}
-                                    style={{ color: '#ff7800', weight: 2, fillColor: '#fffcf2', fillOpacity: 0.5 }}
                                 />
                                 <Marker position={nigeriaPosition}>
                                     <Popup>Nigeria</Popup>
@@ -94,17 +95,6 @@ const DashboardPage = ({ isLoading }) => {
                     </Grid>
                     <Grid item xs={12} md={2}>
                         <PopularCard isLoading={isLoading} />
-                    </Grid>
-                </Grid>
-
-                <Grid item xs={12}>
-                    <Grid container spacing={gridSpacing}>
-                        <Grid item xs={12} md={8}>
-                            {/* <TotalGrowthBarChart isLoading={isLoading} /> */}
-                        </Grid>
-                        <Grid item xs={12} md={4}>
-                            <PopularCard isLoading={isLoading} />
-                        </Grid>
                     </Grid>
                 </Grid>
             </MainCard>
