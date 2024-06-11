@@ -1,4 +1,5 @@
 // material-ui
+import React from 'react';
 import { useTheme } from '@mui/material/styles';
 import { Avatar, Box, useMediaQuery } from '@mui/material';
 import { MenuItem, TextField } from '@mui/material';
@@ -30,10 +31,11 @@ const Header = () => {
 
     const matchDownMd = useMediaQuery(theme.breakpoints.down('md'));
     const { layout } = useConfig();
+    const [value, setValue] = React.useState('today');
     const status = [
         {
             value: 'today',
-            label: 'Today'
+            label: 'Crime'
         },
         {
             value: 'month',
@@ -95,7 +97,7 @@ const Header = () => {
 
             {/* live customization & localization */}
             <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
-                <TextField id="standard-select-currency" select value="search type" onChange={(e) => setValue(e.target.value)}>
+                <TextField id="standard-select-currency" select value={value} onChange={(e) => setValue(e.target.value)}>
                     {status.map((option) => (
                         <MenuItem key={option.value} value={option.value}>
                             {option.label}
