@@ -1,15 +1,15 @@
 // material-ui
 import { useTheme } from '@mui/material/styles';
 import { Avatar, Box, useMediaQuery } from '@mui/material';
-
+import { MenuItem, TextField } from '@mui/material';
 // project imports
 import LAYOUT_CONST from 'constant';
 import useConfig from 'hooks/useConfig';
 import LogoSection from '../LogoSection';
-import SearchSection from './SearchSection';
+// import SearchSection from './SearchSection';
 import MobileSection from './MobileSection';
 import ProfileSection from './ProfileSection';
-// import FullScreenSection from './FullScreenSection';
+import FullScreenSection from './FullScreenSection';
 // import LocalizationSection from './LocalizationSection';
 // import MegaMenuSection from './MegaMenuSection';
 import NotificationSection from './NotificationSection';
@@ -30,7 +30,20 @@ const Header = () => {
 
     const matchDownMd = useMediaQuery(theme.breakpoints.down('md'));
     const { layout } = useConfig();
-
+    const status = [
+        {
+            value: 'today',
+            label: 'Today'
+        },
+        {
+            value: 'month',
+            label: 'This Month'
+        },
+        {
+            value: 'year',
+            label: 'This Year'
+        }
+    ];
     return (
         <>
             {/* logo & toggler button */}
@@ -60,7 +73,7 @@ const Header = () => {
                             '&:hover': {
                                 background: theme.palette.mode === 'dark' ? theme.palette.secondary.main : theme.palette.secondary.dark,
                                 color: theme.palette.mode === 'dark' ? theme.palette.secondary.light : theme.palette.secondary.light
-                            },
+                            }
                         }}
                         onClick={() => dispatch(openDrawer(!drawerOpen))}
                         color="inherit"
@@ -71,7 +84,7 @@ const Header = () => {
             </Box>
 
             {/* header search */}
-            <SearchSection />
+            {/* <SearchSection /> */}
             <Box sx={{ flexGrow: 1 }} />
             <Box sx={{ flexGrow: 1 }} />
 
@@ -81,17 +94,23 @@ const Header = () => {
             </Box> */}
 
             {/* live customization & localization */}
-            {/* <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
-                <LocalizationSection />
-            </Box> */}
+            <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
+                <TextField id="standard-select-currency" select value="search type" onChange={(e) => setValue(e.target.value)}>
+                    {status.map((option) => (
+                        <MenuItem key={option.value} value={option.value}>
+                            {option.label}
+                        </MenuItem>
+                    ))}
+                </TextField>
+            </Box>
 
             {/* notification */}
             <NotificationSection />
 
             {/* full sceen toggler */}
-            {/* <Box sx={{ display: { xs: 'none', lg: 'block' } }}>
+            <Box sx={{ display: { xs: 'none', lg: 'block' } }}>
                 <FullScreenSection />
-            </Box> */}
+            </Box>
 
             {/* profile */}
             <ProfileSection />

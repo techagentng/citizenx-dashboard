@@ -34,11 +34,11 @@ const DashboardPage = ({ isLoading }) => {
 
     const nigeriaPosition = [9.082, 8.6753]; // Latitude and Longitude for Nigeria
 
-    // Bounds to show only Nigeria
-    const nigeriaBounds = [
-        [4.24, 2.6769], // Southwest corner
-        [13.8904, 14.678] // Northeast corner
-    ];
+    // // Bounds to show only Nigeria
+    // const nigeriaBounds = [
+    //     [4.24, 2.6769], // Southwest corner
+    //     [13.8904, 14.678] // Northeast corner
+    // ];
 
     // Fetch users data on component mount
     useEffect(() => {
@@ -79,10 +79,24 @@ const DashboardPage = ({ isLoading }) => {
                 </Grid>
             </MainCard>
             <MainCard>
+                <Grid container spacing={2}>
+                    <Grid item xs={12} md={8}>
+                        <BarChart sx={{ width: 'calc(50% - 8px)', mt: 18 }} />
+                    </Grid>
+                    <Grid item xs={12} md={4}>
+                        <PieChart />
+                    </Grid>
+                </Grid>
+
                 <Grid container spacing={gridSpacing}>
                     <Grid item xs={12} md={10}>
                         <MainCard title="Markers & Popups">
-                            <MapContainer bounds={nigeriaBounds} style={{ height: '100vh', width: '100%' }}>
+                            <MapContainer
+                                // center={nigeriaPosition}
+                                zoom={6}
+                                style={{ height: '100vh', width: '100%' }}
+                                scrollWheelZoom={false}
+                            >
                                 <TileLayer
                                     url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                                     attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
@@ -95,14 +109,6 @@ const DashboardPage = ({ isLoading }) => {
                     </Grid>
                     <Grid item xs={12} md={2}>
                         <PopularCard isLoading={isLoading} />
-                    </Grid>
-                </Grid>
-                <Grid container spacing={2}>
-                    <Grid item xs={12} md={6}>
-                        <BarChart sx={{ width: 'calc(50% - 8px)', mt:18 }}/>
-                    </Grid>
-                    <Grid item xs={12} md={6}>
-                        <PieChart />
                     </Grid>
                 </Grid>
             </MainCard>
