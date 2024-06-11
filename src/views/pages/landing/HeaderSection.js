@@ -3,7 +3,7 @@ import { useMemo } from 'react';
 
 // material-ui
 import { useTheme, styled } from '@mui/material/styles';
-import { Box, Button, CardMedia, Container, Grid, Link, Stack, Typography } from '@mui/material';
+import { Box, Button, Container, Grid, Link, Stack, Typography } from '@mui/material';
 
 // third party
 import { motion } from 'framer-motion';
@@ -13,11 +13,11 @@ import AnimateButton from 'ui-component/extended/AnimateButton';
 import useConfig from 'hooks/useConfig';
 
 // assets
-import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 
-import TechLight from 'assets/images/landing/tech-light.svg';
-import TechDark from 'assets/images/landing/tech-dark.svg';
-import dashboard from 'assets/images/landing/hero-dashboard.png';
+// import TechLight from 'assets/images/landing/tech-light.svg';
+// import TechDark from 'assets/images/landing/tech-dark.svg';
+import Hero from 'assets/images/landing/hero.png';
+// import dashboard from 'assets/images/landing/hero-dashboard.png';
 import widget1 from 'assets/images/landing/hero-widget-1.png';
 import widget2 from 'assets/images/landing/hero-widget-2.png';
 import BgDark from 'assets/images/landing/bg-hero-block-dark.png';
@@ -26,7 +26,7 @@ import { DASHBOARD_PATH } from 'config';
 
 // styles
 const HeaderImage = styled('img')(({ theme }) => ({
-    maxWidth: '100%',
+    maxWidth: '80%',
     borderRadius: 20,
     transform: 'scale(1.7)',
     transformOrigin: theme.direction === 'rtl' ? '100% 50%' : '0 50%',
@@ -38,8 +38,20 @@ const HeaderImage = styled('img')(({ theme }) => ({
     }
 }));
 
+// const CircleContainer = styled(Box)(({ theme }) => ({
+//     width: '400px',
+//     height: '400px',
+//     borderRadius: '50%',
+//     overflow: 'hidden',
+//     position: 'relative',
+    
+//     justifyContent: 'center',
+//     alignItems: 'center',
+//     boxShadow: theme.shadows[3]
+// }));
+
 const HeaderAnimationImage = styled('img')({
-    maxWidth: '100%',
+    maxWidth: '80%',
     filter: 'drop-shadow(0px 0px 50px rgb(33 150 243 / 30%))'
 });
 
@@ -49,7 +61,10 @@ const HeaderSection = () => {
     const theme = useTheme();
     const { rtlLayout } = useConfig();
 
-    const headerSX = { fontSize: { xs: '2rem', sm: '3rem', md: '3.5rem', lg: '3.5rem' } };
+    const headerSX = { 
+        fontSize: { xs: '2rem', sm: '3rem', md: '3rem', lg: '3rem' }, 
+        // fontWeight: 500,    
+    };
 
     const HeaderAnimationImagememo = useMemo(
         () => (
@@ -89,11 +104,7 @@ const HeaderSection = () => {
                             >
                                 <Stack spacing={1}>
                                     <Typography textAlign={{ xs: 'center', md: 'left' }} variant="h1" sx={headerSX}>
-                                        Use Berry to Power Your Next
-                                    </Typography>
-
-                                    <Typography textAlign={{ xs: 'center', md: 'left' }} variant="h1" color="primary" sx={headerSX}>
-                                        React Project
+                                        Revolutionizing Citizen Engagement and Governance in Nigeria 
                                     </Typography>
                                 </Stack>
                             </motion.div>
@@ -110,7 +121,7 @@ const HeaderSection = () => {
                                     variant="body1"
                                     sx={{ fontSize: { xs: '1rem', md: '1.125rem' } }}
                                 >
-                                    Berry is React based Dashboard template which helps you to build faster and beautiful web applications.
+                                    Join us in making a difference Engage, report and stay informed
                                 </Typography>
                             </motion.div>
                         </Grid>
@@ -130,46 +141,37 @@ const HeaderSection = () => {
                                                 size="large"
                                                 variant="contained"
                                                 color="secondary"
-                                                startIcon={<PlayArrowIcon />}
                                             >
-                                                Live Preview
+                                                Explore Dashboard
                                             </Button>
                                         </AnimateButton>
                                     </Grid>
                                     <Grid item>
-                                        <Button component={Link} href="https://links.codedthemes.com/hsqll" target="_blank" size="large">
-                                            Purchase Now
+                                        <Button component={Link} variant='outlined' href="" target="_blank" size="large">
+                                            Download App
                                         </Button>
                                     </Grid>
                                 </Grid>
                             </motion.div>
                         </Grid>
-                        <Grid item xs={12}>
-                            <motion.div
-                                initial={{ opacity: 0, translateY: 550 }}
-                                animate={{ opacity: 1, translateY: 0 }}
-                                transition={{ type: 'spring', stiffness: 150, damping: 30, delay: 0.6 }}
-                            >
-                                <Stack direction="row" spacing={2} alignItems="center" justifyContent={{ xs: 'center', md: 'flex-start' }}>
-                                    <CardMedia
-                                        component="img"
-                                        image={theme.palette.mode === 'dark' ? TechDark : TechLight}
-                                        alt="Berry Tech"
-                                        sx={{ width: { xs: '75%', sm: '50%', md: '75%' } }}
-                                    />
-                                </Stack>
-                            </motion.div>
-                        </Grid>
+                        
                     </Grid>
                 </Grid>
-                <Grid item xs={12} md={7} sx={{ display: { xs: 'none', md: 'flex' } }}>
-                    <Box sx={{ position: 'relative', mt: 8.75, zIndex: 9 }}>
-                        <HeaderImage src={dashboard} alt="Berry" />
-                        <Box
-                            sx={{
+                <Grid item xs={12} md={7} sx={{ display: { xs: 'none', md: 'flex' }, }}>
+                    <Box  sx={{ position: 'relative', mt: 8.75, zIndex: 9 }}>
+                    <HeaderImage src={Hero} alt="Berry" /> 
+                        <Box sx={{
                                 position: 'absolute',
                                 top: { md: -35, lg: -110 },
                                 right: theme.direction === 'rtl' ? 170 : { md: -50, lg: -140, xl: -220 },
+                                width: { md: 220, lg: 290 },
+                                animation: '10s slideY linear infinite'
+                            }} ></Box>
+                        <Box
+                            sx={{
+                                position: 'absolute',
+                                top: { md: -35, lg: -120 },
+                                right: theme.direction === 'rtl' ? 170 : { md: -50, lg: -80, xl: -150 },
                                 width: { md: 220, lg: 290 },
                                 animation: '10s slideY linear infinite'
                             }}
@@ -186,7 +188,7 @@ const HeaderSection = () => {
                             sx={{
                                 position: 'absolute',
                                 bottom: { md: -20, lg: -90 },
-                                left: { md: 100, lg: 300 },
+                                left: { md: 60, lg: 60 },
                                 width: { md: 220, lg: 280 },
                                 animation: '10s slideY linear infinite',
                                 animationDelay: '2s'
