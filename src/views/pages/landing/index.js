@@ -3,6 +3,7 @@ import { styled } from '@mui/material/styles';
 
 // Projects imports
 import AppBar from 'ui-component/extended/AppBar';
+import HeaderSection from './HeaderSection';
 
 // custom stlye
 const HeaderWrapper = styled('div')(({ theme }) => ({
@@ -17,6 +18,7 @@ const HeaderWrapper = styled('div')(({ theme }) => ({
 
 
 
+
 // =============================|| LANDING MAIN ||============================= //
 
 const Landing = () => {
@@ -27,7 +29,7 @@ const Landing = () => {
           {/* 1. header and hero section */}
           <HeaderWrapper id="home">
                 <AppBar />
-                {/* <HeaderSection /> */}
+                <HeaderSection />
             </HeaderWrapper>
         </>
     );
