@@ -15,6 +15,7 @@ import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
 import BarChart from './barchart';
+import PieChart from './piechart';
 
 // Fix the default icon issue
 // delete L.Icon.Default.prototype._getIconUrl;
@@ -80,7 +81,6 @@ const DashboardPage = ({ isLoading }) => {
             <MainCard>
                 <Grid container spacing={gridSpacing}>
                     <Grid item xs={12} md={10}>
-                      <BarChart/>
                         <MainCard title="Markers & Popups">
                             <MapContainer bounds={nigeriaBounds} style={{ height: '100vh', width: '100%' }}>
                                 <TileLayer
@@ -95,6 +95,14 @@ const DashboardPage = ({ isLoading }) => {
                     </Grid>
                     <Grid item xs={12} md={2}>
                         <PopularCard isLoading={isLoading} />
+                    </Grid>
+                </Grid>
+                <Grid container spacing={2}>
+                    <Grid item xs={12} md={6}>
+                        <BarChart sx={{ width: 'calc(50% - 8px)', mt:18 }}/>
+                    </Grid>
+                    <Grid item xs={12} md={6}>
+                        <PieChart />
                     </Grid>
                 </Grid>
             </MainCard>
