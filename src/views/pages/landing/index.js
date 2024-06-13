@@ -5,6 +5,7 @@ import { useTheme, styled } from '@mui/material/styles';
 import AppBar from 'ui-component/extended/AppBar';
 import HeaderSection from './HeaderSection';
 import Jumbo from './Jumbo';
+import Cards from './Cards';
 
 // custom stlye
 const HeaderWrapper = styled('div')(({ theme }) => ({
@@ -41,6 +42,11 @@ const Landing = () => {
             {/* 2. card section */}
             <SectionWrapper sx={{ bgcolor: theme.palette.mode === 'dark' ? 'dark.dark' : 'background.default' }}>
                 <Jumbo />
+            </SectionWrapper>
+
+            {/* 3. about section */}
+            <SectionWrapper sx={{ bgcolor: theme.palette.mode === 'dark' ? 'dark.dark' : 'background.default' }}>
+                <Cards />
             </SectionWrapper>
         </>
     );
