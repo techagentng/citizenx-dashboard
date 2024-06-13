@@ -32,8 +32,12 @@ export const data = {
 };
 
 export default function PieChart() {
-    return<> <div style={{ width: '100%', maxWidth: '400px' }}> 
-      <Doughnut data={data} />
-    </div>
-    </>
+    return (
+        <>
+            {' '}
+            <div style={{ width: '95%'}}>
+                <Doughnut data={data} />
+            </div>
+        </>
+    );
 }

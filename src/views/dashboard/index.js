@@ -80,16 +80,19 @@ const DashboardPage = ({ isLoading }) => {
             </MainCard>
             <MainCard>
                 <Grid container spacing={2}>
-                    <Grid item xs={12} md={8}>
-                        <BarChart sx={{ width: 'calc(50% - 8px)', mt: 18 }} />
+                    <Grid item xs={12} md={6}>
+                        <BarChart />
                     </Grid>
-                    <Grid item xs={12} md={4}>
+                    <Grid item xs={12} md={3}>
                         <PieChart />
+                    </Grid>
+                    <Grid item xs={12} md={3}>
+                        <PopularCard isLoading={isLoading} />
                     </Grid>
                 </Grid>
 
                 <Grid container spacing={gridSpacing}>
-                    <Grid item xs={12} md={10}>
+                    <Grid item xs={12} md={12}>
                         <MainCard title="Markers & Popups">
                             <MapContainer
                                 // center={nigeriaPosition}
@@ -106,9 +109,6 @@ const DashboardPage = ({ isLoading }) => {
                                 </Marker>
                             </MapContainer>
                         </MainCard>
-                    </Grid>
-                    <Grid item xs={12} md={2}>
-                        <PopularCard isLoading={isLoading} />
                     </Grid>
                 </Grid>
             </MainCard>
