@@ -1,9 +1,10 @@
 // material-ui
-import { styled } from '@mui/material/styles';
+import { useTheme, styled } from '@mui/material/styles';
 
 // Projects imports
 import AppBar from 'ui-component/extended/AppBar';
 import HeaderSection from './HeaderSection';
+import Jumbo from './Jumbo';
 
 // custom stlye
 const HeaderWrapper = styled('div')(({ theme }) => ({
@@ -16,13 +17,18 @@ const HeaderWrapper = styled('div')(({ theme }) => ({
     [theme.breakpoints.down('md')]: {}
 }));
 
+const SectionWrapper = styled('div')({
+    paddingTop: 100,
+    paddingBottom: 100
+});
+
 
 
 
 // =============================|| LANDING MAIN ||============================= //
 
 const Landing = () => {
-    // const theme = useTheme();
+    const theme = useTheme();
 
     return (
         <>
@@ -31,6 +37,11 @@ const Landing = () => {
                 <AppBar />
                 <HeaderSection />
             </HeaderWrapper>
+
+            {/* 2. card section */}
+            <SectionWrapper sx={{ bgcolor: theme.palette.mode === 'dark' ? 'dark.dark' : 'background.default' }}>
+                <Jumbo />
+            </SectionWrapper>
         </>
     );
 };
