@@ -54,6 +54,11 @@ const Landing = () => {
             <SectionWrapper sx={{ bgcolor: theme.palette.mode === 'dark' ? 'dark.dark' : 'background.default' }}>
                 <AppInfo />
             </SectionWrapper>
+
+            {/* 5. Analytics */}
+            <SectionWrapper>
+                
+            </SectionWrapper>
         </>
     );
 };
