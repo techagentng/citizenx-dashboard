@@ -6,6 +6,7 @@ import AppBar from 'ui-component/extended/AppBar';
 import HeaderSection from './HeaderSection';
 import Jumbo from './Jumbo';
 import Cards from './Cards';
+import AppInfo from './AppInfo';
 
 // custom stlye
 const HeaderWrapper = styled('div')(({ theme }) => ({
@@ -47,6 +48,11 @@ const Landing = () => {
             {/* 3. about section */}
             <SectionWrapper sx={{ bgcolor: theme.palette.mode === 'dark' ? 'dark.dark' : 'background.default' }}>
                 <Cards />
+            </SectionWrapper>
+
+            {/* 4. about section */}
+            <SectionWrapper sx={{ bgcolor: theme.palette.mode === 'dark' ? 'dark.dark' : 'background.default' }}>
+                <AppInfo />
             </SectionWrapper>
         </>
     );
