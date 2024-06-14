@@ -43,6 +43,19 @@ import EarningCard from './EarningCard';
 import EarningIcon from 'assets/images/icons/earning.svg';
 import { getAllUserCount, getAllReportsToday } from 'services/userService';
 import { useState, useEffect } from 'react';
+import { formatDistanceToNow } from 'date-fns';
+
+const RelativeTimeCell = ({ timestamp }) => {
+    const date = new Date(timestamp * 1000); // Convert the timestamp to milliseconds
+    const relativeTime = formatDistanceToNow(date, { addSuffix: true });
+
+    return <TableCell>{relativeTime}</TableCell>;
+};
+
+RelativeTimeCell.propTypes = {
+    timestamp: PropTypes.number.isRequired
+};
+
 // table sort
 function descendingComparator(a, b, orderBy) {
     if (b[orderBy] < a[orderBy]) {
@@ -391,9 +404,10 @@ const IncidentReportList = () => {
                                         </TableCell>
                                         <TableCell>{row.fullname}</TableCell>
                                         <TableCell>{row.date_of_incidence}</TableCell>
-                                        <TableCell>{row.report_type}</TableCell>
+                                        <TableCell>{row.report_type_id}</TableCell>
                                         <TableCell>{row.description}</TableCell>
-                                        <TableCell>{row.created_at}</TableCell>
+                                        {/* <TableCell>{row.created_at}</TableCell> */}
+                                        <RelativeTimeCell timestamp={row.created_at} />
                                         <TableCell align="center" sx={{ pr: 3 }}>
                                             <IconButton color="primary" size="large" aria-label="view">
                                                 <VisibilityTwoToneIcon sx={{ fontSize: '1.3rem' }} />

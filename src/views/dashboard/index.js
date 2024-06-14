@@ -1,12 +1,13 @@
 // material-ui
 import { Grid } from '@mui/material';
 import React, { useEffect, useContext, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 // project imports
 import MainCard from 'ui-component/cards/MainCard';
 import EarningCard from 'ui-component/cards/Skeleton/EarningCard';
 import EarningIcon from 'assets/images/icons/earning.svg';
 // import EarningCard from './EarningCard';
-import PopularCard from './PopularCard';
+// import PopularCard from './PopularCard';
 import { gridSpacing } from 'store/constant';
 import JWTContext from 'contexts/JWTContext';
 import { getAllUserCount, getAllReportsToday, getOnlineUsers } from 'services/userService';
@@ -16,7 +17,7 @@ import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
 import BarChart from './barchart';
 import PieChart from './piechart';
-
+import { getGraph } from 'store/slices/graphs';
 // Fix the default icon issue
 // delete L.Icon.Default.prototype._getIconUrl;
 
@@ -26,19 +27,18 @@ L.Icon.Default.mergeOptions({
     shadowUrl: require('leaflet/dist/images/marker-shadow.png').default
 });
 
-const DashboardPage = ({ isLoading }) => {
+const DashboardPage = () => {
+    const dispatch = useDispatch();
     const { isLoggedIn } = useContext(JWTContext);
+    const { reportTypes, reportCounts, loading, error } = useSelector((state) => state.graphs.graphs);
     const [userCount, setUserCount] = useState(0);
     const [todayReportCount, setTodayReportCount] = useState(0);
     const [onlineUsers, setOnlineUsers] = useState(0);
+    const nigeriaPosition = [9.082, 8.6753]; 
 
-    const nigeriaPosition = [9.082, 8.6753]; // Latitude and Longitude for Nigeria
-
-    // // Bounds to show only Nigeria
-    // const nigeriaBounds = [
-    //     [4.24, 2.6769], // Southwest corner
-    //     [13.8904, 14.678] // Northeast corner
-    // ];
+    useEffect(() => {
+        dispatch(getGraph('Benue', 'Melabu'));
+    }, [dispatch]);
 
     // Fetch users data on component mount
     useEffect(() => {
@@ -59,6 +59,9 @@ const DashboardPage = ({ isLoading }) => {
                 });
         }
     }, [isLoggedIn]);
+
+    if (loading) return <div>Loading...</div>;
+    if (error) return <div>Error: {error.message}</div>;
 
     return (
         <>
@@ -81,13 +84,13 @@ const DashboardPage = ({ isLoading }) => {
             <MainCard>
                 <Grid container spacing={2}>
                     <Grid item xs={12} md={6}>
-                        <BarChart />
+                        <BarChart reportTypes={reportTypes} reportCounts={reportCounts} />
                     </Grid>
                     <Grid item xs={12} md={3}>
-                        <PieChart />
+                        <PieChart reportTypes={reportTypes} reportCounts={reportCounts} />
                     </Grid>
                     <Grid item xs={12} md={3}>
-                        <PopularCard isLoading={isLoading} />
+                        {/* <PopularCard isLoading={isLoading} reportTypes={reportTypes} reportCounts={reportCounts}/> */}
                     </Grid>
                 </Grid>
 
