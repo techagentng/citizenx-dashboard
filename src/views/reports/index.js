@@ -29,7 +29,7 @@ import { visuallyHidden } from '@mui/utils';
 import MainCard from 'ui-component/cards/MainCard';
 // import Chip from 'ui-component/extended/Chip';
 import { useDispatch, useSelector } from 'store';
-import { getProductReviews } from 'store/slices/customer';
+import { getAllReports } from 'store/slices/reports';
 
 // assets
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -207,14 +207,14 @@ const IncidentReportList = () => {
     const [rowsPerPage, setRowsPerPage] = React.useState(5);
     const [search, setSearch] = React.useState('');
     const [rows, setRows] = React.useState([]);
-    const { productreviews } = useSelector((state) => state.customer);
+    const { report } = useSelector((state) => state.report);
     React.useEffect(() => {
-        dispatch(getProductReviews());
+        dispatch(getAllReports());
     }, [dispatch]);
 
     React.useEffect(() => {
-        setRows(productreviews);
-    }, [productreviews]);
+        setRows(report);
+    }, [report]);
 
     const handleSearch = (event) => {
         const newString = event?.target.value;

@@ -27,7 +27,7 @@ import ReviewEdit from './ReviewEdit';
 import MainCard from 'ui-component/cards/MainCard';
 import Chip from 'ui-component/extended/Chip';
 import { useDispatch, useSelector } from 'store';
-import { getProductReviews } from 'store/slices/customer';
+import { getProductReviews } from 'store/slices/reports';
 import DeleteIcon from '@mui/icons-material/Delete';
 import FilterListIcon from '@mui/icons-material/FilterListTwoTone';
 import PrintIcon from '@mui/icons-material/PrintTwoTone';
