@@ -19,6 +19,7 @@ import NotificationSection from './NotificationSection';
 
 import { useDispatch, useSelector } from 'store';
 import { openDrawer } from 'store/slices/menu';
+import { setState, setLga } from 'store/slices/graphs';
 import statesAndLgas from './statesAndLgas.json';
 // assets
 import { IconMenu2 } from '@tabler/icons-react';
@@ -27,31 +28,28 @@ import { IconMenu2 } from '@tabler/icons-react';
 
 const Header = () => {
     const theme = useTheme();
-
     const dispatch = useDispatch();
     const { drawerOpen } = useSelector((state) => state.menu);
-
     const matchDownMd = useMediaQuery(theme.breakpoints.down('md'));
     const { layout } = useConfig();
     const [states, setStates] = useState([]);
-    const [selectedState, setSelectedState] = useState('State');
     const [lgas, setLgas] = useState([]);
+    const [selectedState, setSelectedState] = useState('State');
     const [selectedLga, setSelectedLga] = useState('LGA');
 
     useEffect(() => {
-        // Load the state data from JSON
-        const stateNames = statesAndLgas.map(state => ({ value: state.state, label: state.state }));
+        const stateNames = statesAndLgas.map((state) => ({ value: state.state, label: state.state }));
         setStates(stateNames);
     }, []);
 
     const handleStateChange = (event) => {
         const stateName = event.target.value;
         setSelectedState(stateName);
-    
-        // Find the selected state in the JSON data and update the LGA list
-        const stateData = statesAndLgas.find(state => state.state === stateName);
+        dispatch(setState(stateName));
+
+        const stateData = statesAndLgas.find((state) => state.state === stateName);
         if (stateData) {
-            const lgaOptions = stateData.lgas.map(lga => ({ value: lga, label: lga }));
+            const lgaOptions = stateData.lgas.map((lga) => ({ value: lga, label: lga }));
             setLgas(lgaOptions);
         } else {
             setLgas([]);
@@ -59,7 +57,9 @@ const Header = () => {
     };
 
     const handleLgaChange = (event) => {
-        setSelectedLga(event.target.value);
+        const lgaName = event.target.value;
+        setSelectedLga(lgaName);
+        dispatch(setLga(lgaName));
     };
 
     return (
@@ -113,13 +113,7 @@ const Header = () => {
 
             {/* live customization & localization */}
             <Box sx={{ display: { xs: 'none', sm: 'flex' }, alignItems: 'center', gap: 2 }}>
-                <TextField
-                    id="standard-select-currency-1"
-                    select
-                    value={selectedState}
-                    onChange={handleStateChange}
-                    label="Select State"
-                >
+                <TextField id="standard-select-currency-1" select value={selectedState} onChange={handleStateChange} label="Select State">
                     <MenuItem value="State" disabled>
                         State
                     </MenuItem>

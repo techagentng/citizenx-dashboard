@@ -29,6 +29,7 @@ L.Icon.Default.mergeOptions({
 
 const DashboardPage = () => {
     const dispatch = useDispatch();
+    const { state: selectedState, lga: selectedLga } = useSelector((state) => state.graphs.lgaState);
     const { isLoggedIn } = useContext(JWTContext);
     const { reportTypes, reportCounts, loading, error } = useSelector((state) => state.graphs.graphs);
     const [userCount, setUserCount] = useState(0);
@@ -37,8 +38,10 @@ const DashboardPage = () => {
     const nigeriaPosition = [9.082, 8.6753]; 
 
     useEffect(() => {
-        dispatch(getGraph('Benue', 'Melabu'));
-    }, [dispatch]);
+        if (selectedState && selectedLga) {
+            dispatch(getGraph(selectedState, selectedLga));
+        }
+    }, [dispatch, selectedState, selectedLga]);
 
     // Fetch users data on component mount
     useEffect(() => {

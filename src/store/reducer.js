@@ -16,7 +16,7 @@ const reducer = combineReducers({
     report: reportReducer,
     user: userReducer,
     graphs: graphReducer,
-    reward: rewardReducer
+    reward: rewardReducer,
 });
 
 

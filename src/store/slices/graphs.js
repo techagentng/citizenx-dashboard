@@ -8,7 +8,11 @@ const initialState = {
         reportTypes: [],
         reportCounts: [],
     },
-    loading: false,
+    lgaState: {
+        state: "",
+        lga: "",
+    },
+    loading: false
 };
 
 const slice = createSlice({
@@ -27,18 +31,24 @@ const slice = createSlice({
             state.graphs.reportCounts = action.payload.report_counts;
             state.loading = false;
         },
+        setState(state, action) {
+            state.lgaState.state = action.payload;
+        },
+        setLga(state, action) {
+            state.lgaState.lga = action.payload;
+        },
     }
 });
 
 export default slice.reducer;
 
-export const { getGraphStart, hasError, getGraphSuccess } = slice.actions;
+export const { getGraphStart, hasError, getGraphSuccess, setState, setLga } = slice.actions;
 
 export function getGraph(state, lga) {
     return async () => {
         dispatch(getGraphStart());
         try {
-            const response = await axios.get(`http://localhost:8080/api/v1/report/type/count?state=${state}&lga=${lga}`);
+            const response = await axios.get(`/report/type/count?state=${state}&lga=${lga}`);
             dispatch(getGraphSuccess(response.data));
         } catch (error) {
             dispatch(hasError(error));
