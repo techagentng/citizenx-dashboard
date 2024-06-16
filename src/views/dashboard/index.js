@@ -17,6 +17,7 @@ import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
 import BarChart from './barchart';
 import PieChart from './piechart';
+import LineChart from './linechart'
 import { getGraph } from 'store/slices/graphs';
 // Fix the default icon issue
 // delete L.Icon.Default.prototype._getIconUrl;
@@ -36,6 +37,7 @@ const DashboardPage = () => {
     const [todayReportCount, setTodayReportCount] = useState(0);
     const [onlineUsers, setOnlineUsers] = useState(0);
     const nigeriaPosition = [9.082, 8.6753];
+   
 
     useEffect(() => {
         if (selectedState && selectedLga) {
@@ -85,7 +87,7 @@ const DashboardPage = () => {
                 </Grid>
             </MainCard>
             <MainCard>
-                <Grid container spacing={2}>
+                <Grid container spacing={2} justifyContent="center" alignItems="flex-end">
                     {!reportTypes || reportTypes.length === 0 ? (
                         <Grid item xs={12}>
                             <p>No data available for the selected state and LGA.</p>
@@ -99,7 +101,7 @@ const DashboardPage = () => {
                                 <PieChart reportTypes={reportTypes} reportCounts={reportCounts} />
                             </Grid>
                             <Grid item xs={12} md={3}>
-                                {/* <PopularCard isLoading={isLoading} reportTypes={reportTypes} reportCounts={reportCounts}/> */}
+                                <LineChart reportTypes={reportTypes} reportCounts={reportCounts} />
                             </Grid>
                         </>
                     )}

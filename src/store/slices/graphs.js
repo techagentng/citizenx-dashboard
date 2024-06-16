@@ -36,7 +36,7 @@ const slice = createSlice({
         },
         setLga(state, action) {
             state.lgaState.lga = action.payload;
-        },
+        }
     }
 });
 
@@ -44,16 +44,16 @@ export default slice.reducer;
 
 export const { getGraphStart, hasError, getGraphSuccess, setState, setLga } = slice.actions;
 
-export function getGraph(state, lga) {
+export function getGraph(state, lga, startDate, endDate) {
     return async () => {
         dispatch(getGraphStart());
         try {
-            const response = await axios.get(`/report/type/count?state=${state}&lga=${lga}`);
-            if (response.data && response.data.report_types && response.data.report_counts) {
-                dispatch(getGraphSuccess(response.data));
-            } else {
-                dispatch(getGraphSuccess({ report_types: [], report_counts: [] }));
+            let url = `/report/type/count?state=${state}&lga=${lga}`;
+            if (startDate && endDate) {
+                url += `&startDate=${startDate}&endDate=${endDate}`;
             }
+            const response = await axios.get(url);
+            dispatch(getGraphSuccess(response.data));
         } catch (error) {
             dispatch(hasError(error));
         }

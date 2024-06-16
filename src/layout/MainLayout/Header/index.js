@@ -1,5 +1,5 @@
 // material-ui
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useTheme } from '@mui/material/styles';
 import { Avatar, Box, useMediaQuery, MenuItem, TextField } from '@mui/material';
 // project imports
@@ -19,12 +19,10 @@ import NotificationSection from './NotificationSection';
 
 import { useDispatch, useSelector } from 'store';
 import { openDrawer } from 'store/slices/menu';
-import { setState, setLga } from 'store/slices/graphs';
+import { setState, setLga, getGraph } from 'store/slices/graphs';
 import statesAndLgas from './statesAndLgas.json';
 // assets
 import { IconMenu2 } from '@tabler/icons-react';
-
-// ==============================|| MAIN NAVBAR / HEADER ||============================== //
 
 const Header = () => {
     const theme = useTheme();
@@ -36,6 +34,7 @@ const Header = () => {
     const [lgas, setLgas] = useState([]);
     const [selectedState, setSelectedState] = useState('State');
     const [selectedLga, setSelectedLga] = useState('LGA');
+    const [dateRange, setDateRange] = useState([null, null]);
 
     useEffect(() => {
         const stateNames = statesAndLgas.map((state) => ({ value: state.state, label: state.state }));
@@ -62,9 +61,24 @@ const Header = () => {
         dispatch(setLga(lgaName));
     };
 
+    const handleDateRangeChange = (newValue) => {
+        setDateRange(newValue);
+    };
+
+    const handleSearch = useCallback(() => {
+        const [startDate, endDate] = dateRange;
+        dispatch(getGraph(selectedState, selectedLga, startDate?.format('YYYY-MM-DD'), endDate?.format('YYYY-MM-DD')));
+    }, [dispatch, selectedState, selectedLga, dateRange]);
+
+    useEffect(() => {
+        if (selectedState !== 'State' && selectedLga !== 'LGA') {
+            handleSearch();
+        }
+    }, [selectedState, selectedLga, dateRange, handleSearch]);
+
+
     return (
         <>
-            {/* logo & toggler button */}
             <Box
                 sx={{
                     width: 228,
@@ -101,17 +115,9 @@ const Header = () => {
                 ) : null}
             </Box>
 
-            {/* header search */}
-            {/* <SearchSection /> */}
             <Box sx={{ flexGrow: 1 }} />
             <Box sx={{ flexGrow: 1 }} />
 
-            {/* mega-menu */}
-            {/* <Box sx={{ display: { xs: 'none', sm: 'block' }, mr:3 }}>
-                <MegaMenuSection />
-            </Box> */}
-
-            {/* live customization & localization */}
             <Box sx={{ display: { xs: 'none', sm: 'flex' }, alignItems: 'center', gap: 2 }}>
                 <TextField id="standard-select-currency-1" select value={selectedState} onChange={handleStateChange} label="Select State">
                     <MenuItem value="State" disabled>
@@ -129,7 +135,7 @@ const Header = () => {
                     value={selectedLga}
                     onChange={handleLgaChange}
                     label="Select LGA"
-                    disabled={!selectedState || selectedState === 'State'} // Disable if no state is selected
+                    disabled={!selectedState || selectedState === 'State'}
                 >
                     <MenuItem value="LGA" disabled>
                         LGA
@@ -142,23 +148,20 @@ const Header = () => {
                 </TextField>
                 <Box>
                     <LocalizationProvider dateAdapter={AdapterDayjs}>
-                        <DateRangePicker localeText={{ start: 'Start Date', end: 'End Date' }} />
+                        <DateRangePicker
+                            localeText={{ start: 'Start Date', end: 'End Date' }}
+                            value={dateRange}
+                            onChange={handleDateRangeChange}
+                        />
                     </LocalizationProvider>
                 </Box>
             </Box>
 
-            {/* notification */}
             <NotificationSection />
-
-            {/* full screen toggler */}
             <Box sx={{ display: { xs: 'none', lg: 'block' } }}>
                 <FullScreenSection />
             </Box>
-
-            {/* profile */}
             <ProfileSection />
-
-            {/* mobile header */}
             <Box sx={{ display: { xs: 'block', sm: 'none' } }}>
                 <MobileSection />
             </Box>

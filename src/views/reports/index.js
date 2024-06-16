@@ -37,8 +37,13 @@ import FilterListIcon from '@mui/icons-material/FilterListTwoTone';
 import PrintIcon from '@mui/icons-material/PrintTwoTone';
 import FileCopyIcon from '@mui/icons-material/FileCopyTwoTone';
 import SearchIcon from '@mui/icons-material/Search';
-import VisibilityTwoToneIcon from '@mui/icons-material/VisibilityTwoTone';
-import EditTwoToneIcon from '@mui/icons-material/EditTwoTone';
+// import VisibilityTwoToneIcon from '@mui/icons-material/VisibilityTwoTone';
+import CheckIcon from '@mui/icons-material/Check';
+import CancelIcon from '@mui/icons-material/Cancel';
+import KeyboardVoiceIcon from '@mui/icons-material/KeyboardVoice';
+import SlideshowIcon from '@mui/icons-material/Slideshow';
+import InsertPhotoIcon from '@mui/icons-material/InsertPhoto';
+// import EditTwoToneIcon from '@mui/icons-material/EditTwoTone';
 import EarningCard from './EarningCard';
 import EarningIcon from 'assets/images/icons/earning.svg';
 import { getAllUserCount, getAllReportsToday } from 'services/userService';
@@ -353,7 +358,7 @@ const IncidentReportList = () => {
                 </Grid>
             </CardContent>
 
-            <TableContainer>
+            <TableContainer sx={{ overflowX: 'auto' }}>
                 <Table sx={{ minWidth: 750 }} aria-labelledby="tableTitle">
                     <EnhancedTableHead
                         numSelected={selected.length}
@@ -393,7 +398,7 @@ const IncidentReportList = () => {
                                             id={labelId}
                                             scope="row"
                                             onClick={(event) => handleClick(event, row.id)}
-                                            sx={{ cursor: 'pointer' }}
+                                            sx={{ cursor: 'pointer', whiteSpace: 'nowrap' }}
                                         >
                                             <Typography
                                                 variant="body2"
@@ -402,18 +407,27 @@ const IncidentReportList = () => {
                                                 {row.id}
                                             </Typography>
                                         </TableCell>
-                                        <TableCell>{row.fullname}</TableCell>
-                                        <TableCell>{row.date_of_incidence}</TableCell>
-                                        <TableCell>{row.report_type_id}</TableCell>
-                                        <TableCell>{row.description}</TableCell>
+                                        <TableCell sx={{ whiteSpace: 'nowrap' }}>{row.fullname}</TableCell>
+                                        <TableCell sx={{ whiteSpace: 'nowrap' }}>{row.date_of_incidence}</TableCell>
+                                        <TableCell sx={{ whiteSpace: 'nowrap' }}>{row.report_type_id}</TableCell>
+                                        <TableCell sx={{ whiteSpace: 'nowrap' }}>{row.description}</TableCell>
                                         {/* <TableCell>{row.created_at}</TableCell> */}
                                         <RelativeTimeCell timestamp={row.created_at} />
-                                        <TableCell align="center" sx={{ pr: 3 }}>
+                                        <TableCell align="center" sx={{ pr: 3, whiteSpace: 'nowrap' }}>
+                                        <IconButton color="primary" size="large" aria-label="view">
+                                                <KeyboardVoiceIcon sx={{ fontSize: '1.3rem' }} />
+                                            </IconButton>
                                             <IconButton color="primary" size="large" aria-label="view">
-                                                <VisibilityTwoToneIcon sx={{ fontSize: '1.3rem' }} />
+                                                <SlideshowIcon sx={{ fontSize: '1.3rem' }} />
+                                            </IconButton>
+                                            <IconButton color="primary" size="large" aria-label="view">
+                                                <InsertPhotoIcon sx={{ fontSize: '1.3rem' }} />
+                                            </IconButton>
+                                            <IconButton color="primary" size="large" aria-label="view">
+                                                <CheckIcon sx={{ fontSize: '1.3rem' }} />
                                             </IconButton>
                                             <IconButton color="secondary" size="large" aria-label="edit">
-                                                <EditTwoToneIcon sx={{ fontSize: '1.3rem' }} />
+                                                <CancelIcon sx={{ fontSize: '1.3rem' }} />
                                             </IconButton>
                                         </TableCell>
                                     </TableRow>
