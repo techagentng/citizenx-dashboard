@@ -5,6 +5,10 @@ import { Chart as ChartJS, CategoryScale, LinearScale, BarController, BarElement
 ChartJS.register(Title, Tooltip, Legend, CategoryScale, LinearScale, BarElement, BarController);
 
 const BarChart = ({ reportTypes, reportCounts }) => {
+    if (!reportTypes || !reportCounts || reportTypes.length === 0 || reportCounts.length === 0) {
+        return <p>No data available</p>;
+    }
+
     const data = {
         labels: reportTypes,
         datasets: [

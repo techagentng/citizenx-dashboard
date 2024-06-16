@@ -35,7 +35,7 @@ const DashboardPage = () => {
     const [userCount, setUserCount] = useState(0);
     const [todayReportCount, setTodayReportCount] = useState(0);
     const [onlineUsers, setOnlineUsers] = useState(0);
-    const nigeriaPosition = [9.082, 8.6753]; 
+    const nigeriaPosition = [9.082, 8.6753];
 
     useEffect(() => {
         if (selectedState && selectedLga) {
@@ -86,15 +86,23 @@ const DashboardPage = () => {
             </MainCard>
             <MainCard>
                 <Grid container spacing={2}>
-                    <Grid item xs={12} md={6}>
-                        <BarChart reportTypes={reportTypes} reportCounts={reportCounts} />
-                    </Grid>
-                    <Grid item xs={12} md={3}>
-                        <PieChart reportTypes={reportTypes} reportCounts={reportCounts} />
-                    </Grid>
-                    <Grid item xs={12} md={3}>
-                        {/* <PopularCard isLoading={isLoading} reportTypes={reportTypes} reportCounts={reportCounts}/> */}
-                    </Grid>
+                    {!reportTypes || reportTypes.length === 0 ? (
+                        <Grid item xs={12}>
+                            <p>No data available for the selected state and LGA.</p>
+                        </Grid>
+                    ) : (
+                        <>
+                            <Grid item xs={12} md={6}>
+                                <BarChart reportTypes={reportTypes} reportCounts={reportCounts} />
+                            </Grid>
+                            <Grid item xs={12} md={3}>
+                                <PieChart reportTypes={reportTypes} reportCounts={reportCounts} />
+                            </Grid>
+                            <Grid item xs={12} md={3}>
+                                {/* <PopularCard isLoading={isLoading} reportTypes={reportTypes} reportCounts={reportCounts}/> */}
+                            </Grid>
+                        </>
+                    )}
                 </Grid>
 
                 <Grid container spacing={gridSpacing}>

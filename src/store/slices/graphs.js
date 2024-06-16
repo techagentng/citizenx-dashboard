@@ -49,7 +49,11 @@ export function getGraph(state, lga) {
         dispatch(getGraphStart());
         try {
             const response = await axios.get(`/report/type/count?state=${state}&lga=${lga}`);
-            dispatch(getGraphSuccess(response.data));
+            if (response.data && response.data.report_types && response.data.report_counts) {
+                dispatch(getGraphSuccess(response.data));
+            } else {
+                dispatch(getGraphSuccess({ report_types: [], report_counts: [] }));
+            }
         } catch (error) {
             dispatch(hasError(error));
         }
