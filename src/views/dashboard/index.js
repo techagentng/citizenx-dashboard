@@ -7,7 +7,7 @@ import MainCard from 'ui-component/cards/MainCard';
 import EarningCard from 'ui-component/cards/Skeleton/EarningCard';
 import EarningIcon from 'assets/images/icons/earning.svg';
 // import EarningCard from './EarningCard';
-// import PopularCard from './PopularCard';
+import PopularCard from './PopularCard';
 import { gridSpacing } from 'store/constant';
 import JWTContext from 'contexts/JWTContext';
 import { getAllUserCount, getAllReportsToday, getOnlineUsers } from 'services/userService';
@@ -108,7 +108,7 @@ const DashboardPage = () => {
                 </Grid>
 
                 <Grid container spacing={gridSpacing}>
-                    <Grid item xs={12} md={12}>
+                    <Grid item xs={12} md={8}>
                         <MainCard title="Markers & Popups">
                             <MapContainer
                                 // center={nigeriaPosition}
@@ -125,6 +125,9 @@ const DashboardPage = () => {
                                 </Marker>
                             </MapContainer>
                         </MainCard>
+                    </Grid>
+                    <Grid item xs={12} md={4}>
+                        <PopularCard />
                     </Grid>
                 </Grid>
             </MainCard>
