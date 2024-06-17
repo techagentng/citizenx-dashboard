@@ -12,6 +12,7 @@ const initialState = {
         state: "",
         lga: "",
     },
+    reportCount: 0,
     loading: false
 };
 
@@ -52,6 +53,19 @@ export function getGraph(state, lga, startDate, endDate) {
             if (startDate && endDate) {
                 url += `&startDate=${startDate}&endDate=${endDate}`;
             }
+            const response = await axios.get(url);
+            dispatch(getGraphSuccess(response.data));
+        } catch (error) {
+            dispatch(hasError(error));
+        }
+    };
+}
+
+export function getReportCount() {
+    return async () => {
+        dispatch(getGraphStart());
+        try {
+            let url = `/incident_reports`;
             const response = await axios.get(url);
             dispatch(getGraphSuccess(response.data));
         } catch (error) {

@@ -5,7 +5,7 @@ import { Dialog, DialogContent, DialogTitle } from '@mui/material';
 
 // project imports
 import AudioPlayer from 'material-ui-audio-player';
-const ReviewEdit = ({ open, handleCloseDialog }) => {
+const ReviewVideo = ({ open, handleCloseDialog }) => {
     // handle star rating
     return (
         <Dialog
@@ -36,4 +36,4 @@ ReviewEdit.propTypes = {
     handleCloseDialog: PropTypes.func
 };
 
-export default ReviewEdit;
+export default ReviewVideo;

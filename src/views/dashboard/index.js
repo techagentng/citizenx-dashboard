@@ -12,13 +12,15 @@ import { gridSpacing } from 'store/constant';
 import JWTContext from 'contexts/JWTContext';
 import { getAllUserCount, getAllReportsToday, getOnlineUsers } from 'services/userService';
 // React Leaflet imports
-import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
+// import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
 import BarChart from './barchart';
 import PieChart from './piechart';
-import LineChart from './linechart'
+import LineChart from './linechart';
 import { getGraph } from 'store/slices/graphs';
+import MapboxMap from './mapbox'
+// import AudioPlayer from 'material-ui-audio-player';
 // Fix the default icon issue
 // delete L.Icon.Default.prototype._getIconUrl;
 
@@ -36,9 +38,18 @@ const DashboardPage = () => {
     const [userCount, setUserCount] = useState(0);
     const [todayReportCount, setTodayReportCount] = useState(0);
     const [onlineUsers, setOnlineUsers] = useState(0);
-    const nigeriaPosition = [9.082, 8.6753];
-   
+    // Define the bounds for Nigeria
+    // const nigeriaBounds = [
+    //     [4.272, 2.6769], // Southwest corner (approx)
+    //     [13.865, 14.678] // Northeast corner (approx)
+    // ];
 
+    // Example markers (replace with your actual data)
+    // const markers = [
+    //     { lat: 9.082, lng: 8.6753, popup: 'Marker 1' },
+    //     { lat: 6.5244, lng: 3.3792, popup: 'Marker 2' }
+    //     // Add more markers as needed
+    // ];
     useEffect(() => {
         if (selectedState && selectedLga) {
             dispatch(getGraph(selectedState, selectedLga));
@@ -110,24 +121,28 @@ const DashboardPage = () => {
                 <Grid container spacing={gridSpacing}>
                     <Grid item xs={12} md={8}>
                         <MainCard title="Markers & Popups">
-                            <MapContainer
-                                // center={nigeriaPosition}
+                            <MapboxMap />
+                            {/* <MapContainer
+                                bounds={nigeriaBounds}
                                 zoom={6}
                                 style={{ height: '100vh', width: '100%' }}
                                 scrollWheelZoom={false}
+                                maxBounds={nigeriaBounds} // Set the max bounds to constrain the map to Nigeria
                             >
                                 <TileLayer
                                     url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                                     attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                                 />
-                                <Marker position={nigeriaPosition}>
-                                    <Popup>Nigeria</Popup>
-                                </Marker>
-                            </MapContainer>
+                                {markers.map((marker, index) => (
+                                    <Marker key={index} position={[marker.lat, marker.lng]}>
+                                        <Popup>{marker.popup}</Popup>
+                                    </Marker>
+                                ))}
+                            </MapContainer> */}
                         </MainCard>
                     </Grid>
                     <Grid item xs={12} md={4}>
-                        <PopularCard />
+                        <PopularCard reportTypes={reportTypes} reportCounts={reportCounts} />
                     </Grid>
                 </Grid>
             </MainCard>

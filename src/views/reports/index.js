@@ -49,6 +49,7 @@ import EarningIcon from 'assets/images/icons/earning.svg';
 import { getAllUserCount, getAllReportsToday } from 'services/userService';
 import { useState, useEffect } from 'react';
 import { formatDistanceToNow } from 'date-fns';
+import ReviewEdit from './ReviewEdit';
 
 const RelativeTimeCell = ({ timestamp }) => {
     const date = new Date(timestamp * 1000); // Convert the timestamp to milliseconds
@@ -213,6 +214,10 @@ const IncidentReportList = () => {
     const [search, setSearch] = React.useState('');
     const [rows, setRows] = React.useState([]);
     const { report } = useSelector((state) => state.report);
+    const [open, setOpen] = React.useState(false);
+    const handleClickOpenDialog = () => {
+        setOpen(true);
+    };
     React.useEffect(() => {
         dispatch(getAllReports());
     }, [dispatch]);
@@ -311,6 +316,9 @@ const IncidentReportList = () => {
             });
     }, []);
 
+    const handleCloseDialog = () => {
+        setOpen(false);
+    };
     return (
         <MainCard title="Manage Reports" content={false}>
             <CardContent>
@@ -414,7 +422,7 @@ const IncidentReportList = () => {
                                         {/* <TableCell>{row.created_at}</TableCell> */}
                                         <RelativeTimeCell timestamp={row.created_at} />
                                         <TableCell align="center" sx={{ pr: 3, whiteSpace: 'nowrap' }}>
-                                        <IconButton color="primary" size="large" aria-label="view">
+                                        <IconButton color="primary" size="large" aria-label="view" onClick={handleClickOpenDialog}>
                                                 <KeyboardVoiceIcon sx={{ fontSize: '1.3rem' }} />
                                             </IconButton>
                                             <IconButton color="primary" size="large" aria-label="view">
@@ -440,6 +448,7 @@ const IncidentReportList = () => {
                         )}
                     </TableBody>
                 </Table>
+                <ReviewEdit open={open} handleCloseDialog={handleCloseDialog} />
             </TableContainer>
 
             <TablePagination
