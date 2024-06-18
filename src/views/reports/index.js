@@ -50,6 +50,8 @@ import { getAllUserCount, getAllReportsToday } from 'services/userService';
 import { useState, useEffect } from 'react';
 import { formatDistanceToNow } from 'date-fns';
 import ReviewEdit from './ReviewEdit';
+import ReviewVideo from './ReviewVideo.js';
+import ReviewImage from './ReviewImage.js';
 import { deleteReport } from 'services/reportService';
 
 const RelativeTimeCell = ({ timestamp }) => {
@@ -216,8 +218,13 @@ const IncidentReportList = () => {
     const [rows, setRows] = React.useState([]);
     const { report } = useSelector((state) => state.report);
     const [open, setOpen] = React.useState(false);
+    const [openVideo, setOpenVideo] = React.useState(false);
+    const [openImage, setOpenImage] = React.useState(false);
     const handleClickOpenDialog = () => {
         setOpen(true);
+    };
+    const handleClickOpenVideoDialog = () => {
+        setOpenVideo(true);
     };
     React.useEffect(() => {
         dispatch(getAllReports());
@@ -321,6 +328,14 @@ const IncidentReportList = () => {
         setOpen(false);
     };
 
+    const handleCloseImageDialog = () => {
+        setOpenImage(false);
+    };
+
+    const handleCloseVideoDialog = () => {
+        setOpenVideo(false);
+    };
+
     const handleDeleteClick = (id) => {
         deleteReport(id)
             .then(() => {
@@ -334,7 +349,7 @@ const IncidentReportList = () => {
                 // Handle error scenario here (e.g., show error message)
             });
     };
-    
+
     return (
         <MainCard title="Manage Reports" content={false}>
             <CardContent>
@@ -442,7 +457,7 @@ const IncidentReportList = () => {
                                                 <KeyboardVoiceIcon sx={{ fontSize: '1.3rem' }} />
                                             </IconButton>
                                             <IconButton color="primary" size="large" aria-label="view">
-                                                <SlideshowIcon sx={{ fontSize: '1.3rem' }} />
+                                                <SlideshowIcon sx={{ fontSize: '1.3rem' }} onClick={handleClickOpenVideoDialog}/>
                                             </IconButton>
                                             <IconButton color="primary" size="large" aria-label="view">
                                                 <InsertPhotoIcon sx={{ fontSize: '1.3rem' }} />
@@ -470,6 +485,8 @@ const IncidentReportList = () => {
                     </TableBody>
                 </Table>
                 <ReviewEdit open={open} handleCloseDialog={handleCloseDialog} />
+                <ReviewImage openImage={openImage} handleCloseImageDialog={handleCloseImageDialog} />
+                <ReviewVideo openVideo={openVideo} handleCloseVideoDialog={handleCloseVideoDialog} />
             </TableContainer>
 
             <TablePagination

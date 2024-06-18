@@ -5,12 +5,12 @@ import { Dialog, DialogContent, DialogTitle } from '@mui/material';
 
 // project imports
 // import AudioPlayer from 'material-ui-audio-player';
-const ReviewVideo = ({ openVideo, handleCloseVideoDialog }) => {
+const ReviewImage = ({ openImage, handleCloseImageDialog }) => {
     // handle star rating
     return (
         <Dialog
-            open={openVideo}
-            onClose={handleCloseVideoDialog}
+            open={openImage}
+            onClose={handleCloseImageDialog}
             sx={{
                 '&>div:nth-of-type(3)': {
                     '&>div': {
@@ -19,9 +19,9 @@ const ReviewVideo = ({ openVideo, handleCloseVideoDialog }) => {
                 }
             }}
         >
-            {openVideo && (
+            {openImage && (
                 <>
-                    <DialogTitle>Voice record</DialogTitle>
+                    <DialogTitle>Image preview</DialogTitle>
                     <DialogContent>
                         <video width="600" controls>
                             <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4" />
@@ -41,9 +41,9 @@ const ReviewVideo = ({ openVideo, handleCloseVideoDialog }) => {
     );
 };
 
-ReviewVideo.propTypes = {
+ReviewImage.propTypes = {
     open: PropTypes.bool,
-    handleCloseVideoDialog: PropTypes.func
+    handleCloseImageDialog: PropTypes.func
 };
 
-export default ReviewVideo;
+export default ReviewImage;
