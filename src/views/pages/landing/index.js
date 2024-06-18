@@ -8,6 +8,7 @@ import Jumbo from './Jumbo';
 import Cards from './Cards';
 import AppInfo from './AppInfo';
 import Analytics from './Analytics';
+import Impact from './Impact';
 
 // custom stlye
 const HeaderWrapper = styled('div')(({ theme }) => ({
@@ -59,6 +60,11 @@ const Landing = () => {
             {/* 5. Analytics */}
             <SectionWrapper>
                 <Analytics />
+            </SectionWrapper>
+
+            {/* 6. Impact */}
+            <SectionWrapper>
+                <Impact />
             </SectionWrapper>
         </>
     );
