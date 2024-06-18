@@ -50,6 +50,7 @@ import { getAllUserCount, getAllReportsToday } from 'services/userService';
 import { useState, useEffect } from 'react';
 import { formatDistanceToNow } from 'date-fns';
 import ReviewEdit from './ReviewEdit';
+import { deleteReport } from 'services/reportService';
 
 const RelativeTimeCell = ({ timestamp }) => {
     const date = new Date(timestamp * 1000); // Convert the timestamp to milliseconds
@@ -319,6 +320,21 @@ const IncidentReportList = () => {
     const handleCloseDialog = () => {
         setOpen(false);
     };
+
+    const handleDeleteClick = (id) => {
+        deleteReport(id)
+            .then(() => {
+                // Remove the deleted report from the rows state
+                const updatedRows = rows.filter((row) => row.id !== id);
+                setRows(updatedRows);
+                setSelected([]);
+            })
+            .catch((error) => {
+                console.error('Failed to delete report:', error.message);
+                // Handle error scenario here (e.g., show error message)
+            });
+    };
+    
     return (
         <MainCard title="Manage Reports" content={false}>
             <CardContent>
@@ -434,7 +450,12 @@ const IncidentReportList = () => {
                                             <IconButton color="primary" size="large" aria-label="view">
                                                 <CheckIcon sx={{ fontSize: '1.3rem' }} />
                                             </IconButton>
-                                            <IconButton color="secondary" size="large" aria-label="edit">
+                                            <IconButton
+                                                color="secondary"
+                                                size="large"
+                                                aria-label="delete"
+                                                onClick={() => handleDeleteClick(row.id)}
+                                            >
                                                 <CancelIcon sx={{ fontSize: '1.3rem' }} />
                                             </IconButton>
                                         </TableCell>
