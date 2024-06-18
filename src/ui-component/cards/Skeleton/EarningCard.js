@@ -29,9 +29,7 @@ const CardWrapper = styled(MainCard)(({ theme }) => ({
         width: 210,
         height: 210,
         background:
-            theme.palette.mode === 'dark'
-                ? `linear-gradient(210.04deg, ${theme.palette.secondary.dark} -50.94%, rgba(144, 202, 249, 0) 95.49%)`
-                : theme.palette.secondary[800],
+          "#104833",
         borderRadius: '50%',
         top: -85,
         right: -95,

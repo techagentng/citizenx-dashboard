@@ -14,8 +14,8 @@ const BarChart = ({ reportTypes, reportCounts }) => {
         datasets: [
             {
                 label: 'Report Counts',
-                backgroundColor: 'rgb(0,137,123)',
-                borderColor: 'rgb(0,137,123)',
+                backgroundColor: 'rgb(16,72,51)',
+                borderColor: 'rgb(16,72,51)',
                 borderWidth: 1,
                 data: reportCounts
             }
