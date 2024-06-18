@@ -107,7 +107,7 @@ const MapboxMap = () => {
                                     width="44"
                                     height="44"
                                     viewBox="0 0 24 24"
-                                    stroke="#00FF00"
+                                    stroke="#00897b"
                                     fill="none"
                                 >
                                     <path stroke="none" d="M0 0h24v24H0z" fill="none" />

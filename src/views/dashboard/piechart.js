@@ -15,12 +15,7 @@ const PieChart = ({ reportTypes, reportCounts }) => {
             {
                 label: 'Report Counts',
                 data: reportCounts,
-                backgroundColor: [
-                    'rgba(75, 192, 192, 0.6)',
-                    'rgba(54, 162, 235, 0.6)',
-                    'rgba(255, 206, 86, 0.6)',
-                    'rgba(255, 99, 132, 0.6)'
-                ],
+                backgroundColor: ['rgb(0,137,123)', 'rgb(0,105,92)', 'rgb(167,227,225)', 'rgb(0,105,92)'],
                 borderColor: ['rgba(75, 192, 192, 1)', 'rgba(54, 162, 235, 1)', 'rgba(255, 206, 86, 1)', 'rgba(255, 99, 132, 1)'],
                 borderWidth: 1
             }
