@@ -22,10 +22,15 @@ const OfferCard = ({ title, caption, image }) => {
         <FadeInWhenVisible>
             <SubCard
                 sx={{
-                    bgcolor: theme.palette.mode === 'dark' ? 'dark.800' : 'grey.100',
-                    borderColor: theme.palette.mode === 'dark' ? theme.palette.background.default : theme.palette.divider,
-                    '&:hover': { boxShadow: 'none' },
-                    height: '100%'
+                    border: '1px solid',
+                    borderColor: theme.palette.grey[400],
+                    height: '100%',
+                    '&:hover': {
+                        transform: 'scale3d(1.02, 1.02, 1)',
+                        transition: 'all .4s ease-in-out',
+                        color: theme.palette.secondary.main,
+                        backgroundColor: theme.palette.primary.light
+                    },
                 }}
             >
                 <Stack spacing={4}>

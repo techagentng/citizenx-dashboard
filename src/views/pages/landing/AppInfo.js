@@ -9,7 +9,8 @@ import FadeInWhenVisible from './Animation'; // Ensure this path is correct and 
 
 // Assets
 import AppleIcon from '@mui/icons-material/Apple';
-import { IconCircleCheck } from '@tabler/icons-react';
+import GooglePlay from 'assets/images/landing/playstore_300218.png'
+import { IconCircleCheckFilled } from '@tabler/icons-react';
 import handApp from 'assets/images/landing/handApp.png';
 import screenone from 'assets/images/landing/phone-image.png';
 import screentwo from 'assets/images/landing/image44.png';
@@ -42,6 +43,11 @@ const AppInfo = () => {
         overflow: 'none',
         boxShadow: theme.shadows[0]
         }));
+
+        const GooglePlayIcon = styled('img')({
+            width: '20px',
+            height: '20px',
+        });
 
     const ScreeColumn = ({ title, caption, image }) => (
         <FadeInWhenVisible>
@@ -89,26 +95,26 @@ const AppInfo = () => {
                         {/* Icons */}
                         <Grid item xs={12}>
                             <Typography sx={listSX}>
-                                <IconCircleCheck size={20} /> Report Incidents
+                                <IconCircleCheckFilled size={20} /> Report Incidents
                             </Typography>
                             <Typography sx={listSX}>
-                                <IconCircleCheck size={20} /> Be part of the Community
+                                <IconCircleCheckFilled size={20} /> Be part of the Community
                             </Typography>
                             <Typography sx={listSX}>
-                                <IconCircleCheck size={20} /> Follow Up on Reports
+                                <IconCircleCheckFilled size={20} /> Follow Up on Reports
                             </Typography>
                             <Typography sx={listSX}>
-                                <IconCircleCheck size={20} /> See Top Reports Hotspots
+                                <IconCircleCheckFilled size={20} /> See Top Reports Hotspots
                             </Typography>
                             <Typography sx={listSX}>
-                                <IconCircleCheck size={20} /> Earn Rewards
+                                <IconCircleCheckFilled size={20} /> Earn Rewards
                             </Typography>
                             {/* Buttons */}
-                            <Stack direction='column' spacing={2} pt={2} pb={5} sx={{width: '50%'}}>
+                            <Stack direction='column' spacing={2} pt={2} pb={5} sx={{width: '60%'}}>
                                 <Button component={Link} sx={ButtonSX} startIcon={<AppleIcon />} variant='contained' href="" target="_blank" size="large">
                                     Available on Apple Store
                                 </Button>
-                                <Button component={Link} sx={ButtonSX} variant='contained' href="" target="_blank" size="large">
+                                <Button component={Link} sx={ButtonSX} startIcon={<GooglePlayIcon src={GooglePlay}/>} variant='contained' href="" target="_blank" size="large">
                                     Available on Google Playstore
                                 </Button>
                             </Stack>
