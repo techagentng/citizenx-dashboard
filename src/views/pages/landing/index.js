@@ -9,6 +9,7 @@ import Cards from './Cards';
 import AppInfo from './AppInfo';
 import Analytics from './Analytics';
 import Impact from './Impact';
+import Publication from './Publication';
 
 // custom stlye
 const HeaderWrapper = styled('div')(({ theme }) => ({
@@ -65,6 +66,11 @@ const Landing = () => {
             {/* 6. Impact */}
             <SectionWrapper>
                 <Impact />
+            </SectionWrapper>
+            
+            {/* 7. Impact */}
+            <SectionWrapper>
+                <Publication />
             </SectionWrapper>
         </>
     );
