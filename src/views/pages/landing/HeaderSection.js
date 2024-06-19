@@ -4,6 +4,8 @@ import { useMemo } from 'react';
 // material-ui
 import { useTheme, styled } from '@mui/material/styles';
 import { Box, Button, Container, Grid, Link, Stack, Typography } from '@mui/material';
+import LocalHospitalIcon from '@mui/icons-material/LocalHospital';
+import FastfoodIcon from '@mui/icons-material/Fastfood';
 
 // third party
 import { motion } from 'framer-motion';
@@ -13,13 +15,7 @@ import AnimateButton from 'ui-component/extended/AnimateButton';
 import useConfig from 'hooks/useConfig';
 
 // assets
-
-// import TechLight from 'assets/images/landing/tech-light.svg';
-// import TechDark from 'assets/images/landing/tech-dark.svg';
 import Hero from 'assets/images/landing/hero.png';
-// import dashboard from 'assets/images/landing/hero-dashboard.png';
-import widget1 from 'assets/images/landing/hero-widget-1.png';
-import widget2 from 'assets/images/landing/hero-widget-2.png';
 import BgDark from 'assets/images/landing/bg-hero-block-dark.png';
 import BgLight from 'assets/images/landing/bg-hero-block-light.png';
 import { DASHBOARD_PATH } from 'config';
@@ -31,29 +27,26 @@ const HeaderImage = styled('img')(({ theme }) => ({
     transform: 'scale(1.7)',
     transformOrigin: theme.direction === 'rtl' ? '100% 50%' : '0 50%',
     [theme.breakpoints.down('xl')]: {
-        transform: 'scale(1.5)'
+        transform: 'scale(1.5)',
+        marginBottom: '-60px',
     },
     [theme.breakpoints.down('lg')]: {
-        transform: 'scale(1.2)'
+        transform: 'scale(1.2)',
     }
 }));
-
-// const CircleContainer = styled(Box)(({ theme }) => ({
-//     width: '400px',
-//     height: '400px',
-//     borderRadius: '50%',
-//     overflow: 'hidden',
-//     position: 'relative',
-    
-//     justifyContent: 'center',
-//     alignItems: 'center',
-//     boxShadow: theme.shadows[3]
-// }));
 
 const HeaderAnimationImage = styled('img')({
     maxWidth: '80%',
     filter: 'drop-shadow(0px 0px 50px rgb(33 150 243 / 30%))'
 });
+
+// Icon style
+const iconStyle = {
+    backgroundColor: '#c7f7e7',
+    color: '#17a877',
+    borderRadius: '50%',
+    padding: '20px',
+};
 
 // ==============================|| LANDING - HEADER PAGE ||============================== //
 
@@ -63,7 +56,6 @@ const HeaderSection = () => {
 
     const headerSX = { 
         fontSize: { xs: '2rem', sm: '3rem', md: '3rem', lg: '3rem' }, 
-        // fontWeight: 500,    
     };
 
     const HeaderAnimationImagememo = useMemo(
@@ -75,7 +67,7 @@ const HeaderSection = () => {
                     display: { xs: 'none', md: 'flex' },
                     position: 'absolute',
                     filter: 'none',
-                    bottom: { md: 0 },
+                    bottom: { lg: 0, md: 0 },
                     right: 0,
                     width: '50%',
                     transformOrigin: '50% 50%',
@@ -140,14 +132,14 @@ const HeaderSection = () => {
                                                 target="_blank"
                                                 size="large"
                                                 variant="contained"
-                                                color="secondary"
+                                                sx={{ backgroundColor: '#17a877', color: '#fff' }}
                                             >
                                                 Explore Dashboard
                                             </Button>
                                         </AnimateButton>
                                     </Grid>
                                     <Grid item>
-                                        <Button component={Link} variant='outlined' href="" target="_blank" size="large">
+                                        <Button component={Link} variant='outlined' href="" target="_blank" size="large" sx={{ color: '#17a877', borderColor: '#17a877' }}>
                                             Download App
                                         </Button>
                                     </Grid>
@@ -158,20 +150,13 @@ const HeaderSection = () => {
                     </Grid>
                 </Grid>
                 <Grid item xs={12} md={7} sx={{ display: { xs: 'none', md: 'flex' }, }}>
-                    <Box  sx={{ position: 'relative', mt: 8.75, zIndex: 9 }}>
-                    <HeaderImage src={Hero} alt="Berry" /> 
-                        <Box sx={{
-                                position: 'absolute',
-                                top: { md: -35, lg: -110 },
-                                right: theme.direction === 'rtl' ? 170 : { md: -50, lg: -140, xl: -220 },
-                                width: { md: 220, lg: 290 },
-                                animation: '10s slideY linear infinite'
-                            }} ></Box>
+                    <Box sx={{ position: 'relative', mt: 8.75, zIndex: 9 }}>
+                        <HeaderImage src={Hero} alt="Berry" /> 
                         <Box
                             sx={{
                                 position: 'absolute',
-                                top: { md: -35, lg: -120 },
-                                right: theme.direction === 'rtl' ? 170 : { md: -50, lg: -80, xl: -150 },
+                                top: { md: -35, lg: -110 },
+                                right: theme.direction === 'rtl' ? 170 : { md: -50, lg: -140, xl: -220 },
                                 width: { md: 220, lg: 290 },
                                 animation: '10s slideY linear infinite'
                             }}
@@ -181,7 +166,7 @@ const HeaderSection = () => {
                                 animate={{ opacity: 1, scale: 1 }}
                                 transition={{ type: 'spring', stiffness: 150, damping: 30, delay: 0.2 }}
                             >
-                                <HeaderAnimationImage src={widget1} alt="Berry" />
+                                <LocalHospitalIcon sx={{fontSize: '8rem'}} style={iconStyle} />
                             </motion.div>
                         </Box>
                         <Box
@@ -199,7 +184,7 @@ const HeaderSection = () => {
                                 animate={{ opacity: 1, scale: 1 }}
                                 transition={{ type: 'spring', stiffness: 150, damping: 30, delay: 0.4 }}
                             >
-                                <HeaderAnimationImage src={widget2} alt="Berry" />
+                                <FastfoodIcon sx={{fontSize: '10rem'}} style={iconStyle} />
                             </motion.div>
                         </Box>
                     </Box>
