@@ -4,23 +4,10 @@ import 'mapbox-gl/dist/mapbox-gl.css';
 import mapboxgl from 'mapbox-gl';
 import { WebMercatorViewport } from 'viewport-mercator-project';
 import { getMapMarkers } from 'services/mapService';
+// import { getStateCount } from 'services/mapService';
 
 // Set the Mapbox access token
 mapboxgl.accessToken = 'pk.eyJ1Ijoia2Vub2kiLCJhIjoiY2x4amljMmtjMXZzcjJqc2hxMnBkdGJjYyJ9.1EPJXdBM5-wrywGBVrxWPA';
-
-// Example markers for some states in Nigeria
-// const markers = [
-//     { lat: 9.082, lng: 8.6753, popup: 'Abuja' }, // Federal Capital Territory
-//     { lat: 6.5244, lng: 3.3792, popup: 'Lagos' }, // Lagos State
-//     { lat: 11.748, lng: 11.966, popup: 'Kano' }, // Kano State
-//     { lat: 7.8754, lng: 5.237, popup: 'Ekiti' }, // Ekiti State
-//     { lat: 10.3158, lng: 9.8442, popup: 'Kaduna' }, // Kaduna State
-//     { lat: 12.0022, lng: 8.5919, popup: 'Katsina' }, // Katsina State
-//     { lat: 13.0593, lng: 5.2416, popup: 'Sokoto' }, // Sokoto State
-//     { lat: 4.8156, lng: 7.0498, popup: 'Port Harcourt' }, // Rivers State
-//     { lat: 10.29, lng: 11.17, popup: 'Bauchi' }, // Bauchi State
-//     { lat: 6.4654, lng: 7.5464, popup: 'Enugu' } // Enugu State
-// ];
 
 const MapboxMap = () => {
     const [markers, setMarkers] = useState([]);

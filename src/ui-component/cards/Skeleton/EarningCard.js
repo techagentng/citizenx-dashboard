@@ -28,8 +28,7 @@ const CardWrapper = styled(MainCard)(({ theme }) => ({
         position: 'absolute',
         width: 210,
         height: 210,
-        background:
-          "#104833",
+        background: '#104833',
         borderRadius: '50%',
         top: -85,
         right: -95,

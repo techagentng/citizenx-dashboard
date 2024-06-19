@@ -20,3 +20,18 @@ export const getMapMarkers = () => {
             });
     });
 };
+
+export const getStateCount = async () => {
+    try {
+        const response = await axios.get('http://localhost:8080/api/v1/incident-report/state/count');
+        if (response.status === 200) {
+            return response.data.data;
+        } else {
+            console.error('Error fetching state report counts:', response.statusText);
+            return [];
+        }
+    } catch (error) {
+        console.error('Error during API call:', error);
+        return [];
+    }
+};
