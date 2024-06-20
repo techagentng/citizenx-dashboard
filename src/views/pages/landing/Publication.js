@@ -54,10 +54,11 @@ const Publication = () => {
                             <Typography variant="h2" sx={{ fontSize: { xs: '1.5rem', sm: '2.125rem' } }}>
                                 Publications
                             </Typography>
-                            <Typography
+                            <Typography variant="body2" align="left"
                                 sx={{
                                     fontSize: '1rem',
                                     zIndex: '99',
+                                    pt: 1,
                                     width: { xs: '100%', sm: '100%', md: 'calc(100% - 20%)' },
                                 }}
                             >

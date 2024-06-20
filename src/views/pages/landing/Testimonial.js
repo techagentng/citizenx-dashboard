@@ -93,7 +93,7 @@ const Testimonial = () => {
                     </Grid>
                     <Grid item xs={12} md={6} >
                       <Stack spacing={4} sx={{ px: { xs: 2, md: 4 } }}>
-                        <Typography variant="body1" sx={{ lineHeight: 1.5 }}>
+                        <Typography variant="body1" sx={{ lineHeight: 1.5, fontSize: '1rem' }}>
                           {data.caption}
                         </Typography>
                         
