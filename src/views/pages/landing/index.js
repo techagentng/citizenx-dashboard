@@ -11,6 +11,7 @@ import Analytics from './Analytics';
 import Impact from './Impact';
 import Publication from './Publication';
 import Testimonial from './Testimonial';
+import Trends from './Trends';
 
 // custom stlye
 const HeaderWrapper = styled('div')(({ theme }) => ({
@@ -77,6 +78,11 @@ const Landing = () => {
             {/* 8. Impact */}
             <SectionWrapper>
                 <Testimonial />
+            </SectionWrapper>
+
+            {/* 8. Trends */}
+            <SectionWrapper>
+                <Trends />
             </SectionWrapper>
         </>
     );
