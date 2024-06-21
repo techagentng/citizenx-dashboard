@@ -12,7 +12,7 @@ import AuthLogin from './auth-forms/AuthLogin';
 import Logo from 'ui-component/Logo';
 import AuthFooter from 'ui-component/cards/AuthFooter';
 import useAuth from 'hooks/useAuth';
-
+import axios from 'utils/axios';
 // assets
 
 // ================================|| AUTH3 - LOGIN ||================================ //
@@ -21,9 +21,15 @@ const Login = () => {
     const theme = useTheme();
     const { isLoggedIn } = useAuth();
     const matchDownSM = useMediaQuery(theme.breakpoints.down('md'));
-    const handleLogin = () => {
-        window.location.href = 'http://localhost:8080/api/v1/google/login'; 
+    const handleLogin = async () => {
+        try {
+            const response = await axios.get('http://localhost:8080/api/v1/google/login'); // Use your Gin server endpoint
+            window.location.href = response.request.responseURL; // Redirect to the OAuth URL
+        } catch (error) {
+            console.error('Error initiating Google login:', error);
+        }
     };
+
     return (
         <AuthWrapper1>
             <Grid container direction="column" justifyContent="flex-end" sx={{ minHeight: '100vh' }}>

@@ -97,34 +97,34 @@ export const JWTProvider = ({ children }) => {
         return response;
     };
 
-    // const loginWithGoogle = async () => {
-    //     try {
-    //         const response = await axios.get('/google/login');
+    const loginWithGoogle = async () => {
+        try {
+            const response = await axios.get('/google/login');
 
-    //         if (response.status === 200) {
-    //             const accessToken = response.data.data.access_token; // Assuming access token is in response.data.data
-    //             setSession(accessToken);
+            if (response.status === 200) {
+                const accessToken = response.data.data.access_token; // Assuming access token is in response.data.data
+                setSession(accessToken);
 
-    //             // Fetch user info if needed
-    //             const userResponse = await axios.get('/me');
-    //             const { data } = userResponse.data;
+                // Fetch user info if needed
+                const userResponse = await axios.get('/me');
+                const { data } = userResponse.data;
 
-    //             dispatch({
-    //                 type: LOGIN,
-    //                 payload: {
-    //                     isLoggedIn: true,
-    //                     user: data
-    //                 }
-    //             });
+                dispatch({
+                    type: LOGIN,
+                    payload: {
+                        isLoggedIn: true,
+                        user: data
+                    }
+                });
 
-    //             window.location.href = `/dashboard?access_token=${accessToken}`;
-    //         } else {
-    //             console.error('Login error:', response.data.message || 'Unknown error');
-    //         }
-    //     } catch (error) {
-    //         console.error('Error during login:', error);
-    //     }
-    // };
+                window.location.href = `/dashboard?access_token=${accessToken}`;
+            } else {
+                console.error('Login error:', response.data.message || 'Unknown error');
+            }
+        } catch (error) {
+            console.error('Error during login:', error);
+        }
+    };
 
     const register = async (fullName, userName, telephone, email, password) => {
         try {
@@ -175,7 +175,7 @@ export const JWTProvider = ({ children }) => {
     }
 
     return (
-        <JWTContext.Provider value={{ ...state, login, logout, register, resetPassword, updateProfile }}>{children}</JWTContext.Provider>
+        <JWTContext.Provider value={{ ...state, login, logout, register, resetPassword, updateProfile, loginWithGoogle }}>{children}</JWTContext.Provider>
     );
 };
 

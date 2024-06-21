@@ -19,7 +19,8 @@ import BarChart from './barchart';
 import PieChart from './piechart';
 import LineChart from './linechart';
 import { getGraph } from 'store/slices/graphs';
-import MapboxMap from './mapbox'
+import MapboxMap from './mapbox';
+import CompareForms from './CompareForms';
 // import AudioPlayer from 'material-ui-audio-player';
 // Fix the default icon issue
 // delete L.Icon.Default.prototype._getIconUrl;
@@ -81,7 +82,7 @@ const DashboardPage = () => {
 
     return (
         <>
-            <MainCard title="Dashboard Page">
+            <MainCard title="State and LGA dashboard">
                 <Grid container spacing={2}>
                     <Grid item xs={3}>
                         <EarningCard count={todayReportCount} details="Today's Report" icon={EarningIcon} />
@@ -96,8 +97,7 @@ const DashboardPage = () => {
                         <EarningCard count="230" details="Average Daily Users" icon={EarningIcon} />
                     </Grid>
                 </Grid>
-            </MainCard>
-            <MainCard>
+
                 <Grid container spacing={2} justifyContent="center" alignItems="flex-end">
                     {!reportTypes || reportTypes.length === 0 ? (
                         <Grid item xs={12}>
@@ -141,9 +141,14 @@ const DashboardPage = () => {
                             </MapContainer> */}
                         </MainCard>
                     </Grid>
-                    <Grid item xs={12} md={4}>
+                    <Grid item xs={6} md={4}>
                         <PopularCard reportTypes={reportTypes} reportCounts={reportCounts} />
                     </Grid>
+                </Grid>
+            </MainCard>
+            <MainCard title="Compare reports">
+                <Grid item xs={12} md={6}>
+                    <CompareForms />
                 </Grid>
             </MainCard>
         </>
