@@ -8,23 +8,47 @@ import FadeInWhenVisible from './Animation';
 // Assets
 import Team from 'assets/images/landing/group-afro-americans-working-together 1.png';
 
+const Cards = [
+    {
+    id: 1,
+    title: 'Nigerian Citizens to be Reached',
+    caption: 'We aim to reach 756 local government areas, ensuring accessibility and engagement.'
+},
+{
+    id: 2,
+    title: 'Communities to be Supported',
+    caption: 'Supporting rural communities to ensure their voices are heard'
+},
+{
+    id: 3,
+    title: 'Institutional Partnerships',
+    caption: 'Collaborating with government agencies, NGOs, and community-based organizations.'
+},
+{
+    id: 4,
+    title: 'Core Personnel',
+    caption: 'Our dedicated team of experts in technology, community development, and governance.'
+}
+]
+
 const ImpactCard = ({ title, caption}) => {
     const theme = useTheme();
     return (
         <FadeInWhenVisible>
             <SubCard
                 sx={{
-                    bgcolor: theme.palette.primary.main,
+                    backgroundColor: theme.palette.primary.light,
                     borderColor: theme.palette.mode === 'dark' ? theme.palette.background.default : theme.palette.divider,
                     '&:hover': { boxShadow: 'none' },
-                    height: '100%'
+                    height: '100%',
+                    padding: '20px 10px'
                 }}
             >
                     <Stack spacing={2}>
                         <Typography variant="h3" sx={{ fontWeight: 500 }}>
                             {title}
                         </Typography>
-                        <Typography variant="body2" sx={{ fontSize: '1rem' }}>
+                        <Typography variant="body2" sx={{ fontSize: '1rem', maxWidth:'90%' }}>
                             {caption}
                         </Typography>
                     </Stack>
@@ -55,33 +79,23 @@ const Impact = () => {
             
             <Grid item xs={12}>
                 <Grid container justifyContent="center" spacing={5} sx={{ '&> .MuiGrid-root > div': { height: '100%' } }}>
-                 <Grid item xs={6} md={6}>
-                    <ImpactCard 
-                    title='Nigerian Citizens to be Registered'
-                    caption='We aim to reach 756 local goverment areas, ensuring accessibility and engagement.'/>
-                 </Grid>
-                 <Grid item xs={6} md={6}>
-                    <ImpactCard 
-                    title='Nigerian Citizens to be Registered'
-                    caption='We aim to reach 756 local goverment areas, ensuring accessibility and engagement.'/>
-                 </Grid>
-                 <Grid item xs={6} md={6}>
-                    <ImpactCard 
-                    title='Nigerian Citizens to be Registered'
-                    caption='We aim to reach 756 local goverment areas, ensuring accessibility and engagement.'/>
-                 </Grid>
-                 <Grid item xs={6} md={6}>
-                    <ImpactCard 
-                    title='Nigerian Citizens to be Registered'
-                    caption='We aim to reach 756 local goverment areas, ensuring accessibility and engagement.'/>
-                 </Grid>
-
+                 {Cards.map((data, index)=>{
+                    return(
+                    <Grid key={index} item xs={6} md={6}>
+                        <ImpactCard 
+                        title={data.title}
+                        caption={data.caption}/>
+                    </Grid>
+                    )
+                 })}
+                 
+                 
                 </Grid>
             </Grid>
 
             <Grid item xs={12}>
                     <Box sx={{ textAlign: 'center' }}>
-                        <img src={Team} width="100%" alt="Dashboard" style={{ borderRadius: '12px' }} />
+                        <img src={Team} width="100%" alt="Dashboard" style={{ borderRadius: '10px', padding: 10 }} />
                     </Box>
                 </Grid>
         </Grid>

@@ -25,9 +25,9 @@ const Jumbo = styled(Paper)({
 const Subscribe = () => {
   return (
     <Container>
-        <Jumbo sx={{paddingX: 15, paddingY: 15}} elevation={2}>
-            <Grid container spacing={2.5} sx={{alignItems: 'center'}} direction={{ xs: 'column-reverse', md: 'row' }}>
-                <Grid item xs={12} md={6} >
+        <Jumbo sx={{paddingX:{xs:5, md:15}, paddingY: 15}} elevation={2}>
+            <Grid container spacing={5} sx={{alignItems: 'center'}} direction={{ xs: 'column-reverse', md: 'row' }}>
+                <Grid item xs={12} md={6} sx={{marginTop:{xs: '20px', md: '1px'}}} >
                     <Typography variant="h2" sx={{ fontSize: { xs: '1.5rem', sm: '2.125rem' }, mb: 2, textAlign: { xs: 'center', md: 'left' }, color: 'white' }}>
                     Subscribe to our news letter for updates.
                 </Typography>
