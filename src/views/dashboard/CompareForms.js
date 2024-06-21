@@ -1,5 +1,5 @@
 import { useDispatch } from 'store';
-import {useState} from 'react'
+import { useState } from 'react';
 // material-ui
 import { Button, Grid, Stack, TextField } from '@mui/material';
 
@@ -62,249 +62,254 @@ const LoginForms = () => {
     return (
         <MainCard title="Incident information">
             <form onSubmit={formik.handleSubmit}>
-                <Grid container spacing={gridSpacing} direction="column" sx={12} md={6}>
-                    <Grid item sx={12}>
-                        <Autocomplete
-                            fullWidth
-                            value={formik.values.role}
-                            disableClearable
-                            onChange={(event, newValue) => {
-                                const jobExist = roles.includes(newValue);
-                                if (!jobExist) {
-                                    const matchData = newValue.match(/"((?:\\.|[^"\\])*)"/);
-                                    formik.setFieldValue('role', matchData && matchData[1]);
-                                } else {
-                                    formik.setFieldValue('role', newValue);
-                                }
-                            }}
-                            filterOptions={(options, params) => {
-                                const filtered = filter(options, params);
-                                const { inputValue } = params;
-                                const isExisting = options.some((option) => inputValue === option);
-                                if (inputValue !== '' && !isExisting) {
-                                    filtered.push(`Add "${inputValue}"`);
-                                }
-                                return filtered;
-                            }}
-                            selectOnFocus
-                            clearOnBlur
-                            autoHighlight
-                            handleHomeEndKeys
-                            id="free-solo-with-text-demo"
-                            options={roles}
-                            getOptionLabel={(option) => {
-                                let value = option;
-                                const jobExist = roles.includes(option);
-                                if (!jobExist) {
-                                    const matchData = option.match(/"((?:\\.|[^"\\])*)"/);
-                                    if (matchData && matchData[1]) value = matchData && matchData[1];
-                                }
-                                return value;
-                            }}
-                            renderOption={(props, option) => (
-                                <Box component="li" {...props}>
-                                    {option}
-                                </Box>
-                            )}
-                            freeSolo
-                            renderInput={(params) => (
+                <Grid container spacing={gridSpacing}>
+                    <Grid item xs={12} md={6}>
+                        <Grid container spacing={gridSpacing} direction="column">
+                            <Grid item xs={12}>
+                                <Autocomplete
+                                    fullWidth
+                                    value={formik.values.role}
+                                    disableClearable
+                                    onChange={(event, newValue) => {
+                                        const jobExist = roles.includes(newValue);
+                                        if (!jobExist) {
+                                            const matchData = newValue.match(/"((?:\\.|[^"\\])*)"/);
+                                            formik.setFieldValue('role', matchData && matchData[1]);
+                                        } else {
+                                            formik.setFieldValue('role', newValue);
+                                        }
+                                    }}
+                                    filterOptions={(options, params) => {
+                                        const filtered = filter(options, params);
+                                        const { inputValue } = params;
+                                        const isExisting = options.some((option) => inputValue === option);
+                                        if (inputValue !== '' && !isExisting) {
+                                            filtered.push(`Add "${inputValue}"`);
+                                        }
+                                        return filtered;
+                                    }}
+                                    selectOnFocus
+                                    clearOnBlur
+                                    autoHighlight
+                                    handleHomeEndKeys
+                                    id="free-solo-with-text-demo"
+                                    options={roles}
+                                    getOptionLabel={(option) => {
+                                        let value = option;
+                                        const jobExist = roles.includes(option);
+                                        if (!jobExist) {
+                                            const matchData = option.match(/"((?:\\.|[^"\\])*)"/);
+                                            if (matchData && matchData[1]) value = matchData && matchData[1];
+                                        }
+                                        return value;
+                                    }}
+                                    renderOption={(props, option) => (
+                                        <Box component="li" {...props}>
+                                            {option}
+                                        </Box>
+                                    )}
+                                    freeSolo
+                                    renderInput={(params) => (
+                                        <TextField
+                                            {...params}
+                                            name="role"
+                                            error={formik.touched.role && Boolean(formik.errors.role)}
+                                            helperText={formik.touched.role && formik.errors.role && formik.errors.role}
+                                            placeholder="Select Role"
+                                            InputProps={{
+                                                ...params.InputProps,
+                                                sx: { bgcolor: 'grey.0' },
+                                                endAdornment: (
+                                                    <InputAdornment position="end">
+                                                        <ArrowDropDown sx={{ color: 'text.primary' }} />
+                                                    </InputAdornment>
+                                                )
+                                            }}
+                                        />
+                                    )}
+                                />
+                            </Grid>
+                            <Grid item xs={12}>
+                                <Autocomplete
+                                    fullWidth
+                                    value={formik.values.role}
+                                    disableClearable
+                                    onChange={(event, newValue) => {
+                                        const jobExist = roles.includes(newValue);
+                                        if (!jobExist) {
+                                            const matchData = newValue.match(/"((?:\\.|[^"\\])*)"/);
+                                            formik.setFieldValue('role', matchData && matchData[1]);
+                                        } else {
+                                            formik.setFieldValue('role', newValue);
+                                        }
+                                    }}
+                                    filterOptions={(options, params) => {
+                                        const filtered = filter2(options, params);
+                                        const { inputValue } = params;
+                                        const isExisting = options.some((option) => inputValue === option);
+                                        if (inputValue !== '' && !isExisting) {
+                                            filtered.push(`Add "${inputValue}"`);
+                                        }
+                                        return filtered;
+                                    }}
+                                    selectOnFocus
+                                    clearOnBlur
+                                    autoHighlight
+                                    handleHomeEndKeys
+                                    id="free-solo-with-text-demo"
+                                    options={roles}
+                                    getOptionLabel={(option) => {
+                                        let value = option;
+                                        const jobExist = roles.includes(option);
+                                        if (!jobExist) {
+                                            const matchData = option.match(/"((?:\\.|[^"\\])*)"/);
+                                            if (matchData && matchData[1]) value = matchData && matchData[1];
+                                        }
+                                        return value;
+                                    }}
+                                    renderOption={(props, option) => (
+                                        <Box component="li" {...props}>
+                                            {option}
+                                        </Box>
+                                    )}
+                                    freeSolo
+                                    renderInput={(params) => (
+                                        <TextField
+                                            {...params}
+                                            name="role"
+                                            error={formik.touched.role && Boolean(formik.errors.role)}
+                                            helperText={formik.touched.role && formik.errors.role && formik.errors.role}
+                                            placeholder="Select Role"
+                                            InputProps={{
+                                                ...params.InputProps,
+                                                sx: { bgcolor: 'grey.0' },
+                                                endAdornment: (
+                                                    <InputAdornment position="end">
+                                                        <ArrowDropDown sx={{ color: 'text.primary' }} />
+                                                    </InputAdornment>
+                                                )
+                                            }}
+                                        />
+                                    )}
+                                />
+                            </Grid>
+                            <Grid item xs={12}>
+                                <Autocomplete
+                                    fullWidth
+                                    value={formik.values.role}
+                                    disableClearable
+                                    onChange={(event, newValue) => {
+                                        const jobExist = roles.includes(newValue);
+                                        if (!jobExist) {
+                                            const matchData = newValue.match(/"((?:\\.|[^"\\])*)"/);
+                                            formik.setFieldValue('role', matchData && matchData[1]);
+                                        } else {
+                                            formik.setFieldValue('role', newValue);
+                                        }
+                                    }}
+                                    filterOptions={(options, params) => {
+                                        const filtered = filter3(options, params);
+                                        const { inputValue } = params;
+                                        const isExisting = options.some((option) => inputValue === option);
+                                        if (inputValue !== '' && !isExisting) {
+                                            filtered.push(`Add "${inputValue}"`);
+                                        }
+                                        return filtered;
+                                    }}
+                                    selectOnFocus
+                                    clearOnBlur
+                                    autoHighlight
+                                    handleHomeEndKeys
+                                    id="free-solo-with-text-demo"
+                                    options={roles}
+                                    getOptionLabel={(option) => {
+                                        let value = option;
+                                        const jobExist = roles.includes(option);
+                                        if (!jobExist) {
+                                            const matchData = option.match(/"((?:\\.|[^"\\])*)"/);
+                                            if (matchData && matchData[1]) value = matchData && matchData[1];
+                                        }
+                                        return value;
+                                    }}
+                                    renderOption={(props, option) => (
+                                        <Box component="li" {...props}>
+                                            {option}
+                                        </Box>
+                                    )}
+                                    freeSolo
+                                    renderInput={(params) => (
+                                        <TextField
+                                            {...params}
+                                            name="role"
+                                            error={formik.touched.role && Boolean(formik.errors.role)}
+                                            helperText={formik.touched.role && formik.errors.role && formik.errors.role}
+                                            placeholder="Select Role"
+                                            InputProps={{
+                                                ...params.InputProps,
+                                                sx: { bgcolor: 'grey.0' },
+                                                endAdornment: (
+                                                    <InputAdornment position="end">
+                                                        <ArrowDropDown sx={{ color: 'text.primary' }} />
+                                                    </InputAdornment>
+                                                )
+                                            }}
+                                        />
+                                    )}
+                                />
+                            </Grid>
+                            <Grid item xs={12}>
                                 <TextField
-                                    {...params}
-                                    name="role"
-                                    error={formik.touched.role && Boolean(formik.errors.role)}
-                                    helperText={formik.touched.role && formik.errors.role && formik.errors.role}
-                                    placeholder="Select Role"
-                                    InputProps={{
-                                        ...params.InputProps,
-                                        sx: { bgcolor: 'grey.0' },
-                                        endAdornment: (
-                                            <InputAdornment position="end">
-                                                <ArrowDropDown sx={{ color: 'text.primary' }} />
-                                            </InputAdornment>
-                                        )
-                                    }}
+                                    fullWidth
+                                    id="email"
+                                    name="email"
+                                    label="Email"
+                                    value={formik.values.email}
+                                    onChange={formik.handleChange}
+                                    error={formik.touched.email && Boolean(formik.errors.email)}
+                                    helperText={formik.touched.email && formik.errors.email}
                                 />
-                            )}
-                        />
-                    </Grid>
-                    <Grid item sx={12}>
-                        <Autocomplete
-                            fullWidth
-                            value={formik.values.role}
-                            disableClearable
-                            onChange={(event, newValue) => {
-                                const jobExist = roles.includes(newValue);
-                                if (!jobExist) {
-                                    const matchData = newValue.match(/"((?:\\.|[^"\\])*)"/);
-                                    formik.setFieldValue('role', matchData && matchData[1]);
-                                } else {
-                                    formik.setFieldValue('role', newValue);
-                                }
-                            }}
-                            filterOptions={(options, params) => {
-                                const filtered = filter2(options, params);
-                                const { inputValue } = params;
-                                const isExisting = options.some((option) => inputValue === option);
-                                if (inputValue !== '' && !isExisting) {
-                                    filtered.push(`Add "${inputValue}"`);
-                                }
-                                return filtered;
-                            }}
-                            selectOnFocus
-                            clearOnBlur
-                            autoHighlight
-                            handleHomeEndKeys
-                            id="free-solo-with-text-demo"
-                            options={roles}
-                            getOptionLabel={(option) => {
-                                let value = option;
-                                const jobExist = roles.includes(option);
-                                if (!jobExist) {
-                                    const matchData = option.match(/"((?:\\.|[^"\\])*)"/);
-                                    if (matchData && matchData[1]) value = matchData && matchData[1];
-                                }
-                                return value;
-                            }}
-                            renderOption={(props, option) => (
-                                <Box component="li" {...props}>
-                                    {option}
-                                </Box>
-                            )}
-                            freeSolo
-                            renderInput={(params) => (
+                            </Grid>
+                            <Grid item xs={12}>
                                 <TextField
-                                    {...params}
-                                    name="role"
-                                    error={formik.touched.role && Boolean(formik.errors.role)}
-                                    helperText={formik.touched.role && formik.errors.role && formik.errors.role}
-                                    placeholder="Select Role"
-                                    InputProps={{
-                                        ...params.InputProps,
-                                        sx: { bgcolor: 'grey.0' },
-                                        endAdornment: (
-                                            <InputAdornment position="end">
-                                                <ArrowDropDown sx={{ color: 'text.primary' }} />
-                                            </InputAdornment>
-                                        )
-                                    }}
+                                    fullWidth
+                                    id="password"
+                                    name="password"
+                                    label="Password"
+                                    type="password"
+                                    value={formik.values.password}
+                                    onChange={formik.handleChange}
+                                    error={formik.touched.password && Boolean(formik.errors.password)}
+                                    helperText={formik.touched.password && formik.errors.password}
                                 />
-                            )}
-                        />
+                            </Grid>
+                            <Grid item xs={12}>
+                                <Stack direction="row" justifyContent="flex-end">
+                                    <AnimateButton>
+                                        <Button variant="contained" type="submit">
+                                            Verify & Submit
+                                        </Button>
+                                    </AnimateButton>
+                                </Stack>
+                            </Grid>
+                        </Grid>
                     </Grid>
-                    <Grid item sx={12}>
-                        <Autocomplete
-                            fullWidth
-                            value={formik.values.role}
-                            disableClearable
-                            onChange={(event, newValue) => {
-                                const jobExist = roles.includes(newValue);
-                                if (!jobExist) {
-                                    const matchData = newValue.match(/"((?:\\.|[^"\\])*)"/);
-                                    formik.setFieldValue('role', matchData && matchData[1]);
-                                } else {
-                                    formik.setFieldValue('role', newValue);
-                                }
-                            }}
-                            filterOptions={(options, params) => {
-                                const filtered = filter3(options, params);
-                                const { inputValue } = params;
-                                const isExisting = options.some((option) => inputValue === option);
-                                if (inputValue !== '' && !isExisting) {
-                                    filtered.push(`Add "${inputValue}"`);
-                                }
-                                return filtered;
-                            }}
-                            selectOnFocus
-                            clearOnBlur
-                            autoHighlight
-                            handleHomeEndKeys
-                            id="free-solo-with-text-demo"
-                            options={roles}
-                            getOptionLabel={(option) => {
-                                let value = option;
-                                const jobExist = roles.includes(option);
-                                if (!jobExist) {
-                                    const matchData = option.match(/"((?:\\.|[^"\\])*)"/);
-                                    if (matchData && matchData[1]) value = matchData && matchData[1];
-                                }
-                                return value;
-                            }}
-                            renderOption={(props, option) => (
-                                <Box component="li" {...props}>
-                                    {option}
-                                </Box>
-                            )}
-                            freeSolo
-                            renderInput={(params) => (
-                                <TextField
-                                    {...params}
-                                    name="role"
-                                    error={formik.touched.role && Boolean(formik.errors.role)}
-                                    helperText={formik.touched.role && formik.errors.role && formik.errors.role}
-                                    placeholder="Select Role"
-                                    InputProps={{
-                                        ...params.InputProps,
-                                        sx: { bgcolor: 'grey.0' },
-                                        endAdornment: (
-                                            <InputAdornment position="end">
-                                                <ArrowDropDown sx={{ color: 'text.primary' }} />
-                                            </InputAdornment>
-                                        )
-                                    }}
-                                />
-                            )}
-                        />
-                    </Grid>
-                    <Grid item>
-                        <TextField
-                            fullWidth
-                            id="email"
-                            name="email"
-                            label="Email"
-                            value={formik.values.email}
-                            onChange={formik.handleChange}
-                            error={formik.touched.email && Boolean(formik.errors.email)}
-                            helperText={formik.touched.email && formik.errors.email}
-                        />
-                    </Grid>
-                    <Grid item>
-                        <TextField
-                            fullWidth
-                            id="password"
-                            name="password"
-                            label="Password"
-                            type="password"
-                            value={formik.values.password}
-                            onChange={formik.handleChange}
-                            error={formik.touched.password && Boolean(formik.errors.password)}
-                            helperText={formik.touched.password && formik.errors.password}
-                        />
-                    </Grid>
-                    <Grid item>
-                        <Stack direction="row" justifyContent="flex-end">
-                            <AnimateButton>
-                                <Button variant="contained" type="submit">
-                                    Verify & Submit
-                                </Button>
-                            </AnimateButton>
-                        </Stack>
-                    </Grid>
-                </Grid>
-
-                <Grid container spacing={gridSpacing} md={6}>
-                    <Grid item xs={12}>
-                        <SubCard title="Basic Datetime Picker">
-                            <LocalizationProvider dateAdapter={AdapterDateFns}>
-                                <DateTimePicker
-                                    slotProps={{ textField: { fullWidth: true } }}
-                                    label="Date & Time"
-                                    value={valueBasic}
-                                    onChange={(newValue) => {
-                                        setValueBasic(newValue);
-                                    }}
-                                />
-                            </LocalizationProvider>
-                        </SubCard>
+                    <Grid item xs={12} md={6}>
+                        <Grid container spacing={gridSpacing}>
+                            <Grid item xs={12}>
+                                <SubCard title="Basic Datetime Picker">
+                                    <LocalizationProvider dateAdapter={AdapterDateFns}>
+                                        <DateTimePicker
+                                            slotProps={{ textField: { fullWidth: true } }}
+                                            label="Date & Time"
+                                            value={valueBasic}
+                                            onChange={(newValue) => {
+                                                setValueBasic(newValue);
+                                            }}
+                                        />
+                                    </LocalizationProvider>
+                                </SubCard>
+                            </Grid>
+                        </Grid>
                     </Grid>
                 </Grid>
             </form>
