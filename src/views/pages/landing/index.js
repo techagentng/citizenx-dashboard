@@ -13,6 +13,7 @@ import Publication from './Publication';
 import Testimonial from './Testimonial';
 import Trends from './Trends';
 import Subscribe from './Subscribe';
+import Footer from './Footer';
 
 // custom stlye
 const HeaderWrapper = styled('div')(({ theme }) => ({
@@ -62,7 +63,7 @@ const Landing = () => {
             </SectionWrapper>
 
             {/* 5. Analytics */}
-            <SectionWrapper>
+            <SectionWrapper >
                 <Analytics />
             </SectionWrapper>
 
@@ -89,6 +90,11 @@ const Landing = () => {
             {/* 9. Trends */}
             <SectionWrapper>
                 <Subscribe />
+            </SectionWrapper>
+
+            {/* 10. footer section */}
+            <SectionWrapper sx={{ paddingTop: 0, paddingBottom: 0}}>
+                <Footer />
             </SectionWrapper>
         </>
     );
