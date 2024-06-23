@@ -29,7 +29,7 @@ import { visuallyHidden } from '@mui/utils';
 import MainCard from 'ui-component/cards/MainCard';
 // import Chip from 'ui-component/extended/Chip';
 import { useDispatch, useSelector } from 'store';
-import { getProductReviews } from 'store/slices/customer';
+import { getAllReports } from 'store/slices/reports';
 
 // assets
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -37,12 +37,34 @@ import FilterListIcon from '@mui/icons-material/FilterListTwoTone';
 import PrintIcon from '@mui/icons-material/PrintTwoTone';
 import FileCopyIcon from '@mui/icons-material/FileCopyTwoTone';
 import SearchIcon from '@mui/icons-material/Search';
-import VisibilityTwoToneIcon from '@mui/icons-material/VisibilityTwoTone';
-import EditTwoToneIcon from '@mui/icons-material/EditTwoTone';
+// import VisibilityTwoToneIcon from '@mui/icons-material/VisibilityTwoTone';
+import CheckIcon from '@mui/icons-material/Check';
+import CancelIcon from '@mui/icons-material/Cancel';
+import KeyboardVoiceIcon from '@mui/icons-material/KeyboardVoice';
+import SlideshowIcon from '@mui/icons-material/Slideshow';
+import InsertPhotoIcon from '@mui/icons-material/InsertPhoto';
+// import EditTwoToneIcon from '@mui/icons-material/EditTwoTone';
 import EarningCard from './EarningCard';
 import EarningIcon from 'assets/images/icons/earning.svg';
 import { getAllUserCount, getAllReportsToday } from 'services/userService';
 import { useState, useEffect } from 'react';
+import { formatDistanceToNow } from 'date-fns';
+import ReviewEdit from './ReviewEdit';
+import ReviewVideo from './ReviewVideo.js';
+import ReviewImage from './ReviewImage.js';
+import { deleteReport } from 'services/reportService';
+
+const RelativeTimeCell = ({ timestamp }) => {
+    const date = new Date(timestamp * 1000); // Convert the timestamp to milliseconds
+    const relativeTime = formatDistanceToNow(date, { addSuffix: true });
+
+    return <TableCell>{relativeTime}</TableCell>;
+};
+
+RelativeTimeCell.propTypes = {
+    timestamp: PropTypes.number.isRequired
+};
+
 // table sort
 function descendingComparator(a, b, orderBy) {
     if (b[orderBy] < a[orderBy]) {
@@ -194,14 +216,23 @@ const IncidentReportList = () => {
     const [rowsPerPage, setRowsPerPage] = React.useState(5);
     const [search, setSearch] = React.useState('');
     const [rows, setRows] = React.useState([]);
-    const { productreviews } = useSelector((state) => state.customer);
+    const { report } = useSelector((state) => state.report);
+    const [open, setOpen] = React.useState(false);
+    const [openVideo, setOpenVideo] = React.useState(false);
+    const [openImage, setOpenImage] = React.useState(false);
+    const handleClickOpenDialog = () => {
+        setOpen(true);
+    };
+    const handleClickOpenVideoDialog = () => {
+        setOpenVideo(true);
+    };
     React.useEffect(() => {
-        dispatch(getProductReviews());
+        dispatch(getAllReports());
     }, [dispatch]);
 
     React.useEffect(() => {
-        setRows(productreviews);
-    }, [productreviews]);
+        setRows(report);
+    }, [report]);
 
     const handleSearch = (event) => {
         const newString = event?.target.value;
@@ -293,6 +324,32 @@ const IncidentReportList = () => {
             });
     }, []);
 
+    const handleCloseDialog = () => {
+        setOpen(false);
+    };
+
+    const handleCloseImageDialog = () => {
+        setOpenImage(false);
+    };
+
+    const handleCloseVideoDialog = () => {
+        setOpenVideo(false);
+    };
+
+    const handleDeleteClick = (id) => {
+        deleteReport(id)
+            .then(() => {
+                // Remove the deleted report from the rows state
+                const updatedRows = rows.filter((row) => row.id !== id);
+                setRows(updatedRows);
+                setSelected([]);
+            })
+            .catch((error) => {
+                console.error('Failed to delete report:', error.message);
+                // Handle error scenario here (e.g., show error message)
+            });
+    };
+
     return (
         <MainCard title="Manage Reports" content={false}>
             <CardContent>
@@ -340,7 +397,7 @@ const IncidentReportList = () => {
                 </Grid>
             </CardContent>
 
-            <TableContainer>
+            <TableContainer sx={{ overflowX: 'auto' }}>
                 <Table sx={{ minWidth: 750 }} aria-labelledby="tableTitle">
                     <EnhancedTableHead
                         numSelected={selected.length}
@@ -380,7 +437,7 @@ const IncidentReportList = () => {
                                             id={labelId}
                                             scope="row"
                                             onClick={(event) => handleClick(event, row.id)}
-                                            sx={{ cursor: 'pointer' }}
+                                            sx={{ cursor: 'pointer', whiteSpace: 'nowrap' }}
                                         >
                                             <Typography
                                                 variant="body2"
@@ -389,17 +446,32 @@ const IncidentReportList = () => {
                                                 {row.id}
                                             </Typography>
                                         </TableCell>
-                                        <TableCell>{row.fullname}</TableCell>
-                                        <TableCell>{row.date_of_incidence}</TableCell>
-                                        <TableCell>{row.report_type}</TableCell>
-                                        <TableCell>{row.description}</TableCell>
-                                        <TableCell>{row.created_at}</TableCell>
-                                        <TableCell align="center" sx={{ pr: 3 }}>
-                                            <IconButton color="primary" size="large" aria-label="view">
-                                                <VisibilityTwoToneIcon sx={{ fontSize: '1.3rem' }} />
+                                        <TableCell sx={{ whiteSpace: 'nowrap' }}>{row.fullname}</TableCell>
+                                        <TableCell sx={{ whiteSpace: 'nowrap' }}>{row.date_of_incidence}</TableCell>
+                                        <TableCell sx={{ whiteSpace: 'nowrap' }}>{row.report_type_id}</TableCell>
+                                        <TableCell sx={{ whiteSpace: 'nowrap' }}>{row.description}</TableCell>
+                                        {/* <TableCell>{row.created_at}</TableCell> */}
+                                        <RelativeTimeCell timestamp={row.created_at} />
+                                        <TableCell align="center" sx={{ pr: 3, whiteSpace: 'nowrap' }}>
+                                        <IconButton color="primary" size="large" aria-label="view" onClick={handleClickOpenDialog}>
+                                                <KeyboardVoiceIcon sx={{ fontSize: '1.3rem' }} />
                                             </IconButton>
-                                            <IconButton color="secondary" size="large" aria-label="edit">
-                                                <EditTwoToneIcon sx={{ fontSize: '1.3rem' }} />
+                                            <IconButton color="primary" size="large" aria-label="view">
+                                                <SlideshowIcon sx={{ fontSize: '1.3rem' }} onClick={handleClickOpenVideoDialog}/>
+                                            </IconButton>
+                                            <IconButton color="primary" size="large" aria-label="view">
+                                                <InsertPhotoIcon sx={{ fontSize: '1.3rem' }} />
+                                            </IconButton>
+                                            <IconButton color="primary" size="large" aria-label="view">
+                                                <CheckIcon sx={{ fontSize: '1.3rem' }} />
+                                            </IconButton>
+                                            <IconButton
+                                                color="secondary"
+                                                size="large"
+                                                aria-label="delete"
+                                                onClick={() => handleDeleteClick(row.id)}
+                                            >
+                                                <CancelIcon sx={{ fontSize: '1.3rem' }} />
                                             </IconButton>
                                         </TableCell>
                                     </TableRow>
@@ -412,6 +484,9 @@ const IncidentReportList = () => {
                         )}
                     </TableBody>
                 </Table>
+                <ReviewEdit open={open} handleCloseDialog={handleCloseDialog} />
+                <ReviewImage openImage={openImage} handleCloseImageDialog={handleCloseImageDialog} />
+                <ReviewVideo openVideo={openVideo} handleCloseVideoDialog={handleCloseVideoDialog} />
             </TableContainer>
 
             <TablePagination

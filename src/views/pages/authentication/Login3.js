@@ -2,8 +2,9 @@ import { Link } from 'react-router-dom';
 
 // material-ui
 import { useTheme } from '@mui/material/styles';
-import { Divider, Grid, Stack, Typography, useMediaQuery } from '@mui/material';
-
+import { Divider, Grid, Stack, Typography, useMediaQuery, Button } from '@mui/material';
+// import LayersTwoToneIcon from '@mui/icons-material/LayersTwoTone';
+import GoogleIcon from '@mui/icons-material/Google';
 // project imports
 import AuthWrapper1 from '../AuthWrapper1';
 import AuthCardWrapper from '../AuthCardWrapper';
@@ -11,7 +12,7 @@ import AuthLogin from './auth-forms/AuthLogin';
 import Logo from 'ui-component/Logo';
 import AuthFooter from 'ui-component/cards/AuthFooter';
 import useAuth from 'hooks/useAuth';
-
+import axios from 'utils/axios';
 // assets
 
 // ================================|| AUTH3 - LOGIN ||================================ //
@@ -20,6 +21,14 @@ const Login = () => {
     const theme = useTheme();
     const { isLoggedIn } = useAuth();
     const matchDownSM = useMediaQuery(theme.breakpoints.down('md'));
+    const handleLogin = async () => {
+        try {
+            const response = await axios.get('http://localhost:8080/api/v1/google/login'); // Use your Gin server endpoint
+            window.location.href = response.request.responseURL; // Redirect to the OAuth URL
+        } catch (error) {
+            console.error('Error initiating Google login:', error);
+        }
+    };
 
     return (
         <AuthWrapper1>
@@ -37,25 +46,45 @@ const Login = () => {
                                     <Grid item xs={12}>
                                         <Grid
                                             container
-                                            direction={matchDownSM ? 'column-reverse' : 'row'}
+                                            direction={matchDownSM ? 'column-reverse' : 'column'}
                                             alignItems="center"
                                             justifyContent="center"
                                         >
-                                            <Grid item>
+                                            <Grid item sx={{ mb: 3 }}>
                                                 <Stack alignItems="center" justifyContent="center" spacing={1}>
                                                     <Typography
                                                         color={theme.palette.secondary.main}
                                                         gutterBottom
                                                         variant={matchDownSM ? 'h3' : 'h2'}
                                                     >
-                                                        Hi, Welcome Back
+                                                        Login to earn points
                                                     </Typography>
+                                                </Stack>
+                                            </Grid>
+
+                                            <Grid item sx={{ mb: 3 }}>
+                                                <Button
+                                                    variant="outlined"
+                                                    startIcon={<GoogleIcon />}
+                                                    sx={{
+                                                        borderRadius: '20px',
+                                                        width: '360px',
+                                                        height: '50px',
+                                                        fontSize: '18px'
+                                                    }}
+                                                    onClick={handleLogin}
+                                                >
+                                                    Continue with Google
+                                                </Button>
+                                            </Grid>
+                                            <Grid item>
+                                                <Stack alignItems="center" spacing={1}>
                                                     <Typography
-                                                        variant="caption"
-                                                        fontSize="16px"
-                                                        textAlign={matchDownSM ? 'center' : 'inherit'}
+                                                        color={theme.palette.secondary.main}
+                                                        gutterBottom
+                                                        variant={matchDownSM ? 'h4' : 'h3'}
                                                     >
-                                                        Enter your credentials to continue
+                                                        OR
                                                     </Typography>
                                                 </Stack>
                                             </Grid>

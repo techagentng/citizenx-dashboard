@@ -1,19 +1,23 @@
-
+import React from 'react';
 import { Bar } from 'react-chartjs-2';
 import { Chart as ChartJS, CategoryScale, LinearScale, BarController, BarElement, Title, Tooltip, Legend } from 'chart.js';
 
 ChartJS.register(Title, Tooltip, Legend, CategoryScale, LinearScale, BarElement, BarController);
 
-const BarChart = () => {
+const BarChart = ({ reportTypes, reportCounts }) => {
+    if (!reportTypes || !reportCounts || reportTypes.length === 0 || reportCounts.length === 0) {
+        return <p>No data available</p>;
+    }
+
     const data = {
-        labels: ['Label 1', 'Label 2', 'Label 3', 'Label 4', 'Label 5'],
+        labels: reportTypes,
         datasets: [
             {
-                label: 'Data Series 1',
-                backgroundColor: 'rgba(75, 192, 192, 0.6)',
-                borderColor: 'rgba(75, 192, 192, 1)',
+                label: 'Report Counts',
+                backgroundColor: 'rgb(16,72,51)',
+                borderColor: 'rgb(16,72,51)',
                 borderWidth: 1,
-                data: [12, 19, 3, 5, 2]
+                data: reportCounts
             }
         ]
     };
@@ -27,7 +31,7 @@ const BarChart = () => {
     };
 
     return (
-        <div>
+        <div style={{ width: '100%' }}>
             <Bar data={data} options={options} />
         </div>
     );

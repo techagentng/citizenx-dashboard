@@ -30,7 +30,7 @@ import { visuallyHidden } from '@mui/utils';
 import ProductAdd from './ProductAdd';
 import MainCard from 'ui-component/cards/MainCard';
 import { useDispatch, useSelector } from 'store';
-import { getProducts } from 'store/slices/customer';
+import { getProducts } from 'store/slices/reports';
 
 // assets
 import DeleteIcon from '@mui/icons-material/Delete';
