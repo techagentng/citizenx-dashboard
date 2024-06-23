@@ -190,3 +190,21 @@
 .ReactModal__Overlay {
     z-index: 99999 !important;
 }
+
+.hero-main{
+    background: linear-gradient(-45deg, #17a877, #183aa7, #587ae7, #57e8b7);
+    background-size: 400% 400%;
+    animation: gradient 15s ease infinite;
+}
+
+@keyframes gradient {
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
+}
