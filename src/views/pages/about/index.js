@@ -3,6 +3,7 @@ import React from 'react'
 import { styled } from '@mui/material/styles';
 
 import AppBar from 'ui-component/extended/AppBar';
+import HeaderSection from './HeaderSection';
 // import Footer from 'views/pages/landing/Footer';
 
 // custom stlye
@@ -27,6 +28,7 @@ const about = () => {
         {/* 1. header and hero section */}
         <HeaderWrapper id="home">
                 <AppBar />
+                <HeaderSection/>
             </HeaderWrapper>
          {/* 2. card section */}
          <SectionWrapper >
