@@ -4,8 +4,8 @@ import { useMemo } from 'react';
 // material-ui
 import { useTheme, styled } from '@mui/material/styles';
 import { Box, Button, Container, Grid, Link, Stack, Typography } from '@mui/material';
-import LocalHospitalIcon from '@mui/icons-material/LocalHospital';
-import FastfoodIcon from '@mui/icons-material/Fastfood';
+import Discuss from 'assets/images/landing/chat_1147963.png';
+import Report from 'assets/images/landing/megaphone_477813.png';
 
 // third party
 import { motion } from 'framer-motion';
@@ -42,11 +42,14 @@ const HeaderAnimationImage = styled('img')({
 
 // Icon style
 const iconStyle = {
-    backgroundColor: '#c7f7e7',
-    color: '#17a877',
-    borderRadius: '50%',
     padding: '20px',
+
 };
+
+const Icon = styled('img')({
+    padding: '30px',
+    filter: 'drop-shadow(0px 0px 50px rgb(33 150 243 / 30%))'
+});
 
 // ==============================|| LANDING - HEADER PAGE ||============================== //
 
@@ -113,7 +116,7 @@ const HeaderSection = () => {
                                     variant="body1"
                                     sx={{ fontSize: { xs: '1rem', md: '1.125rem' } }}
                                 >
-                                    Join us in making a difference Engage, report and stay informed
+                                    Join us in making a difference Engage, <br/>report and stay informed
                                 </Typography>
                             </motion.div>
                         </Grid>
@@ -166,7 +169,10 @@ const HeaderSection = () => {
                                 animate={{ opacity: 1, scale: 1 }}
                                 transition={{ type: 'spring', stiffness: 150, damping: 30, delay: 0.2 }}
                             >
-                                <LocalHospitalIcon sx={{fontSize: '8rem'}} style={iconStyle} />
+                                <Box style={iconStyle}>
+                                   
+                                </Box>
+                                <Icon src={Discuss} width='50%' height='50%'  />
                             </motion.div>
                         </Box>
                         <Box
@@ -184,7 +190,9 @@ const HeaderSection = () => {
                                 animate={{ opacity: 1, scale: 1 }}
                                 transition={{ type: 'spring', stiffness: 150, damping: 30, delay: 0.4 }}
                             >
-                                <FastfoodIcon sx={{fontSize: '10rem'}} style={iconStyle} />
+                                <Box style={iconStyle}>
+                                    <Icon  width='80%' height='80%' src={Report}   />
+                                </Box>
                             </motion.div>
                         </Box>
                     </Box>

@@ -10,10 +10,10 @@ import SubCard from 'ui-component/cards/SubCard';
 import Avatar from 'ui-component/extended/Avatar';
 
 // assets
-import Offer1 from 'assets/images/landing/features/image 1.png';
-import Offer2 from 'assets/images/landing/features/image 2.png';
-import Offer3 from 'assets/images/landing/features/image 3.png';
-import Offer4 from 'assets/images/landing/features/image 4.png';
+import Offer1 from 'assets/images/landing/features/seo-report_9143391.png';
+import Offer2 from 'assets/images/landing/features/medal_499054.png';
+import Offer3 from 'assets/images/landing/features/statistics_9079413.png';
+import Offer4 from 'assets/images/landing/features/audit_12492449.png';
 
 const OfferCard = ({ title, caption, image }) => {
     const theme = useTheme();

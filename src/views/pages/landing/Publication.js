@@ -59,6 +59,7 @@ const Publication = () => {
                                     fontSize: '1rem',
                                     zIndex: '99',
                                     pt: 1,
+                                    lineHeight: 1.7,
                                     width: { xs: '100%', sm: '100%', md: 'calc(100% - 20%)' },
                                 }}
                             >

@@ -26,7 +26,7 @@ const AppInfo = () => {
         padding: '10px 0',
         fontSize: '1rem',
         color: theme.palette.grey[900],
-        svg: { color: theme.palette.secondary.main }
+        svg: { color: '#17a877' }
     };
 
     const ButtonSX = {
@@ -36,7 +36,7 @@ const AppInfo = () => {
 
     const Screensection = styled(Box)(({theme}) => ({
         width: "100%",
-        backgroundColor: "#E6FFE5",
+        backgroundColor: theme.palette.primary.light,
         borderRadius: 20,
         padding: "80px 20px 0px 20px",
         margin: "0px 10px",
@@ -53,7 +53,7 @@ const AppInfo = () => {
         <FadeInWhenVisible>
             <Stack direction="column" alignItems="left">
                 <Typography variant="h4" fontWeight={800} align="left" marginLeft={12} marginBottom={1}>{title}</Typography>
-                <Typography align="left" marginLeft={12} paddingRight={10}>{caption}</Typography>
+                <Typography align="left" marginLeft={12} color={theme.palette.text.secondary} paddingRight={10}>{caption}</Typography>
                 <img src={image} alt="Phone screen" style={{ width: '100%', height: 'auto' }} />
             </Stack>    
         </FadeInWhenVisible>
@@ -87,7 +87,9 @@ const AppInfo = () => {
                             <Typography sx={{
                                 fontSize: '1rem',
                                 zIndex: '99',
-                                width: { xs: '100%', sm: '100%', md: 'calc(100% - 20%)' }
+                                pt: 1,
+                                lineHeight: 1.7,
+                                width: { xs: '100%', sm: '100%', md: 'calc(100% - 30%)' },
                             }}>
                                 Get involved, make your voice heard, and get rewards all at your fingertips!
                             </Typography>
