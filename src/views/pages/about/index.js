@@ -4,6 +4,7 @@ import { styled } from '@mui/material/styles';
 
 import AppBar from 'ui-component/extended/AppBar';
 import HeaderSection from './HeaderSection';
+import Focus from './Focus';
 // import Footer from 'views/pages/landing/Footer';
 
 // custom stlye
@@ -32,7 +33,7 @@ const about = () => {
             </HeaderWrapper>
          {/* 2. card section */}
          <SectionWrapper >
-              
+              <Focus/>
             </SectionWrapper>
 
             {/* 2. card section */}
