@@ -10,8 +10,10 @@ import AuthenticationRoutes from './AuthenticationRoutes';
 import Loadable from 'ui-component/Loadable';
 
 const PagesLanding = Loadable(lazy(() => import('views/pages/landing')));
+const PagesAbout = Loadable(lazy(() => import('views/pages/about')));
 
 // ==============================|| ROUTING RENDER ||============================== //
 
-const router = createBrowserRouter([{ path: '/', element: <PagesLanding /> }, LoginRoutes, AuthenticationRoutes, MainRoutes], { basename: process.env.REACT_APP_BASE_NAME });
+const router = createBrowserRouter([{ path: '/', element: <PagesLanding /> },
+{ path: '/about', element: <PagesAbout /> }, LoginRoutes, AuthenticationRoutes, MainRoutes], { basename: process.env.REACT_APP_BASE_NAME });
 export default router;
