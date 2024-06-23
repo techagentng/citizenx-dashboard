@@ -73,7 +73,7 @@ const AppInfo = () => {
         }}>
             <Grid container justifyContent="space-between" alignItems="center" spacing={{ xs: 1.5, sm: 2.5, md: 3, lg: 5 }}>
                 <Grid item xs={12} md={6} sx={{ img: { width: '100%' } }}>
-                    <Stack sx={{ width: '75%', mb: -1, mx: 'auto' }}>
+                    <Stack sx={{ width: '75%', mb: {xs: 0, lg:'-50px'}, mx: 'auto' }}>
                         <CardMedia component="img" image={handApp} alt="Layer" />
                     </Stack>
                 </Grid>
@@ -144,7 +144,7 @@ const AppInfo = () => {
                         <Grid item xs={12} md={4}>
                             <ScreeColumn
                                 title='Earn Rewards'
-                                caption="sGet involved, make your voice heard, and get rewards all at your fingertips!"
+                                caption="Get involved, make your voice heard, and get rewards all at your fingertips!"
                                 image={screenthree}
                             />
                         </Grid>
