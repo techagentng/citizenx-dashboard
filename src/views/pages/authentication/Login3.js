@@ -23,7 +23,7 @@ const Login = () => {
     const matchDownSM = useMediaQuery(theme.breakpoints.down('md'));
     const handleLogin = async () => {
         try {
-            const response = await axios.get('http://localhost:8080/api/v1/google/login'); // Use your Gin server endpoint
+            const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/v1/google/login`);
             window.location.href = response.request.responseURL; // Redirect to the OAuth URL
         } catch (error) {
             console.error('Error initiating Google login:', error);
