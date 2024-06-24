@@ -6,7 +6,6 @@ import MainRoutes from './MainRoutes';
 import LoginRoutes from './LoginRoutes';
 import AuthenticationRoutes from './AuthenticationRoutes';
 
-
 // ==============================|| ROUTING RENDER ||============================== //
 import Loadable from 'ui-component/Loadable';
 const PagesLanding = Loadable(lazy(() => import('views/pages/landing')));
