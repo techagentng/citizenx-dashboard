@@ -7,6 +7,8 @@ import HeaderSection from './HeaderSection';
 import Focus from './Focus';
 import Partners from './Partners';
 import FAQ from './FAQ';
+import Testimonial from '../landing/Testimonial';
+import Jumbo from './Jumbo';
 // import Footer from 'views/pages/landing/Footer';
 
 // custom stlye
@@ -37,12 +39,19 @@ const about = () => {
          <SectionWrapper >
               <Focus/>
             </SectionWrapper>
-        {/* 3. card section */}
+        {/* 3. Partners section */}
         <SectionWrapper >
               <Partners/>
         </SectionWrapper>
-
-        {/* 4. card section */}
+        {/* 4. Testimonial section */}
+        <SectionWrapper >
+              <Testimonial/>
+        </SectionWrapper>
+        {/* 5. Jumbo section */}
+        <SectionWrapper >
+              <Jumbo/>
+        </SectionWrapper>
+        {/* . card section */}
         <SectionWrapper >
               <FAQ/>
         </SectionWrapper>
