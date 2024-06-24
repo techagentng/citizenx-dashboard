@@ -9,7 +9,8 @@ import Partners from './Partners';
 import FAQ from './FAQ';
 import Testimonial from '../landing/Testimonial';
 import Jumbo from './Jumbo';
-// import Footer from 'views/pages/landing/Footer';
+import Trends from '../landing/Trends';
+import Footer from 'views/pages/landing/Footer';
 
 // custom stlye
 const HeaderWrapper = styled('div')(({ theme }) => ({
@@ -52,15 +53,19 @@ const about = () => {
         <SectionWrapper >
               <Jumbo/>
         </SectionWrapper>
-        {/* . card section */}
+        {/* . FAQ section */}
         <SectionWrapper >
               <FAQ/>
         </SectionWrapper>
+        {/* . Trends section */}
+        <SectionWrapper >
+              <Trends/>
+        </SectionWrapper>
 
             {/* 2. card section */}
-         {/* <SectionWrapper >
+            <SectionWrapper sx={{ paddingTop: 0, paddingBottom: 0}}>
                 <Footer/>
-            </SectionWrapper> */}
+            </SectionWrapper>
     </>
   )
 }
