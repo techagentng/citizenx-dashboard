@@ -77,7 +77,7 @@ const AppBar = ({ ...others }) => {
                         </Typography>
                         <Stack direction="row" sx={{ display: { xs: 'none', sm: 'block' } }} spacing={{ xs: 1.5, md: 2.5 }}>
                             <Button color="inherit" component={Link} href="#" target="_blank">
-                                Home
+                                About
                             </Button>
                             <Button color="inherit" component={Link} href="#" target="_blank">
                                 Publications
@@ -96,15 +96,6 @@ const AppBar = ({ ...others }) => {
                                 color="secondary"
                             >
                                 Sign In
-                            </Button>
-                            <Button
-                                component={Link}
-                                href="#"
-                                disableElevation
-                                variant="contained"
-                                color="error"
-                            >
-                                Donate
                             </Button>
                         </Stack>
                         <Box sx={{ display: { xs: 'block', sm: 'none' } }}>

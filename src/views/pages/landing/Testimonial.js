@@ -7,6 +7,7 @@ import "slick-carousel/slick/slick-theme.css";
 
 // image
 import UserOne from 'assets/images/cards/card-1.jpg'
+import FadeInWhenVisible from './Animation';
 
 const TestimonialData = [
   {
@@ -55,6 +56,7 @@ const Testimonial = () => {
 
   return (
     <Container >
+      <FadeInWhenVisible>
       <Grid container spacing={3}>
        {/* Heading */}
        <Grid item xs={12} sx={{textAlign: "left"}}>
@@ -66,7 +68,6 @@ const Testimonial = () => {
                     </Grid>
                 </Grid>
             </Grid>
-
 
     <Grid item xs={12} >
       <Grid container justifyContent="center" >
@@ -117,7 +118,7 @@ const Testimonial = () => {
           </Grid>
         </Grid>
       </Grid>
-
+      </FadeInWhenVisible>
     </Container>
   )
 }
