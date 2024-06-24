@@ -6,6 +6,7 @@ import AppBar from 'ui-component/extended/AppBar';
 import HeaderSection from './HeaderSection';
 import Focus from './Focus';
 import Partners from './Partners';
+import FAQ from './FAQ';
 // import Footer from 'views/pages/landing/Footer';
 
 // custom stlye
@@ -36,9 +37,14 @@ const about = () => {
          <SectionWrapper >
               <Focus/>
             </SectionWrapper>
-        {/* 2. card section */}
+        {/* 3. card section */}
         <SectionWrapper >
               <Partners/>
+        </SectionWrapper>
+
+        {/* 4. card section */}
+        <SectionWrapper >
+              <FAQ/>
         </SectionWrapper>
 
             {/* 2. card section */}
