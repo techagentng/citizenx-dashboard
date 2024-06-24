@@ -5,26 +5,28 @@ import { Box, Avatar, CardMedia, Container, Grid, Stack, Typography } from '@mui
 // import SubCard from 'ui-component/cards/SubCard';
 import FadeInWhenVisible from '../landing/Animation';
 
-import icon from 'assets/images/landing/chat_1147958.png'
-
+import engagementIcon from 'assets/images/about/social-media_3930528.png';
+import securityIcon from 'assets/images/about/shield_508250.png';
+import communityIcon from 'assets/images/about/community_8987703.png';
+ 
 const BoxContent =[
     {
         id: 1,
         title: 'Digital Engagement' ,
         caption: 'Leveraging technology to enhance citizen interaction with governance processes.',
-        image: icon 
+        image: engagementIcon 
     },
     {
         id: 2,
         title: 'Transparency & Accountability' ,
         caption: 'Ensuring that government actions are open and accountable to the people',
-        image: icon 
+        image: securityIcon 
     },
     {
         id: 3,
         title: 'Community Empowerment' ,
         caption: 'Empowering local communities to voice their needs and participate in governance.',
-        image: icon 
+        image: communityIcon 
     }
 ]
 

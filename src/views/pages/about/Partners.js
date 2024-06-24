@@ -7,8 +7,8 @@ import Slider from 'react-slick';
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
-import PartnerOne from 'assets/images/landing/megaphone_477813.png';
-import PartnerTwo from 'assets/images/landing/chat_1147958.png';
+import PartnerOne from 'assets/images/landing/citizenX-logo.png';
+import PartnerTwo from 'assets/images/landing/citizenX-logo.png';
 import FadeInWhenVisible from '../landing/Animation';
 
 const Images = [
