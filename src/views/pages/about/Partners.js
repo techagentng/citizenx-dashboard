@@ -9,6 +9,7 @@ import "slick-carousel/slick/slick-theme.css";
 
 import PartnerOne from 'assets/images/landing/megaphone_477813.png';
 import PartnerTwo from 'assets/images/landing/chat_1147958.png';
+import FadeInWhenVisible from '../landing/Animation';
 
 const Images = [
     {
@@ -37,10 +38,11 @@ const settings = {
 
 const Partners = () => {
     const theme = useTheme();
-    const AvatarSx = { background: 'transparent', color: theme.palette.secondary.main, paddingX:2 , width: 300, height: 300 };
+    const AvatarSx = { background: 'transparent', color: theme.palette.secondary.main, paddingX:2 , width: 200, height: 100 };
     
     return (
         <Container>
+            <FadeInWhenVisible>
             <Grid container>
                 <Grid item xs={12} md={8}>
                     <Stack spacing={2}>
@@ -79,6 +81,7 @@ const Partners = () => {
                     </Grid>
                 </Grid>
             </Grid>
+            </FadeInWhenVisible>
         </Container>
     );
 }

@@ -43,9 +43,8 @@ const FAQ = () => {
     <Container>
         <Grid container justifyContent="center" spacing={gridSpacing}>
         <Grid item xs={12}>
-                <Typography variant="h2" sx={{ fontSize: { xs: '1.5rem', sm: '2.125rem' }, mb: 2 }}>
-                    Citizen X Dashboard: <br />
-                    Incident Reports & Analytics
+                <Typography variant="h2" sx={{ fontSize: { xs: '1.5rem', sm: '2.125rem' }, textAlign: 'center', mb: 2 }}>
+                    FAQ
                 </Typography>
             </Grid>
             <Grid item xs={12}>

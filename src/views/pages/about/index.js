@@ -28,6 +28,7 @@ const SectionWrapper = styled('div')({
 });
 
 const about = () => {
+
   return (
     <>
         {/* 1. header and hero section */}
@@ -40,7 +41,7 @@ const about = () => {
               <Focus/>
             </SectionWrapper>
         {/* 3. Partners section */}
-        <SectionWrapper >
+        <SectionWrapper sx={{background: '#EEEEEE'}} >
               <Partners/>
         </SectionWrapper>
         {/* 4. Testimonial section */}
