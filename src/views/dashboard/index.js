@@ -19,7 +19,7 @@ import BarChart from './barchart';
 import PieChart from './piechart';
 import LineChart from './linechart';
 import { getGraph } from 'store/slices/graphs';
-import MapboxMap from './mapbox';
+// import NigeriaMap from './nigeria-map';
 import CompareForms from './CompareForms';
 // import AudioPlayer from 'material-ui-audio-player';
 // Fix the default icon issue
@@ -121,7 +121,7 @@ const DashboardPage = () => {
                 <Grid container spacing={gridSpacing}>
                     <Grid item xs={12} md={8}>
                         <MainCard title="Markers & Popups">
-                            <MapboxMap />
+                            {/* <NigeriaMap /> */}
                             {/* <MapContainer
                                 bounds={nigeriaBounds}
                                 zoom={6}

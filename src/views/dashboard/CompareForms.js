@@ -1,7 +1,7 @@
 import { useDispatch } from 'store';
 import { useState } from 'react';
 // material-ui
-import { Button, Grid, Stack, TextField } from '@mui/material';
+import { Button, Grid, Stack, TextField, Typography } from '@mui/material';
 
 // project imports
 import MainCard from 'ui-component/cards/MainCard';
@@ -64,6 +64,9 @@ const LoginForms = () => {
             <form onSubmit={formik.handleSubmit}>
                 <Grid container spacing={gridSpacing} sx={12} md={12} style={{ justifyContent: 'space-between' }}>
                     <Grid container spacing={gridSpacing} sx={12} md={6} style={{ marginTop: '3px' }}>
+                        <Typography variant="h4" sx={{ ml: 4 }} component="h2">
+                            Incident report
+                        </Typography>
                         <Grid item xs={12}>
                             <Autocomplete
                                 fullWidth
@@ -127,6 +130,11 @@ const LoginForms = () => {
                                     />
                                 )}
                             />
+                        </Grid>
+                        <Grid item md={12}>
+                            <Typography variant="h4" sx={{ ml: 1 }} component="h2">
+                                Compare state data
+                            </Typography>
                         </Grid>
                         <Grid item xs={12} md={6}>
                             <Autocomplete
@@ -282,6 +290,9 @@ const LoginForms = () => {
 
                     <Grid container spacing={2} md={6} sx={{ mt: 1 }}>
                         <Grid item xs={12} md={4}>
+                            <Typography variant="h5" gutterBottom>
+                                First DateTime
+                            </Typography>
                             <LocalizationProvider dateAdapter={AdapterDateFns}>
                                 <DateTimePicker
                                     slotProps={{ textField: { fullWidth: true } }}
@@ -294,8 +305,9 @@ const LoginForms = () => {
                             </LocalizationProvider>
                         </Grid>
                         <Grid item xs={12} md={4}>
-                            {' '}
-                            {/* Adjust xs and md values for responsive layout */}
+                            <Typography variant="h5" gutterBottom>
+                                Second Date
+                            </Typography>
                             <LocalizationProvider dateAdapter={AdapterDateFns}>
                                 <DateTimePicker
                                     slotProps={{ textField: { fullWidth: true } }}
@@ -308,7 +320,7 @@ const LoginForms = () => {
                             </LocalizationProvider>
                         </Grid>
                     </Grid>
-                    <Button variant="contained" color="secondary" sx={{ width: '100%', backgroundColor:'0e9b66', mt:2 }}>
+                    <Button variant="contained" color="secondary" sx={{ width: '100%', backgroundColor: '0e9b66', mt: 2 }}>
                         Compare
                     </Button>
                 </Grid>
