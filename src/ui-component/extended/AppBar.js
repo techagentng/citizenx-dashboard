@@ -77,7 +77,7 @@ const AppBar = ({ ...others }) => {
                             <Button color="inherit" component={Link} href="#" target="_blank">
                                 Home
                             </Button>
-                            <Button color="inherit" component={RouterLink} to="https://citizenx-dashboard.onrender.com/" target="_blank">
+                            <Button color="inherit" component={RouterLink} to="https://citizenx-dashboard.onrender.com/login" target="_blank">
                                 Dashboard
                             </Button>
                             <Button color="inherit" component={Link} href="https://codedthemes.gitbook.io/berry" target="_blank">
@@ -119,14 +119,10 @@ const AppBar = ({ ...others }) => {
                                                     <ListItemIcon>
                                                         <IconDashboard />
                                                     </ListItemIcon>
-                                                    <ListItemText primary="Dashboard" />
+                                                    <ListItemText primary="Dashboardxx" />
                                                 </ListItemButton>
                                             </Link>
-                                            <Link
-                                                style={{ textDecoration: 'none' }}
-                                                href="https://codedthemes.gitbook.io/berry"
-                                                target="_blank"
-                                            >
+                                            <Link style={{ textDecoration: 'none' }} href="/login" target="_blank">
                                                 <ListItemButton component="a">
                                                     <ListItemIcon>
                                                         <IconBook />
