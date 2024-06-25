@@ -3,6 +3,7 @@
     "version": "3.7.0",
     "private": true,
     "dependencies": {
+        "@amcharts/amcharts5": "^5.9.12",
         "@auth0/auth0-spa-js": "^2.1.2",
         "@emotion/cache": "^11.11.0",
         "@emotion/react": "^11.11.1",
