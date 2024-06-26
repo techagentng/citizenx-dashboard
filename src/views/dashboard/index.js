@@ -11,6 +11,7 @@ import PopularCard from './PopularCard';
 import { gridSpacing } from 'store/constant';
 import JWTContext from 'contexts/JWTContext';
 import { getAllUserCount, getAllReportsToday, getOnlineUsers } from 'services/userService';
+
 // React Leaflet imports
 // import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
@@ -19,8 +20,10 @@ import BarChart from './barchart';
 import PieChart from './piechart';
 import LineChart from './linechart';
 import { getGraph } from 'store/slices/graphs';
-// import NigeriaMap from './nigeria-map';
+// import NigeriaMap from './nigeria-map-index';
 import CompareForms from './CompareForms';
+
+
 // import AudioPlayer from 'material-ui-audio-player';
 // Fix the default icon issue
 // delete L.Icon.Default.prototype._getIconUrl;
@@ -39,6 +42,7 @@ const DashboardPage = () => {
     const [userCount, setUserCount] = useState(0);
     const [todayReportCount, setTodayReportCount] = useState(0);
     const [onlineUsers, setOnlineUsers] = useState(0);
+ 
     // Define the bounds for Nigeria
     // const nigeriaBounds = [
     //     [4.272, 2.6769], // Southwest corner (approx)
@@ -51,6 +55,9 @@ const DashboardPage = () => {
     //     { lat: 6.5244, lng: 3.3792, popup: 'Marker 2' }
     //     // Add more markers as needed
     // ];
+
+
+
     useEffect(() => {
         if (selectedState && selectedLga) {
             dispatch(getGraph(selectedState, selectedLga));
@@ -62,11 +69,9 @@ const DashboardPage = () => {
         if (isLoggedIn) {
             console.log('Fetching user data, report data, and online users');
             Promise.all([getAllUserCount(), getAllReportsToday(), getOnlineUsers()])
-                .then(([userCountData, todayReportCountData, onlineUserData]) => {
-                    console.log('User count:', userCountData);
+                .then(([userCountData, todayReportCountData, onlineUserData]) => {                    console.log('User count:', userCountData);
                     console.log('Today report count:', todayReportCountData);
                     console.log('Online users data:', onlineUserData);
-
                     setUserCount(userCountData);
                     setTodayReportCount(todayReportCountData);
                     setOnlineUsers(onlineUserData); // Set the count correctly
