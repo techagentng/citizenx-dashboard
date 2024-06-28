@@ -77,7 +77,7 @@ const AppBar = ({ ...others }) => {
                             <Button color="inherit" component={Link} href="#" target="_blank">
                                 Home
                             </Button>
-                            <Button color="inherit" component={RouterLink} to="https://citizenx-dashboard.onrender.com/login" target="_blank">
+                            <Button color="inherit" component={RouterLink} to="/login" target="_blank">
                                 Dashboard
                             </Button>
                             <Button color="inherit" component={Link} href="https://codedthemes.gitbook.io/berry" target="_blank">
