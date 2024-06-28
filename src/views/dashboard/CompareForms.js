@@ -1,7 +1,7 @@
 import { useDispatch } from 'store';
 import { useState } from 'react';
 // material-ui
-import { Button, Grid, Stack, TextField, Typography } from '@mui/material';
+import { Button, Grid, Stack, TextField, Typography, IconButton } from '@mui/material';
 
 // project imports
 import MainCard from 'ui-component/cards/MainCard';
@@ -21,6 +21,7 @@ import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import ControlPointIcon from '@mui/icons-material/ControlPoint';
 import CompareBarChart from './compareBarChart';
+import DeleteIcon from '@mui/icons-material/Delete';
 // import { getStateReportCounts } from './../../services/reportService';
 // assets
 // import LinkIcon from '@mui/icons-material/Link';
@@ -82,7 +83,7 @@ const reportTypes = [
 const CompareForms = () => {
     const dispatch = useDispatch();
     const [valueBasic, setValueBasic] = useState(new Date());
-    const [compare, setcompare] = useState([{ id: Date.now(), role: '' }]);
+    const [compare, setCompare] = useState([{ id: Date.now(), role: '' }]);
     const [reportTypeInputs, setReportTypeInputs] = useState([{ id: Date.now(), type: '' }]);
 
     const handleAddReportTypeInput = () => {
@@ -97,7 +98,7 @@ const CompareForms = () => {
     };
 
     const handleAddInput = () => {
-        setcompare([...compare, { id: Date.now(), role: '' }]);
+        setCompare([...compare, { id: Date.now(), role: '' }]);
     };
     const formik = useFormik({
         initialValues: {
@@ -120,6 +121,16 @@ const CompareForms = () => {
         }
     });
 
+    const handleDeleteReportTypeInput = (index) => {
+        const updatedInputs = reportTypeInputs.filter((_, i) => i !== index);
+        setReportTypeInputs(updatedInputs);
+    };
+
+    const handleDeleteCompareInput = (id) => {
+        const updatedCompare = compare.filter((input) => input.id !== id);
+        setCompare(updatedCompare);
+    };
+
     return (
         <MainCard>
             <form onSubmit={formik.handleSubmit}>
@@ -131,63 +142,67 @@ const CompareForms = () => {
                             </Typography>
                             {reportTypeInputs.map((input, index) => (
                                 <Grid item xs={12} key={input.id} sx={{ mt: 2 }}>
-                                    <Autocomplete
-                                        fullWidth
-                                        value={input.type}
-                                        disableClearable
-                                        onChange={(event, newValue) => handleReportTypeChange(index, newValue)}
-                                        filterOptions={(options, params) => {
-                                            const filtered = filter(options, params);
-                                            const { inputValue } = params;
-                                            const isExisting = options.some((option) => inputValue === option);
-                                            if (inputValue !== '' && !isExisting) {
-                                                filtered.push(`Add "${inputValue}"`);
-                                            }
-                                            return filtered;
-                                        }}
-                                        selectOnFocus
-                                        clearOnBlur
-                                        autoHighlight
-                                        handleHomeEndKeys
-                                        id={`free-solo-with-text-demo-${input.id}`}
-                                        options={reportTypes}
-                                        getOptionLabel={(option) => {
-                                            let value = option;
-                                            const jobExist = reportTypes.includes(option);
-                                            if (!jobExist) {
-                                                const matchData = option.match(/"((?:\\.|[^"\\])*)"/);
-                                                if (matchData && matchData[1]) value = matchData[1];
-                                            }
-                                            return value;
-                                        }}
-                                        renderOption={(props, option) => (
-                                            <Box component="li" {...props}>
-                                                {option}
-                                            </Box>
-                                        )}
-                                        freeSolo
-                                        renderInput={(params) => (
-                                            <TextField
-                                                {...params}
-                                                name={`role-${index}`}
-                                                error={formik.touched.role && Boolean(formik.errors.role)}
-                                                helperText={formik.touched.role && formik.errors.role && formik.errors.role}
-                                                placeholder="Select Report Type"
-                                                InputProps={{
-                                                    ...params.InputProps,
-                                                    sx: { bgcolor: 'grey.0' },
-                                                    endAdornment: (
-                                                        <InputAdornment position="end">
-                                                            <ArrowDropDown sx={{ color: 'text.primary' }} />
-                                                        </InputAdornment>
-                                                    )
-                                                }}
-                                            />
-                                        )}
-                                    />
+                                    <Stack direction="row" spacing={2} alignItems="center">
+                                        <Autocomplete
+                                            fullWidth
+                                            value={input.type}
+                                            disableClearable
+                                            onChange={(event, newValue) => handleReportTypeChange(index, newValue)}
+                                            filterOptions={(options, params) => {
+                                                const filtered = filter(options, params);
+                                                const { inputValue } = params;
+                                                const isExisting = options.some((option) => inputValue === option);
+                                                if (inputValue !== '' && !isExisting) {
+                                                    filtered.push(`Add "${inputValue}"`);
+                                                }
+                                                return filtered;
+                                            }}
+                                            selectOnFocus
+                                            clearOnBlur
+                                            autoHighlight
+                                            handleHomeEndKeys
+                                            id={`free-solo-with-text-demo-${input.id}`}
+                                            options={reportTypes}
+                                            getOptionLabel={(option) => {
+                                                let value = option;
+                                                const jobExist = reportTypes.includes(option);
+                                                if (!jobExist) {
+                                                    const matchData = option.match(/"((?:\\.|[^"\\])*)"/);
+                                                    if (matchData && matchData[1]) value = matchData[1];
+                                                }
+                                                return value;
+                                            }}
+                                            renderOption={(props, option) => (
+                                                <Box component="li" {...props}>
+                                                    {option}
+                                                </Box>
+                                            )}
+                                            freeSolo
+                                            renderInput={(params) => (
+                                                <TextField
+                                                    {...params}
+                                                    name={`role-${index}`}
+                                                    error={formik.touched.role && Boolean(formik.errors.role)}
+                                                    helperText={formik.touched.role && formik.errors.role && formik.errors.role}
+                                                    placeholder="Select Report Type"
+                                                    InputProps={{
+                                                        ...params.InputProps,
+                                                        sx: { bgcolor: 'grey.0' },
+                                                        endAdornment: (
+                                                            <InputAdornment position="end">
+                                                                <ArrowDropDown sx={{ color: 'text.primary' }} />
+                                                            </InputAdornment>
+                                                        )
+                                                    }}
+                                                />
+                                            )}
+                                        />
+                                        <IconButton aria-label="delete" onClick={() => handleDeleteReportTypeInput(index)}>
+                                            <DeleteIcon />
+                                        </IconButton>
+                                    </Stack>
                                 </Grid>
                             ))}
-
                             <Grid item xs={12} sx={{ mt: 1 }}>
                                 <Stack direction="row" justifyContent="flex-start">
                                     <AnimateButton>
@@ -214,63 +229,68 @@ const CompareForms = () => {
                         <Grid container spacing={gridSpacing}>
                             {compare.map((input) => (
                                 <Grid item xs={12} md={6} sx={{ mt: 1 }} key={input.id}>
-                                    <Autocomplete
-                                        fullWidth
-                                        value={input.role}
-                                        disableClearable
-                                        onChange={(event, newValue) => {
-                                            const updatedcompare = compare.map((inp) =>
-                                                inp.id === input.id ? { ...inp, role: newValue } : inp
-                                            );
-                                            setcompare(updatedcompare);
-                                        }}
-                                        filterOptions={(options, params) => {
-                                            const filtered = createFilterOptions()(options, params);
-                                            const { inputValue } = params;
-                                            const isExisting = options.some((option) => inputValue === option);
-                                            if (inputValue !== '' && !isExisting) {
-                                                filtered.push(`Add "${inputValue}"`);
-                                            }
-                                            return filtered;
-                                        }}
-                                        selectOnFocus
-                                        clearOnBlur
-                                        autoHighlight
-                                        handleHomeEndKeys
-                                        id="free-solo-with-text-demo"
-                                        options={states}
-                                        getOptionLabel={(option) => {
-                                            let value = option;
-                                            const jobExist = states.includes(option);
-                                            if (!jobExist) {
-                                                const matchData = option.match(/"((?:\\.|[^"\\])*)"/);
-                                                if (matchData && matchData[1]) value = matchData && matchData[1];
-                                            }
-                                            return value;
-                                        }}
-                                        renderOption={(props, option) => (
-                                            <Box component="li" {...props}>
-                                                {option}
-                                            </Box>
-                                        )}
-                                        freeSolo
-                                        renderInput={(params) => (
-                                            <TextField
-                                                {...params}
-                                                name="role"
-                                                placeholder="Select State"
-                                                InputProps={{
-                                                    ...params.InputProps,
-                                                    sx: { bgcolor: 'grey.0' },
-                                                    endAdornment: (
-                                                        <InputAdornment position="end">
-                                                            <ArrowDropDown sx={{ color: 'text.primary' }} />
-                                                        </InputAdornment>
-                                                    )
-                                                }}
-                                            />
-                                        )}
-                                    />
+                                    <Stack direction="row" spacing={2} alignItems="center">
+                                        <Autocomplete
+                                            fullWidth
+                                            value={input.role}
+                                            disableClearable
+                                            onChange={(event, newValue) => {
+                                                const updatedCompare = compare.map((inp) =>
+                                                    inp.id === input.id ? { ...inp, role: newValue } : inp
+                                                );
+                                                setCompare(updatedCompare);
+                                            }}
+                                            filterOptions={(options, params) => {
+                                                const filtered = createFilterOptions()(options, params);
+                                                const { inputValue } = params;
+                                                const isExisting = options.some((option) => inputValue === option);
+                                                if (inputValue !== '' && !isExisting) {
+                                                    filtered.push(`Add "${inputValue}"`);
+                                                }
+                                                return filtered;
+                                            }}
+                                            selectOnFocus
+                                            clearOnBlur
+                                            autoHighlight
+                                            handleHomeEndKeys
+                                            id="free-solo-with-text-demo"
+                                            options={states}
+                                            getOptionLabel={(option) => {
+                                                let value = option;
+                                                const jobExist = states.includes(option);
+                                                if (!jobExist) {
+                                                    const matchData = option.match(/"((?:\\.|[^"\\])*)"/);
+                                                    if (matchData && matchData[1]) value = matchData[1];
+                                                }
+                                                return value;
+                                            }}
+                                            renderOption={(props, option) => (
+                                                <Box component="li" {...props}>
+                                                    {option}
+                                                </Box>
+                                            )}
+                                            freeSolo
+                                            renderInput={(params) => (
+                                                <TextField
+                                                    {...params}
+                                                    name="role"
+                                                    placeholder="Select State"
+                                                    InputProps={{
+                                                        ...params.InputProps,
+                                                        sx: { bgcolor: 'grey.0' },
+                                                        endAdornment: (
+                                                            <InputAdornment position="end">
+                                                                <ArrowDropDown sx={{ color: 'text.primary' }} />
+                                                            </InputAdornment>
+                                                        )
+                                                    }}
+                                                />
+                                            )}
+                                        />
+                                        <IconButton aria-label="delete" onClick={() => handleDeleteCompareInput(input.id)}>
+                                            <DeleteIcon />
+                                        </IconButton>
+                                    </Stack>
                                 </Grid>
                             ))}
                         </Grid>
@@ -299,39 +319,41 @@ const CompareForms = () => {
                     </Grid>
 
                     <Grid item md={6} spacing={2}>
-                        <Grid container spacing={2} direction="column" justifyContent="space-between">
-                            <Grid item>
-                                <Typography variant="h5" gutterBottom>
-                                    First DateTime
-                                </Typography>
-                                <LocalizationProvider dateAdapter={AdapterDateFns}>
-                                    <DateTimePicker
-                                        slotProps={{ textField: { fullWidth: true } }}
-                                        label="Date & Time"
-                                        value={valueBasic}
-                                        onChange={(newValue) => {
-                                            setValueBasic(newValue);
-                                        }}
-                                    />
-                                </LocalizationProvider>
+                        <Grid container spacing={2} direction="column">
+                            <Grid item container spacing={2} direction="row">
+                                <Grid item>
+                                    <Typography variant="h5" gutterBottom>
+                                        First DateTime
+                                    </Typography>
+                                    <LocalizationProvider dateAdapter={AdapterDateFns}>
+                                        <DateTimePicker
+                                            slotProps={{ textField: { fullWidth: true } }}
+                                            label="Date & Time"
+                                            value={valueBasic}
+                                            onChange={(newValue) => {
+                                                setValueBasic(newValue);
+                                            }}
+                                        />
+                                    </LocalizationProvider>
+                                </Grid>
+                                <Grid item>
+                                    <Typography variant="h5" gutterBottom>
+                                        Second Date
+                                    </Typography>
+                                    <LocalizationProvider dateAdapter={AdapterDateFns}>
+                                        <DateTimePicker
+                                            slotProps={{ textField: { fullWidth: true } }}
+                                            label="Date & Time"
+                                            value={valueBasic}
+                                            onChange={(newValue) => {
+                                                setValueBasic(newValue);
+                                            }}
+                                        />
+                                    </LocalizationProvider>
+                                </Grid>
                             </Grid>
-                            <Grid item>
-                                <Typography variant="h5" gutterBottom>
-                                    Second Date
-                                </Typography>
-                                <LocalizationProvider dateAdapter={AdapterDateFns}>
-                                    <DateTimePicker
-                                        slotProps={{ textField: { fullWidth: true } }}
-                                        label="Date & Time"
-                                        value={valueBasic}
-                                        onChange={(newValue) => {
-                                            setValueBasic(newValue);
-                                        }}
-                                    />
-                                </LocalizationProvider>
-                            </Grid>
-                            <Grid item>
-                                <Button variant="contained" color="secondary" sx={{ width: '100%', backgroundColor: '#0e9b66' }}>
+                            <Grid item sx={{ mt: 8 }}>
+                                <Button variant="contained" color="secondary" sx={{ width: '50%', backgroundColor: '#0e9b66' }}>
                                     Compare
                                 </Button>
                             </Grid>
