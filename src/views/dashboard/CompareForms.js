@@ -65,7 +65,7 @@ const CompareForms = () => {
                 console.error('Failed to fetch categories:', error);
             });
     }, []);
-console.log("xxxxxx", states)
+
     const handleAddReportTypeInput = () => {
         if (reportTypeInputs.length < 4) {
             setReportTypeInputs([...reportTypeInputs, { id: Date.now(), type: '' }]);
@@ -77,8 +77,18 @@ console.log("xxxxxx", states)
         setReportTypeInputs(updatedInputs);
     };
 
-    const handleAddInput = () => {
-        setCompare([...compare, { id: Date.now(), role: '' }]);
+    const handleAddStateInput = () => {
+        if (compare.length < 4) {
+            setCompare([...compare, { id: Date.now(), role: '' }]);
+        }
+    };
+    
+
+    const handleRoleChange = (id, newValue) => {
+        const updatedCompare = compare.map((input) =>
+            input.id === id ? { ...input, role: newValue } : input
+        );
+        setCompare(updatedCompare);
     };
 
     const handleDeleteReportTypeInput = (index) => {
@@ -92,8 +102,8 @@ console.log("xxxxxx", states)
     };
 
     const requestBody = {
-        report_types: ['Election', 'Robbery'],
-        states: ['Lagos', 'Ondo', 'Clara']
+        report_types: chartData,
+        states: states
         // "start_date": "2023-01-01T00:00:00Z",
         // "end_date": "2023-12-31T23:59:59Z"
     };
@@ -102,7 +112,7 @@ console.log("xxxxxx", states)
         getBarChartData(requestBody)
             .then((data) => {
                 setChartData(data);
-                console.log("zzzzzzzz", data)
+            
                 setLoading(false);
             })
             .catch((err) => {
@@ -213,73 +223,69 @@ console.log("xxxxxx", states)
                         </Grid>
 
                         <Grid container spacing={gridSpacing}>
-                            {compare.map((input) => (
-                                <Grid item xs={12} md={6} sx={{ mt: 1 }} key={input.id}>
-                                    <Stack direction="row" spacing={2} alignItems="center">
-                                        <Autocomplete
-                                            fullWidth
-                                            value={input.role}
-                                            disableClearable
-                                            onChange={(event, newValue) => {
-                                                const updatedCompare = compare.map((inp) =>
-                                                    inp.id === input.id ? { ...inp, role: newValue } : inp
-                                                );
-                                                setCompare(updatedCompare);
-                                            }}
-                                            filterOptions={(options, params) => {
-                                                const filtered = createFilterOptions()(options, params);
-                                                const { inputValue } = params;
-                                                const isExisting = options.some((option) => inputValue === option);
-                                                if (inputValue !== '' && !isExisting) {
-                                                    filtered.push(`Add "${inputValue}"`);
-                                                }
-                                                return filtered;
-                                            }}
-                                            selectOnFocus
-                                            clearOnBlur
-                                            autoHighlight
-                                            handleHomeEndKeys
-                                            id="free-solo-with-text-demo"
-                                            options={states}
-                                            getOptionLabel={(option) => {
-                                                let value = option;
-                                                const jobExist = states.includes(option);
-                                                if (!jobExist) {
-                                                    const matchData = option.match(/"((?:\\.|[^"\\])*)"/);
-                                                    if (matchData && matchData[1]) value = matchData[1];
-                                                }
-                                                return value;
-                                            }}
-                                            renderOption={(props, option) => (
-                                                <Box component="li" {...props}>
-                                                    {option}
-                                                </Box>
-                                            )}
-                                            freeSolo
-                                            renderInput={(params) => (
-                                                <TextField
-                                                    {...params}
-                                                    name="role"
-                                                    placeholder="Select State"
-                                                    InputProps={{
-                                                        ...params.InputProps,
-                                                        sx: { bgcolor: 'grey.0' },
-                                                        endAdornment: (
-                                                            <InputAdornment position="end">
-                                                                <ArrowDropDown sx={{ color: 'text.primary' }} />
-                                                            </InputAdornment>
-                                                        )
-                                                    }}
-                                                />
-                                            )}
-                                        />
-                                        <IconButton aria-label="delete" onClick={() => handleDeleteCompareInput(input.id)}>
-                                            <DeleteIcon />
-                                        </IconButton>
-                                    </Stack>
-                                </Grid>
-                            ))}
-                        </Grid>
+    {compare.map((input) => (
+        <Grid item xs={12} md={6} sx={{ mt: 1 }} key={input.id}>
+            <Stack direction="row" spacing={2} alignItems="center">
+                <Autocomplete
+                    fullWidth
+                    value={input.role}
+                    disableClearable
+                    onChange={(event, newValue) => handleRoleChange(input.id, newValue)}
+                    filterOptions={(options, params) => {
+                        const filtered = createFilterOptions()(options, params);
+                        const { inputValue } = params;
+                        const isExisting = options.some((option) => inputValue === option);
+                        if (inputValue !== '' && !isExisting) {
+                            filtered.push(`Add "${inputValue}"`);
+                        }
+                        return filtered;
+                    }}
+                    selectOnFocus
+                    clearOnBlur
+                    autoHighlight
+                    handleHomeEndKeys
+                    id="free-solo-with-text-demo"
+                    options={states}
+                    getOptionLabel={(option) => {
+                        let value = option;
+                        const jobExist = states.includes(option);
+                        if (!jobExist) {
+                            const matchData = option.match(/"((?:\\.|[^"\\])*)"/);
+                            if (matchData && matchData[1]) value = matchData[1];
+                        }
+                        return value;
+                    }}
+                    renderOption={(props, option) => (
+                        <Box component="li" {...props}>
+                            {option}
+                        </Box>
+                    )}
+                    freeSolo
+                    renderInput={(params) => (
+                        <TextField
+                            {...params}
+                            name="role"
+                            placeholder="Select State"
+                            InputProps={{
+                                ...params.InputProps,
+                                sx: { bgcolor: 'grey.0' },
+                                endAdornment: (
+                                    <InputAdornment position="end">
+                                        <ArrowDropDown sx={{ color: 'text.primary' }} />
+                                    </InputAdornment>
+                                )
+                            }}
+                        />
+                    )}
+                />
+                <IconButton aria-label="delete" onClick={() => handleDeleteCompareInput(input.id)}>
+                    <DeleteIcon />
+                </IconButton>
+            </Stack>
+        </Grid>
+    ))}
+</Grid>
+
 
                         <Grid item sx={{ mt: 2 }}>
                             <Stack direction="row" justifyContent="flex-start">
@@ -288,7 +294,10 @@ console.log("xxxxxx", states)
                                         variant="outlined"
                                         type="submit"
                                         startIcon={<ControlPointIcon />}
-                                        onClick={handleAddInput}
+                                        onClick={(event) => {
+                                            event.preventDefault(); // Prevent the default form submission
+                                            handleAddStateInput();
+                                        }}
                                         sx={{
                                             mb: 1,
                                             borderRadius: '8px',

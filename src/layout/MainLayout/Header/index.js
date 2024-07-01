@@ -85,7 +85,7 @@ const Header = () => {
             .then((types) => {
                 const reportTypeOptions = ['Select Report Type', ...types];
                 setReportTypes(reportTypeOptions);
-                setValue(reportTypeOptions[0]); // Set the first option as the default value
+                setValue(reportTypeOptions[0]); 
             })
             .catch((error) => {
                 console.error('Failed to fetch categories:', error);
