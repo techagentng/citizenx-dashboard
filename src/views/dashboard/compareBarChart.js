@@ -1,10 +1,9 @@
-// BarChart.js
 import React, { useLayoutEffect } from 'react';
 import * as am5 from '@amcharts/amcharts5';
 import * as am5xy from '@amcharts/amcharts5/xy';
 import am5themes_Animated from '@amcharts/amcharts5/themes/Animated';
 
-const BarChart = () => {
+const BarChart = ({ data }) => {
     useLayoutEffect(() => {
         let root = am5.Root.new('chartdiv');
 
@@ -28,11 +27,25 @@ const BarChart = () => {
             })
         );
 
-        let data = [
-            { year: '2021', europe: 2.5, namerica: 2.5, asia: 2.1, lamerica: 1, meast: 0.8, africa: 0.4 },
-            { year: '2022', europe: 2.6, namerica: 2.7, asia: 2.2, lamerica: 0.5, meast: 0.4, africa: 0.3 },
-            { year: '2023', europe: 2.8, namerica: 2.9, asia: 2.4, lamerica: 0.3, meast: 0.9, africa: 0.5 }
-        ];
+        // Transforming the payload data
+        let transformedData = [];
+        let categories = new Set();
+
+        data.forEach(item => {
+            const { state_name, category, report_count } = item;
+            let state = transformedData.find(state => state.state_name === state_name);
+            if (!state) {
+                state = { state_name };
+                transformedData.push(state);
+            }
+            state[category] = report_count;
+            categories.add(category);
+        });
+
+        // Convert the transformed data into the format required by amCharts
+        let chartData = transformedData.map(item => {
+            return { state_name: item.state_name, ...item };
+        });
 
         let xRenderer = am5xy.AxisRendererX.new(root, {
             cellStartLocation: 0.1,
@@ -42,7 +55,7 @@ const BarChart = () => {
 
         let xAxis = chart.xAxes.push(
             am5xy.CategoryAxis.new(root, {
-                categoryField: 'year',
+                categoryField: 'state_name',
                 renderer: xRenderer,
                 tooltip: am5.Tooltip.new(root, {})
             })
@@ -50,7 +63,7 @@ const BarChart = () => {
 
         xRenderer.grid.template.setAll({ location: 1 });
 
-        xAxis.data.setAll(data);
+        xAxis.data.setAll(chartData);
 
         let yAxis = chart.yAxes.push(
             am5xy.ValueAxis.new(root, {
@@ -67,7 +80,7 @@ const BarChart = () => {
                     xAxis: xAxis,
                     yAxis: yAxis,
                     valueYField: fieldName,
-                    categoryXField: 'year'
+                    categoryXField: 'state_name'
                 })
             );
 
@@ -78,7 +91,7 @@ const BarChart = () => {
                 strokeOpacity: 0
             });
 
-            series.data.setAll(data);
+            series.data.setAll(chartData);
 
             series.appear();
 
@@ -98,19 +111,16 @@ const BarChart = () => {
             legend.data.push(series);
         }
 
-        makeSeries('Europe', 'europe');
-        makeSeries('North America', 'namerica');
-        makeSeries('Asia', 'asia');
-        makeSeries('Latin America', 'lamerica');
-        makeSeries('Middle East', 'meast');
-        makeSeries('Africa', 'africa');
+        categories.forEach(category => {
+            makeSeries(category, category);
+        });
 
         chart.appear(1000, 100);
 
         return () => {
             root.dispose();
         };
-    }, []);
+    }, [data]);
 
     return <div id="chartdiv" style={{ width: '100%', height: '500px' }}></div>;
 };

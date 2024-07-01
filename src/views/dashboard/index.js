@@ -56,8 +56,6 @@ const DashboardPage = () => {
     //     // Add more markers as needed
     // ];
 
-
-
     useEffect(() => {
         if (selectedState && selectedLga) {
             dispatch(getGraph(selectedState, selectedLga));

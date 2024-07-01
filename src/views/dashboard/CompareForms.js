@@ -1,5 +1,4 @@
-import { useDispatch } from 'store';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 // material-ui
 import { Button, Grid, Stack, TextField, Typography, IconButton } from '@mui/material';
 
@@ -12,8 +11,7 @@ import { gridSpacing } from 'store/constant';
 import { Autocomplete, Box, InputAdornment } from '@mui/material';
 import ArrowDropDown from '@mui/icons-material/ArrowDropDown';
 // third-party
-import { useFormik } from 'formik';
-import * as yup from 'yup';
+// import * as yup from 'yup';
 import { createFilterOptions } from '@mui/material/Autocomplete';
 // import SubCard from 'ui-component/cards/SubCard';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
@@ -22,6 +20,10 @@ import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import ControlPointIcon from '@mui/icons-material/ControlPoint';
 import CompareBarChart from './compareBarChart';
 import DeleteIcon from '@mui/icons-material/Delete';
+import { getBarChartData } from 'services/reportService';
+import { getCategories } from 'services/reportService';
+import { getStates } from 'services/reportService';
+import 'layout/MainLayout/Header';
 // import { getStateReportCounts } from './../../services/reportService';
 // assets
 // import LinkIcon from '@mui/icons-material/Link';
@@ -31,61 +33,39 @@ const filter = createFilterOptions();
 /**
  * 'Enter your email'
  * yup.string Expected 0 arguments, but got 1 */
-const validationSchema = yup.object({
-    email: yup.string().email('Enter a valid email').required('Email is required'),
-    password: yup.string().min(8, 'Password should be of minimum 8 characters length').required('Password is required')
-});
-const states = ['Abia', 'Ondo', 'Lagos', 'Osun'];
-const reportTypes = [
-    'Crime',
-    'Fake Products:',
-    'Roads',
-    'Hospitals',
-    'Accidents',
-    'Schools',
-    'Power',
-    'Portable Water',
-    'Petrol',
-    'Airports',
-    'Transport',
-    'Embassies',
-    'Corruption',
-    'Elections',
-    'Environment',
-    'Healthcare',
-    'Employment',
-    'Social Welfare',
-    'Technology',
-    'Trade and Commerce',
-    'Community Development'
-];
-// const roles2 = ['User', 'Admin', 'Staff', 'Manager'];
-// const roles3 = ['User', 'Admin', 'Staff', 'Manager'];
-// ==============================|| FORM VALIDATION - LOGIN FORMIK ||============================== //
-// const [reportVCounts, setVReportCounts] = useState([]);
-// const [errorV, setVError] = useState(null);
-
-// const fetchReportCounts = () => {
-//     const criteria = {
-//         report_type_category: "Election",
-//         states: ["Lagos", "Ondo"]
-//     };
-
-//     getStateReportCounts(criteria)
-//         .then((data) => {
-//             setVReportCounts(data);
-//         })
-//         .catch((err) => {
-//             setVError(err.message);
-//         });
-// };
 
 const CompareForms = () => {
-    const dispatch = useDispatch();
     const [valueBasic, setValueBasic] = useState(new Date());
     const [compare, setCompare] = useState([{ id: Date.now(), role: '' }]);
     const [reportTypeInputs, setReportTypeInputs] = useState([{ id: Date.now(), type: '' }]);
+    const [reportTypes, setReportTypes] = useState([]);
+    const [states, setStates] = useState([]);
+    const [chartData, setChartData] = useState([]);
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState(false);
 
+    useEffect(() => {
+        // Fetch categories and set them in the state
+        getCategories()
+            .then((categories) => {
+                setReportTypes(categories);
+            })
+            .catch((error) => {
+                console.error('Failed to fetch categories:', error);
+            });
+    }, []);
+
+    useEffect(() => {
+        // Fetch categories and set them in the state
+        getStates()
+            .then((states) => {
+                setStates(states);
+            })
+            .catch((error) => {
+                console.error('Failed to fetch categories:', error);
+            });
+    }, []);
+console.log("xxxxxx", states)
     const handleAddReportTypeInput = () => {
         if (reportTypeInputs.length < 4) {
             setReportTypeInputs([...reportTypeInputs, { id: Date.now(), type: '' }]);
@@ -100,26 +80,6 @@ const CompareForms = () => {
     const handleAddInput = () => {
         setCompare([...compare, { id: Date.now(), role: '' }]);
     };
-    const formik = useFormik({
-        initialValues: {
-            email: '',
-            password: ''
-        },
-        validationSchema,
-        onSubmit: () => {
-            dispatch(
-                openSnackbar({
-                    open: true,
-                    message: 'Submit Success',
-                    variant: 'alert',
-                    alert: {
-                        color: 'success'
-                    },
-                    close: false
-                })
-            );
-        }
-    });
 
     const handleDeleteReportTypeInput = (index) => {
         const updatedInputs = reportTypeInputs.filter((_, i) => i !== index);
@@ -131,9 +91,37 @@ const CompareForms = () => {
         setCompare(updatedCompare);
     };
 
+    const requestBody = {
+        report_types: ['Election', 'Robbery'],
+        states: ['Lagos', 'Ondo', 'Clara']
+        // "start_date": "2023-01-01T00:00:00Z",
+        // "end_date": "2023-12-31T23:59:59Z"
+    };
+
+    useEffect(() => {
+        getBarChartData(requestBody)
+            .then((data) => {
+                setChartData(data);
+                console.log("zzzzzzzz", data)
+                setLoading(false);
+            })
+            .catch((err) => {
+                setError(err.message);
+                setLoading(false);
+            });
+    }, []);
+
+    if (loading) {
+        return <div>Loading...</div>;
+    }
+
+    if (error) {
+        return <div>Error: {error}</div>;
+    }
+
     return (
         <MainCard>
-            <form onSubmit={formik.handleSubmit}>
+            <form>
                 <Grid container md={12} spacing={gridSpacing}>
                     <Grid item md={6} spacing={gridSpacing}>
                         <Grid item sx={12} md={6}>
@@ -182,8 +170,6 @@ const CompareForms = () => {
                                                 <TextField
                                                     {...params}
                                                     name={`role-${index}`}
-                                                    error={formik.touched.role && Boolean(formik.errors.role)}
-                                                    helperText={formik.touched.role && formik.errors.role && formik.errors.role}
                                                     placeholder="Select Report Type"
                                                     InputProps={{
                                                         ...params.InputProps,
@@ -361,7 +347,7 @@ const CompareForms = () => {
                     </Grid>
 
                     <Grid container sx={{ mt: 2 }}>
-                        <CompareBarChart />
+                        <CompareBarChart data={chartData} />
                     </Grid>
                 </Grid>
             </form>

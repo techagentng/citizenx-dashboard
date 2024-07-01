@@ -90,3 +90,83 @@ export const getStateReportCounts = (criteria) => {
             });
     });
 };
+
+export const getBarChartData = (requestBody) => {
+    return new Promise((resolve, reject) => {
+        const serviceToken = localStorage.getItem('serviceToken');
+        if (!serviceToken) {
+            return reject(new Error('No token found'));
+        }
+
+        axios
+            .post(`${process.env.REACT_APP_API_URL}/report-type/states`, requestBody, {
+                headers: {
+                    Authorization: `Bearer ${serviceToken}`,
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then((response) => {
+                if (response && response.data) {
+                    resolve(response.data); // Changed this line to resolve response.data
+                } else {
+                    reject(new Error('No data found'));
+                }
+            })
+            .catch((error) => {
+                reject(error);
+            });
+    });
+};
+
+export const getCategories = () => {
+    return new Promise((resolve, reject) => {
+        const serviceToken = localStorage.getItem('serviceToken');
+        if (!serviceToken) {
+            return reject(new Error('No token found'));
+        }
+
+        axios
+            .get('http://localhost:8080/api/v1/categories', {
+                headers: {
+                    Authorization: `Bearer ${serviceToken}`
+                }
+            })
+            .then((response) => {
+                if (response && response.data) {
+                    resolve(response.data.categories);
+                } else {
+                    reject(new Error('No data found'));
+                }
+            })
+            .catch((error) => {
+                reject(error);
+            });
+    });
+};
+
+export const getStates = () => {
+    return new Promise((resolve, reject) => {
+        const serviceToken = localStorage.getItem('serviceToken');
+        if (!serviceToken) {
+            return reject(new Error('No token found'));
+        }
+
+        axios
+            .get('http://localhost:8080/api/v1/states', {
+                headers: {
+                    Authorization: `Bearer ${serviceToken}`
+                }
+            })
+            .then((response) => {
+                if (response && response.data) {
+                    resolve(response.data.states);
+                } else {
+                    reject(new Error('No data found'));
+                }
+            })
+            .catch((error) => {
+                reject(error);
+            });
+    });
+};
+

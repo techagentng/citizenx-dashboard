@@ -1,7 +1,7 @@
 // material-ui
 import React, { useState, useEffect, useCallback } from 'react';
 import { useTheme } from '@mui/material/styles';
-import { Avatar, Box, useMediaQuery, MenuItem, TextField } from '@mui/material';
+import { Avatar, Box, useMediaQuery, MenuItem, TextField, Grid } from '@mui/material';
 // project imports
 import LAYOUT_CONST from 'constant';
 import useConfig from 'hooks/useConfig';
@@ -23,7 +23,7 @@ import { setState, setLga, getGraph } from 'store/slices/graphs';
 import statesAndLgas from './statesAndLgas.json';
 // assets
 import { IconMenu2 } from '@tabler/icons-react';
-
+import { getCategories } from 'services/reportService';
 const Header = () => {
     const theme = useTheme();
     const dispatch = useDispatch();
@@ -35,6 +35,8 @@ const Header = () => {
     const [selectedState, setSelectedState] = useState('State');
     const [selectedLga, setSelectedLga] = useState('LGA');
     const [dateRange, setDateRange] = useState([null, null]);
+    const [value, setValue] = React.useState('');
+    const [reportTypes, setReportTypes] = useState(["Selecte type"]);
 
     useEffect(() => {
         const stateNames = statesAndLgas.map((state) => ({ value: state.state, label: state.state }));
@@ -77,6 +79,19 @@ const Header = () => {
     }, [selectedState, selectedLga, dateRange, handleSearch]);
 
 
+    useEffect(() => {
+        // Fetch categories and set them in the state
+        getCategories()
+            .then((types) => {
+                const reportTypeOptions = ['Select Report Type', ...types];
+                setReportTypes(reportTypeOptions);
+                setValue(reportTypeOptions[0]); // Set the first option as the default value
+            })
+            .catch((error) => {
+                console.error('Failed to fetch categories:', error);
+            });
+    }, []);
+
     return (
         <>
             <Box
@@ -117,7 +132,17 @@ const Header = () => {
 
             <Box sx={{ flexGrow: 1 }} />
             <Box sx={{ flexGrow: 1 }} />
-
+            <Grid item>
+                <TextField id="standard-select-currency" select value={value} onChange={(e) => setValue(e.target.value)}>
+                    <MenuItem value=""></MenuItem>
+                    {reportTypes.map((option, index) => (
+                        <MenuItem key={index} value={option}>
+                            {option}
+                        </MenuItem>
+                    ))}
+                </TextField>
+            </Grid>
+            <Box sx={{ flexGrow: 1 }} />
             <Box sx={{ display: { xs: 'none', sm: 'flex' }, alignItems: 'center', gap: 2 }}>
                 <TextField id="standard-select-currency-1" select value={selectedState} onChange={handleStateChange} label="Select State">
                     <MenuItem value="State" disabled>
