@@ -6,11 +6,11 @@ const initialState = {
     error: null,
     graphs: {
         reportTypes: [],
-        reportCounts: [],
+        reportCounts: []
     },
     lgaState: {
-        state: "",
-        lga: "",
+        state: '',
+        lga: ''
     },
     reportCount: 0,
     loading: false

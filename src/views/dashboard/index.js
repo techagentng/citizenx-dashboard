@@ -20,13 +20,9 @@ import BarChart from './barchart';
 import PieChart from './piechart';
 import LineChart from './linechart';
 import { getGraph } from 'store/slices/graphs';
-// import NigeriaMap from './nigeria-map-index';
+// import mapData from './nigeria-map';
+// import { GeoJSON } from 'react-geo';
 import CompareForms from './CompareForms';
-
-
-// import AudioPlayer from 'material-ui-audio-player';
-// Fix the default icon issue
-// delete L.Icon.Default.prototype._getIconUrl;
 
 L.Icon.Default.mergeOptions({
     iconRetinaUrl: require('leaflet/dist/images/marker-icon-2x.png').default,
@@ -78,7 +74,7 @@ const DashboardPage = () => {
                     console.log(error.message);
                 });
         }
-    }, [isLoggedIn]);
+    }, [isLoggedIn, setTodayReportCount]);
 
     if (loading) return <div>Loading...</div>;
     if (error) return <div>Error: {error.message}</div>;
@@ -122,8 +118,9 @@ const DashboardPage = () => {
                 </Grid>
 
                 <Grid container spacing={gridSpacing}>
-                    <Grid item xs={12} md={8}>
+                    <Grid item xs={12} md={12}>
                         <MainCard title="Markers & Popups">
+                        {/* <GeoJSON data={mapData} fill="#eee" stroke="black" strokeWidth={0.5} /> */}
                             {/* <NigeriaMap /> */}
                             {/* <MapContainer
                                 bounds={nigeriaBounds}
@@ -147,6 +144,12 @@ const DashboardPage = () => {
                     <Grid item xs={6} md={4}>
                         <PopularCard reportTypes={reportTypes} reportCounts={reportCounts} />
                     </Grid>
+                    <Grid item xs={6} md={4}>
+                        <PopularCard reportTypes={reportTypes} reportCounts={reportCounts} />
+                    </Grid>
+                    <Grid item xs={12} md={3}>
+                                <PieChart reportTypes={reportTypes} reportCounts={reportCounts} />
+                            </Grid>
                 </Grid>
             </MainCard>
             <MainCard title="Compare reports">
