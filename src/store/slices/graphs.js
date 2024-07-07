@@ -12,6 +12,10 @@ const initialState = {
         state: '',
         lga: ''
     },
+    reportPercent: {
+        good_percentage: 0,
+        bad_percentage: 0
+    },
     reportCount: 0,
     loading: false
 };
@@ -32,18 +36,24 @@ const slice = createSlice({
             state.graphs.reportCounts = action.payload.report_counts;
             state.loading = false;
         },
+        getPercentCountSuccess(state, action) {
+            state.reportPercent = action.payload;
+        },
         setState(state, action) {
             state.lgaState.state = action.payload;
         },
         setLga(state, action) {
             state.lgaState.lga = action.payload;
+        },
+        setReportType(state, action) {
+            state.reportType = action.payload;
         }
     }
 });
 
 export default slice.reducer;
 
-export const { getGraphStart, hasError, getGraphSuccess, setState, setLga } = slice.actions;
+export const { getGraphStart, hasError, getGraphSuccess, getPercentCountSuccess, setState, setLga, setReportType } = slice.actions;
 
 export function getGraph(state, lga, startDate, endDate) {
     return async () => {
@@ -70,6 +80,22 @@ export function getReportCount() {
             dispatch(getGraphSuccess(response.data));
         } catch (error) {
             dispatch(hasError(error));
+        }
+    };
+}
+
+export function getPercentCount(reportType, state) {
+    return async (dispatch) => {
+        try {
+            const response = await axios.get(`/report/rating`, {
+                params: {
+                    reportType,
+                    state
+                }
+            });
+            dispatch(slice.actions.getPercentCountSuccess(response.data));
+        } catch (error) {
+            dispatch(slice.actions.hasError(error));
         }
     };
 }

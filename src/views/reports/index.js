@@ -322,7 +322,7 @@ const IncidentReportList = () => {
             .catch((error) => {
                 console.log(error.message);
             });
-    }, []);
+    }, [setTodayReportCount]);
 
     const handleCloseDialog = () => {
         setOpen(false);

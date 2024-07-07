@@ -8,7 +8,6 @@ import reportReducer from './slices/reports';
 import userReducer from './slices/users';
 import rewardReducer from './slices/reward';
 import graphReducer from './slices/graphs';
-import piechartReducer from './slices/piechart';
 import reportTypeReducer from './slices/reportType';
 // ==============================|| COMBINE REDUCER ||============================== //
 
@@ -19,7 +18,6 @@ const reducer = combineReducers({
     user: userReducer,
     graphs: graphReducer,
     reward: rewardReducer,
-    piechart: piechartReducer,
     reportTypes: reportTypeReducer
 });
 

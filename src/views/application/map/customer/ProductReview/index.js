@@ -316,54 +316,55 @@ const ProductReviewList = () => {
                         selected={selected}
                     />
                     <TableBody>
-                        {Array.isArray(rows) && stableSort(rows, getComparator(order, orderBy))
-                            .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                            .map((row, index) => {
-                                const isItemSelected = isSelected(row.name);
-                                const labelId = `enhanced-table-checkbox-${index}`;
+                        {Array.isArray(rows) &&
+                            stableSort(rows, getComparator(order, orderBy))
+                                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                                .map((row, index) => {
+                                    const isItemSelected = isSelected(row.name);
+                                    const labelId = `enhanced-table-checkbox-${index}`;
 
-                                return (
-                                    <TableRow
-                                        hover
-                                        role="checkbox"
-                                        aria-checked={isItemSelected}
-                                        tabIndex={-1}
-                                        key={row.name}
-                                        selected={isItemSelected}
-                                    >
-                                        <TableCell padding="checkbox" sx={{ pl: 3 }}>
-                                            <Checkbox
-                                                color="primary"
-                                                onClick={(event) => handleClick(event, row.name)}
-                                                checked={isItemSelected}
-                                                inputProps={{ 'aria-labelledby': labelId }}
-                                            />
-                                        </TableCell>
-                                        <TableCell component="th" id={labelId} scope="row" padding="none">
-                                            {row.name}
-                                        </TableCell>
-                                        <TableCell align="left">{row.author}</TableCell>
-                                        <TableCell align="left">{row.review}</TableCell>
-                                        <TableCell align="center">
-                                            <Rating size="small" name="read-only" value={row.rating} readOnly precision={0.5} />
-                                        </TableCell>
-                                        <TableCell align="center">{row.date}</TableCell>
-                                        <TableCell align="center">
-                                            {row.status === 1 && <Chip chipcolor="success" label="Approved" size="small" />}
-                                            {row.status === 2 && <Chip chipcolor="orange" label="Pending" size="small" />}
-                                            {row.status === 3 && <Chip chipcolor="error" label="Rejected" size="small" />}
-                                        </TableCell>
-                                        <TableCell align="center">
-                                            <IconButton color="primary" size="large" onClick={handleClickOpenDialog}>
-                                                <VisibilityTwoToneIcon sx={{ fontSize: '1.3rem' }} />
-                                            </IconButton>
-                                            <IconButton color="secondary" size="large" onClick={handleClickOpenDialog}>
-                                                <EditTwoToneIcon sx={{ fontSize: '1.3rem' }} />
-                                            </IconButton>
-                                        </TableCell>
-                                    </TableRow>
-                                );
-                            })}
+                                    return (
+                                        <TableRow
+                                            hover
+                                            role="checkbox"
+                                            aria-checked={isItemSelected}
+                                            tabIndex={-1}
+                                            key={row.name}
+                                            selected={isItemSelected}
+                                        >
+                                            <TableCell padding="checkbox" sx={{ pl: 3 }}>
+                                                <Checkbox
+                                                    color="primary"
+                                                    onClick={(event) => handleClick(event, row.name)}
+                                                    checked={isItemSelected}
+                                                    inputProps={{ 'aria-labelledby': labelId }}
+                                                />
+                                            </TableCell>
+                                            <TableCell component="th" id={labelId} scope="row" padding="none">
+                                                {row.name}
+                                            </TableCell>
+                                            <TableCell align="left">{row.author}</TableCell>
+                                            <TableCell align="left">{row.review}</TableCell>
+                                            <TableCell align="center">
+                                                <Rating size="small" name="read-only" value={row.rating} readOnly precision={0.5} />
+                                            </TableCell>
+                                            <TableCell align="center">{row.date}</TableCell>
+                                            <TableCell align="center">
+                                                {row.status === 1 && <Chip chipcolor="success" label="Approved" size="small" />}
+                                                {row.status === 2 && <Chip chipcolor="orange" label="Pending" size="small" />}
+                                                {row.status === 3 && <Chip chipcolor="error" label="Rejected" size="small" />}
+                                            </TableCell>
+                                            <TableCell align="center">
+                                                <IconButton color="primary" size="large" onClick={handleClickOpenDialog}>
+                                                    <VisibilityTwoToneIcon sx={{ fontSize: '1.3rem' }} />
+                                                </IconButton>
+                                                <IconButton color="secondary" size="large" onClick={handleClickOpenDialog}>
+                                                    <EditTwoToneIcon sx={{ fontSize: '1.3rem' }} />
+                                                </IconButton>
+                                            </TableCell>
+                                        </TableRow>
+                                    );
+                                })}
                         {emptyRows > 0 && (
                             <TableRow style={{ height: 53 * emptyRows }}>
                                 <TableCell colSpan={8} />

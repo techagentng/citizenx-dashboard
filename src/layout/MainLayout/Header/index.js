@@ -1,29 +1,25 @@
-// material-ui
 import React, { useState, useEffect, useCallback } from 'react';
 import { useTheme } from '@mui/material/styles';
 import { Avatar, Box, useMediaQuery, MenuItem, TextField, Grid } from '@mui/material';
-// project imports
-import LAYOUT_CONST from 'constant';
-import useConfig from 'hooks/useConfig';
-import LogoSection from '../LogoSection';
-// import SearchSection from './SearchSection';
-import MobileSection from './MobileSection';
-import ProfileSection from './ProfileSection';
-import FullScreenSection from './FullScreenSection';
-// import LocalizationSection from './LocalizationSection';
-// import MegaMenuSection from './MegaMenuSection';
 import { LocalizationProvider } from '@mui/x-date-pickers-pro/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers-pro/AdapterDayjs';
 import { DateRangePicker } from '@mui/x-date-pickers-pro/DateRangePicker';
-import NotificationSection from './NotificationSection';
-
 import { useDispatch, useSelector } from 'store';
 import { openDrawer } from 'store/slices/menu';
-import { setState, setLga, getGraph } from 'store/slices/graphs';
+import { setState, setLga, setReportType, getGraph, getPercentCount } from 'store/slices/graphs';
 import statesAndLgas from './statesAndLgas.json';
-// assets
-import { IconMenu2 } from '@tabler/icons-react';
 import { getCategories } from 'services/reportService';
+
+import LogoSection from '../LogoSection';
+import MobileSection from './MobileSection';
+import ProfileSection from './ProfileSection';
+import FullScreenSection from './FullScreenSection';
+import NotificationSection from './NotificationSection';
+import LAYOUT_CONST from 'constant';
+import useConfig from 'hooks/useConfig';
+
+import { IconMenu2 } from '@tabler/icons-react';
+
 const Header = () => {
     const theme = useTheme();
     const dispatch = useDispatch();
@@ -32,11 +28,11 @@ const Header = () => {
     const { layout } = useConfig();
     const [states, setStates] = useState([]);
     const [lgas, setLgas] = useState([]);
-    const [selectedState, setSelectedState] = useState('State');
-    const [selectedLga, setSelectedLga] = useState('LGA');
+    const [selectedState, setSelectedState] = useState('Ogun');
+    const [selectedLga, setSelectedLga] = useState('Ifo');
     const [dateRange, setDateRange] = useState([null, null]);
-    const [value, setValue] = React.useState('');
-    const [reportTypes, setReportTypes] = useState(["Selecte type"]);
+    const [value, setValue] = useState('');
+    const [reportTypes, setReportTypes] = useState(['Select type']);
 
     useEffect(() => {
         const stateNames = statesAndLgas.map((state) => ({ value: state.state, label: state.state }));
@@ -69,8 +65,8 @@ const Header = () => {
 
     const handleSearch = useCallback(() => {
         const [startDate, endDate] = dateRange;
-        dispatch(getGraph(selectedState, selectedLga, startDate?.format('YYYY-MM-DD'), endDate?.format('YYYY-MM-DD')));
-    }, [dispatch, selectedState, selectedLga, dateRange]);
+        dispatch(getGraph(selectedState, selectedLga, startDate?.format('YYYY-MM-DD'), endDate?.format('YYYY-MM-DD'), reportTypes));
+    }, [dispatch, selectedState, selectedLga, dateRange, reportTypes]);
 
     useEffect(() => {
         if (selectedState !== 'State' && selectedLga !== 'LGA') {
@@ -78,19 +74,31 @@ const Header = () => {
         }
     }, [selectedState, selectedLga, dateRange, handleSearch]);
 
-
     useEffect(() => {
-        // Fetch categories and set them in the state
         getCategories()
             .then((types) => {
                 const reportTypeOptions = ['Select Report Type', ...types];
                 setReportTypes(reportTypeOptions);
-                setValue(reportTypeOptions[0]); 
+                setValue(reportTypeOptions[0]);
             })
             .catch((error) => {
                 console.error('Failed to fetch categories:', error);
             });
     }, []);
+
+    const handleReportTypeChange = (event) => {
+        const reportType = event.target.value;
+        setValue(reportType);
+        console.log('Selected Report Type:', reportType);
+        dispatch(setReportType(reportType));
+        dispatch(getPercentCount(reportType, selectedState));
+    };
+
+    const percentCount = useSelector((state) => state.graphs.percentCount);
+
+    useEffect(() => {
+        console.log('Percent Count:', percentCount);  
+    }, [percentCount]);
 
     return (
         <>
@@ -133,7 +141,7 @@ const Header = () => {
             <Box sx={{ flexGrow: 1 }} />
             <Box sx={{ flexGrow: 1 }} />
             <Grid item>
-                <TextField id="standard-select-currency" select value={value} onChange={(e) => setValue(e.target.value)}>
+                <TextField id="standard-select-currency" select value={value} onChange={handleReportTypeChange}>
                     <MenuItem value=""></MenuItem>
                     {reportTypes.map((option, index) => (
                         <MenuItem key={index} value={option}>
