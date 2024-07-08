@@ -1,52 +1,45 @@
-import React, { useEffect } from 'react';
-// import 'jsvectormap/dist/js/jsvectormap.min.js'; 
-// import 'jsvectormap/dist/css/jsvectormap.min.css'; 
-// import nigeriaMap from './nigeria-map'; 
+import React from 'react';
+import { ComposableMap, Geographies, Geography, Marker } from 'react-simple-maps';
+import geoData from './nigeria_lga_boundaries.geojson';
 
-const NigeriaMap = () => {
-    useEffect(() => {
-        const markers = [
-            { name: 'Lagos', coords: [6.5244, 3.3792] },
-            { name: 'Abuja', coords: [9.0579, 7.4951] }
-            // Add more markers if needed
-        ];
+const markers = [{ markerOffset: -20, name: 'Lagos', coordinates: [3.3792, 6.5244] }];
 
-        new jsVectorMap({
-            map: 'nigeriaMap', 
-            selector: '#map',
-            zoomButtons: true,
-            zoomOnScroll: true,
-
-            regionStyle: {
-                initial: {
-                    fill: '#d1d5db'
+const NigerianMap = () => {
+    return (
+        <ComposableMap
+            projection="geoMercator"
+            projectionConfig={{
+                scale: 3000, // Adjust the scale to fit the map size
+                center: [8, 9] // Center the map on Nigeria
+            }}
+            width={800}
+            height={600}
+        >
+            <Geographies geography={geoData}>
+                {({ geographies }) =>
+                    geographies.map((geo) => (
+                        <Geography
+                            key={geo.rsmKey}
+                            geography={geo}
+                            style={{
+                                default: { fill: '#D6D6DA', stroke: '#000', strokeWidth: 0.5 },
+                                hover: { fill: '#F53', stroke: '#000', strokeWidth: 0.75 },
+                                pressed: { fill: '#E42', stroke: '#000', strokeWidth: 0.75 }
+                            }}
+                        />
+                    ))
                 }
-            },
-
-            labels: {
-                markers: {
-                    render: (marker) => marker.name
-                }
-            },
-
-            markersSelectable: true,
-            selectedMarkers: markers.map((marker, index) => index),
-            markers: markers,
-            markerStyle: {
-                initial: { fill: '#5c5cff' },
-                selected: { fill: '#ff5050' }
-            },
-            markerLabelStyle: {
-                initial: {
-                    fontFamily: 'Roboto',
-                    fontWeight: 400,
-                    fontSize: 13
-                }
-            }
-        });
-    }, []);
-
-    return <div id="map" style={{ width: '100%', height: '600px' }} />;
+            </Geographies>
+            {markers.map(({ name, coordinates, markerOffset }) => (
+                <Marker key={name} coordinates={coordinates}>
+                    <circle r={5} fill="#F00" stroke="#fff" strokeWidth={2} />
+                    <text textAnchor="middle" y={markerOffset} style={{ fontFamily: 'system-ui', fill: '#5D5A6D' }}>
+                        {name}
+                    </text>
+                </Marker>
+            ))}
+        </ComposableMap>
+    );
 };
 
-export default NigeriaMap;
+export default NigerianMap;

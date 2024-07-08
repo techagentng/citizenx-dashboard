@@ -21,9 +21,8 @@ import PieChart from './piechart';
 import PieChart2 from './piechart2';
 import LineChart from './linechart';
 import { getGraph, getPercentCount } from 'store/slices/graphs';
-// import mapData from './nigeria-map';
-// import { GeoJSON } from 'react-geo';
 import CompareForms from './CompareForms';
+import NigerianMap from './nigeria-map';
 
 L.Icon.Default.mergeOptions({
     iconRetinaUrl: require('leaflet/dist/images/marker-icon-2x.png').default,
@@ -121,7 +120,7 @@ const DashboardPage = () => {
                     <Grid item xs={12} md={12}>
                         <MainCard title="Markers & Popups">
                             {/* <GeoJSON data={mapData} fill="#eee" stroke="black" strokeWidth={0.5} /> */}
-                            {/* <NigeriaMap /> */}
+                            <NigerianMap />
                             {/* <MapContainer
                                 bounds={nigeriaBounds}
                                 zoom={6}
