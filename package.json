@@ -92,6 +92,7 @@
         "react-syntax-highlighter": "^15.5.0",
         "react-timer-hook": "^3.0.7",
         "react-to-print": "^2.14.13",
+        "react-tooltip": "^5.27.1",
         "react-window": "^1.8.9",
         "react18-input-otp": "^1.1.4",
         "redux": "^4.2.1",

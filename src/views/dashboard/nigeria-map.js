@@ -9,8 +9,8 @@ const NigerianMap = () => {
         <ComposableMap
             projection="geoMercator"
             projectionConfig={{
-                scale: 3000, // Adjust the scale to fit the map size
-                center: [8, 9] // Center the map on Nigeria
+                scale: 2500, 
+                center: [8, 9] 
             }}
             width={800}
             height={600}
@@ -22,8 +22,8 @@ const NigerianMap = () => {
                             key={geo.rsmKey}
                             geography={geo}
                             style={{
-                                default: { fill: '#D6D6DA', stroke: '#000', strokeWidth: 0.5 },
-                                hover: { fill: '#F53', stroke: '#000', strokeWidth: 0.75 },
+                                default: { fill: '#ffff', stroke: '#0e4934', strokeWidth: 1.5 },
+                                hover: { fill: '#0e4934', stroke: '#000', strokeWidth: 0.75 },
                                 pressed: { fill: '#E42', stroke: '#000', strokeWidth: 0.75 }
                             }}
                         />
