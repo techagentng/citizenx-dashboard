@@ -27,8 +27,9 @@ import {
 import Logo from 'ui-component/Logo';
 
 // assets
-import { IconBook, IconCreditCard, IconDashboard, IconHome2 } from '@tabler/icons-react';
 import MenuIcon from '@mui/icons-material/Menu';
+import PersonIcon from '@mui/icons-material/Person';
+
 
 // elevation scroll
 function ElevationScroll({ children, window }) {
@@ -74,23 +75,26 @@ const AppBar = ({ ...others }) => {
                             <Logo />
                         </Typography>
                         <Stack direction="row" sx={{ display: { xs: 'none', sm: 'block' } }} spacing={{ xs: 1.5, md: 2.5 }}>
-                            <Button color="inherit" component={Link} href="#" target="_blank">
-                                Home
+                            <Button color="inherit" component={Link} href="/about" target="_blank">
+                                About
+                            </Button>
+                            <Button color="inherit" component={Link} href="/publication" target="_blank">
+                                Publications
                             </Button>
                             <Button color="inherit" component={RouterLink} to="/login" target="_blank">
                                 Dashboard
                             </Button>
-                            <Button color="inherit" component={Link} href="https://codedthemes.gitbook.io/berry" target="_blank">
-                                Documentation
+                            <Button color="inherit" component={Link} href="#" target="_blank">
+                                Download App
                             </Button>
                             <Button
-                                component={Link}
-                                href="https://links.codedthemes.com/hsqll"
+                                component={RouterLink}
+                                to="/login"
                                 disableElevation
-                                variant="contained"
+                                variant="outlined"
                                 color="secondary"
                             >
-                                Purchase Now
+                                Sign In
                             </Button>
                         </Stack>
                         <Box sx={{ display: { xs: 'block', sm: 'none' } }}>
@@ -106,42 +110,48 @@ const AppBar = ({ ...others }) => {
                                         onKeyDown={drawerToggler(false)}
                                     >
                                         <List>
-                                            <Link style={{ textDecoration: 'none' }} href="#" target="_blank">
+                                            <Link style={{ textDecoration: 'none' }} to='/' target="_blank">
                                                 <ListItemButton component="a">
-                                                    <ListItemIcon>
+                                                    {/* <ListItemIcon>
                                                         <IconHome2 />
-                                                    </ListItemIcon>
+                                                    </ListItemIcon> */}
                                                     <ListItemText primary="Home" />
                                                 </ListItemButton>
                                             </Link>
+                                            <Link style={{ textDecoration: 'none' }} to="/about" target="_blank">
+                                                <ListItemButton component="a">
+                                                    {/* <ListItemIcon>
+                                                        <IconHome2 />
+                                                    </ListItemIcon> */}
+                                                    <ListItemText primary="About Us" />
+                                                </ListItemButton>
+                                            </Link>
                                             <Link style={{ textDecoration: 'none' }} href="/login" target="_blank">
                                                 <ListItemButton component="a">
-                                                    <ListItemIcon>
+                                                    {/* <ListItemIcon>
                                                         <IconDashboard />
-                                                    </ListItemIcon>
-                                                    <ListItemText primary="Dashboardxx" />
+                                                    </ListItemIcon> */}
+                                                    <ListItemText primary="Dashboard" />
                                                 </ListItemButton>
                                             </Link>
-                                            <Link style={{ textDecoration: 'none' }} href="/login" target="_blank">
+                                            <Link style={{ textDecoration: 'none' }} href="/publication" target="_blank">
+                                                <ListItemButton component="a">
+                                                    {/* <ListItemIcon>
+                                                        <IconDashboard />
+                                                    </ListItemIcon> */}
+                                                    <ListItemText primary="Publications" />
+                                                </ListItemButton>
+                                            </Link>
+                                            {/* Button */}
+                                            <Link style={{ textDecoration: 'none' }} href="#" target="_blank">
                                                 <ListItemButton component="a">
                                                     <ListItemIcon>
-                                                        <IconBook />
+                                                        <PersonIcon />
                                                     </ListItemIcon>
-                                                    <ListItemText primary="Documentation" />
+                                                    <ListItemText primary="Sign In" />
                                                 </ListItemButton>
                                             </Link>
-                                            <Link
-                                                style={{ textDecoration: 'none' }}
-                                                href="https://links.codedthemes.com/hsqll"
-                                                target="_blank"
-                                            >
-                                                <ListItemButton component="a">
-                                                    <ListItemIcon>
-                                                        <IconCreditCard />
-                                                    </ListItemIcon>
-                                                    <ListItemText primary="Purchase Now" />
-                                                </ListItemButton>
-                                            </Link>
+                                           
                                         </List>
                                     </Box>
                                 )}

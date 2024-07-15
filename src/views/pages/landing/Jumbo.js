@@ -18,6 +18,7 @@ const JumboContainer = styled(Paper)(({ theme }) => ({
     },
     [theme.breakpoints.down('lg')]: {
         transform: 'scale(1)',
+        paddingX: 20
     },
 }));
 
@@ -44,8 +45,9 @@ const Jumbo = () => {
                             <Typography
                                 variant="paragraph"
                                 sx={{
-                                    fontSize: { xs: '1.5rem', sm: '2rem', md: '2.1rem', lg: '2.1rem' },
+                                    fontSize: { xs: '1.3rem', sm: '2rem', md: '2.1rem', lg: '2.1rem' },
                                     lineHeight: 1.5,
+                                    paddingX: {xs: 5, md: 2}
                                 }}
                             >
                                 We are on a mission to transform the way citizens<br /> engage with governance, ensuring transparency,<br /> accountability, and community empowerment.

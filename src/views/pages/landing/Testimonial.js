@@ -71,7 +71,7 @@ const Testimonial = () => {
     <Grid item xs={12} >
       <Grid container justifyContent="center" >
         <Paper sx={{
-            backgroundColor: theme.palette.primary.light,
+            backgroundColor: '#c7f7e7',
             padding: { xs: '40px', md: '80px 80px' },
             maxWidth: '100%',
             margin: '0 auto',
