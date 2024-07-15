@@ -1,11 +1,11 @@
 import React from 'react'
 // material-ui
-import { styled } from '@mui/material/styles';
+import { styled, useTheme } from '@mui/material/styles';
 
 import AppBar from 'ui-component/extended/AppBar';
 import HeaderSection from './HeaderSection';
-// import Focus from './Focus';
-// import Partners from './Partners';
+import Focus from './Focus';
+import Partners from './Partner';
 // import FAQ from './FAQ';
 // import Testimonial from '../landing/Testimonial';
 // import Jumbo from './Jumbo';
@@ -19,7 +19,7 @@ const HeaderWrapper = styled('div')(({ theme }) => ({
     background:
         theme.palette.mode === 'dark'
             ? theme.palette.background.default
-            : `linear-gradient(360deg, ${theme.palette.grey[100]} 1.09%, ${theme.palette.background.paper} 100%)`,
+            : `linear-gradient(360deg, #c7f7e7 1.09%, ${theme.palette.background.paper} 100%)`,
     [theme.breakpoints.down('md')]: {}
 }));
 
@@ -29,7 +29,7 @@ const SectionWrapper = styled('div')({
 });
 
 const about = () => {
-
+    const theme =useTheme()
   return (
     <>
         {/* 1. header and hero section */}
@@ -37,6 +37,16 @@ const about = () => {
             <AppBar />
             <HeaderSection/>
         </HeaderWrapper>
+
+        {/* 2. Focus Section */}
+        <SectionWrapper >
+              <Focus/>
+        </SectionWrapper>
+
+        {/* 3. Partners section */}
+        <SectionWrapper sx={{background: theme.palette.grey[100]}} >
+              <Partners/>
+        </SectionWrapper>
          
 
             {/* 2. card section */}
