@@ -1,4 +1,4 @@
-import { styled, useTheme } from '@mui/material/styles';
+import { styled } from '@mui/material/styles';
 import { Box, Container, Grid, Paper, Stack, Typography } from '@mui/material'
 import React from 'react'
 import Slider from 'react-slick';
@@ -34,7 +34,7 @@ const TestimonialData = [
 
 
 const Testimonial = () => {
-  const theme = useTheme();
+  // const theme = useTheme();
   const settings = {
     dots: true,
     infinite: true,
