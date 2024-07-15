@@ -88,7 +88,7 @@ const Landing = () => {
             </SectionWrapper>
 
             {/* 9. Trends & Download */}
-            <SectionWrapper sx={{marginTop:-20}} >
+            <SectionWrapper >
                 <Subscribe />
             </SectionWrapper>
 
