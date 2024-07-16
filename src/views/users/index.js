@@ -290,7 +290,7 @@ const Users = () => {
             .catch((error) => {
                 console.log(error.message);
             });
-    }, []);
+    }, [setTodayReportCount]);
     return (
         <MainCard title="Manage Users" content={false}>
             <CardContent>
