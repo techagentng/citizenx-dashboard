@@ -6,10 +6,10 @@ import AppBar from 'ui-component/extended/AppBar';
 import HeaderSection from './HeaderSection';
 import Focus from './Focus';
 import Partners from './Partner';
-// import FAQ from './FAQ';
-// import Testimonial from '../landing/Testimonial';
-// import Jumbo from './Jumbo';
-// import Trends from '../landing/Trends';
+import FAQ from './FAQ';
+import Testimonial from '../landing/Testimonial';
+import Jumbo from './Jumbo';
+import Trends from '../landing/Trends';
 import Footer from 'views/pages/landing/Footer';
 
 // custom stlye
@@ -47,9 +47,29 @@ const about = () => {
         <SectionWrapper sx={{background: theme.palette.grey[100]}} >
               <Partners/>
         </SectionWrapper>
+
+        {/* 5. Testimonial section */}
+        <SectionWrapper >
+              <Testimonial/>
+        </SectionWrapper>
+
+        {/* 6. Jumbo section */}
+        <SectionWrapper >
+              <Jumbo/>
+        </SectionWrapper>
+
+        {/* 7. FAQ section */}
+        <SectionWrapper >
+              <FAQ/>
+        </SectionWrapper>
+
+        {/* 8. Trends section */}
+        <SectionWrapper >
+              <Trends/>
+        </SectionWrapper>
          
 
-            {/* 2. card section */}
+            {/* 9. card section */}
          <SectionWrapper sx={{ paddingTop: 0, paddingBottom: 0}}>
             <Footer/>
         </SectionWrapper>
