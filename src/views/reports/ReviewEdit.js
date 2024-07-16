@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 import { Dialog, DialogContent, DialogTitle } from '@mui/material';
 
 // project imports
-import AudioPlayer from 'material-ui-audio-player';
+// import AudioPlayer from 'material-ui-audio-player';
 const ReviewEdit = ({ open, handleCloseDialog }) => {
     // handle star rating
     return (
@@ -23,7 +23,7 @@ const ReviewEdit = ({ open, handleCloseDialog }) => {
                 <>
                     <DialogTitle>Voice record</DialogTitle>
                     <DialogContent>
-                    <AudioPlayer src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" />
+                    {/* <AudioPlayer src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" /> */}
                     </DialogContent>
                 </>
             )}

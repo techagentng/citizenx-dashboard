@@ -21,7 +21,7 @@ import { useState} from 'react';
 
 // ==============================|| DASHBOARD DEFAULT - POPULAR CARD ||============================== //
 
-const PopularCard = ({ isLoading }) => {
+const PopularCard = ({ isLoading, title }) => {
     const theme = useTheme();
     const { reportTypes, reportCounts, loading, error } = useSelector((state) => state.graphs.graphs);
     const [anchorEl, setAnchorEl] = useState(null);
@@ -48,7 +48,7 @@ const PopularCard = ({ isLoading }) => {
                             <Grid item xs={12}>
                                 <Grid container alignContent="center" justifyContent="space-between">
                                     <Grid item>
-                                        <Typography variant="h4">Popular Reports</Typography>
+                                        <Typography variant="h4">{title}</Typography>
                                     </Grid>
                                     <Grid item>
                                         <MoreHorizOutlinedIcon

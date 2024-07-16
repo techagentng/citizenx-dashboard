@@ -290,12 +290,12 @@ const Users = () => {
             .catch((error) => {
                 console.log(error.message);
             });
-    }, []);
+    }, [setTodayReportCount]);
     return (
         <MainCard title="Manage Users" content={false}>
             <CardContent>
                 <Grid container justifyContent="space-between" alignItems="center" spacing={2}>
-                <Grid container spacing={2} sx={{ mt: 4 }}>
+                    <Grid container spacing={2} sx={{ mt: 4 }}>
                         <Grid item xs={3}>
                             <EarningCard count={userCount} detail="Total Users" icon={EarningIcon} />
                         </Grid>

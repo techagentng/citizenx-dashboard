@@ -18,15 +18,11 @@ import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
 import BarChart from './barchart';
 import PieChart from './piechart';
+import PieChart2 from './piechart2';
 import LineChart from './linechart';
-import { getGraph } from 'store/slices/graphs';
-// import NigeriaMap from './nigeria-map-index';
+import { getGraph, getPercentCount } from 'store/slices/graphs';
 import CompareForms from './CompareForms';
-
-
-// import AudioPlayer from 'material-ui-audio-player';
-// Fix the default icon issue
-// delete L.Icon.Default.prototype._getIconUrl;
+import NigerianMap from './nigeria-map';
 
 L.Icon.Default.mergeOptions({
     iconRetinaUrl: require('leaflet/dist/images/marker-icon-2x.png').default,
@@ -39,22 +35,14 @@ const DashboardPage = () => {
     const { state: selectedState, lga: selectedLga } = useSelector((state) => state.graphs.lgaState);
     const { isLoggedIn } = useContext(JWTContext);
     const { reportTypes, reportCounts, loading, error } = useSelector((state) => state.graphs.graphs);
+    const { good_percentage, bad_percentage } = useSelector((state) => state.graphs.reportPercent);
     const [userCount, setUserCount] = useState(0);
     const [todayReportCount, setTodayReportCount] = useState(0);
     const [onlineUsers, setOnlineUsers] = useState(0);
- 
-    // Define the bounds for Nigeria
-    // const nigeriaBounds = [
-    //     [4.272, 2.6769], // Southwest corner (approx)
-    //     [13.865, 14.678] // Northeast corner (approx)
-    // ];
 
-    // Example markers (replace with your actual data)
-    // const markers = [
-    //     { lat: 9.082, lng: 8.6753, popup: 'Marker 1' },
-    //     { lat: 6.5244, lng: 3.3792, popup: 'Marker 2' }
-    //     // Add more markers as needed
-    // ];
+        // Log good_percentage and bad_percentage
+        console.log('Good Percentage:', good_percentage);
+        console.log('Bad Percentage:', bad_percentage);
 
     useEffect(() => {
         if (selectedState && selectedLga) {
@@ -62,12 +50,19 @@ const DashboardPage = () => {
         }
     }, [dispatch, selectedState, selectedLga]);
 
+    useEffect(() => {
+        if (reportTypes && Array.isArray(reportTypes) && selectedState) {
+            dispatch(getPercentCount(reportTypes, selectedState));
+        }
+    }, [dispatch, reportTypes, selectedState]);
+
     // Fetch users data on component mount
     useEffect(() => {
         if (isLoggedIn) {
             console.log('Fetching user data, report data, and online users');
             Promise.all([getAllUserCount(), getAllReportsToday(), getOnlineUsers()])
-                .then(([userCountData, todayReportCountData, onlineUserData]) => {                    console.log('User count:', userCountData);
+                .then(([userCountData, todayReportCountData, onlineUserData]) => {
+                    console.log('User count:', userCountData);
                     console.log('Today report count:', todayReportCountData);
                     console.log('Online users data:', onlineUserData);
                     setUserCount(userCountData);
@@ -78,7 +73,7 @@ const DashboardPage = () => {
                     console.log(error.message);
                 });
         }
-    }, [isLoggedIn]);
+    }, [isLoggedIn, setTodayReportCount]);
 
     if (loading) return <div>Loading...</div>;
     if (error) return <div>Error: {error.message}</div>;
@@ -122,9 +117,10 @@ const DashboardPage = () => {
                 </Grid>
 
                 <Grid container spacing={gridSpacing}>
-                    <Grid item xs={12} md={8}>
+                    <Grid item xs={12} md={12}>
                         <MainCard title="Markers & Popups">
-                            {/* <NigeriaMap /> */}
+                            {/* <GeoJSON data={mapData} fill="#eee" stroke="black" strokeWidth={0.5} /> */}
+                            <NigerianMap />
                             {/* <MapContainer
                                 bounds={nigeriaBounds}
                                 zoom={6}
@@ -145,7 +141,13 @@ const DashboardPage = () => {
                         </MainCard>
                     </Grid>
                     <Grid item xs={6} md={4}>
-                        <PopularCard reportTypes={reportTypes} reportCounts={reportCounts} />
+                        <PopularCard reportTypes={reportTypes} title="Popular Reports" reportCounts={reportCounts} />
+                    </Grid>
+                    <Grid item xs={6} md={4}>
+                        <PopularCard reportTypes={reportTypes} title="Popular States" reportCounts={reportCounts} />
+                    </Grid>
+                    <Grid item xs={12} md={3}>
+                        <PieChart2 reportTypes={reportTypes} reportPercent={{ good_percentage, bad_percentage }} />
                     </Grid>
                 </Grid>
             </MainCard>
