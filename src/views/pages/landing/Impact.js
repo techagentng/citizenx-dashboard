@@ -37,7 +37,7 @@ const ImpactCard = ({ title, caption}) => {
         <FadeInWhenVisible>
             <SubCard
                 sx={{
-                    backgroundColor: theme.palette.primary.light,
+                    backgroundColor: '#c7f7e7',
                     borderColor: theme.palette.mode === 'dark' ? theme.palette.background.default : theme.palette.divider,
                     '&:hover': { boxShadow: 'none' },
                     height: '100%',
@@ -67,11 +67,11 @@ const Impact = () => {
     <Container>
         <Grid container spacing={{ xs: 1.5, sm: 2.5, md: 3, lg: 5 }} justifyContent="space-between" alignItems="center">
             {/* Heading */}
-            <Grid item xs={12} md={6}>
+            <Grid item xs={12}>
                 <Grid container spacing={1.5}>
                     <Grid item xs={12}>
-                        <Typography variant="h2" sx={{ fontSize: { xs: '1.5rem', sm: '2.125rem' } }}>
-                            What&apos;s the buzz on Citizen X?
+                        <Typography variant="h2" sx={{ textAlign:'center', fontSize: { xs: '1.5rem', sm: '2.125rem' } }}>
+                            Our Impact Projections
                         </Typography>
                     </Grid>
                 </Grid>
@@ -95,7 +95,9 @@ const Impact = () => {
 
             <Grid item xs={12}>
                     <Box sx={{ textAlign: 'center' }}>
+                        <FadeInWhenVisible>
                         <img src={Team} width="100%" alt="Dashboard" style={{ borderRadius: '10px', padding: 10 }} />
+                        </FadeInWhenVisible>
                     </Box>
                 </Grid>
         </Grid>

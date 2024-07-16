@@ -1,4 +1,4 @@
-import { styled, useTheme } from '@mui/material/styles';
+import { styled } from '@mui/material/styles';
 import { Box, Container, Grid, Paper, Stack, Typography } from '@mui/material'
 import React from 'react'
 import Slider from 'react-slick';
@@ -34,7 +34,7 @@ const TestimonialData = [
 
 
 const Testimonial = () => {
-  const theme = useTheme();
+  // const theme = useTheme();
   const settings = {
     dots: true,
     infinite: true,
@@ -71,7 +71,7 @@ const Testimonial = () => {
     <Grid item xs={12} >
       <Grid container justifyContent="center" >
         <Paper sx={{
-            backgroundColor: theme.palette.primary.light,
+            backgroundColor: '#c7f7e7',
             padding: { xs: '40px', md: '80px 80px' },
             maxWidth: '100%',
             margin: '0 auto',

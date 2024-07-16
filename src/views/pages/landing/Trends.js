@@ -3,12 +3,14 @@ import {Button, Container, Grid, Stack, Typography} from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { Link } from 'react-router-dom';
 
+// Icons
 import AppleIcon from '@mui/icons-material/Apple';
 import GooglePlay from 'assets/images/landing/playstore_300218.png';
 
 // Images 
 import BarcodeI from 'assets/images/landing/image 14.png';
 import HandImg from 'assets/images/landing/Free iPhone 15 Pro Hand Mockup (Mockuuups Studio).png';
+import FadeInWhenVisible from './Animation2';
 
 const HeaderAnimationImage = styled('img')({
     maxWidth: '100%',
@@ -49,6 +51,7 @@ const Trends = () => {
         <Grid item xs={12}>
           <Grid container spacing={2.5} direction={{ xs: 'column-reverse', md: 'row' }}>
             <Grid item xs={12} md={6}>
+            <FadeInWhenVisible animationType="fadeInCenter" delay={0.2} >
               <Typography variant="h2" sx={{ fontSize: { xs: '1.5rem', sm: '2.125rem' }, mb: 2, textAlign: { xs: 'center', md: 'left' } }}>
                 Engage Trending Topics <br />
                 Download App now
@@ -76,13 +79,16 @@ const Trends = () => {
                 </Stack>
                 <BarcodeImg src={BarcodeI} />
               </Stack>
+              </FadeInWhenVisible>
             </Grid>
             <Grid item xs={12} md={6} >
               {/* <CardMedia component="img" image={HandImg} alt="Layer" sx={{ width: '70%' }} /> */}
-              <HeaderAnimationImage
-                    src={HandImg}
-                    alt="CitizenX"
-            />
+              <FadeInWhenVisible animationType="fadeInLeft" delay={0.5}>
+                <HeaderAnimationImage
+                  src={HandImg}
+                  alt="CitizenX"
+                />
+              </FadeInWhenVisible>
             </Grid>
           </Grid>
         </Grid>

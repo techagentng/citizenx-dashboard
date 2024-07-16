@@ -5,10 +5,14 @@ import { useTheme } from '@mui/material/styles';
 import { CardMedia, Stack, Typography } from '@mui/material';
 import { Link } from 'react-router-dom';
 
+ //aNIMATION
+ import FadeInWhenVisible from './Animation';
+
 const PublicationCard = ({ image, title, caption, postDate, postLink }) => {
     const theme = useTheme();
 
     return (
+        <FadeInWhenVisible>
         <SubCard
             sx={{
                 border: '1px solid',
@@ -35,6 +39,7 @@ const PublicationCard = ({ image, title, caption, postDate, postLink }) => {
                 </Link>
             </Stack>
         </SubCard>
+        </FadeInWhenVisible>
     );
 };
 

@@ -1,6 +1,7 @@
 import { Button, Container, Grid, Paper, Stack, TextField, Typography } from '@mui/material'
 import { styled } from '@mui/material/styles';
 import React from 'react'
+import FadeInWhenVisible from './Animation2';
 
 const Jumbo = styled(Paper)({
     display: 'flex',
@@ -25,6 +26,7 @@ const Jumbo = styled(Paper)({
 const Subscribe = () => {
   return (
     <Container>
+        <FadeInWhenVisible animationType="fadeIn" delay={0.3}>
         <Jumbo sx={{paddingX:{xs:5, md:15}, paddingY: 15}} elevation={2}>
             <Grid container spacing={5} sx={{alignItems: 'center'}} direction={{ xs: 'column-reverse', md: 'row' }}>
                 <Grid item xs={12} md={6} sx={{marginTop:{xs: '20px', md: '1px'}}} >
@@ -65,6 +67,7 @@ const Subscribe = () => {
                 </Grid>
             </Grid>
         </Jumbo>
+        </FadeInWhenVisible>
     </Container>
   )
 }

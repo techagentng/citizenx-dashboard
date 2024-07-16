@@ -5,7 +5,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 // Project Imports
-import FadeInWhenVisible from './Animation'; // Ensure this path is correct and the component is exported properly
+import FadeInWhenVisible from './Animation'; 
 
 // Assets
 import AppleIcon from '@mui/icons-material/Apple';
@@ -36,7 +36,7 @@ const AppInfo = () => {
 
     const Screensection = styled(Box)(({theme}) => ({
         width: "100%",
-        backgroundColor: theme.palette.primary.light,
+        backgroundColor: '#c7f7e7',
         borderRadius: 20,
         padding: "80px 20px 0px 20px",
         margin: "0px 10px",

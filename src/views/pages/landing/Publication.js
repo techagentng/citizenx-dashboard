@@ -2,11 +2,15 @@ import React from 'react';
 import PublicationCard from './PublicationCard';
 import { Container, Grid, Typography, Box, Divider, Button } from '@mui/material';
 
+    //aNIMATION
+    import FadeInWhenVisible from './Animation';
+     
     // Import the images
     import cardOneImage from 'assets/images/cards/card-1.jpg';
     import cardSecondImage from 'assets/images/cards/card-2.jpg';
     import cardThirdImage from 'assets/images/cards/card-1.jpg';
     import cardFourthImage from 'assets/images/cards/card-3.jpg';
+
     
 const cards = [
     {
@@ -87,9 +91,10 @@ const Publication = () => {
 
                 {/* Divider */}
                 <Grid item xs={12}>
+                <FadeInWhenVisible>
                     <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', mt: 5 }}>
                         <Divider sx={{ flexGrow: 1, borderColor: 'grey.300' }} />
-                        <Button
+                        <Button href='/publication'
                             variant="outlined"
                             sx={{
                                 borderRadius: 2,
@@ -110,6 +115,7 @@ const Publication = () => {
                         </Button>
                         <Divider sx={{ flexGrow: 1, borderColor: 'grey.300' }} />
                     </Box>
+                    </FadeInWhenVisible>
                 </Grid>
             </Grid>
         </Container>
