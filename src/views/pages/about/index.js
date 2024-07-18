@@ -1,6 +1,6 @@
-import React from 'react'
+import React from 'react';
 // material-ui
-import { styled, useTheme } from '@mui/material/styles';
+import { styled } from '@mui/material/styles';
 
 import AppBar from 'ui-component/extended/AppBar';
 import HeaderSection from './HeaderSection';
@@ -29,52 +29,51 @@ const SectionWrapper = styled('div')({
 });
 
 const about = () => {
-    const theme =useTheme()
-  return (
-    <>
-        {/* 1. header and hero section */}
-        <HeaderWrapper id="home">
-            <AppBar />
-            <HeaderSection/>
-        </HeaderWrapper>
+    // const theme =useTheme()
+    return (
+        <>
+            {/* 1. header and hero section */}
+            <HeaderWrapper id="home">
+                <AppBar />
+                <HeaderSection />
+            </HeaderWrapper>
 
-        {/* 2. Focus Section */}
-        <SectionWrapper >
-              <Focus/>
-        </SectionWrapper>
+            {/* 2. Focus Section */}
+            <SectionWrapper>
+                <Focus />
+            </SectionWrapper>
 
-        {/* 3. Partners section */}
-        <SectionWrapper sx={{background: theme.palette.grey[100]}} >
-              <Partners/>
-        </SectionWrapper>
+            {/* 3. Partners section */}
+            <SectionWrapper sx={{ background: theme.palette.grey[100] }}>
+                <Partners />
+            </SectionWrapper>
 
-        {/* 5. Testimonial section */}
-        <SectionWrapper >
-              <Testimonial/>
-        </SectionWrapper>
+            {/* 5. Testimonial section */}
+            <SectionWrapper>
+                <Testimonial />
+            </SectionWrapper>
 
-        {/* 6. Jumbo section */}
-        <SectionWrapper >
-              <Jumbo/>
-        </SectionWrapper>
+            {/* 6. Jumbo section */}
+            <SectionWrapper>
+                <Jumbo />
+            </SectionWrapper>
 
-        {/* 7. FAQ section */}
-        <SectionWrapper >
-              <FAQ/>
-        </SectionWrapper>
+            {/* 7. FAQ section */}
+            <SectionWrapper>
+                <FAQ />
+            </SectionWrapper>
 
-        {/* 8. Trends section */}
-        <SectionWrapper >
-              <Trends/>
-        </SectionWrapper>
-         
+            {/* 8. Trends section */}
+            <SectionWrapper>
+                <Trends />
+            </SectionWrapper>
 
             {/* 9. card section */}
-         <SectionWrapper sx={{ paddingTop: 0, paddingBottom: 0}}>
-            <Footer/>
-        </SectionWrapper>
-    </>
-  )
-}
+            <SectionWrapper sx={{ paddingTop: 0, paddingBottom: 0 }}>
+                <Footer />
+            </SectionWrapper>
+        </>
+    );
+};
 
-export default about
+export default about;
