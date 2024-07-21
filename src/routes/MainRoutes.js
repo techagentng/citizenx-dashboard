@@ -11,6 +11,7 @@ const Settings = Loadable(lazy(() => import('views/Profile')));
 const Reports = Loadable(lazy(() => import('views/reports')));
 const Rewards = Loadable(lazy(() => import('views/rewards')));
 const Users = Loadable(lazy(() => import('views/users')));
+const State = Loadable(lazy(() => import('views/states')));
 // ==============================|| MAIN ROUTING ||============================== //
 
 const MainRoutes = {
@@ -40,6 +41,10 @@ const MainRoutes = {
         {
             path: '/users',
             element: <Users />
+        },
+        {
+            path: '/state/:lga',
+            element: <State />
         },
         {
             path: '/settings',

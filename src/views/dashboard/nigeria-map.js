@@ -1,11 +1,14 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { ComposableMap, Geographies, Geography, Marker } from 'react-simple-maps';
 import { Tooltip } from 'react-tooltip';
 import geoData from './nigeria_lga_boundaries.geojson';
+import './tooltip.css'; // Import the custom CSS
 
 const markers = [{ markerOffset: -20, name: 'Lagos', coordinates: [3.3792, 6.5244] }];
 
 const NigerianMap = () => {
+    const navigate = useNavigate();
     return (
         <>
             <ComposableMap
@@ -29,7 +32,7 @@ const NigerianMap = () => {
                                     pressed: { fill: '#E42', stroke: '#000', strokeWidth: 0.75 }
                                 }}
                                 data-tooltip-id="lga-tooltip"
-                                data-tooltip-content={geo.properties.admin2Name}
+                                data-tooltip-content={`${geo.properties.admin2Name}, ${geo.properties.admin1Name}`}
                             />
                         ))
                     }
@@ -43,7 +46,7 @@ const NigerianMap = () => {
                     </Marker>
                 ))}
             </ComposableMap>
-            <Tooltip id="lga-tooltip" />
+            <Tooltip id="lga-tooltip" className="custom-tooltip" />
         </>
     );
 };
