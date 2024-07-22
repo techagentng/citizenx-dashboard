@@ -1,5 +1,5 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
+// import { useNavigate } from 'react-router-dom';
 import { ComposableMap, Geographies, Geography, Marker } from 'react-simple-maps';
 import { Tooltip } from 'react-tooltip';
 import geoData from './nigeria_lga_boundaries.geojson';
@@ -8,7 +8,6 @@ import './tooltip.css'; // Import the custom CSS
 const markers = [{ markerOffset: -20, name: 'Lagos', coordinates: [3.3792, 6.5244] }];
 
 const NigerianMap = () => {
-    const navigate = useNavigate();
     return (
         <>
             <ComposableMap

@@ -77,7 +77,7 @@ export const getOnlineUsers = () => {
     });
 };
 
-export const uploadProfileImage = (file) => {
+export const getProfileImage = (file) => {
     return new Promise((resolve, reject) => {
         const serviceToken = localStorage.getItem('serviceToken');
         const formData = new FormData();

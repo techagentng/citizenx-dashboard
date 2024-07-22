@@ -4,7 +4,7 @@ import useAuth from 'hooks/useAuth';
 import SubCard from 'ui-component/cards/SubCard';
 import AnimateButton from 'ui-component/extended/AnimateButton';
 import { gridSpacing } from 'store/constant';
-import { uploadProfileImage } from 'services/userService'; // Add getProfileImage
+import { getProfileImage } from 'services/userService'; // Add getProfileImage
 import Avatarr from 'ui-component/extended/Avatar';
 const Profile = () => {
     const [selectedFile, setSelectedFile] = useState(null);
@@ -34,7 +34,7 @@ const Profile = () => {
 
     const handleUploadClick = () => {
         if (selectedFile) {
-            uploadProfileImage(selectedFile)
+            getProfileImage(selectedFile)
                 .then((response) => {
                     console.log(response);
                     // Optionally, update the avatarSrc to the new uploaded file
