@@ -5,14 +5,14 @@ export const getMapMarkers = () => {
         const serviceToken = localStorage.getItem('serviceToken');
 
         axios
-            .get(`${process.env.REACT_APP_API_URL}/lgas/lat/lng`, {
+            .get(`${process.env.REACT_APP_API_URL}/report/lga/count`, {
                 headers: {
                     Authorization: `Bearer ${serviceToken}`
                 }
             })
             .then(response => {
                 console.log('API response:', response.data); // Log the entire response data
-                resolve(response.data);
+                resolve(response.data.report_counts);
             })
             .catch(error => {
                 console.log('API error:', error); // Log any errors

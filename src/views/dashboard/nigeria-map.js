@@ -1,13 +1,27 @@
-import React from 'react';
+import React, {gitState, useEffect} from 'react';
 // import { useNavigate } from 'react-router-dom';
 import { ComposableMap, Geographies, Geography, Marker } from 'react-simple-maps';
 import { Tooltip } from 'react-tooltip';
 import geoData from './nigeria_lga_boundaries.geojson';
-import './tooltip.css'; // Import the custom CSS
+import './tooltip.css';
+import { getMapMarkers } from 'services/mapService';
 
 const markers = [{ markerOffset: -20, name: 'Lagos', coordinates: [3.3792, 6.5244] }];
 
 const NigerianMap = () => {
+    const [reportCounts, setReportCounts] = useState([]);
+
+    useEffect(() => {
+        getMapMarkers()
+            .then((data) => setReportCounts(data))
+            .catch((error) => console.error(error));
+    }, []);
+
+    const getCountForLGA = (stateName, lgaName) => {
+        const found = reportCounts.find((count) => count.StateName === stateName && count.LGAName === lgaName);
+        return found ? found.Count : 0;
+    };
+
     return (
         <>
             <ComposableMap
@@ -31,7 +45,7 @@ const NigerianMap = () => {
                                     pressed: { fill: '#E42', stroke: '#000', strokeWidth: 0.75 }
                                 }}
                                 data-tooltip-id="lga-tooltip"
-                                data-tooltip-content={`${geo.properties.admin2Name}, ${geo.properties.admin1Name}`}
+                                data-tooltip-content={`${geo.properties.admin2Name}, ${geo.properties.admin1Name}, Count: ${getCountForLGA(geo.properties.admin1Name, geo.properties.admin2Name)}`}
                             />
                         ))
                     }
