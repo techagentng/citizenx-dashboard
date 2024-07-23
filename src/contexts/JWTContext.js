@@ -126,7 +126,7 @@ export const JWTProvider = ({ children }) => {
         }
     };
 
-    const register = async (fullName, userName, telephone, email, password) => {
+    const register = async (fullName, userName, telephone, email, password, profile_image) => {
         try {
             const response = await axios.post('/auth/signup', {
                 profile_image,
