@@ -126,7 +126,7 @@ export const getCategories = () => {
         }
 
         axios
-            .get('http://localhost:8080/api/v1/categories', {
+            .get(`${process.env.REACT_APP_API_URL}/category`, {
                 headers: {
                     Authorization: `Bearer ${serviceToken}`
                 }
@@ -152,7 +152,7 @@ export const getStates = () => {
         }
 
         axios
-            .get('http://localhost:8080/api/v1/states', {
+            .get(`${process.env.REACT_APP_API_URL}/states`, {
                 headers: {
                     Authorization: `Bearer ${serviceToken}`
                 }
@@ -169,5 +169,3 @@ export const getStates = () => {
             });
     });
 };
-
-
