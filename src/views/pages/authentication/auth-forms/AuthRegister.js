@@ -82,6 +82,7 @@ const JWTRegister = ({ ...others }) => {
 
             <Formik
                 initialValues={{
+                    profile_image: '',
                     fullName: 'Nnah kenneth',
                     userName: 'knoi',
                     telephone: '090887655',
