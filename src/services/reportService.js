@@ -126,7 +126,7 @@ export const getCategories = () => {
         }
 
         axios
-            .get(`${process.env.REACT_APP_API_URL}/category`, {
+            .get(`${process.env.REACT_APP_API_URL}/categories`, {
                 headers: {
                     Authorization: `Bearer ${serviceToken}`
                 }
