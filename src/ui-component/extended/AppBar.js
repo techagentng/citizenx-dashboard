@@ -30,7 +30,6 @@ import Logo from 'ui-component/Logo';
 import MenuIcon from '@mui/icons-material/Menu';
 import PersonIcon from '@mui/icons-material/Person';
 
-
 // elevation scroll
 function ElevationScroll({ children, window }) {
     const theme = useTheme();
@@ -87,13 +86,7 @@ const AppBar = ({ ...others }) => {
                             <Button color="inherit" component={Link} href="#" target="_blank">
                                 Download App
                             </Button>
-                            <Button
-                                component={RouterLink}
-                                to="/login"
-                                disableElevation
-                                variant="outlined"
-                                color="secondary"
-                            >
+                            <Button component={RouterLink} to="/login" disableElevation variant="outlined" color="secondary">
                                 Sign In
                             </Button>
                         </Stack>
@@ -110,7 +103,7 @@ const AppBar = ({ ...others }) => {
                                         onKeyDown={drawerToggler(false)}
                                     >
                                         <List>
-                                            <Link style={{ textDecoration: 'none' }} to='/' target="_blank">
+                                            <Link style={{ textDecoration: 'none' }} to="/" target="_blank">
                                                 <ListItemButton component="a">
                                                     {/* <ListItemIcon>
                                                         <IconHome2 />
@@ -151,7 +144,6 @@ const AppBar = ({ ...others }) => {
                                                     <ListItemText primary="Sign In" />
                                                 </ListItemButton>
                                             </Link>
-                                           
                                         </List>
                                     </Box>
                                 )}
