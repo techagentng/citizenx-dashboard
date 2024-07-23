@@ -1,4 +1,4 @@
-import React, {gitState, useEffect} from 'react';
+import React, {useState, useEffect} from 'react';
 // import { useNavigate } from 'react-router-dom';
 import { ComposableMap, Geographies, Geography, Marker } from 'react-simple-maps';
 import { Tooltip } from 'react-tooltip';
