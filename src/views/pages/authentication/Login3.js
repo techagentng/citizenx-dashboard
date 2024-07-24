@@ -23,8 +23,8 @@ const Login = () => {
     const matchDownSM = useMediaQuery(theme.breakpoints.down('md'));
     const handleLogin = async () => {
         try {
-            const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/v1/google/login`);
-            window.location.href = response.request.responseURL; // Redirect to the OAuth URL
+            const response = await axios.get(`${process.env.REACT_APP_API_URL}/google/login`);
+            window.location.href = response.request.responseURL; 
         } catch (error) {
             console.error('Error initiating Google login:', error);
         }
@@ -67,8 +67,8 @@ const Login = () => {
                                                     variant="outlined"
                                                     startIcon={<GoogleIcon />}
                                                     sx={{
-                                                        borderRadius: '20px',
-                                                        width: '360px',
+                                                        borderRadius: '40px',
+                                                        width: '260px',
                                                         height: '50px',
                                                         fontSize: '18px'
                                                     }}
