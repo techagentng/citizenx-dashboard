@@ -65,7 +65,7 @@ export const getOnlineUsers = () => {
             .then((response) => {
                 console.log('API response:', response.data); // Log the entire response data
                 if (response) {
-                    resolve(response.data.data);  // Extract the count from the data property
+                    resolve(response.data.data); // Extract the count from the data property
                 } else {
                     reject(new Error('No data found'));
                 }
@@ -77,7 +77,7 @@ export const getOnlineUsers = () => {
     });
 };
 
-export const getProfileImage = (file) => {
+export const uploadProfileImage = (file) => {
     return new Promise((resolve, reject) => {
         const serviceToken = localStorage.getItem('serviceToken');
         const formData = new FormData();
@@ -91,15 +91,15 @@ export const getProfileImage = (file) => {
                 }
             })
             .then((response) => {
-                console.log('API response:', response.data); // Log the entire response data
-                if (response.data.status === "OK") {
-                    resolve(response.data.message);  // Extract the message from the response
+                console.log('API response:', response.data);
+                if (response.data.status === 'OK') {
+                    resolve(response.data.message); 
                 } else {
                     reject(new Error('File upload failed'));
                 }
             })
             .catch((error) => {
-                console.log('API error:', error); // Log any errors
+                console.log('API error:', error); 
                 reject(error);
             });
     });
@@ -110,7 +110,7 @@ export const getAllUsers = () => {
         const serviceToken = localStorage.getItem('serviceToken');
 
         // Assuming formData is an empty FormData object or contains necessary data
-        const formData = new FormData(); 
+        const formData = new FormData();
 
         axios
             .post(`${process.env.REACT_APP_API_URL}/users/all`, formData, {
@@ -121,8 +121,8 @@ export const getAllUsers = () => {
             })
             .then((response) => {
                 console.log('API response:', response.data); // Log the entire response data
-                if (response.data.status === "OK") {
-                    resolve(response.data.users);  // Adjust based on actual data structure
+                if (response.data.status === 'OK') {
+                    resolve(response.data.users); // Adjust based on actual data structure
                 } else {
                     reject(new Error(response.data.message || 'Failed to fetch users'));
                 }

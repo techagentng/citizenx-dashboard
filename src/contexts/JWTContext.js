@@ -125,34 +125,34 @@ export const JWTProvider = ({ children }) => {
             console.error('Error during login:', error);
         }
     };
-    
+
     const register = async (fullName, userName, telephone, email, password, profile_image) => {
         try {
             // Create a new FormData object
             const formData = new FormData();
-    
+
             // Append profile_image only if it's a valid File object
             if (profile_image && profile_image instanceof File) {
                 formData.append('profile_image', profile_image);
             }
-    
+
             formData.append('fullName', fullName);
             formData.append('userName', userName);
             formData.append('telephone', telephone);
             formData.append('email', email);
             formData.append('password', password);
-    
+
             // Make the request with the FormData object
             const response = await axios.post('/auth/signup', formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data'
                 }
             });
-    
+
             console.log('Registration response:', response);
-    
+
             let user = response.data.data;
-    
+
             if (window.localStorage.getItem('users')) {
                 let storedUsers = JSON.parse(window.localStorage.getItem('users'));
                 storedUsers.push(user);
@@ -160,14 +160,14 @@ export const JWTProvider = ({ children }) => {
             } else {
                 window.localStorage.setItem('users', JSON.stringify([user]));
             }
-    
+
             return response; // Return the entire response
         } catch (error) {
             console.error('Registration error:', error);
             throw error; // Throw the error to be caught by the caller
         }
     };
-    
+
     const logout = async () => {
         try {
             await axios.get('/logout');

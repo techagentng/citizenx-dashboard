@@ -83,11 +83,11 @@ const JWTRegister = ({ ...others }) => {
             <Formik
                 initialValues={{
                     profile_image: '',
-                    fullName: 'Nnah kenneth',
-                    userName: 'knoi',
-                    telephone: '090887655',
-                    email: 't@gmail.com',
-                    password: 'kenneth1',
+                    fullName: '',
+                    userName: '',
+                    telephone: '',
+                    email: '',
+                    password: '',
                     submit: null
                 }}
                 validationSchema={Yup.object().shape({
