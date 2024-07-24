@@ -23,7 +23,7 @@ export const getMapMarkers = () => {
 
 export const getStateCount = async () => {
     try {
-        const response = await axios.get('https://citizenx-9hk2.onrender.com/api/v1/incident-report/state/count');
+        const response = await axios.get('/api/v1/incident-report/state/count');
         if (response.status === 200) {
             return response.data.data;
         } else {
