@@ -130,7 +130,16 @@ export const JWTProvider = ({ children }) => {
         try {
             // Create a new FormData object
             const formData = new FormData();
-            formData.append('profile_image', profile_image); // Assuming profile_image is a File object
+    
+            // If profile_image is not provided, set a default image URL or skip adding it
+            if (profile_image) {
+                formData.append('profile_image', profile_image); // Assuming profile_image is a File object
+            } else {
+                // Optional: If you have a default image URL, you can set it here
+                const defaultImageUrl = './cx.png'; // Replace with your default image URL
+                formData.append('profile_image', defaultImageUrl);
+            }
+    
             formData.append('fullName', fullName);
             formData.append('userName', userName);
             formData.append('telephone', telephone);
@@ -143,6 +152,7 @@ export const JWTProvider = ({ children }) => {
                     'Content-Type': 'multipart/form-data'
                 }
             });
+    
             console.log('Registration response:', response);
     
             let user = response.data.data;
@@ -161,6 +171,7 @@ export const JWTProvider = ({ children }) => {
             throw error; // Throw the error to be caught by the caller
         }
     };
+    
     
 
     const logout = async () => {

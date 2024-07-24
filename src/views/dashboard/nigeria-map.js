@@ -18,7 +18,7 @@ const NigerianMap = () => {
     }, []);
 
     const getCountForLGA = (stateName, lgaName) => {
-        const found = reportCounts.find((count) => count.StateName === stateName && count.LGAName === lgaName);
+        const found = reportCounts?.find((count) => count.StateName === stateName && count.LGAName === lgaName);
         return found ? found.Count : 0;
     };
 
