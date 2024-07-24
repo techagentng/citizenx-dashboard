@@ -125,38 +125,33 @@ export const JWTProvider = ({ children }) => {
             console.error('Error during login:', error);
         }
     };
-
     const register = async (fullName, userName, telephone, email, password, profile_image) => {
         try {
             // Create a new FormData object
             const formData = new FormData();
-    
-            // If profile_image is not provided, set a default image URL or skip adding it
+
+            // Append profile_image only if it's defined
             if (profile_image) {
                 formData.append('profile_image', profile_image); // Assuming profile_image is a File object
-            } else {
-                // Optional: If you have a default image URL, you can set it here
-                const defaultImageUrl = './cx.png'; // Replace with your default image URL
-                formData.append('profile_image', defaultImageUrl);
             }
-    
+
             formData.append('fullName', fullName);
             formData.append('userName', userName);
             formData.append('telephone', telephone);
             formData.append('email', email);
             formData.append('password', password);
-    
+
             // Make the request with the FormData object
             const response = await axios.post('/auth/signup', formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data'
                 }
             });
-    
+
             console.log('Registration response:', response);
-    
+
             let user = response.data.data;
-    
+
             if (window.localStorage.getItem('users')) {
                 let storedUsers = JSON.parse(window.localStorage.getItem('users'));
                 storedUsers.push(user);
@@ -164,15 +159,13 @@ export const JWTProvider = ({ children }) => {
             } else {
                 window.localStorage.setItem('users', JSON.stringify([user]));
             }
-    
+
             return response; // Return the entire response
         } catch (error) {
             console.error('Registration error:', error);
             throw error; // Throw the error to be caught by the caller
         }
     };
-    
-    
 
     const logout = async () => {
         try {
