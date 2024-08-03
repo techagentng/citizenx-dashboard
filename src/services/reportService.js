@@ -169,3 +169,29 @@ export const getStates = () => {
             });
     });
 };
+
+export const getStateReportCountList = () => {
+    return new Promise((resolve, reject) => {
+        const serviceToken = localStorage.getItem('serviceToken');
+        if (!serviceToken) {
+            return reject(new Error('No token found'));
+        }
+
+        axios
+            .get(`${process.env.REACT_APP_API_URL}/state/report/count`, {
+                headers: {
+                    Authorization: `Bearer ${serviceToken}`
+                }
+            })
+            .then((response) => {
+                if (response && response.data && response.data.top_states) {
+                    resolve(response.data.top_states);
+                } else {
+                    reject(new Error('No data found'));
+                }
+            })
+            .catch((error) => {
+                reject(error);
+            });
+    });
+};

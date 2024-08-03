@@ -2,10 +2,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Pie } from 'react-chartjs-2';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
-
+import Grid from '@mui/material/Grid';
+import Typography from '@mui/material/Typography';
 ChartJS.register(ArcElement, Tooltip, Legend);
 
-const PieChart2 = ({ reportTypes, reportPercent }) => {
+const PieChart2 = ({ reportTypes, reportPercent, title }) => {
     const reportsPercentData = {
         labels: reportTypes,
         datasets: [
@@ -19,7 +20,14 @@ const PieChart2 = ({ reportTypes, reportPercent }) => {
         ]
     };
 
-    return <div style={{ width: '100%' }}>{reportTypes && reportPercent ? <Pie data={reportsPercentData} /> : <p>Loading...</p>}</div>;
+    return (
+        <div style={{ width: '100%' }}>
+            <Grid item>
+                <Typography variant="h4">{title}</Typography>
+            </Grid>
+            {reportPercent ? <Pie data={reportsPercentData} /> : <p>Loading...</p>}
+        </div>
+    );
 };
 
 PieChart2.propTypes = {

@@ -1,25 +1,62 @@
-import React, {useState, useEffect} from 'react';
-// import { useNavigate } from 'react-router-dom';
-import { ComposableMap, Geographies, Geography, Marker } from 'react-simple-maps';
+import React, { useState, useEffect } from 'react';
+import { ComposableMap, Geographies, Geography } from 'react-simple-maps';
 import { Tooltip } from 'react-tooltip';
 import geoData from './nigeria_lga_boundaries.geojson';
 import './tooltip.css';
 import { getMapMarkers } from 'services/mapService';
+import Fuse from 'fuse.js';
 
-const markers = [{ markerOffset: -20, name: 'Lagos', coordinates: [3.3792, 6.5244] }];
+// Utility function to normalize state names
+const normalizeStateName = (name) => name.trim().toLowerCase();
+
+// Create a mapping for common state name variations
+const stateNameMapping = {
+    'bornu': 'borno',
+    'federal capital territory': 'fct',
+    // Add other common variations here
+};
+
+const mapStateName = (name) => {
+    const normalized = normalizeStateName(name);
+    return stateNameMapping[normalized] || normalized;
+};
 
 const NigerianMap = () => {
-    const [reportCounts, setReportCounts] = useState([]);
+    const [setReportCounts] = useState([]);
+    const [fuse, setFuse] = useState(null);
 
+    // Fetch data on component mount
     useEffect(() => {
         getMapMarkers()
-            .then((data) => setReportCounts(data))
-            .catch((error) => console.error(error));
+            .then((data) => {
+                // Normalize data and initialize Fuse.js
+                const normalizedData = data.map(item => ({
+                    ...item,
+                    state_name: mapStateName(item.state_name),
+                }));
+                console.log('Normalized API Data:', normalizedData);
+
+                // Set up Fuse.js for fuzzy matching
+                const fuseInstance = new Fuse(normalizedData, {
+                    keys: ['state_name'],
+                    threshold: 0.3, // Adjust threshold for match sensitivity
+                });
+                setFuse(fuseInstance);
+                setReportCounts(normalizedData);
+            })
+            .catch((error) => console.error('API error:', error));
     }, []);
 
-    const getCountForLGA = (stateName, lgaName) => {
-        const found = reportCounts?.find((count) => count.StateName === stateName && count.LGAName === lgaName);
-        return found ? found.Count : 0;
+    // Get the count for a given state using fuzzy matching
+    const getCountForState = (stateName) => {
+        if (!fuse) return 0;
+
+        const mappedStateName = mapStateName(stateName);
+        const results = fuse.search(mappedStateName);
+        const found = results.length > 0 ? results[0].item : null;
+
+        console.log('Looking for:', mappedStateName, 'Found:', found);
+        return found ? found.report_count : 0;
     };
 
     return (
@@ -27,7 +64,7 @@ const NigerianMap = () => {
             <ComposableMap
                 projection="geoMercator"
                 projectionConfig={{
-                    scale: 2500,
+                    scale: 3000,
                     center: [8, 9]
                 }}
                 width={800}
@@ -35,31 +72,35 @@ const NigerianMap = () => {
             >
                 <Geographies geography={geoData}>
                     {({ geographies }) =>
-                        geographies.map((geo) => (
-                            <Geography
-                                key={geo.rsmKey}
-                                geography={geo}
-                                style={{
-                                    default: { fill: '#ffff', stroke: '#0e4934', strokeWidth: 1.5 },
-                                    hover: { fill: '#0e4934', stroke: '#000', strokeWidth: 0.75 },
-                                    pressed: { fill: '#E42', stroke: '#000', strokeWidth: 0.75 }
-                                }}
-                                data-tooltip-id="lga-tooltip"
-                                data-tooltip-content={`${geo.properties.admin2Name}, ${geo.properties.admin1Name}, Count: ${getCountForLGA(geo.properties.admin1Name, geo.properties.admin2Name)}`}
-                            />
-                        ))
+                        geographies.map((geo) => {
+                            const stateName = geo.properties.admin1Name.trim();
+                            const count = getCountForState(stateName);
+
+                            // Debugging output for each state
+                            console.log('State Name from GeoJSON:', stateName);
+                            console.log('Report Count for State:', count);
+
+                            return (
+                                <Geography
+                                    key={geo.rsmKey}
+                                    geography={geo}
+                                    style={{
+                                        default: { fill: '#ffff', stroke: '#0e4934', strokeWidth: 1.5 },
+                                        hover: { fill: '#0e4934', stroke: '#000', strokeWidth: 0.75 },
+                                        pressed: { fill: '#E42', stroke: '#000', strokeWidth: 0.75 }
+                                    }}
+                                    data-tooltip-id="state-tooltip"
+                                    data-tooltip-content={`
+                                        State: ${stateName}, 
+                                        Count: ${count}
+                                    `}
+                                />
+                            );
+                        })
                     }
                 </Geographies>
-                {markers.map(({ name, coordinates, markerOffset }) => (
-                    <Marker key={name} coordinates={coordinates}>
-                        <circle r={5} fill="#F00" stroke="#fff" strokeWidth={2} />
-                        <text textAnchor="middle" y={markerOffset} style={{ fontFamily: 'system-ui', fill: '#5D5A6D' }}>
-                            {name}
-                        </text>
-                    </Marker>
-                ))}
             </ComposableMap>
-            <Tooltip id="lga-tooltip" className="custom-tooltip" />
+            <Tooltip id="state-tooltip" className="custom-tooltip" />
         </>
     );
 };

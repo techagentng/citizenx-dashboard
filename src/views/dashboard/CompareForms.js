@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Button, Grid, Stack, TextField, Typography, IconButton } from '@mui/material';
 import MainCard from 'ui-component/cards/MainCard';
 import AnimateButton from 'ui-component/extended/AnimateButton';
@@ -11,13 +11,11 @@ import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import ControlPointIcon from '@mui/icons-material/ControlPoint';
 import CompareBarChart from './compareBarChart';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { getBarChartData } from 'services/reportService';
-import { getCategories } from 'services/reportService';
-import { getStates } from 'services/reportService';
+import { getBarChartData, getCategories, getStates } from 'services/reportService';
 
 const CompareForms = () => {
-    const defaultReportType = ["Election", "Robbery"];
-    const defaultState = ["Lagos", "Ondo"];
+    const defaultReportType = ['Election'];
+    const defaultState = ['Lagos', 'Ondo'];
 
     const [valueBasic, setValueBasic] = useState(new Date());
     const [valueSecond, setValueSecond] = useState(new Date());
@@ -27,13 +25,14 @@ const CompareForms = () => {
     const [, setError] = useState(false);
     const [states, setStates] = useState([]);
     const [chartData, setChartData] = useState([]);
+    const [categories, setCategories] = useState([]);
 
     useEffect(() => {
         getCategories()
-            .then((categories) => {
-                console.log('Fetched categories:', categories);
-                // Initialize reportTypeInputs with fetched categories if needed
-                setReportTypeInputs([{ id: Date.now(), types: defaultReportType }]);
+            .then((data) => {
+                console.log('Fetched categories:', data);
+                setCategories(data);
+                setReportTypeInputs([{ id: Date.now(), types: [] }]); // Initialize with empty types
             })
             .catch((error) => {
                 console.error('Failed to fetch categories:', error);
@@ -50,60 +49,69 @@ const CompareForms = () => {
             });
     }, []);
 
-    const handleAddReportTypeInput = () => {
+    const handleAddReportTypeInput = useCallback(() => {
         if (reportTypeInputs.length < 4) {
             setReportTypeInputs([...reportTypeInputs, { id: Date.now(), types: [] }]);
         }
-    };
+    }, [reportTypeInputs]);
 
-    const handleReportTypeChange = (id, newValue) => {
-        const updatedInputs = reportTypeInputs.map((input) =>
-            input.id === id ? { ...input, types: newValue } : input
-        );
-        setReportTypeInputs(updatedInputs);
-    };
+    const handleReportTypeChange = useCallback(
+        (id, newValue) => {
+            const updatedInputs = reportTypeInputs.map((input) => (input.id === id ? { ...input, types: newValue } : input));
+            setReportTypeInputs(updatedInputs);
+        },
+        [reportTypeInputs]
+    );
 
-    const handleAddStateInput = () => {
+    const handleAddStateInput = useCallback(() => {
         if (compare.length < 4) {
             setCompare([...compare, { id: Date.now(), states: '' }]);
         }
-    };
+    }, [compare]);
 
-    const handleStateChange = (id, newValue) => {
-        const updatedCompare = compare.map((input) =>
-            input.id === id ? { ...input, states: newValue } : input
-        );
-        setCompare(updatedCompare);
-    };
+    const handleStateChange = useCallback(
+        (id, newValue) => {
+            const updatedCompare = compare.map((input) => (input.id === id ? { ...input, states: newValue } : input));
+            setCompare(updatedCompare);
+        },
+        [compare]
+    );
 
-    const handleDeleteReportTypeInput = (index) => {
-        const updatedInputs = reportTypeInputs.filter((_, i) => i !== index);
-        setReportTypeInputs(updatedInputs);
-    };
+    const handleDeleteReportTypeInput = useCallback(
+        (index) => {
+            const updatedInputs = reportTypeInputs.filter((_, i) => i !== index);
+            setReportTypeInputs(updatedInputs);
+        },
+        [reportTypeInputs]
+    );
 
-    const handleDeleteCompareInput = (id) => {
-        const updatedCompare = compare.filter((input) => input.id !== id);
-        setCompare(updatedCompare);
-    };
-
-    const requestBody = {
-        report_types: reportTypeInputs.flatMap(input => input.types),
-        states: compare.flatMap(input => input.states)
-        // start_date: valueBasic.toISOString(),
-        // end_date: valueSecond.toISOString()
-    };
+    const handleDeleteCompareInput = useCallback(
+        (id) => {
+            const updatedCompare = compare.filter((input) => input.id !== id);
+            setCompare(updatedCompare);
+        },
+        [compare]
+    );
 
     useEffect(() => {
-        console.log("Request Body:", requestBody);
-        getBarChartData(requestBody)
-            .then((data) => {
-                setChartData(data);
-                setLoading(false);
-            })
-            .catch((err) => {
-                setError(err.message);
-                setLoading(false);
-            });
+        if (reportTypeInputs.length > 0 && compare.length > 0) {
+            setLoading(true);
+            const requestBody = {
+                report_types: reportTypeInputs.flatMap((input) => input.types),
+                states: compare.flatMap((input) => input.states)
+                // start_date: valueBasic.toISOString(),
+                // end_date: valueSecond.toISOString()
+            };
+            getBarChartData(requestBody)
+                .then((data) => {
+                    setChartData(data);
+                    setLoading(false);
+                })
+                .catch((err) => {
+                    setError(err.message);
+                    setLoading(false);
+                });
+        }
     }, [reportTypeInputs, compare, valueBasic, valueSecond]);
 
     if (loading) {
@@ -141,7 +149,7 @@ const CompareForms = () => {
                                             autoHighlight
                                             handleHomeEndKeys
                                             id={`free-solo-with-text-demo-${input.id}`}
-                                            options={defaultReportType}
+                                            options={categories}
                                             getOptionLabel={(option) => option}
                                             renderOption={(props, option) => (
                                                 <Box component="li" {...props}>
@@ -166,6 +174,7 @@ const CompareForms = () => {
                                                 />
                                             )}
                                         />
+
                                         <IconButton aria-label="delete" onClick={() => handleDeleteReportTypeInput(index)}>
                                             <DeleteIcon />
                                         </IconButton>
@@ -224,11 +233,11 @@ const CompareForms = () => {
                                             options={states}
                                             getOptionLabel={(option) => {
                                                 if (typeof option === 'string') {
-                                                    return option; // Just return the string if it's already a string
+                                                    return option;
                                                 } else if (typeof option === 'object' && option.label) {
-                                                    return option.label; // Return the label property of the object
+                                                    return option.label;
                                                 } else {
-                                                    return ''; // Handle other cases if necessary
+                                                    return '';
                                                 }
                                             }}
                                             renderOption={(props, option) => (
@@ -254,6 +263,7 @@ const CompareForms = () => {
                                                 />
                                             )}
                                         />
+
                                         <IconButton aria-label="delete" onClick={() => handleDeleteCompareInput(input.id)}>
                                             <DeleteIcon />
                                         </IconButton>
@@ -313,14 +323,7 @@ const CompareForms = () => {
                                 </Grid>
                             </Grid>
                             <Grid item sx={{ mt: 2 }}>
-                                <Button
-                                    variant="contained"
-                                    color="secondary"
-                                    // onClick={() => {
-                                    //     setLoading(true);
-                                    // }}
-                                    sx={{ width: '50%', backgroundColor: '#0e9b66' }}
-                                >
+                                <Button variant="contained" color="secondary" sx={{ width: '50%', backgroundColor: '#0e9b66' }}>
                                     Compare
                                 </Button>
                             </Grid>

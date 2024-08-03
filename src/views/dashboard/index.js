@@ -40,9 +40,9 @@ const DashboardPage = () => {
     const [todayReportCount, setTodayReportCount] = useState(0);
     const [onlineUsers, setOnlineUsers] = useState(0);
 
-        // Log good_percentage and bad_percentage
-        console.log('Good Percentage:', good_percentage);
-        console.log('Bad Percentage:', bad_percentage);
+    // Log good_percentage and bad_percentage
+    console.log('Good Percentage:', good_percentage);
+    console.log('Bad Percentage:', bad_percentage);
 
     useEffect(() => {
         if (selectedState && selectedLga) {
@@ -81,7 +81,7 @@ const DashboardPage = () => {
     return (
         <>
             <MainCard title="State and LGA dashboard">
-                <Grid container spacing={2}>
+                <Grid container spacing={2} sx={{mb:3}}>
                     <Grid item xs={3}>
                         <EarningCard count={todayReportCount} details="Today's Report" icon={EarningIcon} />
                     </Grid>
@@ -118,7 +118,7 @@ const DashboardPage = () => {
 
                 <Grid container spacing={gridSpacing}>
                     <Grid item xs={12} md={12}>
-                        <MainCard title="Markers & Popups">
+                        <MainCard title="State and Report Count">
                             {/* <GeoJSON data={mapData} fill="#eee" stroke="black" strokeWidth={0.5} /> */}
                             <NigerianMap />
                             {/* <MapContainer
@@ -147,7 +147,7 @@ const DashboardPage = () => {
                         <PopularCard reportTypes={reportTypes} title="Popular States" reportCounts={reportCounts} />
                     </Grid>
                     <Grid item xs={12} md={3}>
-                        <PieChart2 reportTypes={reportTypes} reportPercent={{ good_percentage, bad_percentage }} />
+                        <PieChart2 title="Good and Bad" reportPercent={{ good_percentage, bad_percentage }} />
                     </Grid>
                 </Grid>
             </MainCard>
