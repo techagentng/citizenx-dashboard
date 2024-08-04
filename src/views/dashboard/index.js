@@ -11,7 +11,7 @@ import PopularCard from './PopularCard';
 import { gridSpacing } from 'store/constant';
 import JWTContext from 'contexts/JWTContext';
 import { getAllUserCount, getAllReportsToday, getOnlineUsers } from 'services/userService';
-
+import { getStateReportCountList } from 'services/reportService';
 // React Leaflet imports
 // import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
@@ -39,6 +39,7 @@ const DashboardPage = () => {
     const [userCount, setUserCount] = useState(0);
     const [todayReportCount, setTodayReportCount] = useState(0);
     const [onlineUsers, setOnlineUsers] = useState(0);
+    const [topStates, setTopStates] = useState([]);
 
     // Log good_percentage and bad_percentage
     console.log('Good Percentage:', good_percentage);
@@ -75,13 +76,24 @@ const DashboardPage = () => {
         }
     }, [isLoggedIn, setTodayReportCount]);
 
+    useEffect(() => {
+        // Fetch top states data when component mounts
+        getStateReportCountList()
+            .then((data) => {
+                setTopStates(data);
+            })
+            .catch((error) => {
+                console.error('Failed to fetch top states:', error);
+            });
+    }, []);
+
     if (loading) return <div>Loading...</div>;
     if (error) return <div>Error: {error.message}</div>;
 
     return (
         <>
             <MainCard title="State and LGA dashboard">
-                <Grid container spacing={2} sx={{mb:3}}>
+                <Grid container spacing={2} sx={{ mb: 3 }}>
                     <Grid item xs={3}>
                         <EarningCard count={todayReportCount} details="Today's Report" icon={EarningIcon} />
                     </Grid>
@@ -141,10 +153,14 @@ const DashboardPage = () => {
                         </MainCard>
                     </Grid>
                     <Grid item xs={6} md={4}>
-                        <PopularCard reportTypes={reportTypes} title="Popular Reports" reportCounts={reportCounts} />
+                        <PopularCard
+                            title="Popular Report Types"
+                            data={reportTypes?.map((type, index) => ({ reportType: type, reportCount: reportCounts[index] }))}
+                            type="reportTypes"
+                        />
                     </Grid>
                     <Grid item xs={6} md={4}>
-                        <PopularCard reportTypes={reportTypes} title="Popular States" reportCounts={reportCounts} />
+                        <PopularCard title="Popular States" data={topStates} type="states" />
                     </Grid>
                     <Grid item xs={12} md={3}>
                         <PieChart2 title="Good and Bad" reportPercent={{ good_percentage, bad_percentage }} />

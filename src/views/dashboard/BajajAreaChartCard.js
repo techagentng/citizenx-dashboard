@@ -1,5 +1,4 @@
-import React from 'react';
-
+import React, { useState, useEffect } from 'react';
 // material-ui
 import { useTheme } from '@mui/material/styles';
 import { Card, Grid, Typography } from '@mui/material';
@@ -11,7 +10,7 @@ import Chart from 'react-apexcharts';
 // project imports
 import useConfig from 'hooks/useConfig';
 import chartData from './chart-data/bajaj-area-chart';
-
+import { getTotalReportCount } from 'services/reportService';
 // ===========================|| DASHBOARD DEFAULT - BAJAJ AREA CHART CARD ||=========================== //
 
 const BajajAreaChartCard = () => {
@@ -19,6 +18,23 @@ const BajajAreaChartCard = () => {
     const { navType } = useConfig();
 
     const orangeDark = theme.palette.secondary[800];
+    const [totalReportCount, setTotalReportCount] = useState(null);
+    const [, setError] = useState('');
+    const [, setLoading] = useState('');
+    useEffect(() => {
+        const fetchReportCount = async () => {
+            try {
+                const count = await getTotalReportCount();
+                setTotalReportCount(count);
+                setLoading(false);
+            } catch (err) {
+                setError(err.message);
+                setLoading(false);
+            }
+        };
+
+        fetchReportCount();
+    }, []);
 
     React.useEffect(() => {
         const newSupportChart = {
@@ -43,7 +59,7 @@ const BajajAreaChartCard = () => {
                         </Grid>
                         <Grid item>
                             <Typography variant="h4" sx={{ color: theme.palette.grey[800] }}>
-                                1839
+                            {totalReportCount}
                             </Typography>
                         </Grid>
                     </Grid>
