@@ -1,30 +1,21 @@
 import React, { useState, useEffect } from 'react';
 import { Avatar, Button, Grid, Stack, TextField, Typography } from '@mui/material';
-import useAuth from 'hooks/useAuth';
 import SubCard from 'ui-component/cards/SubCard';
 import AnimateButton from 'ui-component/extended/AnimateButton';
 import { gridSpacing } from 'store/constant';
-import { uploadProfileImage } from 'services/userService'; // Add getProfileImage
-import Avatarr from 'ui-component/extended/Avatar';
+import Avatarr from 'ui-component/extended/Avatar'; // Default avatar image
+
 const Profile = () => {
     const [selectedFile, setSelectedFile] = useState(null);
     const [avatarSrc, setAvatarSrc] = useState('');
-    const { user } = useAuth();
 
     useEffect(() => {
-        const userData = localStorage.getItem('user');
-        if (userData) {
-            const user = JSON.parse(userData);
-            if (user.profileImage) {
-                const profileImagePath = user.profileImage; // e.g., "./uploadImage/27_cx-logo.png"
-
-                const fullImageUrl = `${process.env.REACT_APP_API_URL}/${profileImagePath}`;
-                setAvatarSrc(fullImageUrl);
-                console.log(fullImageUrl);
-            } else {
-                // Optionally, set a default avatar here if profileImage is not available
-                setAvatarSrc(Avatarr);
-            }
+        // Retrieve the avatar source from local storage
+        const storedAvatar = localStorage.getItem('avatarSrc');
+        if (storedAvatar) {
+            setAvatarSrc(storedAvatar);
+        } else {
+            setAvatarSrc(Avatarr); // Fallback to default avatar
         }
     }, []);
 
@@ -34,15 +25,10 @@ const Profile = () => {
 
     const handleUploadClick = () => {
         if (selectedFile) {
-            uploadProfileImage(selectedFile)
-                .then((response) => {
-                    console.log(response);
-                    // Optionally, update the avatarSrc to the new uploaded file
-                    setAvatarSrc(URL.createObjectURL(selectedFile));
-                })
-                .catch((error) => {
-                    console.error('Upload failed:', error);
-                });
+            const newAvatarSrc = URL.createObjectURL(selectedFile);
+            // Store the new avatar in local storage
+            localStorage.setItem('avatarSrc', newAvatarSrc);
+            setAvatarSrc(newAvatarSrc);
         } else {
             console.warn('No file selected');
         }
@@ -54,7 +40,7 @@ const Profile = () => {
                 <SubCard title="Profile Picture" contentSX={{ textAlign: 'center' }}>
                     <Grid container spacing={2}>
                         <Grid item xs={12}>
-                            <Avatar alt="User 1" src={avatarSrc} sx={{ width: 100, height: 100, margin: '0 auto' }} />
+                            <Avatar alt="User Avatar" src={avatarSrc} sx={{ width: 100, height: 100, margin: '0 auto' }} />
                         </Grid>
                         <Grid item xs={12}>
                             <Typography variant="subtitle2" align="center">
@@ -78,7 +64,7 @@ const Profile = () => {
                 <SubCard title="Edit Account Details">
                     <Grid container spacing={gridSpacing}>
                         <Grid item xs={12}>
-                            <TextField id="outlined-basic1" fullWidth label="Name" defaultValue={user?.name} helperText="Helper text" />
+                            <TextField id="outlined-basic1" fullWidth label="Name" defaultValue="John Doe" helperText="Helper text" />
                         </Grid>
                         <Grid item xs={12}>
                             <TextField id="outlined-basic6" fullWidth label="Email address" defaultValue="name@example.com" />

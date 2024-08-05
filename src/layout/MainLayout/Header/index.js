@@ -28,8 +28,8 @@ const Header = () => {
     const { layout } = useConfig();
     const [states, setStates] = useState([]);
     const [lgas, setLgas] = useState([]);
-    const [selectedState, setSelectedState] = useState('Ogun');
-    const [selectedLga, setSelectedLga] = useState('Ifo');
+    const [selectedState, setSelectedState] = useState('Anambra');
+    const [selectedLga, setSelectedLga] = useState('Aguata');
     const [dateRange, setDateRange] = useState([null, null]);
     const [value, setValue] = useState('');
     const [reportTypes, setReportTypes] = useState(['Select type']);

@@ -1,15 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { useTheme } from '@mui/material/styles';
-import { Avatar, Button, CardActions, CardContent, Divider, Grid, Menu, MenuItem, Typography } from '@mui/material';
+import { Avatar, CardContent, Divider, Grid, Menu, MenuItem, Typography } from '@mui/material';
 import BajajAreaChartCard from './BajajAreaChartCard';
 import MainCard from 'ui-component/cards/MainCard';
 import SkeletonPopularCard from 'ui-component/cards/Skeleton/PopularCard';
 import { gridSpacing } from 'store/constant';
-import ChevronRightOutlinedIcon from '@mui/icons-material/ChevronRightOutlined';
+// import ChevronRightOutlinedIcon from '@mui/icons-material/ChevronRightOutlined';
 import MoreHorizOutlinedIcon from '@mui/icons-material/MoreHorizOutlined';
 import KeyboardArrowUpOutlinedIcon from '@mui/icons-material/KeyboardArrowUpOutlined';
 import KeyboardArrowDownOutlinedIcon from '@mui/icons-material/KeyboardArrowDownOutlined';
-
 
 const PopularCard = ({ isLoading, title, data, type }) => {
     const theme = useTheme();
@@ -17,6 +16,7 @@ const PopularCard = ({ isLoading, title, data, type }) => {
     const [totalReportCount, setTotalReportCount] = useState(null);
     const [, setError] = useState('');
     const [, setLoading] = useState('');
+
     useEffect(() => {
         const fetchReportCount = async () => {
             try {
@@ -132,14 +132,14 @@ const PopularCard = ({ isLoading, title, data, type }) => {
                                         <Grid container alignItems="center" justifyContent="space-between">
                                             <Grid item>
                                                 <Typography variant="subtitle1" color="inherit">
-                                                    {type === 'reportTypes' ? item.reportType : item.state_name}
+                                                    {type === 'reportTypes' ? item.reportType : item.stateName}
                                                 </Typography>
                                             </Grid>
                                             <Grid item>
                                                 <Grid container alignItems="center" justifyContent="space-between">
                                                     <Grid item>
                                                         <Typography variant="subtitle1" color="inherit">
-                                                            {type === 'reportTypes' ? item.reportCount : item.report_count}
+                                                            {type === 'reportTypes' ? item.reportCount : item.reportCount}
                                                         </Typography>
                                                     </Grid>
                                                     <Grid item>
@@ -174,12 +174,12 @@ const PopularCard = ({ isLoading, title, data, type }) => {
                     </Grid>
                 </Grid>
             </CardContent>
-            <CardActions sx={{ p: 1.25, pt: 0, justifyContent: 'center' }}>
+            {/* <CardActions sx={{ p: 1.25, pt: 0, justifyContent: 'center' }}>
                 <Button size="small" disableElevation>
                     View All
                     <ChevronRightOutlinedIcon />
                 </Button>
-            </CardActions>
+            </CardActions> */}
         </MainCard>
     );
 };

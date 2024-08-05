@@ -1,34 +1,21 @@
-// material-ui
-import { Grid } from '@mui/material';
 import React, { useEffect, useContext, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-// project imports
+import { Grid } from '@mui/material';
 import MainCard from 'ui-component/cards/MainCard';
 import EarningCard from 'ui-component/cards/Skeleton/EarningCard';
 import EarningIcon from 'assets/images/icons/earning.svg';
-// import EarningCard from './EarningCard';
 import PopularCard from './PopularCard';
-import { gridSpacing } from 'store/constant';
-import JWTContext from 'contexts/JWTContext';
-import { getAllUserCount, getAllReportsToday, getOnlineUsers } from 'services/userService';
-import { getStateReportCountList } from 'services/reportService';
-// React Leaflet imports
-// import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
-import 'leaflet/dist/leaflet.css';
-import L from 'leaflet';
 import BarChart from './barchart';
 import PieChart from './piechart';
 import PieChart2 from './piechart2';
 import LineChart from './linechart';
+import NigerianMap from './nigeria-map';
+import { gridSpacing } from 'store/constant';
+import JWTContext from 'contexts/JWTContext';
+import { getAllUserCount, getAllReportsToday, getOnlineUsers } from 'services/userService';
+import { getStateReportCountList } from 'services/reportService';
 import { getGraph, getPercentCount } from 'store/slices/graphs';
 import CompareForms from './CompareForms';
-import NigerianMap from './nigeria-map';
-
-L.Icon.Default.mergeOptions({
-    iconRetinaUrl: require('leaflet/dist/images/marker-icon-2x.png').default,
-    iconUrl: require('leaflet/dist/images/marker-icon.png').default,
-    shadowUrl: require('leaflet/dist/images/marker-shadow.png').default
-});
 
 const DashboardPage = () => {
     const dispatch = useDispatch();
@@ -40,10 +27,7 @@ const DashboardPage = () => {
     const [todayReportCount, setTodayReportCount] = useState(0);
     const [onlineUsers, setOnlineUsers] = useState(0);
     const [formattedTopStates, setFormattedTopStates] = useState([]);
-
-    // Log good_percentage and bad_percentage
-    console.log('Good Percentage:', good_percentage);
-    console.log('Bad Percentage:', bad_percentage);
+    const [selectedReportType, setSelectedReportType] = useState('');
 
     useEffect(() => {
         if (selectedState && selectedLga) {
@@ -57,30 +41,23 @@ const DashboardPage = () => {
         }
     }, [dispatch, reportTypes, selectedState]);
 
-    // Fetch users data on component mount
     useEffect(() => {
         if (isLoggedIn) {
-            console.log('Fetching user data, report data, and online users');
             Promise.all([getAllUserCount(), getAllReportsToday(), getOnlineUsers()])
                 .then(([userCountData, todayReportCountData, onlineUserData]) => {
-                    console.log('User count:', userCountData);
-                    console.log('Today report count:', todayReportCountData);
-                    console.log('Online users data:', onlineUserData);
                     setUserCount(userCountData);
                     setTodayReportCount(todayReportCountData);
-                    setOnlineUsers(onlineUserData); // Set the count correctly
+                    setOnlineUsers(onlineUserData);
                 })
                 .catch((error) => {
                     console.log(error.message);
                 });
         }
-    }, [isLoggedIn, setTodayReportCount]);
+    }, [isLoggedIn]);
 
     useEffect(() => {
-        // Fetch and format top states data when component mounts
         getStateReportCountList()
             .then((data) => {
-                // Format data to the expected structure if needed
                 setFormattedTopStates(
                     data.map((state) => ({
                         stateName: state.state_name,
@@ -93,13 +70,21 @@ const DashboardPage = () => {
             });
     }, []);
 
+    useEffect(() => {
+        if (reportTypes.length > 0) {
+            setSelectedReportType(reportTypes[0]); 
+        }
+    }, [reportTypes]);
+
     if (loading) return <div>Loading...</div>;
     if (error) return <div>Error: {error.message}</div>;
-    // Get the count from topStates or default value
+
     const todayReportCountSteroid = topStates[selectedState] || todayReportCount;
     const detailsText = selectedState ? `${selectedState}'s Report` : "Today's Report";
     const detailUsers = selectedState ? `${selectedState}'s Report` : "Today's Report";
     const totalUsersCountSteroid = total_users || userCount;
+    const pieChartTitle = selectedReportType ? `Good and Bad Rating for ${selectedReportType}` : 'Good and Bad Rating';
+
     return (
         <>
             <MainCard title="State and LGA dashboard">
@@ -141,31 +126,16 @@ const DashboardPage = () => {
                 <Grid container spacing={gridSpacing}>
                     <Grid item xs={12} md={12}>
                         <MainCard title="State and Report Count">
-                            {/* <GeoJSON data={mapData} fill="#eee" stroke="black" strokeWidth={0.5} /> */}
                             <NigerianMap />
-                            {/* <MapContainer
-                                bounds={nigeriaBounds}
-                                zoom={6}
-                                style={{ height: '100vh', width: '100%' }}
-                                scrollWheelZoom={false}
-                                maxBounds={nigeriaBounds} // Set the max bounds to constrain the map to Nigeria
-                            >
-                                <TileLayer
-                                    url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                                    attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                                />
-                                {markers.map((marker, index) => (
-                                    <Marker key={index} position={[marker.lat, marker.lng]}>
-                                        <Popup>{marker.popup}</Popup>
-                                    </Marker>
-                                ))}
-                            </MapContainer> */}
                         </MainCard>
                     </Grid>
                     <Grid item xs={6} md={4}>
                         <PopularCard
                             title="Popular Report Types"
-                            data={reportTypes?.map((type, index) => ({ reportType: type, reportCount: reportCounts[index] }))}
+                            data={reportTypes?.map((type, index) => ({
+                                reportType: type,
+                                reportCount: reportCounts[index]
+                            }))}
                             type="reportTypes"
                         />
                     </Grid>
@@ -173,7 +143,7 @@ const DashboardPage = () => {
                         <PopularCard title="Popular States" data={formattedTopStates} type="states" />
                     </Grid>
                     <Grid item xs={12} md={3}>
-                        <PieChart2 title="Good and Bad" reportPercent={{ good_percentage, bad_percentage }} />
+                        <PieChart2 title={pieChartTitle} reportPercent={{ good_percentage, bad_percentage }} />
                     </Grid>
                 </Grid>
             </MainCard>
