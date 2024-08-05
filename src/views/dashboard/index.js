@@ -34,12 +34,12 @@ const DashboardPage = () => {
     const dispatch = useDispatch();
     const { state: selectedState, lga: selectedLga } = useSelector((state) => state.graphs.lgaState);
     const { isLoggedIn } = useContext(JWTContext);
-    const { reportTypes, reportCounts, loading, error } = useSelector((state) => state.graphs.graphs);
+    const { reportTypes, reportCounts, topStates, total_users, loading, error } = useSelector((state) => state.graphs.graphs);
     const { good_percentage, bad_percentage } = useSelector((state) => state.graphs.reportPercent);
     const [userCount, setUserCount] = useState(0);
     const [todayReportCount, setTodayReportCount] = useState(0);
     const [onlineUsers, setOnlineUsers] = useState(0);
-    const [topStates, setTopStates] = useState([]);
+    const [formattedTopStates, setFormattedTopStates] = useState([]);
 
     // Log good_percentage and bad_percentage
     console.log('Good Percentage:', good_percentage);
@@ -77,10 +77,16 @@ const DashboardPage = () => {
     }, [isLoggedIn, setTodayReportCount]);
 
     useEffect(() => {
-        // Fetch top states data when component mounts
+        // Fetch and format top states data when component mounts
         getStateReportCountList()
             .then((data) => {
-                setTopStates(data);
+                // Format data to the expected structure if needed
+                setFormattedTopStates(
+                    data.map((state) => ({
+                        stateName: state.state_name,
+                        reportCount: state.report_count
+                    }))
+                );
             })
             .catch((error) => {
                 console.error('Failed to fetch top states:', error);
@@ -89,16 +95,20 @@ const DashboardPage = () => {
 
     if (loading) return <div>Loading...</div>;
     if (error) return <div>Error: {error.message}</div>;
-
+    // Get the count from topStates or default value
+    const todayReportCountSteroid = topStates[selectedState] || todayReportCount;
+    const detailsText = selectedState ? `${selectedState}'s Report` : "Today's Report";
+    const detailUsers = selectedState ? `${selectedState}'s Report` : "Today's Report";
+    const totalUsersCountSteroid = total_users || userCount;
     return (
         <>
             <MainCard title="State and LGA dashboard">
                 <Grid container spacing={2} sx={{ mb: 3 }}>
                     <Grid item xs={3}>
-                        <EarningCard count={todayReportCount} details="Today's Report" icon={EarningIcon} />
+                        <EarningCard count={todayReportCountSteroid} details={detailsText} icon={EarningIcon} />
                     </Grid>
                     <Grid item xs={3}>
-                        <EarningCard count={userCount} details="Total Users" icon={EarningIcon} />
+                        <EarningCard count={totalUsersCountSteroid} details={detailUsers} icon={EarningIcon} />
                     </Grid>
                     <Grid item xs={3}>
                         <EarningCard count={onlineUsers} details="Active Users" icon={EarningIcon} />
@@ -160,7 +170,7 @@ const DashboardPage = () => {
                         />
                     </Grid>
                     <Grid item xs={6} md={4}>
-                        <PopularCard title="Popular States" data={topStates} type="states" />
+                        <PopularCard title="Popular States" data={formattedTopStates} type="states" />
                     </Grid>
                     <Grid item xs={12} md={3}>
                         <PieChart2 title="Good and Bad" reportPercent={{ good_percentage, bad_percentage }} />
