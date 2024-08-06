@@ -1,6 +1,6 @@
-import { sum } from 'lodash';
+// import { sum } from 'lodash';
 // import { Link } from 'react-router-dom';
-import { useSelector } from 'store';
+// import { useSelector } from 'store';
 
 // material-ui
 import { styled } from '@mui/material/styles';
@@ -18,8 +18,8 @@ const StyledBadge = styled(Badge)(() => ({
 
 const FloatingCart = () => {
     // const theme = useTheme();
-    const cart = useSelector((state) => state.cart);
-    const totalQuantity = sum(cart?.checkout.products.map((item) => item.quantity));
+    // const cart = useSelector((state) => state.cart);
+    const totalQuantity = 8;
 
     return (
         <Box sx={{mr:2, ml:2}}>

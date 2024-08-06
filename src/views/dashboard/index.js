@@ -84,7 +84,7 @@ const DashboardPage = () => {
     const detailUsers = selectedState ? `${selectedState}'s Report` : "Today's Report";
     const totalUsersCountSteroid = total_users || userCount;
     // const pieChartTitle = selectedReportType ? `Good and Bad Rating for ${selectedReportType}` : 'Good and Bad Rating';
-
+console.log("xxxxxxxxxxxxxxxxxxxxxxxxxxxxx",total_users)
     return (
         <>
             <MainCard title="State and LGA dashboard">

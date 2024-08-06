@@ -19,7 +19,7 @@ const initialState = {
     reportCount: 0,
     loading: false,
     topStates: {},
-    total_users: 0,
+    total_users: 0
 };
 
 const slice = createSlice({
@@ -37,6 +37,7 @@ const slice = createSlice({
             state.graphs.reportTypes = action.payload.report_types;
             state.graphs.reportCounts = action.payload.report_counts;
             (state.graphs.topStates = action.payload.top_states), (state.loading = false);
+            state.graphs.total_users = action.payload.total_users;
         },
         getPercentCountSuccess(state, action) {
             state.reportPercent = action.payload;
