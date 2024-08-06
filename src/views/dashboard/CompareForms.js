@@ -322,11 +322,11 @@ const CompareForms = () => {
                                     </LocalizationProvider>
                                 </Grid>
                             </Grid>
-                            <Grid item sx={{ mt: 2 }}>
+                            {/* <Grid item sx={{ mt: 2 }}>
                                 <Button variant="contained" color="secondary" sx={{ width: '50%', backgroundColor: '#0e9b66' }}>
                                     Compare
                                 </Button>
-                            </Grid>
+                            </Grid> */}
                         </Grid>
                     </Grid>
 

@@ -27,7 +27,7 @@ const DashboardPage = () => {
     const [todayReportCount, setTodayReportCount] = useState(0);
     const [onlineUsers, setOnlineUsers] = useState(0);
     const [formattedTopStates, setFormattedTopStates] = useState([]);
-    const [selectedReportType, setSelectedReportType] = useState('');
+    const [, setSelectedReportType] = useState('');
 
     useEffect(() => {
         if (selectedState && selectedLga) {
@@ -71,7 +71,7 @@ const DashboardPage = () => {
     }, []);
 
     useEffect(() => {
-        if (reportTypes.length > 0) {
+        if (reportTypes?.length > 0) {
             setSelectedReportType(reportTypes[0]); 
         }
     }, [reportTypes]);
@@ -83,7 +83,7 @@ const DashboardPage = () => {
     const detailsText = selectedState ? `${selectedState}'s Report` : "Today's Report";
     const detailUsers = selectedState ? `${selectedState}'s Report` : "Today's Report";
     const totalUsersCountSteroid = total_users || userCount;
-    const pieChartTitle = selectedReportType ? `Good and Bad Rating for ${selectedReportType}` : 'Good and Bad Rating';
+    // const pieChartTitle = selectedReportType ? `Good and Bad Rating for ${selectedReportType}` : 'Good and Bad Rating';
 
     return (
         <>
@@ -143,7 +143,7 @@ const DashboardPage = () => {
                         <PopularCard title="Popular States" data={formattedTopStates} type="states" />
                     </Grid>
                     <Grid item xs={12} md={3}>
-                        <PieChart2 title={pieChartTitle} reportPercent={{ good_percentage, bad_percentage }} />
+                        <PieChart2 reportPercent={{ good_percentage, bad_percentage }} />
                     </Grid>
                 </Grid>
             </MainCard>
