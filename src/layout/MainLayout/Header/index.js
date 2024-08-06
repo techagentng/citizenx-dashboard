@@ -17,7 +17,7 @@ import FullScreenSection from './FullScreenSection';
 import NotificationSection from './NotificationSection';
 import LAYOUT_CONST from 'constant';
 import useConfig from 'hooks/useConfig';
-
+import FloatingCart from './FloatingCart';
 import { IconMenu2 } from '@tabler/icons-react';
 
 const Header = () => {
@@ -97,7 +97,7 @@ const Header = () => {
     const percentCount = useSelector((state) => state.graphs.percentCount);
 
     useEffect(() => {
-        console.log('Percent Count:', percentCount);  
+        console.log('Percent Count:', percentCount);
     }, [percentCount]);
 
     return (
@@ -193,6 +193,9 @@ const Header = () => {
             <NotificationSection />
             <Box sx={{ display: { xs: 'none', lg: 'block' } }}>
                 <FullScreenSection />
+            </Box>
+            <Box sx={{ display: { xs: 'block' } }}>
+                <FloatingCart />
             </Box>
             <ProfileSection />
             <Box sx={{ display: { xs: 'block', sm: 'none' } }}>
