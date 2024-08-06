@@ -24,8 +24,12 @@ export const getMapMarkers = () => {
 
 export const getStateCount = async () => {
     try {
-        const response = await axios.get('http://localhost:8080/api/v1/incident-report/state/count');
-        console.log('nnnnnnn', response);
+        const response = await axios.get(`${process.env.REACT_APP_API_URL}/incident-report/state/count`, {
+            headers: {
+                Authorization: `Bearer ${serviceToken}` // Ensure `serviceToken` is defined and accessible
+            }
+        });
+        console.log('Response:', response);
         if (response.status === 200) {
             return response.data.data;
         } else {
