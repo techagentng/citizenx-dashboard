@@ -72,7 +72,7 @@ const DashboardPage = () => {
 
     useEffect(() => {
         if (reportTypes?.length > 0) {
-            setSelectedReportType(reportTypes[0]); 
+            setSelectedReportType(reportTypes[0]);
         }
     }, [reportTypes]);
 
@@ -84,7 +84,6 @@ const DashboardPage = () => {
     const detailUsers = selectedState ? `${selectedState}'s Report` : "Today's Report";
     const totalUsersCountSteroid = total_users || userCount;
     // const pieChartTitle = selectedReportType ? `Good and Bad Rating for ${selectedReportType}` : 'Good and Bad Rating';
-console.log("xxxxxxxxxxxxxxxxxxxxxxxxxxxxx",total_users)
     return (
         <>
             <MainCard title="State and LGA dashboard">
@@ -143,7 +142,7 @@ console.log("xxxxxxxxxxxxxxxxxxxxxxxxxxxxx",total_users)
                         <PopularCard title="Popular States" data={formattedTopStates} type="states" />
                     </Grid>
                     <Grid item xs={12} md={3}>
-                        <PieChart2 reportPercent={{ good_percentage, bad_percentage }} />
+                        <PieChart2 title="Ratings" reportPercent={{ good_percentage, bad_percentage }} />
                     </Grid>
                 </Grid>
             </MainCard>
