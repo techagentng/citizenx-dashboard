@@ -1,6 +1,6 @@
 import React, { useEffect, useContext, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Grid } from '@mui/material';
+import { Grid, TextField, MenuItem, Box, Typography } from '@mui/material';
 import MainCard from 'ui-component/cards/MainCard';
 import EarningCard from 'ui-component/cards/Skeleton/EarningCard';
 import EarningIcon from 'assets/images/icons/earning.svg';
@@ -14,7 +14,8 @@ import { gridSpacing } from 'store/constant';
 import JWTContext from 'contexts/JWTContext';
 import { getAllUserCount, getAllReportsToday, getOnlineUsers } from 'services/userService';
 import { getStateReportCountList } from 'services/reportService';
-import { getGraph, getPercentCount } from 'store/slices/graphs';
+import { getGraph, getPercentCount, setReportType } from 'store/slices/graphs';
+import { getCategories } from 'services/reportService';
 import CompareForms from './CompareForms';
 
 const DashboardPage = () => {
@@ -27,7 +28,8 @@ const DashboardPage = () => {
     const [todayReportCount, setTodayReportCount] = useState(0);
     const [onlineUsers, setOnlineUsers] = useState(0);
     const [formattedTopStates, setFormattedTopStates] = useState([]);
-    const [, setSelectedReportType] = useState('');
+    const [reportTypeOptions, setReportTypes] = useState([]);
+    const [selectedReportType, setSelectedReportType] = useState('');
 
     useEffect(() => {
         if (selectedState && selectedLga) {
@@ -36,10 +38,10 @@ const DashboardPage = () => {
     }, [dispatch, selectedState, selectedLga]);
 
     useEffect(() => {
-        if (reportTypes && Array.isArray(reportTypes) && selectedState) {
-            dispatch(getPercentCount(reportTypes, selectedState));
+        if (reportTypes?.length > 0 && selectedState) {
+            dispatch(getPercentCount(selectedReportType, selectedState));
         }
-    }, [dispatch, reportTypes, selectedState]);
+    }, [dispatch, selectedReportType, selectedState, reportTypes]);
 
     useEffect(() => {
         if (isLoggedIn) {
@@ -71,10 +73,25 @@ const DashboardPage = () => {
     }, []);
 
     useEffect(() => {
-        if (reportTypes?.length > 0) {
-            setSelectedReportType(reportTypes[0]);
-        }
-    }, [reportTypes]);
+        getCategories()
+            .then((types) => {
+                const reportTypeOptions = ['Select Report Type', ...types];
+                setReportTypes(reportTypeOptions);
+                setSelectedReportType(reportTypeOptions[0]); // Set initial selected report type
+                dispatch(setReportType(reportTypeOptions[0])); // Initialize global state
+            })
+            .catch((error) => {
+                console.error('Failed to fetch categories:', error);
+            });
+    }, [dispatch]);
+
+    const handleReportTypeChange = (event) => {
+        const reportType = event.target.value;
+        setSelectedReportType(reportType);
+        console.log('Selected Report Type:', reportType);
+        dispatch(setReportType(reportType));
+        dispatch(getPercentCount(reportType, selectedState));
+    };
 
     if (loading) return <div>Loading...</div>;
     if (error) return <div>Error: {error.message}</div>;
@@ -83,7 +100,7 @@ const DashboardPage = () => {
     const detailsText = selectedState ? `${selectedState}'s Report` : "Today's Report";
     const detailUsers = selectedState ? `${selectedState}'s Report` : "Today's Report";
     const totalUsersCountSteroid = total_users || userCount;
-    // const pieChartTitle = selectedReportType ? `Good and Bad Rating for ${selectedReportType}` : 'Good and Bad Rating';
+
     return (
         <>
             <MainCard title="State and LGA dashboard">
@@ -130,7 +147,7 @@ const DashboardPage = () => {
                     </Grid>
                     <Grid item xs={6} md={4}>
                         <PopularCard
-                            title="Popular Report Types"
+                            title="Popular Report Types for LGA's"
                             data={reportTypes?.map((type, index) => ({
                                 reportType: type,
                                 reportCount: reportCounts[index]
@@ -141,8 +158,30 @@ const DashboardPage = () => {
                     <Grid item xs={6} md={4}>
                         <PopularCard title="Popular States" data={formattedTopStates} type="states" />
                     </Grid>
-                    <Grid item xs={12} md={3}>
-                        <PieChart2 title="Ratings" reportPercent={{ good_percentage, bad_percentage }} />
+                    <Grid item xs={12} md={4} sx={{ backgroundColor: 'white' }}>
+                        <Box
+                            display="flex"
+                            justifyContent="space-between"
+                            alignItems="center"
+                            p={2} // Optional padding for better spacing
+                        >
+                            <Typography>Good & Bad Ratings</Typography>
+                            <TextField
+                                id="standard-select-currency-1"
+                                label="Select Report Type"
+                                select
+                                value={selectedReportType || ''}
+                                onChange={handleReportTypeChange}
+                                sx={{ minWidth: 200 }} // Adjust width as needed
+                            >
+                                {reportTypeOptions.map((type) => (
+                                    <MenuItem key={type} value={type} disabled={type === 'Select Report Type'}>
+                                        {type}
+                                    </MenuItem>
+                                ))}
+                            </TextField>
+                        </Box>
+                        <PieChart2 title="" reportPercent={{ good_percentage, bad_percentage }} />
                     </Grid>
                 </Grid>
             </MainCard>

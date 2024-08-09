@@ -6,7 +6,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers-pro/AdapterDayjs';
 import { DateRangePicker } from '@mui/x-date-pickers-pro/DateRangePicker';
 import { useDispatch, useSelector } from 'store';
 import { openDrawer } from 'store/slices/menu';
-import { setState, setLga, setReportType, getGraph, getPercentCount } from 'store/slices/graphs';
+import { setState, setLga, getGraph} from 'store/slices/graphs';
 import statesAndLgas from './statesAndLgas.json';
 import { getCategories } from 'services/reportService';
 
@@ -31,8 +31,10 @@ const Header = () => {
     const [selectedState, setSelectedState] = useState('Anambra');
     const [selectedLga, setSelectedLga] = useState('Aguata');
     const [dateRange, setDateRange] = useState([null, null]);
-    const [value, setValue] = useState('');
-    const [reportTypes, setReportTypes] = useState(['Select type']);
+    const [, setValue] = useState('');
+    const [, setReportTypes] = useState(['Select type']);
+    const selectedReportType = useSelector((state) => state.graphs.reportType);
+
 
     useEffect(() => {
         const stateNames = statesAndLgas.map((state) => ({ value: state.state, label: state.state }));
@@ -65,8 +67,8 @@ const Header = () => {
 
     const handleSearch = useCallback(() => {
         const [startDate, endDate] = dateRange;
-        dispatch(getGraph(selectedState, selectedLga, startDate?.format('YYYY-MM-DD'), endDate?.format('YYYY-MM-DD'), reportTypes));
-    }, [dispatch, selectedState, selectedLga, dateRange, reportTypes]);
+        dispatch(getGraph(selectedState, selectedLga, startDate?.format('YYYY-MM-DD'), endDate?.format('YYYY-MM-DD'), selectedReportType));
+    }, [dispatch, selectedState, selectedReportType, selectedLga, dateRange]);
 
     useEffect(() => {
         if (selectedState !== 'State' && selectedLga !== 'LGA') {
@@ -85,14 +87,6 @@ const Header = () => {
                 console.error('Failed to fetch categories:', error);
             });
     }, []);
-
-    const handleReportTypeChange = (event) => {
-        const reportType = event.target.value;
-        setValue(reportType);
-        console.log('Selected Report Type:', reportType);
-        dispatch(setReportType(reportType));
-        dispatch(getPercentCount(reportType, selectedState));
-    };
 
     const percentCount = useSelector((state) => state.graphs.percentCount);
 
@@ -141,14 +135,7 @@ const Header = () => {
             <Box sx={{ flexGrow: 1 }} />
             <Box sx={{ flexGrow: 1 }} />
             <Grid item>
-                <TextField id="standard-select-currency" select value={value} onChange={handleReportTypeChange}>
-                    <MenuItem value=""></MenuItem>
-                    {reportTypes.map((option, index) => (
-                        <MenuItem key={index} value={option}>
-                            {option}
-                        </MenuItem>
-                    ))}
-                </TextField>
+               
             </Grid>
             <Box sx={{ flexGrow: 1 }} />
             <Box sx={{ display: { xs: 'none', sm: 'flex' }, alignItems: 'center', gap: 2 }}>

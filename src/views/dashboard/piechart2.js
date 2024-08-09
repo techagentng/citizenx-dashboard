@@ -4,38 +4,41 @@ import { Pie } from 'react-chartjs-2';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
+
 ChartJS.register(ArcElement, Tooltip, Legend);
 
-const PieChart2 = ({ reportTypes, reportPercent, title }) => {
+const PieChart2 = ({ reportPercent, title }) => {
+    const { good_percentage, bad_percentage } = reportPercent;
+
     const reportsPercentData = {
-        labels: reportTypes,
+        labels: ['Good', 'Bad'],
         datasets: [
             {
                 label: 'Report Percentage',
-                data: [reportPercent.good_percentage, reportPercent.bad_percentage],
-                backgroundColor: ['rgb(0,137,123)', 'rgb(16,72,51)', 'rgb(167,227,225)', 'rgb(0,105,92)'],
-                borderColor: ['rgba(75, 192, 192, 1)', 'rgba(54, 162, 235, 1)', 'rgba(255, 206, 86, 1)', 'rgba(255, 99, 132, 1)'],
+                data: [good_percentage, bad_percentage],
+                backgroundColor: ['rgb(0,137,123)', 'rgb(16,72,51)'],
+                borderColor: ['rgba(0,137,123,0.2)', 'rgba(16,72,51,0.2)'],
                 borderWidth: 1
             }
         ]
     };
 
     return (
-        <div style={{ width: '100%' }}>
+        <div style={{ width: '70%', paddingTop: '20px' }}>
             <Grid item>
                 <Typography variant="h4">{title}</Typography>
             </Grid>
-            {reportPercent ? <Pie data={reportsPercentData} /> : <p>Loading...</p>}
+            {good_percentage || bad_percentage ? <Pie data={reportsPercentData} /> : <p>Loading...</p>}
         </div>
     );
 };
 
 PieChart2.propTypes = {
-    reportTypes: PropTypes.arrayOf(PropTypes.string).isRequired,
     reportPercent: PropTypes.shape({
         good_percentage: PropTypes.number.isRequired,
         bad_percentage: PropTypes.number.isRequired
-    }).isRequired
+    }).isRequired,
+    title: PropTypes.string
 };
 
 export default PieChart2;

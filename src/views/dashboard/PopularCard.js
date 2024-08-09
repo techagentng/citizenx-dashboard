@@ -53,7 +53,7 @@ const PopularCard = ({ isLoading, title, data, type }) => {
                             </Grid>
                             <Grid item>
                                 <MoreHorizOutlinedIcon
-                                    fontSize="small"
+                                    fontSize="large"
                                     sx={{
                                         color: theme.palette.primary[200],
                                         cursor: 'pointer'
