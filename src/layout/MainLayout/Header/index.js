@@ -6,7 +6,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers-pro/AdapterDayjs';
 import { DateRangePicker } from '@mui/x-date-pickers-pro/DateRangePicker';
 import { useDispatch, useSelector } from 'store';
 import { openDrawer } from 'store/slices/menu';
-import { setState, setLga, getGraph} from 'store/slices/graphs';
+import { setState, setLga, getGraph } from 'store/slices/graphs';
 import statesAndLgas from './statesAndLgas.json';
 import { getCategories } from 'services/reportService';
 
@@ -34,7 +34,6 @@ const Header = () => {
     const [, setValue] = useState('');
     const [, setReportTypes] = useState(['Select type']);
     const selectedReportType = useSelector((state) => state.graphs.reportType);
-
 
     useEffect(() => {
         const stateNames = statesAndLgas.map((state) => ({ value: state.state, label: state.state }));
@@ -134,9 +133,7 @@ const Header = () => {
 
             <Box sx={{ flexGrow: 1 }} />
             <Box sx={{ flexGrow: 1 }} />
-            <Grid item>
-               
-            </Grid>
+            <Grid item></Grid>
             <Box sx={{ flexGrow: 1 }} />
             <Box sx={{ display: { xs: 'none', sm: 'flex' }, alignItems: 'center', gap: 2 }}>
                 <TextField id="standard-select-currency-1" select value={selectedState} onChange={handleStateChange} label="Select State">

@@ -54,7 +54,7 @@ const BajajAreaChartCard = () => {
                     <Grid container alignItems="center" justifyContent="space-between">
                         <Grid item>
                             <Typography variant="subtitle1" sx={{ color: theme.palette.secondary.dark }}>
-                                State Reports
+                                LGA Reports
                             </Typography>
                         </Grid>
                         <Grid item>

@@ -107,7 +107,7 @@ export const getBarChartData = (requestBody) => {
             })
             .then((response) => {
                 if (response && response.data) {
-                    resolve(response.data); // Changed this line to resolve response.data
+                    resolve(response.data); 
                 } else {
                     reject(new Error('No data found'));
                 }

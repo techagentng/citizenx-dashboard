@@ -67,7 +67,7 @@ export function getGraph(state, lga, startDate, endDate) {
                 url += `&startDate=${startDate}&endDate=${endDate}`;
             }
             const response = await axios.get(url);
-            dispatch(getGraphSuccess(response.data));
+            dispatch(getGraphSuccess(response?.data));
         } catch (error) {
             dispatch(hasError(error));
         }
