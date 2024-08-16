@@ -96,7 +96,8 @@ const DashboardPage = () => {
     if (loading) return <div>Loading...</div>;
     if (error) return <div>Error: {error.message}</div>;
 
-    const todayReportCountSteroid = topStates[selectedState] || todayReportCount;
+    const todayReportCountSteroid = selectedState && topStates ? topStates[selectedState] || todayReportCount : todayReportCount;
+
     const detailsText = selectedState ? `${selectedState}'s Report` : "Today's Report";
     const detailUsers = selectedState ? `${selectedState}'s Report` : "Today's Report";
     const totalUsersCountSteroid = total_users || userCount;
