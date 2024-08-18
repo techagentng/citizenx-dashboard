@@ -32,12 +32,12 @@ import MainCard from 'ui-component/cards/MainCard';
 import Transitions from 'ui-component/extended/Transitions';
 // import UpgradePlanCard from './UpgradePlanCard';
 import useAuth from 'hooks/useAuth';
-import User1 from 'assets/images/users/user-round.svg';
+// import User1 from 'assets/images/users/user-round.svg';
 
 // assets
 import { IconLogout, IconSettings } from '@tabler/icons-react';
 import useConfig from 'hooks/useConfig';
-
+import { useSelector } from 'react-redux';
 // ==============================|| PROFILE MENU ||============================== //
 
 const ProfileSection = () => {
@@ -51,6 +51,7 @@ const ProfileSection = () => {
     const { logout } = useAuth();
     const [user, setUser] = useState(null);
     const [open, setOpen] = useState(false);
+    const { avatarUrl } = useSelector((state) => state.user);
 
     useEffect(() => {
         console.log('User data:', user?.name);
@@ -124,7 +125,7 @@ const ProfileSection = () => {
                 }}
                 icon={
                     <Avatar
-                        src={User1}
+                        src={avatarUrl || '/default-avatar.png'}
                         sx={{
                             ...theme.typography.mediumAvatar,
                             margin: '8px 0 8px 8px !important',
