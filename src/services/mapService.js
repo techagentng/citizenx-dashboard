@@ -5,22 +5,22 @@ export const getMapMarkers = () => {
         const serviceToken = localStorage.getItem('serviceToken');
 
         axios
-            // .get(`${process.env.REACT_APP_API_URL}/report/lga/count`, {
             .get(`${process.env.REACT_APP_API_URL}/incident-report/state/count`, {
                 headers: {
                     Authorization: `Bearer ${serviceToken}`
                 }
             })
             .then((response) => {
-                console.log('API response:::::', response.data);
-                resolve(response.data.report_counts);
+                console.log('API response:::::', response);
+                resolve(response.data.data);
             })
             .catch((error) => {
-                console.log('API error:', error); // Log any errors
+                console.log('API error:', error);
                 reject(new Error('An error occurred while fetching markers'));
             });
     });
 };
+
 
 export const getStateCount = async () => {
     try {

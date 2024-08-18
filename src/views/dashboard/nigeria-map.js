@@ -4,59 +4,31 @@ import { Tooltip } from 'react-tooltip';
 import geoData from './nigeria_lga_boundaries.geojson';
 import './tooltip.css';
 import { getMapMarkers } from 'services/mapService';
-import Fuse from 'fuse.js';
-
-// Utility function to normalize state names
-const normalizeStateName = (name) => name.trim().toLowerCase();
-
-// Create a mapping for common state name variations
-const stateNameMapping = {
-    'bornu': 'borno',
-    'federal capital territory': 'fct',
-    // Add other common variations here
-};
-
-const mapStateName = (name) => {
-    const normalized = normalizeStateName(name);
-    return stateNameMapping[normalized] || normalized;
-};
 
 const NigerianMap = () => {
-    const [setReportCounts] = useState([]);
-    const [fuse, setFuse] = useState(null);
+    const [reportCountsMap, setReportCountsMap] = useState({});
 
     // Fetch data on component mount
     useEffect(() => {
         getMapMarkers()
             .then((data) => {
-                // Normalize data and initialize Fuse.js
-                const normalizedData = data.map(item => ({
-                    ...item,
-                    state_name: mapStateName(item.state_name),
-                }));
-                console.log('Normalized API Data:', normalizedData);
+                console.log('Fetched MAP Data:', data);
 
-                // Set up Fuse.js for fuzzy matching
-                const fuseInstance = new Fuse(normalizedData, {
-                    keys: ['state_name'],
-                    threshold: 0.3, // Adjust threshold for match sensitivity
-                });
-                setFuse(fuseInstance);
-                setReportCounts(normalizedData);
+                // Create a mapping of state names to their report counts
+                const reportCounts = data.reduce((acc, item) => {
+                    const stateName = item.state_name.trim(); // Trim any extra spaces
+                    acc[stateName] = item.report_count;
+                    return acc;
+                }, {});
+
+                setReportCountsMap(reportCounts);
             })
             .catch((error) => console.error('API error:', error));
     }, []);
 
-    // Get the count for a given state using fuzzy matching
+    // Get the count for a given state directly from the map
     const getCountForState = (stateName) => {
-        if (!fuse) return 0;
-
-        const mappedStateName = mapStateName(stateName);
-        const results = fuse.search(mappedStateName);
-        const found = results.length > 0 ? results[0].item : null;
-
-        console.log('Looking for:', mappedStateName, 'Found:', found);
-        return found ? found.report_count : 0;
+        return reportCountsMap[stateName.trim()] || 0;
     };
 
     return (
@@ -92,7 +64,7 @@ const NigerianMap = () => {
                                     data-tooltip-id="state-tooltip"
                                     data-tooltip-content={`
                                         State: ${stateName}, 
-                                        Count: ${count}
+                                        Report Count: ${count}
                                     `}
                                 />
                             );
