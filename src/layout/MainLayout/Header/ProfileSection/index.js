@@ -37,7 +37,7 @@ import useAuth from 'hooks/useAuth';
 // assets
 import { IconLogout, IconSettings } from '@tabler/icons-react';
 import useConfig from 'hooks/useConfig';
-import { useSelector } from 'react-redux';
+// import { useSelector } from 'react-redux';
 // ==============================|| PROFILE MENU ||============================== //
 
 const ProfileSection = () => {
@@ -51,16 +51,23 @@ const ProfileSection = () => {
     const { logout } = useAuth();
     const [user, setUser] = useState(null);
     const [open, setOpen] = useState(false);
-    const { avatarUrl } = useSelector((state) => state.user);
+    // const { avatarUrl } = useSelector((state) => state.user);
 
     useEffect(() => {
-        console.log('User data:', user?.name);
         const userData = localStorage.getItem('user');
         if (userData) {
-            // Parse the JSON string back to an object
-            setUser(JSON.parse(userData));
+            const parsedUserData = JSON.parse(userData);
+            setUser(parsedUserData);
         }
-    }, [user?.name]);
+        const storedAvatarUrl = localStorage.getItem('avatarSrc');
+        if (storedAvatarUrl) {
+            setUser(prevState => ({
+                ...prevState,
+                avatarUrl: storedAvatarUrl
+            }));
+        }
+    }, []);
+    
 
     /**
      * anchorRef is used on different components and specifying one type leads to other components throwing an error
@@ -125,7 +132,7 @@ const ProfileSection = () => {
                 }}
                 icon={
                     <Avatar
-                        src={avatarUrl || '/default-avatar.png'}
+                    src={user?.avatarUrl || '/default-avatar.png'}
                         sx={{
                             ...theme.typography.mediumAvatar,
                             margin: '8px 0 8px 8px !important',
