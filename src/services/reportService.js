@@ -107,7 +107,7 @@ export const getBarChartData = (requestBody) => {
             })
             .then((response) => {
                 if (response && response.data) {
-                    resolve(response.data); 
+                    resolve(response.data);
                 } else {
                     reject(new Error('No data found'));
                 }
@@ -212,6 +212,33 @@ export const getTotalReportCount = () => {
             .then((response) => {
                 if (response && response.data && response.data.total_report_count !== undefined) {
                     resolve(response.data.total_report_count);
+                } else {
+                    reject(new Error('No data found'));
+                }
+            })
+            .catch((error) => {
+                reject(error);
+            });
+    });
+};
+
+export const getSubReportsByCategory = (category) => {
+    return new Promise((resolve, reject) => {
+        const serviceToken = localStorage.getItem('serviceToken');
+        if (!serviceToken) {
+            return reject(new Error('No token found'));
+        }
+
+        axios
+            .get(`${process.env.REACT_APP_API_URL}/report/sub_reports`, {
+                params: { category },
+                headers: {
+                    Authorization: `Bearer ${serviceToken}`
+                }
+            })
+            .then((response) => {
+                if (response && response.data && Array.isArray(response.data.data)) {
+                    resolve(response.data.data);
                 } else {
                     reject(new Error('No data found'));
                 }

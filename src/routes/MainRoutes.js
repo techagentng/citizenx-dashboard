@@ -12,6 +12,7 @@ const Reports = Loadable(lazy(() => import('views/reports')));
 const Rewards = Loadable(lazy(() => import('views/rewards')));
 const Users = Loadable(lazy(() => import('views/users')));
 const State = Loadable(lazy(() => import('views/states')));
+const SubReportDetailsPage = Loadable(lazy(() => import('views/dashboard/subReportDetails')));
 // ==============================|| MAIN ROUTING ||============================== //
 
 const MainRoutes = {
@@ -49,6 +50,10 @@ const MainRoutes = {
         {
             path: '/settings',
             element: <Settings />
+        },
+        {
+            path: '/dashboard/sub_reports',
+            element: <SubReportDetailsPage />
         }
     ]
 };

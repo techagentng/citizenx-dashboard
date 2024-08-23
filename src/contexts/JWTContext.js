@@ -22,17 +22,6 @@ const initialState = {
     user: null
 };
 
-// const verifyToken = (serviceToken) => {
-//     if (!serviceToken) {
-//         return false;
-//     }
-//     const decoded = jwtDecode(serviceToken);
-//     /**
-//      * Property 'exp' does not exist on type '<T = unknown>(token, options?: JwtDecodeOptions | undefined) => T'.
-//      */
-//     return decoded.exp > Date.now() / 1000;
-// };
-
 const setSession = (serviceToken) => {
     if (serviceToken) {
         localStorage.setItem('serviceToken', serviceToken);

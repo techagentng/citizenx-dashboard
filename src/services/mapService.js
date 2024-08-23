@@ -3,7 +3,6 @@ import axios from 'axios';
 export const getMapMarkers = () => {
     return new Promise((resolve, reject) => {
         const serviceToken = localStorage.getItem('serviceToken');
-
         axios
             .get(`${process.env.REACT_APP_API_URL}/incident-report/state/count`, {
                 headers: {
@@ -21,12 +20,11 @@ export const getMapMarkers = () => {
     });
 };
 
-
 export const getStateCount = async () => {
     try {
         const response = await axios.get(`${process.env.REACT_APP_API_URL}/incident-report/state/count`, {
             headers: {
-                Authorization: `Bearer ${serviceToken}` // Ensure `serviceToken` is defined and accessible
+                Authorization: `Bearer ${serviceToken}` 
             }
         });
         console.log('Response:', response);
