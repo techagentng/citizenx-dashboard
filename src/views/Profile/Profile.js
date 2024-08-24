@@ -173,7 +173,7 @@ const Profile = () => {
                                 <Grid container spacing={gridSpacing}>
                                     {/* Form Fields */}
                                     {/* Full Name */}
-                                    <Grid item xs={12}>
+                                    <Grid item md={6} xs={12}>
                                         <TextField
                                             id="fullname"
                                             name="fullname"
@@ -187,7 +187,7 @@ const Profile = () => {
                                         />
                                     </Grid>
                                     {/* Email */}
-                                    <Grid item xs={12}>
+                                    <Grid item md={6} xs={12}>
                                         <TextField
                                             id="email"
                                             name="email"
@@ -201,7 +201,7 @@ const Profile = () => {
                                         />
                                     </Grid>
                                     {/* Username */}
-                                    <Grid item xs={12}>
+                                    <Grid item md={6} xs={12}>
                                         <TextField
                                             id="username"
                                             name="username"
@@ -215,7 +215,7 @@ const Profile = () => {
                                         />
                                     </Grid>
                                     {/* State */}
-                                    <Grid item xs={12}>
+                                    <Grid item md={6} xs={12}>
                                         <TextField
                                             id="state"
                                             name="state"
@@ -229,7 +229,7 @@ const Profile = () => {
                                         />
                                     </Grid>
                                     {/* LGA */}
-                                    <Grid item xs={12}>
+                                    <Grid item md={6} xs={12}>
                                         <TextField
                                             id="lga"
                                             name="lga"
@@ -243,7 +243,7 @@ const Profile = () => {
                                         />
                                     </Grid>
                                     {/* Phone */}
-                                    <Grid item xs={12}>
+                                    <Grid item md={6} xs={12}>
                                         <TextField
                                             id="phone"
                                             name="phone"
