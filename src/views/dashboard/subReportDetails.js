@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import { getSubReportsByCategory } from 'services/reportService'; // Adjust the path to your service file
+import { getSubReportsByCategory } from 'services/reportService'; 
+import { useSelector } from 'react-redux';
 
 const SubReportDetailsPage = () => {
     const location = useLocation();
-    const { state, lga, count } = location.state || {};
+    const { state, count } = location.state || {};
     const [subReports, setSubReports] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const { state: selectedState, lga } = useSelector((state) => state.graphs.lgaState);
 
     useEffect(() => {
         if (state) {
@@ -25,9 +27,10 @@ const SubReportDetailsPage = () => {
 
     return (
         <div>
-            <h1>Sub Reports Details Page</h1>
+            <h1>SubReport details page for {selectedState} </h1>
             <p>Report Type: {state}</p>
             <p>LGA: {lga}</p>
+            <p>State: {selectedState}</p>
             <p>Count: {count}</p>
 
             {loading && <p>Loading sub-reports...</p>}
