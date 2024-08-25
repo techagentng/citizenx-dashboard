@@ -108,6 +108,22 @@ const ProfileSection = () => {
         prevOpen.current = open;
     }, [open]);
 
+    function getTimeOfDay() {
+        const now = new Date();
+        const hours = now.getHours();
+    
+        if (hours >= 5 && hours < 12) {
+            return 'Good Morning';
+        } else if (hours >= 12 && hours < 17) {
+            return 'Good Afternoon';
+        } else if (hours >= 17 && hours < 21) {
+            return 'Good Evening';
+        } else {
+            return 'Good Night';
+        }
+    }
+    const greeting = getTimeOfDay();
+console.log("xxxxxxxxx", greeting)
     return (
         <>
             <Chip
@@ -179,7 +195,7 @@ const ProfileSection = () => {
                                         <Box sx={{ p: 2, pb: 0 }}>
                                             <Stack>
                                                 <Stack direction="row" spacing={0.5} alignItems="center">
-                                                    <Typography variant="h4">Good Morning,</Typography>
+                                                    <Typography variant="h4">{greeting}{ ' '}</Typography>
                                                     <Typography component="span" variant="h4" sx={{ fontWeight: 400 }}>
                                                         {user?.name}
                                                     </Typography>

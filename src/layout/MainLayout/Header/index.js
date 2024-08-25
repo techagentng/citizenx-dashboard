@@ -17,7 +17,7 @@ import FullScreenSection from './FullScreenSection';
 import NotificationSection from './NotificationSection';
 import LAYOUT_CONST from 'constant';
 import useConfig from 'hooks/useConfig';
-// import FloatingCart from './FloatingCart';
+import FloatingCart from './FloatingCart';
 import { IconMenu2 } from '@tabler/icons-react';
 
 const Header = () => {
@@ -179,7 +179,7 @@ const Header = () => {
                 <FullScreenSection />
             </Box>
             <Box sx={{ display: { xs: 'block' } }}>
-                {/* <FloatingCart /> */}
+                <FloatingCart />
             </Box>
             <ProfileSection />
             <Box sx={{ display: { xs: 'block', sm: 'none' } }}>

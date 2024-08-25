@@ -31,6 +31,11 @@ const NigerianMap = () => {
         return reportCountsMap[stateName.trim()] || 0;
     };
 
+    // Determine the fill color based on the report count
+    const getFillColor = (count) => {
+        return count > 0 ? '#0e4934' : '#ffff'; // Green if count > 0, otherwise default color
+    };
+
     return (
         <>
             <ComposableMap
@@ -57,7 +62,7 @@ const NigerianMap = () => {
                                     key={geo.rsmKey}
                                     geography={geo}
                                     style={{
-                                        default: { fill: '#ffff', stroke: '#0e4934', strokeWidth: 1.5 },
+                                        default: { fill: getFillColor(count), stroke: '#0e4934', strokeWidth: 1.5 },
                                         hover: { fill: '#0e4934', stroke: '#000', strokeWidth: 0.75 },
                                         pressed: { fill: '#E42', stroke: '#000', strokeWidth: 0.75 }
                                     }}
