@@ -123,7 +123,6 @@ const ProfileSection = () => {
         }
     }
     const greeting = getTimeOfDay();
-console.log("xxxxxxxxx", greeting)
     return (
         <>
             <Chip

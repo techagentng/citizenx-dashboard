@@ -5,6 +5,7 @@ import MainCard from 'ui-component/cards/MainCard';
 import EarningCard from 'ui-component/cards/Skeleton/EarningCard';
 import EarningIcon from 'assets/images/icons/earning.svg';
 import PopularCard from './PopularCard';
+// import PopularCard2 from './PopularCard2';
 import BarChart from './barchart';
 import PieChart from './piechart';
 import PieChart2 from './piechart2';
@@ -15,12 +16,13 @@ import JWTContext from 'contexts/JWTContext';
 import { getAllUserCount, getAllReportsToday, getOnlineUsers } from 'services/userService';
 import { getStateReportCountList } from 'services/reportService';
 import { getGraph, getPercentCount, setReportType } from 'store/slices/graphs';
-import { getCategories } from 'services/reportService';
+import { getCategories, getReportCountsByState } from 'services/reportService';
 import CompareForms from './CompareForms';
 
 const DashboardPage = () => {
     const dispatch = useDispatch();
-    const { state: selectedState, lga: selectedLga } = useSelector((state) => state.graphs.lgaState);
+    const { lga: selectedLga } = useSelector((state) => state.graphs.lgaState);
+    const selectedState = useSelector((state) => state.graphs.lgaState.state);
     const { isLoggedIn } = useContext(JWTContext);
     const { reportTypes, reportCounts, topStates, total_users, loading, error } = useSelector((state) => state.graphs.graphs);
     const { good_percentage, bad_percentage } = useSelector((state) => state.graphs.reportPercent);
@@ -30,6 +32,29 @@ const DashboardPage = () => {
     const [formattedTopStates, setFormattedTopStates] = useState([]);
     const [reportTypeOptions, setReportTypes] = useState([]);
     const [selectedReportType, setSelectedReportType] = useState('');
+    // const [lgas, setLgas] = useState([]);
+    // const [lgareportCounts, setLgaReportCounts] = useState([]);
+    const [reportData, setReportData] = useState(null);
+    useEffect(() => {
+        if (selectedState) {
+            // setLoading(true);
+            getReportCountsByState(selectedState)
+                .then((data) => {
+                    setReportData(
+                        data.lgas.map((lga, index) => ({
+                            lgaName: lga,
+                            reportCount: data.report_counts[index]
+                        }))
+                    );
+                    // setLoading(false);
+                })
+                .catch((err) => {
+                    // setError(err);
+                    // setLoading(false);
+                    console.log(err);
+                });
+        }
+    }, [selectedState]);
 
     useEffect(() => {
         if (selectedState && selectedLga) {
@@ -101,7 +126,6 @@ const DashboardPage = () => {
     const detailsText = selectedState ? `${selectedState}'s Report` : "Today's Report";
     const detailUsers = selectedState ? `${selectedState}'s Report` : "Today's Report";
     const totalUsersCountSteroid = total_users || userCount;
-
     return (
         <>
             <MainCard title="State and LGA dashboard">
@@ -148,7 +172,7 @@ const DashboardPage = () => {
                     </Grid>
                     <Grid item xs={6} md={4}>
                         <PopularCard
-                            title="Popular Report Types for LGA's"
+                            title={`Top Reports for ${selectedState || 'State'}`}
                             data={reportTypes?.map((type, index) => ({
                                 reportType: type,
                                 reportCount: reportCounts[index]
@@ -156,6 +180,11 @@ const DashboardPage = () => {
                             type="reportTypes"
                         />
                     </Grid>
+                    <Grid item xs={6} md={4}>
+                        {/* Top LGAs View */}
+                        <PopularCard title={`Top LGAs for ${selectedState || 'State'}`} data={reportData} />
+                    </Grid>
+
                     <Grid item xs={6} md={4}>
                         <PopularCard title="Popular States" data={formattedTopStates} type="states" />
                     </Grid>

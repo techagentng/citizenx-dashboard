@@ -125,14 +125,18 @@ const PopularCard = ({ isLoading, title, data, type }) => {
                             </Grid>
                         </Grid>
                         <Divider sx={{ my: 1.5 }} />
-                        {data && data.length > 0 ? (
+                        {data && data?.length > 0 ? (
                             data.map((item, index) => (
                                 <Grid container direction="column" key={index}>
                                     <Grid item>
                                         <Grid container alignItems="center" justifyContent="space-between">
                                             <Grid item>
                                                 <Typography variant="subtitle1" color="inherit">
-                                                    {type === 'reportTypes' ? item.reportType : item.stateName}
+                                                    {type === 'reportTypes'
+                                                        ? item.reportType
+                                                        : type === 'states'
+                                                          ? item.stateName
+                                                          : item.lgaName}
                                                 </Typography>
                                             </Grid>
                                             <Grid item>

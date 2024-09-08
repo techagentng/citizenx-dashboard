@@ -53,7 +53,7 @@ const BajajAreaChartCard = ({ reportType, stateName }) => {
             }
         ]
     });
-    const [, setError] = useState('');
+    const [setError] = useState('');
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
@@ -106,11 +106,12 @@ const BajajAreaChartCard = ({ reportType, stateName }) => {
                     <Grid container alignItems="center" justifyContent="space-between">
                         <Grid item>
                             <Typography variant="subtitle1" sx={{ color: theme.palette.secondary.dark }}>
+                                {/* Display dynamic title */}
                                 {reportType === 'topReports'
                                     ? `Top Reports for ${stateName}`
                                     : reportType === 'topLGAs'
                                     ? `Top LGAs for ${stateName}`
-                                    : 'Overall Report Count'}
+                                    : 'Popular States'}
                             </Typography>
                         </Grid>
                         <Grid item>
@@ -121,9 +122,10 @@ const BajajAreaChartCard = ({ reportType, stateName }) => {
                     </Grid>
                 </Grid>
                 <Grid item xs={12}>
+                    {/* Display the chart */}
                     <Chart
                         type={chartData.type || 'area'}
-                        height={chartData.height || 235}
+                        height={chartData.height || 95}
                         options={chartData.options || {}}
                         series={chartData.series || []}
                     />
