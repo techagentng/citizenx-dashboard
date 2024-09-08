@@ -28,17 +28,33 @@ const Header = () => {
     const { layout } = useConfig();
     const [states, setStates] = useState([]);
     const [lgas, setLgas] = useState([]);
-    const [selectedState, setSelectedState] = useState('Anambra');
-    const [selectedLga, setSelectedLga] = useState('Aguata');
+    const [selectedState, setSelectedState] = useState('');
+    const [selectedLga, setSelectedLga] = useState('');
     const [dateRange, setDateRange] = useState([null, null]);
     const [, setValue] = useState('');
     const [, setReportTypes] = useState(['Select type']);
     const selectedReportType = useSelector((state) => state.graphs.reportType);
 
     useEffect(() => {
+        // Initialize states and LGAs
         const stateNames = statesAndLgas.map((state) => ({ value: state.state, label: state.state }));
         setStates(stateNames);
-    }, []);
+
+        // Set default state and LGA
+        const defaultState = 'Anambra';
+        const defaultLGA = 'Aguata';
+
+        const defaultStateData = statesAndLgas.find((state) => state.state === defaultState);
+        if (defaultStateData) {
+            const lgaOptions = defaultStateData.lgas.map((lga) => ({ value: lga, label: lga }));
+            setLgas(lgaOptions);
+            setSelectedLga(defaultLGA);
+        }
+
+        // Dispatch default values
+        dispatch(setState(defaultState));
+        dispatch(setLga(defaultLGA));
+    }, [dispatch]);
 
     const handleStateChange = (event) => {
         const stateName = event.target.value;

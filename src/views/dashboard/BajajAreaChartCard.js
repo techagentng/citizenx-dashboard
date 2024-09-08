@@ -97,7 +97,7 @@ const BajajAreaChartCard = ({ reportType, stateName }) => {
         if (chartData && chartData.options) {
             ApexCharts.exec('support-chart', 'updateOptions', newSupportChart);
         }
-    }, [navType, orangeDark, chartData.options]);
+    }, [navType, orangeDark, chartData.options, chartData]);
 
     return (
         <Card sx={{ bgcolor: 'secondary.light' }}>
