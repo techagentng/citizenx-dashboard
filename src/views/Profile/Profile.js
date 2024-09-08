@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Avatar, Button, Grid, TextField } from '@mui/material';
+import { Avatar, Button, Grid, TextField, Typography, Box } from '@mui/material';
 import SubCard from 'ui-component/cards/SubCard';
 import AnimateButton from 'ui-component/extended/AnimateButton';
 import CircularProgress from '@mui/material/CircularProgress';
@@ -9,8 +9,17 @@ import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
 import { useDispatch, useSelector } from 'store';
 import { openSnackbar } from 'store/slices/snackbar';
-import { setAvatarUrl } from 'store/slices/users'; 
+import { setAvatarUrl } from 'store/slices/users';
+const count = 110; // Example count
 
+const TitleWithCount = ({ title, count }) => (
+    <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <Typography variant="h6">{title}</Typography>
+        <Typography variant="h4" sx={{ fontWeight: 'bold' }}>
+            {count.toLocaleString()} <span style={{ fontWeight: 'normal' }}>points</span>
+        </Typography>
+    </Box>
+);
 const Profile = () => {
     const [avatarSrc, setAvatarSrc] = useState('');
     const [loading, setLoading] = useState(false);
@@ -140,7 +149,7 @@ const Profile = () => {
                 <Form>
                     <Grid container spacing={gridSpacing}>
                         <Grid item sm={6} md={4}>
-                            <SubCard title="Profile Picture" contentSX={{ textAlign: 'center' }}>
+                        <SubCard title={<TitleWithCount title="Profile Picture" count={count} />} contentSX={{ textAlign: 'center' }}>
                                 <Grid container spacing={2}>
                                     <Grid item xs={12}>
                                         <Avatar

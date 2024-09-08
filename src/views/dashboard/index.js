@@ -31,7 +31,7 @@ const DashboardPage = () => {
     const [onlineUsers, setOnlineUsers] = useState(0);
     const [formattedTopStates, setFormattedTopStates] = useState([]);
     const [reportTypeOptions, setReportTypes] = useState([]);
-    const [selectedReportType, setSelectedReportType] = useState('');
+    const [selectedReportType, setSelectedReportType] = useState('Accidents');
     // const [lgas, setLgas] = useState([]);
     // const [lgareportCounts, setLgaReportCounts] = useState([]);
     const [reportData, setReportData] = useState(null);
@@ -109,9 +109,9 @@ const DashboardPage = () => {
                 console.error('Failed to fetch categories:', error);
             });
     }, [dispatch]);
-
+    const defaultReportType = 'Accidents';
     const handleReportTypeChange = (event) => {
-        const reportType = event.target.value;
+        const reportType = event.target.value || defaultReportType;
         setSelectedReportType(reportType);
         console.log('Selected Report Type:', reportType);
         dispatch(setReportType(reportType));
@@ -123,8 +123,8 @@ const DashboardPage = () => {
 
     const todayReportCountSteroid = selectedState && topStates ? topStates[selectedState] || todayReportCount : todayReportCount;
 
-    const detailsText = selectedState ? `${selectedState}'s Report` : "Today's Report";
-    const detailUsers = selectedState ? `${selectedState}'s Report` : "Today's Report";
+    const detailsText = selectedState ? `${selectedState}'s Overall Report` : "Today's Report";
+    const detailUsers = selectedState ? `${selectedState}'s User Count` : "Today's Report";
     const totalUsersCountSteroid = total_users || userCount;
     return (
         <>
@@ -186,7 +186,7 @@ const DashboardPage = () => {
                     </Grid>
 
                     <Grid item xs={6} md={4}>
-                        <PopularCard title="Popular States" data={formattedTopStates} type="states" />
+                        <PopularCard title="Top States" data={formattedTopStates} type="states" />
                     </Grid>
                     <Grid item xs={12} md={4} sx={{ backgroundColor: 'white' }}>
                         <Box
