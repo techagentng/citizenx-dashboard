@@ -78,9 +78,7 @@ const PopularCard = ({ isLoading, title, data, type }) => {
                                         horizontal: 'right'
                                     }}
                                 >
-                                    <MenuItem onClick={handleClose}> Today</MenuItem>
-                                    <MenuItem onClick={handleClose}> This Month</MenuItem>
-                                    <MenuItem onClick={handleClose}> This Year </MenuItem>
+                                    <MenuItem onClick={handleClose}> Download pdf</MenuItem>
                                 </Menu>
                             </Grid>
                         </Grid>

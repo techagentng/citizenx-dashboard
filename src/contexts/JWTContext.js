@@ -19,7 +19,8 @@ import axios from 'utils/axios';
 const initialState = {
     isLoggedIn: false,
     isInitialized: false,
-    user: null
+    user: null,
+    role: ''
 };
 
 const setSession = (serviceToken) => {
@@ -54,7 +55,10 @@ export const JWTProvider = ({ children }) => {
 
                     dispatch({
                         type: LOGIN,
-                        payload: { user: data }
+                        payload: {
+                            user: data,
+                            role_name: data.role_name
+                        }
                     });
                 } else {
                     dispatch({
@@ -80,7 +84,8 @@ export const JWTProvider = ({ children }) => {
             type: LOGIN,
             payload: {
                 isLoggedIn: true,
-                data
+                data,
+                role_name: data.role_name
             }
         });
         return response;
@@ -102,7 +107,8 @@ export const JWTProvider = ({ children }) => {
                     type: LOGIN,
                     payload: {
                         isLoggedIn: true,
-                        user: data
+                        user: data,
+                        role_name: data.role_name
                     }
                 });
 

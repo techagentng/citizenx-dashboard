@@ -15,7 +15,12 @@ const SubReportDetailsPage = () => {
         if (state) {
             getSubReportsByCategory(state)
                 .then((data) => {
-                    setSubReports(data);
+                    // Remove duplicates by sub_report_type
+                    const uniqueSubReports = data.filter(
+                        (report, index, self) =>
+                            index === self.findIndex((r) => r.sub_report_type === report.sub_report_type)
+                    );
+                    setSubReports(uniqueSubReports);
                     setLoading(false);
                 })
                 .catch((err) => {

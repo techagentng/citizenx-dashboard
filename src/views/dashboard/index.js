@@ -195,7 +195,7 @@ const DashboardPage = () => {
                             alignItems="center"
                             p={2} // Optional padding for better spacing
                         >
-                            <Typography>Good & Bad Ratings</Typography>
+                            <Typography variant='h3'>Overall Ratings</Typography>
                             <TextField
                                 id="standard-select-currency-1"
                                 label="Select Report Type"

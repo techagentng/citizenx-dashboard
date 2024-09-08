@@ -4,6 +4,7 @@ const initialState = {
     error: null,
     users: [],
     avatarUrl: '', 
+    role_name: ''
 };
 
 const slice = createSlice({
@@ -18,6 +19,9 @@ const slice = createSlice({
         },
         setAvatarUrl(state, action) { 
             state.avatarUrl = action.payload;
+        },
+        setRoleName(state, action) { 
+            state.role_name = action.payload;
         }
     }
 });
@@ -25,7 +29,7 @@ const slice = createSlice({
 export default slice.reducer;
 
 // Actions
-export const { setAvatarUrl } = slice.actions;
+export const { setAvatarUrl, setRoleName } = slice.actions;
 
 // Thunks
 import axios from 'utils/axios';
@@ -37,6 +41,19 @@ export function getUsers() {
             dispatch(slice.actions.getUsersReviewSuccess(response.data.data));
         } catch (error) {
             dispatch(slice.actions.hasError(error));
+        }
+    };
+}
+
+// Fetch user role and update the state
+export function fetchUserRole() {
+    return async (dispatch) => {
+        try {
+            const response = await axios.get('/me');
+            const role_name = response.data.data.role_name;
+            dispatch(slice.actions.setRoleName(role_name));
+        } catch (error) {
+            console.error('Error fetching user role:', error);
         }
     };
 }
