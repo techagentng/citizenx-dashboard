@@ -26,8 +26,8 @@ const FloatingCart = () => {
                 setError(err.message); // Update to display error message
                 setLoading(false);
             });
-    }, []);
-
+    }, [totalQuantity]);
+console.log("xxxxxxxxxxxxxxxxxxxxxxxxLLL", totalQuantity)
     if (loading) {
         return <p>Loading...</p>;
     }

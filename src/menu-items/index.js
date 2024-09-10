@@ -1,23 +1,22 @@
+import AuthService from 'utils/identityServer';
 import dashboard from './dashboard';
 import settings from './settings';
 import reports from './reports';
 import rewards from './rewards';
 import users from './users';
 
-// ==============================|| MENU ITEMS ||============================== //
-const isAdmin = false; // Change this value to test
+// Create an instance of the AuthService
+const authService = new AuthService();
 
-// Menu for admin
-const adminMenuItems = {
-    items: [dashboard, reports, rewards, users, settings]
-};
+// Determine the role
+const userRole = authService.getRole();
 
-// Menu for non-admin
-const nonAdminMenuItems = {
-    items: [dashboard, reports, rewards, settings] // "users" is not included here for non-admins
-};
-
-// Conditionally export based on isAdmin
-const menuItems = isAdmin ? adminMenuItems : nonAdminMenuItems;
+// Define menu items based on the user role
+const menuItems =
+    userRole === 'Admin'
+        ? {
+              items: [dashboard, reports, rewards, users, settings]
+          }
+        : { items: [dashboard, reports, rewards, settings] };
 
 export default menuItems;

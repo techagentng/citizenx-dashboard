@@ -1,29 +1,22 @@
 import PropTypes from 'prop-types';
 import { createContext, useEffect, useReducer } from 'react';
-
-// third-party
-// import { Chance } from 'chance';
-// import jwtDecode from 'jwt-decode';
-
-// reducer - state management
+// Reducer - state management
 import { LOGIN, LOGOUT } from 'store/actions';
 import accountReducer from 'store/accountReducer';
 
-// project imports
+// Project imports
 import Loader from 'ui-component/Loader';
 import axios from 'utils/axios';
 
-// const chance = new Chance();
-
-// constant
+// Initial state
 const initialState = {
     isLoggedIn: false,
     isInitialized: false,
     user: null,
-    role: ''
+    role_name: ''
 };
 
-const setSession = (serviceToken) => {
+const setSession = (serviceToken, role_name = '') => {
     if (serviceToken) {
         localStorage.setItem('serviceToken', serviceToken);
         axios.defaults.headers.common.Authorization = `Bearer ${serviceToken}`;
@@ -31,9 +24,15 @@ const setSession = (serviceToken) => {
         localStorage.removeItem('serviceToken');
         delete axios.defaults.headers.common.Authorization;
     }
+
+    if (role_name) {
+        localStorage.setItem('role_name', role_name);
+    } else {
+        localStorage.removeItem('role_name');
+    }
 };
 
-// ==============================|| JWT CONTEXT & PROVIDER ||============================== //
+// Create context
 const JWTContext = createContext(null);
 
 export const JWTProvider = ({ children }) => {
@@ -43,8 +42,9 @@ export const JWTProvider = ({ children }) => {
         const init = async () => {
             try {
                 const serviceToken = window.localStorage.getItem('serviceToken');
-                if (serviceToken) {
-                    setSession(serviceToken);
+                const serviceRole = window.localStorage.getItem('role_name');
+                if (serviceToken && serviceRole) {
+                    setSession(serviceToken, serviceRole);
                     const response = await axios.get('/me');
                     const isOnLine = await axios.get('/user/is_online');
 
@@ -57,49 +57,53 @@ export const JWTProvider = ({ children }) => {
                         type: LOGIN,
                         payload: {
                             user: data,
-                            role_name: data.role_name
+                            role_name: data.role_name,
+                            isLoggedIn: true,
+                            isInitialized: true
                         }
                     });
                 } else {
-                    dispatch({
-                        type: LOGOUT
-                    });
+                    dispatch({ type: LOGOUT });
                 }
             } catch (err) {
                 console.error(err);
-                dispatch({
-                    type: LOGOUT
-                });
+                dispatch({ type: LOGOUT });
             }
         };
 
         init();
     }, [dispatch]);
 
-    const login = async (email, password) => {
-        const response = await axios.post('/auth/login', { email, password });
-        const { access_token, data } = response.data.data;
-        setSession(access_token);
-        dispatch({
-            type: LOGIN,
-            payload: {
-                isLoggedIn: true,
-                data,
-                role_name: data.role_name
-            }
-        });
-        return response;
+    const login = async (email, password, navigate) => {
+        try {
+            const response = await axios.post('/auth/login', { email, password });
+            const { access_token, role_name, ...data } = response.data.data;
+            const roleName = role_name || 'User';
+            setSession(access_token);
+            dispatch({
+                type: LOGIN,
+                payload: {
+                    isLoggedIn: true,
+                    user: data,
+                    role_name: roleName,
+                    isInitialized: true
+                }
+            });
+            navigate('/dashboard'); // Redirect to dashboard
+            return response;
+        } catch (error) {
+            console.error('Login error:', error);
+            throw error;
+        }
     };
 
     const loginWithGoogle = async () => {
         try {
             const response = await axios.get('/google/login');
-
             if (response.status === 200) {
-                const accessToken = response.data.data.access_token; // Assuming access token is in response.data.data
+                const accessToken = response.data.data.access_token;
                 setSession(accessToken);
 
-                // Fetch user info if needed
                 const userResponse = await axios.get('/me');
                 const { data } = userResponse.data;
 
@@ -108,11 +112,12 @@ export const JWTProvider = ({ children }) => {
                     payload: {
                         isLoggedIn: true,
                         user: data,
-                        role_name: data.role_name
+                        role_name: data.role_name,
+                        isInitialized: true
                     }
                 });
 
-                window.location.href = `/dashboard?access_token=${accessToken}`;
+                window.location.replace(`/dashboard?access_token=${accessToken}`);
             } else {
                 console.error('Login error:', response.data.message || 'Unknown error');
             }
@@ -123,43 +128,35 @@ export const JWTProvider = ({ children }) => {
 
     const register = async (fullName, userName, telephone, email, password, profile_image) => {
         try {
-            // Create a new FormData object
             const formData = new FormData();
-
-            // Append profile_image only if it's a valid File object
             if (profile_image && profile_image instanceof File) {
                 formData.append('profile_image', profile_image);
             }
-
             formData.append('fullName', fullName);
             formData.append('userName', userName);
             formData.append('telephone', telephone);
             formData.append('email', email);
             formData.append('password', password);
 
-            // Make the request with the FormData object
             const response = await axios.post('/auth/signup', formData, {
-                headers: {
-                    'Content-Type': 'multipart/form-data'
-                }
+                headers: { 'Content-Type': 'multipart/form-data' }
             });
-
-            console.log('Registration response:', response);
 
             let user = response.data.data;
 
-            if (window.localStorage.getItem('users')) {
-                let storedUsers = JSON.parse(window.localStorage.getItem('users'));
+            let storedUsers = window.localStorage.getItem('users');
+            if (storedUsers) {
+                storedUsers = JSON.parse(storedUsers);
                 storedUsers.push(user);
                 window.localStorage.setItem('users', JSON.stringify(storedUsers));
             } else {
                 window.localStorage.setItem('users', JSON.stringify([user]));
             }
 
-            return response; // Return the entire response
+            return response;
         } catch (error) {
             console.error('Registration error:', error);
-            throw error; // Throw the error to be caught by the caller
+            throw error;
         }
     };
 
@@ -179,7 +176,7 @@ export const JWTProvider = ({ children }) => {
 
     const updateProfile = () => {};
 
-    if (state.isInitialized !== undefined && !state.isInitialized) {
+    if (!state.isInitialized) {
         return <Loader />;
     }
 

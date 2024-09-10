@@ -29,7 +29,7 @@ export const getRewardBalance = () => {
         const serviceToken = localStorage.getItem('serviceToken');
 
         axios
-            .get(`${process.env.REACT_APP_API_URL}/count/all/rewards`, {
+            .get(`${process.env.REACT_APP_API_URL}/get/user/balance`, {
                 headers: {
                     Authorization: `Bearer ${serviceToken}`
                 }
@@ -37,7 +37,7 @@ export const getRewardBalance = () => {
             .then((response) => {
                 console.log('API response:', response); // Add this line to debug
                 if (response.status === 200) {
-                    resolve(response.data.total_balance);
+                    resolve(response.data.balance);
                 } else {
                     reject(new Error(response.data.message || 'Failed to fetch rewards count'));
                 }
