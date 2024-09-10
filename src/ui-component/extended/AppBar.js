@@ -111,7 +111,7 @@ const AppBar = ({ ...others }) => {
                                                     <ListItemText primary="Home" />
                                                 </ListItemButton>
                                             </Link>
-                                            <Link style={{ textDecoration: 'none' }} to="/about" target="_blank">
+                                            <Link style={{ textDecoration: 'none' }} to="/about">
                                                 <ListItemButton component="a">
                                                     {/* <ListItemIcon>
                                                         <IconHome2 />
@@ -119,7 +119,7 @@ const AppBar = ({ ...others }) => {
                                                     <ListItemText primary="About Us" />
                                                 </ListItemButton>
                                             </Link>
-                                            <Link style={{ textDecoration: 'none' }} href="/login" target="_blank">
+                                            <Link style={{ textDecoration: 'none' }} href="/login">
                                                 <ListItemButton component="a">
                                                     {/* <ListItemIcon>
                                                         <IconDashboard />
@@ -127,7 +127,7 @@ const AppBar = ({ ...others }) => {
                                                     <ListItemText primary="Dashboard" />
                                                 </ListItemButton>
                                             </Link>
-                                            <Link style={{ textDecoration: 'none' }} href="/publication" target="_blank">
+                                            <Link style={{ textDecoration: 'none' }} href="/publication">
                                                 <ListItemButton component="a">
                                                     {/* <ListItemIcon>
                                                         <IconDashboard />

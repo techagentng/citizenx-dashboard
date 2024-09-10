@@ -44,7 +44,7 @@ const about = () => {
             </SectionWrapper>
 
             {/* 3. Partners section */}
-            <SectionWrapper sx={{ background: theme.palette.grey[100] }}>
+            <SectionWrapper >
                 <Partners />
             </SectionWrapper>
 

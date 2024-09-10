@@ -11,6 +11,8 @@ const AuthLogin = Loadable(lazy(() => import('views/pages/authentication/Login3'
 const AuthRegister = Loadable(lazy(() => import('views/pages/authentication/Register3')));
 const AuthForgotPassword = Loadable(lazy(() => import('views/pages/authentication/ForgotPassword3')));
 // const SamplePage = Loadable(lazy(() => import('views/sample-page')));
+const PagesAbout = Loadable(lazy(() => import('views/pages/about')));
+const PagesPuplication = Loadable(lazy(() => import('views/pages/landing/Publication')));
 
 // ==============================|| AUTH ROUTING ||============================== //
 
@@ -39,6 +41,14 @@ const LoginRoutes = {
         {
             path: '/forgot',
             element: <AuthForgotPassword />
+        },
+        {
+            path: '/about',
+            element: <PagesAbout />
+        },
+        {
+            path: '/publication',
+            element: <PagesPuplication />
         }
     ]
 };
