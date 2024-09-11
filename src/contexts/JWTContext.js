@@ -63,10 +63,16 @@ export const JWTProvider = ({ children }) => {
                         }
                     });
                 } else {
+                    console.warn('Token or role missing from localStorage');
                     dispatch({ type: LOGOUT });
                 }
             } catch (err) {
-                console.error(err);
+                if (err.response && err.response.status === 401) {
+                    // Handle unauthorized (e.g., token expired)
+                    console.warn('Token expired or unauthorized');
+                } else {
+                    console.error('Error during initialization: ', err);
+                }
                 dispatch({ type: LOGOUT });
             }
         };
@@ -79,7 +85,7 @@ export const JWTProvider = ({ children }) => {
             const response = await axios.post('/auth/login', { email, password });
             const { access_token, role_name, ...data } = response.data.data;
             const roleName = role_name || 'User';
-            setSession(access_token);
+            setSession(access_token, role_name);
             dispatch({
                 type: LOGIN,
                 payload: {

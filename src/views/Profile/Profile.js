@@ -10,22 +10,27 @@ import * as Yup from 'yup';
 import { useDispatch, useSelector } from 'store';
 import { openSnackbar } from 'store/slices/snackbar';
 import { setAvatarUrl } from 'store/slices/users';
-const count = 110; // Example count
 
-const TitleWithCount = ({ title, count }) => (
-    <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <Typography variant="h6">{title}</Typography>
-        <Typography variant="h4" sx={{ fontWeight: 'bold' }}>
-            {count.toLocaleString()} <span style={{ fontWeight: 'normal' }}>points</span>
-        </Typography>
-    </Box>
-);
+const TitleWithCount = ({ title, rewardBalance }) => {
+    const formattedBalance = rewardBalance !== undefined ? rewardBalance.toLocaleString() : '0';
+
+    return (
+        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <Typography variant="h6">{title}</Typography>
+            <Box>
+                <Typography variant="h4" sx={{ fontWeight: 'bold' }}>
+                    {formattedBalance} <span style={{ fontWeight: 'normal' }}>points</span>
+                </Typography>
+            </Box>
+        </Box>
+    );
+};
+
 const Profile = () => {
     const [avatarSrc, setAvatarSrc] = useState('');
     const [loading, setLoading] = useState(false);
-    const [, setError] = useState('');
     const dispatch = useDispatch();
-    const { avatarUrl } = useSelector((state) => state.user);
+    const { avatarUrl, rewardBalance } = useSelector((state) => state.user);
     const [initialValues, setInitialValues] = useState({
         fullname: '',
         email: '',
@@ -35,7 +40,7 @@ const Profile = () => {
         phone: ''
     });
     const [selectedFile, setSelectedFile] = useState(null);
-    const defaultAvatarUrl = 'defaultAvatarUrl'; // Update with actual default URL
+    const defaultAvatarUrl = 'path/to/default/avatar.jpg'; // Update with actual default URL
 
     useEffect(() => {
         setAvatarSrc(avatarUrl || defaultAvatarUrl);
@@ -74,9 +79,20 @@ const Profile = () => {
                             close: true
                         })
                     );
-                    setLoading(false);
                 } catch (error) {
                     console.error('Upload failed:', error);
+                    dispatch(
+                        openSnackbar({
+                            open: true,
+                            message: 'Image upload failed.',
+                            variant: 'alert',
+                            alert: {
+                                color: 'error'
+                            },
+                            close: true
+                        })
+                    );
+                } finally {
                     setLoading(false);
                 }
             };
@@ -100,15 +116,25 @@ const Profile = () => {
                 });
                 const storedAvatarSrc = localStorage.getItem('avatarSrc');
                 setAvatarSrc(storedAvatarSrc || userData.profileImage || defaultAvatarUrl);
-                setLoading(false);
             } catch (err) {
-                setError('Failed to fetch user data');
+                dispatch(
+                    openSnackbar({
+                        open: true,
+                        message: 'Failed to fetch user data',
+                        variant: 'alert',
+                        alert: {
+                            color: 'error'
+                        },
+                        close: true
+                    })
+                );
+            } finally {
                 setLoading(false);
             }
         };
 
         fetchUserData();
-    }, []);
+    }, [dispatch]);
 
     const validationSchema = Yup.object().shape({
         fullname: Yup.string().required('Full Name is required'),
@@ -121,11 +147,9 @@ const Profile = () => {
 
     const handleSubmit = async (values) => {
         setLoading(true);
-        setError('');
 
         try {
             await updateUserProfile(values);
-            setLoading(false);
             dispatch(
                 openSnackbar({
                     open: true,
@@ -138,7 +162,18 @@ const Profile = () => {
                 })
             );
         } catch (err) {
-            setError(err.message);
+            dispatch(
+                openSnackbar({
+                    open: true,
+                    message: err.message,
+                    variant: 'alert',
+                    alert: {
+                        color: 'error'
+                    },
+                    close: true
+                })
+            );
+        } finally {
             setLoading(false);
         }
     };
@@ -149,7 +184,10 @@ const Profile = () => {
                 <Form>
                     <Grid container spacing={gridSpacing}>
                         <Grid item sm={6} md={4}>
-                        <SubCard title={<TitleWithCount title="Profile Picture" count={count} />} contentSX={{ textAlign: 'center' }}>
+                            <SubCard
+                                title={<TitleWithCount title="Profile Picture" rewardBalance={rewardBalance} />}
+                                contentSX={{ textAlign: 'center' }}
+                            >
                                 <Grid container spacing={2}>
                                     <Grid item xs={12}>
                                         <Avatar
@@ -266,12 +304,14 @@ const Profile = () => {
                                         />
                                     </Grid>
                                     {/* Submit Button */}
-                                    <Grid item xs={12} sx={{ textAlign: 'right' }}>
-                                        <AnimateButton>
-                                            <Button type="submit" variant="contained" disabled={loading}>
-                                                {loading ? <CircularProgress size={24} /> : 'Save Changes'}
-                                            </Button>
-                                        </AnimateButton>
+                                    <Grid item xs={12}>
+                                        <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+                                            <AnimateButton>
+                                                <Button type="submit" variant="contained" size="large" disabled={loading}>
+                                                    {loading ? <CircularProgress size={24} /> : 'Save Changes'}
+                                                </Button>
+                                            </AnimateButton>
+                                        </Box>
                                     </Grid>
                                 </Grid>
                             </SubCard>

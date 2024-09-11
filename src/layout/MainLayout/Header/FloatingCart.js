@@ -3,13 +3,16 @@ import { styled } from '@mui/material/styles';
 import { Badge, Box } from '@mui/material';
 import coinimg from './coin.png';
 import { getRewardBalance } from 'services/rewardService'; 
+import { useDispatch, useSelector } from 'react-redux'; 
+import { setTotalQuantity } from 'store/slices/reward'; 
 
 const StyledBadge = styled(Badge)(() => ({
     '& .MuiBadge-badge': {}
 }));
 
 const FloatingCart = () => {
-    const [totalQuantity, setTotalQuantity] = useState(0);
+    const dispatch = useDispatch();
+    const totalQuantity = useSelector((state) => state.reward.totalQuantity); // Access the global balance
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
@@ -17,23 +20,23 @@ const FloatingCart = () => {
         // Fetch the reward count on component mount
         getRewardBalance()
             .then((count) => {
-                console.log('Reward count:', count); // Add this line to debug
-                setTotalQuantity(count);
+                console.log('Reward count:', count); // Debugging
+                dispatch(setTotalQuantity(count)); // Dispatch to store
                 setLoading(false);
             })
             .catch((err) => {
                 console.error('Error fetching reward count:', err);
-                setError(err.message); // Update to display error message
+                setError(err.message); // Display error message
                 setLoading(false);
             });
-    }, [totalQuantity]);
-console.log("xxxxxxxxxxxxxxxxxxxxxxxxLLL", totalQuantity)
+    }, [dispatch]); // Ensure dispatch is a dependency to avoid unnecessary re-fetches
+
     if (loading) {
         return <p>Loading...</p>;
     }
 
     if (error) {
-        return <p>Error loading rewards count: {error}</p>; // Display error message
+        return <p>Error loading rewards count: {error}</p>;
     }
 
     return (
