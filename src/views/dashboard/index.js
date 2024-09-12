@@ -172,7 +172,7 @@ const DashboardPage = () => {
                     </Grid>
                     <Grid item xs={6} md={4}>
                         <PopularCard
-                            title={`Top Reports for ${selectedState || 'State'}`}
+                            title={`Top Reported cases in ${selectedState || 'State'}`}
                             data={reportTypes?.map((type, index) => ({
                                 reportType: type,
                                 reportCount: reportCounts[index]
@@ -182,11 +182,11 @@ const DashboardPage = () => {
                     </Grid>
                     <Grid item xs={6} md={4}>
                         {/* Top LGAs View */}
-                        <PopularCard title={`Top LGAs for ${selectedState || 'State'}`} data={reportData} />
+                        <PopularCard title={`Top Reported LGAs in ${selectedState || 'State'}`} data={reportData} />
                     </Grid>
 
                     <Grid item xs={6} md={4}>
-                        <PopularCard title="Top States" data={formattedTopStates} type="states" />
+                        <PopularCard title="Top Reported States in Nigeria" data={formattedTopStates} type="states" />
                     </Grid>
                     <Grid item xs={12} md={4} sx={{ backgroundColor: 'white' }}>
                         <Box
