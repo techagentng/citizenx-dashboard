@@ -9,11 +9,9 @@ import AuthenticationRoutes from './AuthenticationRoutes';
 // ==============================|| ROUTING RENDER ||============================== //
 import Loadable from 'ui-component/Loadable';
 const PagesLanding = Loadable(lazy(() => import('views/pages/landing')));
-const PagesAbout = Loadable(lazy(() => import('views/pages/about')));
 
 
-const router = createBrowserRouter([{ path: '/', element: <PagesLanding /> },
-                                    { path: '/about', element: <PagesAbout /> }, 
+const router = createBrowserRouter([{ path: '/', element: <PagesLanding /> }, 
                                         AuthenticationRoutes, 
                                         LoginRoutes, 
                                         MainRoutes], {

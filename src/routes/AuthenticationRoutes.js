@@ -4,6 +4,10 @@ import { lazy } from 'react';
 import Loadable from 'ui-component/Loadable';
 import MinimalLayout from 'layout/MinimalLayout';
 
+// other pages routing
+const PagesAbout = Loadable(lazy(() => import('views/pages/about')));
+
+
 // maintenance routing
 const MaintenanceError = Loadable(lazy(() => import('views/pages/maintenance/Error')));
 const MaintenanceComingSoon1 = Loadable(lazy(() => import('views/pages/maintenance/ComingSoon/ComingSoon1')));
@@ -16,6 +20,10 @@ const AuthenticationRoutes = {
     path: '/',
     element: <MinimalLayout />,
     children: [
+        {
+            path: '/about',
+            element: <PagesAbout />
+        },
         {
             path: '/pages/error',
             element: <MaintenanceError />
@@ -31,7 +39,8 @@ const AuthenticationRoutes = {
         {
             path: '/pages/under-construction',
             element: <MaintenanceUnderConstruction />
-        }
+        },
+
     ]
 };
 
