@@ -18,6 +18,22 @@ import screenthree from 'assets/images/landing/image45.png';
 const AppInfo = () => {
     const theme = useTheme();
 
+    // DOWLOAD APP BUTTONS
+    const ButtonSX = {
+        borderRadius: 20,
+        backgroundColor: 'black',
+        [theme.breakpoints.down('sm')]: {
+            width: '300px',
+        },
+    };
+
+    const StoreButton = ({ href, icon, label }) => (
+        <Button component={Link} sx={ButtonSX} startIcon={icon} variant='contained' href={href} target="_blank" size="large">
+          {label}
+        </Button>
+      );
+    
+    // LIST ITEMS  
     const listSX = {
         display: 'flex',
         alignItems: 'center',
@@ -28,19 +44,6 @@ const AppInfo = () => {
         svg: { color: '#17a877' }
     };
 
-    // DOWLOAD APP BUTTONS
-    const ButtonSX = {
-        borderRadius: 20,
-        backgroundColor: 'black',
-    };
-
-    const StoreButton = ({ href, icon, label }) => (
-        <Button component={Link} sx={ButtonSX} startIcon={icon} variant='contained' href={href} target="_blank" size="large">
-          {label}
-        </Button>
-      );
-    
-    // LIST ITEMS  
     const ListItem = ({ children }) => (
         <Typography sx={listSX}>
           <IconCircleCheckFilled size={20} /> {children}
@@ -51,7 +54,7 @@ const AppInfo = () => {
         width: "100%",
         backgroundColor: '#E6FFE5',
         borderRadius: 20,
-        padding: theme.spacing(10, 2, 0), // Use theme spacing
+        padding: theme.spacing(10, 2, 0), 
         margin: theme.spacing(0, 1),
         boxShadow: theme.shadows[0]
         }));
@@ -66,7 +69,15 @@ const AppInfo = () => {
             <Stack alignItems="left">
                 <Typography variant="h4" fontWeight={800} align="left" marginLeft={12} marginBottom={1}>{title}</Typography>
                 <Typography align="left" marginLeft={12} color={theme.palette.text.secondary} paddingRight={10}>{caption}</Typography>
-                <img src={image} alt="Phone screen" style={{ width: '100%', height: 'auto' }} />
+                <img src={image} alt="Phone screen" 
+                     style={{ 
+                                width: '100%', 
+                                height: 'auto',
+                                transform: {
+                                    xs: 'scaleX(-1)', 
+                                    md: 'none' 
+                                  }
+                            }} />
             </Stack>    
         </FadeInWhenVisible>
     );

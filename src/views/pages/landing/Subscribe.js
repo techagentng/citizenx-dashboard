@@ -31,8 +31,8 @@ const Subscribe = () => {
             <Grid container spacing={5} sx={{alignItems: 'center'}} direction={{ xs: 'column-reverse', md: 'row' }}>
                 <Grid item xs={12} md={6} sx={{marginTop:{xs: '20px', md: '1px'}}} >
                     <Typography variant="h2" sx={{ fontSize: { xs: '1.5rem', sm: '2.125rem' }, mb: 2, textAlign: { xs: 'center', md: 'left' }, color: 'white' }}>
-                    Subscribe to our news letter for updates.
-                </Typography>
+                        Subscribe to our newsletter for updates.
+                    </Typography>
                 <Typography
                     variant="subtitle2"
                     color="white"
@@ -43,7 +43,7 @@ const Subscribe = () => {
                     textAlign: { xs: 'center', md: 'left' },
                     }}
                 >
-                    Over 1,000 active citizens are keeping informed of our work within Nigeria’s governance; you should too!
+                    Receive updates from all 774 local governments with over 1,000 active citizens keeping us informed in their communities—join them!
                 </Typography>
                 </Grid>
                 <Grid item xs={12} md={6}>

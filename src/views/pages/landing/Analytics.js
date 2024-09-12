@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 
 // Assets
 import Dashboard from 'assets/images/landing/dashboard.png';
+import FadeInWhenVisible from './Animation2';
 
 const Lists = styled(Box)(({ theme }) => ({
     display: 'flex',
@@ -17,6 +18,7 @@ const Lists = styled(Box)(({ theme }) => ({
 
 const Analytics = () => {
     const theme = useTheme();
+    
     const listSX = {
         display: 'flex',
         alignItems: 'center',
@@ -26,6 +28,12 @@ const Analytics = () => {
         color: theme.palette.grey[900],
         svg: { color: '#17a877' }
     };
+
+    const ListItem = ({ children }) => (
+        <Typography sx={listSX}>
+          <IconCircleCheckFilled size={20} /> {children}
+        </Typography>
+      );
 
     return (
         <Container sx={{ py: 0 }}>
@@ -49,26 +57,14 @@ const Analytics = () => {
                 <Grid item xs={12}>
                     <Lists>
                         <Box>
-                            <Typography sx={listSX}>
-                                <IconCircleCheckFilled size={20} /> Earn Rewards
-                            </Typography>
-                            <Typography sx={listSX}>
-                                <IconCircleCheckFilled size={20} /> Participate in Community
-                            </Typography>
-                            <Typography sx={listSX}>
-                                <IconCircleCheckFilled size={20} /> Report Incidents
-                            </Typography>
+                            <ListItem>Earn Rewards</ListItem>
+                            <ListItem>Participate in Community</ListItem>
+                            <ListItem>Report Incidents</ListItem>
                         </Box>
                         <Box>
-                            <Typography sx={listSX}>
-                                <IconCircleCheckFilled size={20} /> Follow Up on Reports
-                            </Typography>
-                            <Typography sx={listSX}>
-                                <IconCircleCheckFilled size={20} /> See Top Reports Hotspots
-                            </Typography>
-                            <Typography sx={listSX}>
-                                <IconCircleCheckFilled size={20} /> Engage with Local Governance
-                            </Typography>
+                            <ListItem>Follow Up on Reports</ListItem>
+                            <ListItem>See Top Reports Hotspots</ListItem>
+                            <ListItem>Engage with Local Governance</ListItem>
                         </Box>
                     </Lists>
                     <Box sx={{ mt: 5, textAlign: 'left' }}>
@@ -79,9 +75,11 @@ const Analytics = () => {
                 </Grid>
 
                 <Grid item xs={12} >
+                <FadeInWhenVisible animationType='fadeInCenter' delay={0.4}>
                     <Box sx={{ textAlign: 'center' }}>
                         <img src={Dashboard} width="100%" alt="Dashboard" style={{ borderRadius: '30px', padding: 10 }} />
                     </Box>
+                </FadeInWhenVisible>
                 </Grid>
             </Grid>
         </Container>

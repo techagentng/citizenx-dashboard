@@ -1,9 +1,8 @@
 import { useTheme } from '@mui/material/styles';
 import { Box, Container, Grid, Stack, Typography } from '@mui/material'
-import PropTypes from 'prop-types';
 import React from 'react'
 import SubCard from 'ui-component/cards/SubCard';
-import FadeInWhenVisible from './Animation';
+import FadeInWhenVisible from './Animation2';
 
 // Assets
 import Team from 'assets/images/landing/group-afro-americans-working-together 1.png';
@@ -34,10 +33,10 @@ const Cards = [
 const ImpactCard = ({ title, caption}) => {
     const theme = useTheme();
     return (
-        <FadeInWhenVisible>
+        <FadeInWhenVisible animationType='fadeIn' delay={0.3} >
             <SubCard
                 sx={{
-                    backgroundColor: '#c7f7e7',
+                    backgroundColor: '#E6FFE5',
                     borderColor: theme.palette.mode === 'dark' ? theme.palette.background.default : theme.palette.divider,
                     '&:hover': { boxShadow: 'none' },
                     height: '100%',
@@ -57,10 +56,6 @@ const ImpactCard = ({ title, caption}) => {
     );
 };
 
-ImpactCard.propTypes = {
-    title: PropTypes.string,
-    caption: PropTypes.string,
-};
 
 const Impact = () => {
   return (
@@ -95,7 +90,7 @@ const Impact = () => {
 
             <Grid item xs={12}>
                     <Box sx={{ textAlign: 'center' }}>
-                        <FadeInWhenVisible>
+                        <FadeInWhenVisible animationType='fadeInCenter' delay={0.3}>
                         <img src={Team} width="100%" alt="Dashboard" style={{ borderRadius: '10px', padding: 10 }} />
                         </FadeInWhenVisible>
                     </Box>
