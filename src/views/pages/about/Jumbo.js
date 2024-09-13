@@ -74,7 +74,7 @@ const Jumbo = () => {
     <Container>
         <JumboContainer
         title='Get Involved'
-        caption='Join us in making a difference. Whether you want to volunteer, donate, or simply stay informed, there are many ways to get involved with Citizen X.'
+        caption='CitizenX is not just a tool—it’s a movement aimed at reshaping how citizens engage with their communities and governments. We invite you to join us in this mission. Whether you’re reporting an issue, sharing your insights, or simply staying informed, you are contributing to a larger effort to build a better future for everyone. With CitizenX, your actions have impact, your voice has power, and together, we can create meaningful change.'
         Jumbolink='#' />
     </Container>
   )

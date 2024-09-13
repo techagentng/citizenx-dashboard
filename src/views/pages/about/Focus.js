@@ -14,19 +14,19 @@ const BoxContent =[
     {
         id: 1,
         title: 'Digital Engagement' ,
-        caption: 'Leveraging technology to enhance citizen interaction with governance processes.',
+        caption: 'CitizenX uses cutting-edge technology to enhance digital engagement, enabling real-time reporting, community incident analysis, and active participation. Our platform modernizes how citizens interact with governance and stay informed.',
         image: engagementIcon 
     },
     {
         id: 2,
         title: 'Transparency & Accountability' ,
-        caption: 'Ensuring that government actions are open and accountable to the people',
+        caption: 'We promote transparency and accountability by making every report and feedback visible and actionable. This ensures that authorities and leaders are held accountable and that governance remains open and honest.',
         image: securityIcon 
     },
     {
         id: 3,
         title: 'Community Empowerment' ,
-        caption: 'Empowering local communities to voice their needs and participate in governance.',
+        caption: 'CitizenX empowers communities by providing tools for reporting issues, sharing insights, and participating in local decision-making. We help build resilient communities by giving citizens a voice and enabling them to drive change.',
         image: communityIcon 
     }
 ]

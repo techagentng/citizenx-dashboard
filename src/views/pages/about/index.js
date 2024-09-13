@@ -7,7 +7,6 @@ import HeaderSection from './HeaderSection';
 import Focus from './Focus';
 import Partners from './Partner';
 import FAQ from './FAQ';
-import Testimonial from '../landing/Testimonial';
 import Jumbo from './Jumbo';
 import Trends from '../landing/Trends';
 import Footer from 'views/pages/landing/Footer';
@@ -46,11 +45,6 @@ const about = () => {
         {/* 3. Partners section */}
         <SectionWrapper sx={{background: theme.palette.grey[100]}} >
               <Partners/>
-        </SectionWrapper>
-
-        {/* 5. Testimonial section */}
-        <SectionWrapper >
-              <Testimonial/>
         </SectionWrapper>
 
         {/* 6. Jumbo section */}

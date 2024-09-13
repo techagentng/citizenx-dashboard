@@ -40,7 +40,7 @@ const HeaderSection = () => {
                             >
                                 <Stack spacing={1}>
                                     <Typography textAlign={{ xs: 'center', md: 'left' }} variant="h1" sx={headerSX}>
-                                        Our Story 
+                                        Our Story: Empowering Voices for Transparent Governance
                                     </Typography>
                                 </Stack>
                             </motion.div>
@@ -64,7 +64,7 @@ const HeaderSection = () => {
                 <Grid item xs={12}>
                     <HeaderImage src={Hero} />
                 </Grid>
-                <Grid item xs={12} sx={{textAlign:{xs:'center', md:'left'},  marginLeft:{xs: 0, md:'55%'}}}>
+                <Grid item xs={12} sx={{textAlign:{xs:'center', md:'left'},  marginLeft:{xs: 0, md:'50%'}}}>
                 <motion.div
                                 initial={{ opacity: 0, translateY: 550 }}
                                 animate={{ opacity: 1, translateY: 0 }}
@@ -72,7 +72,7 @@ const HeaderSection = () => {
                             >
                                 <Stack spacing={1}>
                                     <Typography textAlign={{ xs: 'center', md: 'left' }} variant="h1" sx={headerSX}>
-                                        Our Purpose 
+                                        Our  Purpose: The Future of Citizen Engagement 
                                     </Typography>
                                 </Stack>
                             </motion.div>
@@ -87,7 +87,7 @@ const HeaderSection = () => {
                                     variant="body1"
                                     sx={{ fontSize: { xs: '0.8rem', md: '1rem' }, paddingY: '10px', width: '100%' }}
                                 >
-                                    At CitizenX, our mission is to transform the way citizens engage with governance. We strive to promote transparency, accountability, and community empowerment through innovative digital solutions and active citizen participation.
+                                    As we look to the future, CitizenX is committed to continuing its mission of empowering citizens and enhancing community engagement. We are constantly evolving, adding new features, and finding innovative ways to make your voice heard. The future of citizen engagement is here, and it’s in your hands. With CitizenX, you’re not just a spectator—you’re an active participant in shaping the future of your  local community. Join us and be part of the change.
                                 </Typography>
                             </motion.div>
                 </Grid>
