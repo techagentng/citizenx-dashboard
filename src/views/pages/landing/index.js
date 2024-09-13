@@ -10,7 +10,6 @@ import AppInfo from './AppInfo';
 import Analytics from './Analytics';
 import Impact from './Impact';
 import Publication from './Publication';
-import Testimonial from './Testimonial';
 import Trends from './Trends';
 import Subscribe from './Subscribe';
 import Footer from './Footer';
@@ -75,11 +74,6 @@ const Landing = () => {
             {/* 7. Publications */}
             <SectionWrapper>
                 <Publication />
-            </SectionWrapper>
-
-            {/* 8. Testimonials */}
-            <SectionWrapper>
-                <Testimonial />
             </SectionWrapper>
 
             {/* 8. Trends */}
