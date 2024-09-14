@@ -1,12 +1,13 @@
-import { Container, Grid, Stack, Typography } from '@mui/material';
+import { Container, Grid, InputAdornment, Stack, TextField, Typography } from '@mui/material';
 
 // third party
 import { motion } from 'framer-motion';
 
-import FormControl from 'ui-component/extended/Form/FormControl';
-
-// import iconFlag from 'assets/images/i18n/china.svg'
 import Chip from 'ui-component/extended/Chip';
+
+// Icon
+import SearchIcon from '@mui/icons-material/Search';
+
 
 const HeaderSection = () => {
     
@@ -60,7 +61,30 @@ const HeaderSection = () => {
                                 transition={{ type: 'spring', stiffness: 150, damping: 30 }}
                             >
                                 <Stack spacing={3}>
-                                    <FormControl  placeholder="Search Publication" />
+
+                                    {/* Search Input with Icon */}
+                                    <TextField
+                                        placeholder="Search Publication"
+                                        variant="outlined"
+                                        fullWidth
+                                        InputProps={{
+                                            startAdornment: (
+                                                <InputAdornment position="start">
+                                                    <SearchIcon />
+                                                </InputAdornment>
+                                            ),
+                                        }}
+
+                                        sx={{
+                                            '& .MuiOutlinedInput-root': {
+                                                borderRadius: '48px', // Apply borderRadius to the outer fieldset
+                                                boxShadow: '0px 5px 24.1px 0px #00000014', // Add drop shadow
+                                            },
+                                            '& fieldset': {
+                                                borderRadius: '48px', // Apply borderRadius to the outlined fieldset
+                                            },
+                                        }}
+                                    />
                                    
                                    < Stack direction='row' justifyContent='center' spacing={2} >
                                         {chips.map((data, index)=>{
