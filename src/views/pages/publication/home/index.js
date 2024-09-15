@@ -4,6 +4,7 @@ import Footer from 'views/pages/landing/Footer';
 
 // Components
 import HeaderSection from '../components/HeaderSection';
+import LatestBlog from './LatestBlog';
 
 // custom stlye
 const HeaderWrapper = styled('div')(({ theme }) => ({
@@ -30,6 +31,11 @@ const HeaderWrapper = styled('div')(({ theme }) => ({
                   <AppBar />
                   <HeaderSection/>
               </HeaderWrapper>
+
+              {/* 2. Featured publications */}
+            <SectionWrapper>
+                <LatestBlog />
+            </SectionWrapper>
   
               
               {/* 10. footer section */}
