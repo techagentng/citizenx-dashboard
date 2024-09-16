@@ -28,7 +28,7 @@ const SectionWrapper = styled('div')({
 });
 
 const about = () => {
-    const theme =useTheme()
+    const theme = useTheme()
   return (
     <>
         {/* 1. header and hero section */}

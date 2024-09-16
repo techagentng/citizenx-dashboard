@@ -5,6 +5,8 @@ import Footer from 'views/pages/landing/Footer';
 // Components
 import HeaderSection from '../components/HeaderSection';
 import LatestBlog from './LatestBlog';
+import Documents from './Documents';
+import Infographics from './Infographics';
 
 // custom stlye
 const HeaderWrapper = styled('div')(({ theme }) => ({
@@ -36,7 +38,16 @@ const HeaderWrapper = styled('div')(({ theme }) => ({
             <SectionWrapper>
                 <LatestBlog />
             </SectionWrapper>
-  
+
+            {/* 2. Featured publications */}
+            <SectionWrapper>
+                <Documents />
+            </SectionWrapper>
+
+            {/* 2. Featured publications */}
+            <SectionWrapper>
+                <Infographics />
+            </SectionWrapper>
               
               {/* 10. footer section */}
               <SectionWrapper sx={{ paddingTop: 0, paddingBottom: 0}}>
