@@ -14,6 +14,7 @@ const PublicationCard = ({ image, title, caption, postDate, postLink }) => {
         <FadeInWhenVisible>
         <SubCard
             sx={{
+                height:'500px',
                 border: '1px solid',
                 borderColor: theme.palette.grey[400],
                 '&:hover': {

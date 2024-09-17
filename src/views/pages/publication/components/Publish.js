@@ -1,9 +1,9 @@
 import React from 'react';
-import { Stack, Typography, Button, Box, Grid, Container } from '@mui/material';
+import { Stack, Typography, Button, Grid, Container } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import { Link } from 'react-router-dom';
 
-import sectionImage from 'assets/images/landing/group-afro-americans-working-together 1.png'
+import sectionImage from 'assets/images/publication/subscribe.webp'
 
 const Publish = () => {
     const theme = useTheme();
@@ -11,7 +11,7 @@ const Publish = () => {
   return (
     <Container>
         <Grid container>
-            <Grid items xs={12} md={6} display='flex' flexDirection='column' justifyContent='center' gap={3} >
+            <Grid item xs={12} md={6} display='flex' flexDirection='column' justifyContent='center' gap={3} >
                 
                     <Typography variant="h2" sx={{ fontSize: { xs: '1.5rem', sm: '2.125rem' } }}>
                     Contribute to Our Publications
@@ -49,7 +49,7 @@ const Publish = () => {
                     </Stack>
                 
             </Grid>
-            <Grid items xs={12} md={6}>
+            <Grid item xs={12} md={6}>
                 <img
                     src={sectionImage}
                     alt="Contribute"

@@ -62,7 +62,7 @@ const LatestBlog = () => {
     };
   
     // Limit text to a specific number of words
-    const limitWords = (str, wordLimit = 10) => {
+    const limitWords = (str, wordLimit = 5) => {
         const words = str.split(' ');
         if (words.length > wordLimit) {
             return words.slice(0, wordLimit).join(' ') + ' ...';
@@ -84,7 +84,7 @@ const LatestBlog = () => {
     };
 
     // Limit the caption to a specific number of characters
-    const cleanCaption = (caption, charLimit = 100) => {
+    const cleanCaption = (caption, charLimit = 20) => {
         const decodedText = decodeHTMLEntities(caption); // Decode HTML entities
         const textWithoutHTML = removeHTMLTags(decodedText); // Remove HTML tags
         return textWithoutHTML.length > charLimit

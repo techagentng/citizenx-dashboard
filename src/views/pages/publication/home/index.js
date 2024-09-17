@@ -4,9 +4,13 @@ import Footer from 'views/pages/landing/Footer';
 
 // Components
 import HeaderSection from '../components/HeaderSection';
+import Subscribe from '../components/Subscribe';
+import Publish from '../components/Publish';
+
 import LatestBlog from './LatestBlog';
 import Documents from './Documents';
 import Infographics from './Infographics';
+import Category from './Category';
 
 // custom stlye
 const HeaderWrapper = styled('div')(({ theme }) => ({
@@ -35,21 +39,36 @@ const HeaderWrapper = styled('div')(({ theme }) => ({
               </HeaderWrapper>
 
               {/* 2. Featured publications */}
+             <SectionWrapper>
+                <Category />
+            </SectionWrapper>
+
+              {/* 3. Featured publications */}
             <SectionWrapper>
                 <LatestBlog />
             </SectionWrapper>
 
-            {/* 2. Featured publications */}
+            {/* 4. Featured publications */}
             <SectionWrapper>
                 <Documents />
             </SectionWrapper>
 
-            {/* 2. Featured publications */}
+            {/* 5. Featured publications */}
             <SectionWrapper>
                 <Infographics />
             </SectionWrapper>
+
+            {/* 6. Publish */}
+            <SectionWrapper>
+                <Publish />
+            </SectionWrapper>
+
+            {/* 7. Subscribe */}
+            <SectionWrapper>
+                <Subscribe />
+            </SectionWrapper>
               
-              {/* 10. footer section */}
+              {/* 8. footer section */}
               <SectionWrapper sx={{ paddingTop: 0, paddingBottom: 0}}>
                   <Footer />
               </SectionWrapper>
