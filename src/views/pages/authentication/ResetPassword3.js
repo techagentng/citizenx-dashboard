@@ -49,7 +49,11 @@ const AuthResetPassword = ({ ...others }) => {
             {({ errors, handleBlur, handleChange, handleSubmit, isSubmitting, touched, values }) => (
                 <form noValidate onSubmit={handleSubmit} {...others}>
                     {/* New Password Field */}
-                    <FormControl fullWidth error={Boolean(touched.newPassword && errors.newPassword)} sx={{ ...theme.typography.customInput }}>
+                    <FormControl
+                        fullWidth
+                        error={Boolean(touched.newPassword && errors.newPassword)}
+                        sx={{ ...theme.typography.customInput }}
+                    >
                         <InputLabel htmlFor="outlined-adornment-new-password">New Password</InputLabel>
                         <OutlinedInput
                             id="outlined-adornment-new-password"
@@ -68,7 +72,11 @@ const AuthResetPassword = ({ ...others }) => {
                     </FormControl>
 
                     {/* Confirm Password Field */}
-                    <FormControl fullWidth error={Boolean(touched.confirmPassword && errors.confirmPassword)} sx={{ ...theme.typography.customInput }}>
+                    <FormControl
+                        fullWidth
+                        error={Boolean(touched.confirmPassword && errors.confirmPassword)}
+                        sx={{ ...theme.typography.customInput }}
+                    >
                         <InputLabel htmlFor="outlined-adornment-confirm-password">Confirm Password</InputLabel>
                         <OutlinedInput
                             id="outlined-adornment-confirm-password"
