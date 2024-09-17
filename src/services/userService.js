@@ -109,7 +109,7 @@ export const getAllUsers = () => {
 export const updateUserProfile = (userDetails) => {
     return new Promise((resolve, reject) => {
         const serviceToken = localStorage.getItem('serviceToken');
-        
+
         axios
             .put(`${process.env.REACT_APP_API_URL}/me/updateUserProfile`, userDetails, {
                 headers: {
@@ -133,7 +133,7 @@ export const updateUserProfile = (userDetails) => {
 export const getUserProfile = () => {
     return new Promise((resolve, reject) => {
         const serviceToken = localStorage.getItem('serviceToken');
-        
+
         axios
             .get(`${process.env.REACT_APP_API_URL}/me`, {
                 headers: {
@@ -182,3 +182,4 @@ export const uploadToS3 = (file) => {
             });
     });
 };
+

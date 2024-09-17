@@ -13,6 +13,8 @@ const AuthForgotPassword = Loadable(lazy(() => import('views/pages/authenticatio
 // const SamplePage = Loadable(lazy(() => import('views/sample-page')));
 const PagesAbout = Loadable(lazy(() => import('views/pages/about')));
 const PagesPuplication = Loadable(lazy(() => import('views/pages/landing/Publication')));
+const AuthResetPassword = Loadable(lazy(() => import('views/pages/authentication/ResetPassword')));
+
 
 // ==============================|| AUTH ROUTING ||============================== //
 
@@ -49,6 +51,11 @@ const LoginRoutes = {
         {
             path: '/publication',
             element: <PagesPuplication />
+        },
+        {
+            // Dynamic route for reset password with token
+            path: '/reset-password/:token', 
+            element: <AuthResetPassword />
         }
     ]
 };

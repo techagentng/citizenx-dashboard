@@ -6,7 +6,8 @@ const initialState = {
     error: null,
     graphs: {
         reportTypes: [],
-        reportCounts: []
+        reportCounts: [],
+        total_count: 0 
     },
     lgaState: {
         state: '',
@@ -36,6 +37,7 @@ const slice = createSlice({
         getGraphSuccess(state, action) {
             state.graphs.reportTypes = action.payload.report_types;
             state.graphs.reportCounts = action.payload.report_counts;
+            state.graphs.total_count = action.payload.total_count;
             (state.graphs.topStates = action.payload.top_states), (state.loading = false);
             state.graphs.total_users = action.payload.total_users;
         },

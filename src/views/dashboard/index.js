@@ -102,8 +102,8 @@ const DashboardPage = () => {
             .then((types) => {
                 const reportTypeOptions = ['Select Report Type', ...types];
                 setReportTypes(reportTypeOptions);
-                setSelectedReportType(reportTypeOptions[0]); // Set initial selected report type
-                dispatch(setReportType(reportTypeOptions[0])); // Initialize global state
+                setSelectedReportType(reportTypeOptions[0]); 
+                dispatch(setReportType(reportTypeOptions[0])); 
             })
             .catch((error) => {
                 console.error('Failed to fetch categories:', error);

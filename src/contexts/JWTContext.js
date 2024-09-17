@@ -176,8 +176,15 @@ export const JWTProvider = ({ children }) => {
         dispatch({ type: LOGOUT });
     };
 
-    const resetPassword = async (email) => {
-        console.log(email);
+    const forgotPassword = async (email) => {
+        try {
+            const response = await axios.post('/password/forgot', { email });
+            console.log('Forgot password response:', response.data);
+            return response.data;
+        } catch (error) {
+            console.error('Error while resetting password:', error.response?.data || error.message);
+            throw new Error(error.response?.data?.message || 'Failed to send password reset email.');
+        }
     };
 
     const updateProfile = () => {};
@@ -187,7 +194,7 @@ export const JWTProvider = ({ children }) => {
     }
 
     return (
-        <JWTContext.Provider value={{ ...state, login, logout, register, resetPassword, updateProfile, loginWithGoogle }}>
+        <JWTContext.Provider value={{ ...state, login, logout, register, forgotPassword, updateProfile, loginWithGoogle }}>
             {children}
         </JWTContext.Provider>
     );

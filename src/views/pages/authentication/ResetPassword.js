@@ -14,7 +14,7 @@ import useAuth from 'hooks/useAuth';
 
 // ============================|| AUTH3 - FORGOT PASSWORD ||============================ //
 
-const ForgotPassword = () => {
+const ResetPassword = () => {
     const theme = useTheme();
     const { isLoggedIn } = useAuth();
     const matchDownSM = useMediaQuery(theme.breakpoints.down('md'));
@@ -40,7 +40,7 @@ const ForgotPassword = () => {
                                                     gutterBottom
                                                     variant={matchDownSM ? 'h3' : 'h2'}
                                                 >
-                                                    Forgot password?
+                                                    Reset password?
                                                 </Typography>
                                             </Grid>
                                             <Grid item xs={12}>
@@ -81,4 +81,4 @@ const ForgotPassword = () => {
     );
 };
 
-export default ForgotPassword;
+export default ResetPassword;
