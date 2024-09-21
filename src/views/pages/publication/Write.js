@@ -9,12 +9,12 @@ import MainCard from 'ui-component/cards/MainCard';
 import { gridSpacing } from 'store/constant';
 import { ArrowUpward } from '@mui/icons-material';
 // utils
-// import axiosServices from 'utils/axios';
+import axiosServices from 'utils/axios';
 import JWTContext from 'contexts/JWTContext';
-// import { useDispatch } from 'react-redux';
-// import { openSnackbar } from 'store/slices/snackbar';
+import { useDispatch } from 'react-redux';
+import { openSnackbar } from 'store/slices/snackbar';
 
-const apiUrl = "http://localhost:5000";
+const apiUrl = "https://citizenx-dashboard-sbqx.onrender.com/api/v1";
 
 const categories = [
     { name: 'crime', label: 'Crime' },
@@ -29,8 +29,8 @@ const Write = () => {
     const theme = useTheme();
     const { user } = useContext(JWTContext);
     const {postId} = useParams();
-    // const navigate = useNavigate();
-    // const dispatch = useDispatch();
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
 
     const [value, setValue] = useState("");
     const [title, setTitle] = useState("");
@@ -48,7 +48,49 @@ const Write = () => {
         }
     }, [user, postId]);
 
-   
+    // Fetch Post
+    const fetchPost= async()=>{
+        try {
+            const response = await axiosServices.get(`${apiUrl}/posts/create/${postId}`);            
+            const post = response.data;
+            setTitle(post.title);
+            setValue(post.post_description);
+            setCat(post.post_category.split(', '));
+            setIsEditMode(true);
+            console.log('my titless', title, value, cat)
+        } catch (error) {
+            console.error('Failed to fetch post:', error);
+        }
+    };
+
+    // Upload Image
+    // const UploadFile = async () => {
+    //     try {
+    //         const formData = new FormData();
+    //         formData.append("file", file);
+    //         const res = await axiosServices.post(`${apiUrl}/upload`, formData, {
+    //             headers: {
+    //                 'Content-Type': 'multipart/form-data'
+    //             }
+    //         });
+    //         return res.data;
+    //     } catch (error) {
+    //         console.log('Failed to Upload File:', error);
+    //         dispatch(
+    //             openSnackbar({
+    //                 open: true,
+    //                 message: 'Failed to upload file.',
+    //                 variant:'alert',
+    //                 alert:{
+    //                     color: 'error'
+    //                 },
+    //                 close: true, 
+    //             })
+    //         );
+    //         navigate('/publication');
+    //     }
+    // };
+
 
     const handleCategoryChange = (event) => {
         const categoryName = event.target.name;
@@ -59,9 +101,57 @@ const Write = () => {
         }
     };
 
-    const handleSubmit = ()=>{
-        console.log("submit")
-    }
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+
+        try {
+            const post_img = file ? await UploadFile() : '';
+            const payload = {
+                title,
+                body: value,
+                author: user.username,
+                post_img,
+                category: cat.join(', '),
+            };
+            const response = isEditMode 
+                    ? await axiosServices.post(`${apiUrl}/post/${postId}/edit`, payload, {
+                headers: {
+                    Authorization: `Bearer ${window.localStorage.getItem('serviceToken')}`
+                }
+            }) 
+            : await axiosServices.post(`${apiUrl}/post/create`, payload, {
+                headers: {
+                    Authorization: `Bearer ${window.localStorage.getItem('serviceToken')}`
+                }
+            });
+            console.log('Publication ${isEditMode ? `Edited` : `Created`}:', response.data);
+            dispatch(
+                openSnackbar({
+                    open: true,
+                    message: `Publication ${isEditMode ? 'updated' : 'created'} successfully!`,
+                    variant: 'alert',
+                    alert: {
+                        color: 'success'
+                    },
+                    close: true,
+                })
+            );
+        } catch (error) {
+            console.error(`Failed to ${isEditMode ? 'update' : 'create'} post:`, error);
+            
+            dispatch(
+                openSnackbar({
+                    open: true,
+                    message: `Failed to ${isEditMode ? 'update' : 'create'} post, try aain:`,
+                    variant:'alert',
+                    alert:{
+                        color: 'error'
+                    },
+                    close: true, 
+                })
+            );
+        }
+    };
 
 
     return (
