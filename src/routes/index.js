@@ -5,6 +5,7 @@ import { createBrowserRouter } from 'react-router-dom';
 import MainRoutes from './MainRoutes';
 import LoginRoutes from './LoginRoutes';
 import AuthenticationRoutes from './AuthenticationRoutes';
+import PublicationRoutes from './PublicationRoutes';
 
 // ==============================|| ROUTING RENDER ||============================== //
 import Loadable from 'ui-component/Loadable';
@@ -13,7 +14,8 @@ const PagesLanding = Loadable(lazy(() => import('views/pages/landing')));
 
 const router = createBrowserRouter([{ path: '/', element: <PagesLanding /> }, 
                                         AuthenticationRoutes, 
-                                        LoginRoutes, 
+                                        LoginRoutes,
+                                        PublicationRoutes, 
                                         MainRoutes], {
                                         basename: process.env.REACT_APP_BASE_NAME
                                     });

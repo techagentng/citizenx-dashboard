@@ -8,7 +8,6 @@ import MinimalLayout from 'layout/MinimalLayout';
 const PagesAbout = Loadable(lazy(() => import('views/pages/about')));
 const Publication = Loadable(lazy(() => import('views/pages/publication/home')));
 
-
 // maintenance routing
 const MaintenanceError = Loadable(lazy(() => import('views/pages/maintenance/Error')));
 const MaintenanceComingSoon1 = Loadable(lazy(() => import('views/pages/maintenance/ComingSoon/ComingSoon1')));
