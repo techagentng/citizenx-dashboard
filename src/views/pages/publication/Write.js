@@ -14,7 +14,7 @@ import JWTContext from 'contexts/JWTContext';
 import { useDispatch } from 'react-redux';
 import { openSnackbar } from 'store/slices/snackbar';
 
-const apiUrl = "https://citizenx-dashboard-sbqx.onrender.com/api/v1";
+const apiUrl = "https://citizenx-9hk2.onrender.com/api/v1";
 
 const categories = [
     { name: 'crime', label: 'Crime' },
@@ -51,7 +51,7 @@ const Write = () => {
     // Fetch Post
     const fetchPost= async()=>{
         try {
-            const response = await axiosServices.get(`${apiUrl}/posts/create/${postId}`);            
+            const response = await axiosServices.get(`${apiUrl}/posts/${postId}`);            
             const post = response.data;
             setTitle(post.title);
             setValue(post.post_description);
@@ -105,13 +105,13 @@ const Write = () => {
         e.preventDefault();
 
         try {
-            const post_img = file ? await UploadFile() : '';
+            const post_image = file ? await UploadFile() : '';
             const payload = {
                 title,
-                body: value,
-                author: user.username,
-                post_img,
-                category: cat.join(', '),
+                post_description: value,
+                // author: user.username,
+                post_image,
+                post_category: cat.join(', '),
             };
             const response = isEditMode 
                     ? await axiosServices.post(`${apiUrl}/post/${postId}/edit`, payload, {
@@ -119,7 +119,7 @@ const Write = () => {
                     Authorization: `Bearer ${window.localStorage.getItem('serviceToken')}`
                 }
             }) 
-            : await axiosServices.post(`${apiUrl}/post/create`, payload, {
+            : await axiosServices.post(`${apiUrl}/posts/create`, payload, {
                 headers: {
                     Authorization: `Bearer ${window.localStorage.getItem('serviceToken')}`
                 }
