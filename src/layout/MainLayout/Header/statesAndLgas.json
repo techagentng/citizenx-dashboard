@@ -981,5 +981,17 @@
         "Talata Mafara",
         "Zurmi"
     ]
+},
+{
+  "state": "Federal Capital Territory (FCT)",
+  "alias": "fct",
+  "lgas": [
+      "Abaji",
+      "Bwari",
+      "Gwagwalada",
+      "Kuje",
+      "Kwali",
+      "Abuja Municipal"
+  ]
 }
 ]

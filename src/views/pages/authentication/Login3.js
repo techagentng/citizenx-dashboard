@@ -11,22 +11,22 @@ import AuthCardWrapper from '../AuthCardWrapper';
 import AuthLogin from './auth-forms/AuthLogin';
 import Logo from 'ui-component/Logo';
 import AuthFooter from 'ui-component/cards/AuthFooter';
-import useAuth from 'hooks/useAuth';
-import axios from 'utils/axios';
+import JWTContext from 'contexts/JWTContext';
+import { useContext } from 'react';
 // assets
 
 // ================================|| AUTH3 - LOGIN ||================================ //
 
 const Login = () => {
     const theme = useTheme();
-    const { isLoggedIn } = useAuth();
     const matchDownSM = useMediaQuery(theme.breakpoints.down('md'));
-    const handleLogin = async () => {
+    const { loginWithGoogle, isLoggedIn } = useContext(JWTContext);
+
+    const handleGoogleLogin = async () => {
         try {
-            const response = await axios.get(`${process.env.REACT_APP_API_URL}/google/login`);
-            window.location.href = response.request.responseURL; 
+            await loginWithGoogle(); 
         } catch (error) {
-            console.error('Error initiating Google login:', error);
+            console.error('Google login failed:', error);
         }
     };
 
@@ -72,7 +72,7 @@ const Login = () => {
                                                         height: '50px',
                                                         fontSize: '18px'
                                                     }}
-                                                    onClick={handleLogin}
+                                                    onClick={handleGoogleLogin}
                                                 >
                                                     Continue with Google
                                                 </Button>
