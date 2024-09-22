@@ -47,7 +47,7 @@ const PieChart = ({ reportTypes, reportCounts }) => {
     const options = {
         plugins: {
             legend: {
-                position: 'top',
+                position: 'bottom',
             },
             tooltip: {
                 callbacks: {
