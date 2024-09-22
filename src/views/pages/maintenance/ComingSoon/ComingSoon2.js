@@ -7,7 +7,6 @@ import { Link } from 'react-router-dom';
 import { useTimer } from 'react-timer-hook';
 
 // project imports
-import { gridSpacing } from 'store/constant';
 
 // assets
 import AppImage from 'assets/images/landing/ab 1.png';
@@ -86,7 +85,8 @@ const TimerWrapper = styled('div')(({theme}) => ({
     background: theme.palette.mode === 'dark' ? theme.palette.dark.main : theme.palette.secondary.light,
     color: theme.palette.mode === 'dark' ? theme.palette.dark.light : theme.palette.secondary.main,
     borderRadius: '12px',
-    padding: '15px 20px',
+    padding: '8px 10px',
+    border: '1px solid #5A5A5A99'
 }));
 
 
@@ -215,9 +215,11 @@ const ComingSoon2 = () => {
                                 Empowering Communities, One Report at a Time.
                             </Typography>
 
-                            <Button variant="contained" color="success" size="large" sx={{ mt: 3 }}>
+                            
+                            <Button variant="contained" color="success" size="large" sx={{ mt: 3, color:'white' }}>
                                  Sign Up
                             </Button>
+                            
 
                             <Stack justifyContent='center' alignItems='center' direction='row' spacing={2}>
                                 {socialLinks.map((social)=>(
