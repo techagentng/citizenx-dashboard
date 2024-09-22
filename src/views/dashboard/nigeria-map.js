@@ -41,11 +41,11 @@ const NigerianMap = () => {
             <ComposableMap
                 projection="geoMercator"
                 projectionConfig={{
-                    scale: 3000,
+                    scale: 2500,
                     center: [8, 9]
                 }}
-                width={800}
-                height={600}
+                width={700}
+                height={500}
             >
                 <Geographies geography={geoData}>
                     {({ geographies }) =>

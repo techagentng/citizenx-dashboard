@@ -179,7 +179,9 @@ const Header = () => {
                         </MenuItem>
                     ))}
                 </TextField>
-                <Box>
+                <Box sx={{ width: '300px' }}>
+                    {' '}
+                    {/* Adjust the width as per your need */}
                     <LocalizationProvider dateAdapter={AdapterDayjs}>
                         <DateRangePicker
                             localeText={{ start: 'Start Date', end: 'End Date' }}

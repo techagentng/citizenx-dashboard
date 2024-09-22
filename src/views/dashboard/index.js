@@ -9,7 +9,7 @@ import PopularCard from './PopularCard';
 import BarChart from './barchart';
 import PieChart from './piechart';
 import PieChart2 from './piechart2';
-import LineChart from './linechart';
+// import LineChart from './linechart';
 import NigerianMap from './nigeria-map';
 import { gridSpacing } from 'store/constant';
 import JWTContext from 'contexts/JWTContext';
@@ -102,8 +102,8 @@ const DashboardPage = () => {
             .then((types) => {
                 const reportTypeOptions = ['Select Report Type', ...types];
                 setReportTypes(reportTypeOptions);
-                setSelectedReportType(reportTypeOptions[0]); 
-                dispatch(setReportType(reportTypeOptions[0])); 
+                setSelectedReportType(reportTypeOptions[0]);
+                dispatch(setReportType(reportTypeOptions[0]));
             })
             .catch((error) => {
                 console.error('Failed to fetch categories:', error);
@@ -128,7 +128,13 @@ const DashboardPage = () => {
     const totalUsersCountSteroid = total_users || userCount;
     return (
         <>
-            <MainCard title="State and LGA dashboard">
+            <MainCard
+                title={
+                    <Typography variant="h2" align="center">
+                        State and LGA Dashboard
+                    </Typography>
+                }
+            >
                 <Grid container spacing={2} sx={{ mb: 3 }}>
                     <Grid item xs={3}>
                         <EarningCard count={todayReportCountSteroid} details={detailsText} icon={EarningIcon} />
@@ -143,30 +149,69 @@ const DashboardPage = () => {
                         <EarningCard count="230" details="Average Daily Users" icon={EarningIcon} />
                     </Grid>
                 </Grid>
+                <Grid container spacing={gridSpacing}>
+                    {/* First Column */}
+                    <Grid item xs={12} md={6}>
+                        <MainCard
+                            content={false}
+                            title={
+                                <Typography variant="h3" align="center">
+                                    Most Reported Incidents
+                                </Typography>
+                            }
+                        >
+                            {!reportTypes || reportTypes.length === 0 ? (
+                                <Grid container justifyContent="center">
+                                    <Grid item>
+                                        <p>No data available for the selected state and LGA.</p>
+                                    </Grid>
+                                </Grid>
+                            ) : (
+                                <Grid container>
+                                    {/* <Grid item xs={12}>
+                                            <BarChart reportTypes={reportTypes} reportCounts={reportCounts} />
+                                        </Grid> */}
+                                    <Grid item xs={12}>
+                                        <PieChart reportTypes={reportTypes} reportCounts={reportCounts} />
+                                    </Grid>
+                                </Grid>
+                            )}
+                        </MainCard>
+                    </Grid>
 
-                <Grid container spacing={2} justifyContent="center" alignItems="flex-end">
-                    {!reportTypes || reportTypes.length === 0 ? (
-                        <Grid item xs={12}>
-                            <p>No data available for the selected state and LGA.</p>
-                        </Grid>
-                    ) : (
-                        <>
-                            <Grid item xs={12} md={6}>
-                                <BarChart reportTypes={reportTypes} reportCounts={reportCounts} />
-                            </Grid>
-                            <Grid item xs={12} md={3}>
-                                <PieChart reportTypes={reportTypes} reportCounts={reportCounts} />
-                            </Grid>
-                            <Grid item xs={12} md={3}>
-                                <LineChart reportTypes={reportTypes} reportCounts={reportCounts} />
-                            </Grid>
-                        </>
-                    )}
+                    {/* Second Column */}
+                    <Grid item xs={12} md={6}>
+                        <MainCard
+                            content={false}
+                            title={
+                                <Typography variant="h3" align="center">
+                                    Most Active States
+                                </Typography>
+                            }
+                        >
+                            {!reportTypes || reportTypes.length === 0 ? (
+                                <Grid container justifyContent="center">
+                                    <Grid item>
+                                        <p>No data available for the selected state and LGA.</p>
+                                    </Grid>
+                                </Grid>
+                            ) : (
+                                <Grid container>
+                                    <Grid item xs={12}>
+                                        <BarChart reportTypes={reportTypes} reportCounts={reportCounts} />
+                                    </Grid>
+                                </Grid>
+                            )}
+                        </MainCard>
+                    </Grid>
                 </Grid>
-
                 <Grid container spacing={gridSpacing}>
                     <Grid item xs={12} md={12}>
-                        <MainCard title="State and Report Count">
+                        <MainCard   title={
+                                <Typography variant="h3" align="center">
+                                    State & Report Count
+                                </Typography>
+                            }>
                             <NigerianMap />
                         </MainCard>
                     </Grid>
@@ -195,7 +240,7 @@ const DashboardPage = () => {
                             alignItems="center"
                             p={2} // Optional padding for better spacing
                         >
-                            <Typography variant='h3'>Overall Ratings</Typography>
+                            <Typography variant="h3">Overall Ratings</Typography>
                             <TextField
                                 id="standard-select-currency-1"
                                 label="Select Report Type"
@@ -215,6 +260,7 @@ const DashboardPage = () => {
                     </Grid>
                 </Grid>
             </MainCard>
+
             <MainCard title="Compare reports">
                 <Grid item xs={12} md={6}>
                     <CompareForms />
