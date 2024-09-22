@@ -4,7 +4,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useTheme } from '@mui/material/styles';
 import { Button, Grid, Stack, Typography, FormGroup, FormControlLabel, Checkbox, TextField, Container, Box } from '@mui/material';
 // Project 
-import ReactQuillDemo from './forms/ReactQuill';
+import ReactDraftWysiwyg from './forms/ReactDraftWysiwyg';
 import MainCard from 'ui-component/cards/MainCard';
 import { gridSpacing } from 'store/constant';
 import { ArrowUpward } from '@mui/icons-material';
@@ -40,9 +40,12 @@ const Write = () => {
     const [isEditMode, setIsEditMode] = useState(false);    
 
     useEffect(() => {
-        if (!user) {
+        const token = localStorage.getItem('serviceToken');
+        if (!token) {
             console.log("User is not logged in");
-        }
+        }else {
+                console.log("User is Logged in");
+            }
         if (postId) {
             fetchPost();
         }
@@ -63,34 +66,6 @@ const Write = () => {
         }
     };
 
-    // Upload Image
-    // const UploadFile = async () => {
-    //     try {
-    //         const formData = new FormData();
-    //         formData.append("file", file);
-    //         const res = await axiosServices.post(`${apiUrl}/upload`, formData, {
-    //             headers: {
-    //                 'Content-Type': 'multipart/form-data'
-    //             }
-    //         });
-    //         return res.data;
-    //     } catch (error) {
-    //         console.log('Failed to Upload File:', error);
-    //         dispatch(
-    //             openSnackbar({
-    //                 open: true,
-    //                 message: 'Failed to upload file.',
-    //                 variant:'alert',
-    //                 alert:{
-    //                     color: 'error'
-    //                 },
-    //                 close: true, 
-    //             })
-    //         );
-    //         navigate('/publication');
-    //     }
-    // };
-
 
     const handleCategoryChange = (event) => {
         const categoryName = event.target.name;
@@ -104,26 +79,80 @@ const Write = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
+        // Validate that title, description, and category are filled
+    if (!title.trim()) {
+        console.error('Title is required');
+        dispatch(
+            openSnackbar({
+                open: true,
+                message: 'Title is required',
+                variant: 'alert',
+                alert: {
+                    color: 'error'
+                },
+                close: true,
+            })
+        );
+        return;
+    }
+
+    if (!value.trim()) {
+        console.error('Description is required');
+        dispatch(
+            openSnackbar({
+                open: true,
+                message: 'Description is required',
+                variant: 'alert',
+                alert: {
+                    color: 'error'
+                },
+                close: true,
+            })
+        );
+        return;
+    }
+
+    if (cat.length === 0) {
+        console.error('At least one category must be selected');
+        dispatch(
+            openSnackbar({
+                open: true,
+                message: 'At least one category must be selected',
+                variant: 'alert',
+                alert: {
+                    color: 'error'
+                },
+                close: true,
+            })
+        );
+        return;
+    }
+
         try {
-            const post_image = file ? await UploadFile() : '';
-            const payload = {
-                title,
-                post_description: value,
-                // author: user.username,
-                post_image,
-                post_category: cat.join(', '),
-            };
-            const response = isEditMode 
-                    ? await axiosServices.post(`${apiUrl}/post/${postId}/edit`, payload, {
+            // FormData Objects
+            const formData = new FormData();
+            formData.append('title', title);
+            formData.append('post_description', value);
+            formData.append('post_category', cat.join(', '));
+
+            if(file){
+                formData.append('postImage', file);
+            }
+
+            // Determine if the request is for creating or updating
+            const apiEndpoint = isEditMode 
+            ? `${apiUrl}/posts/${postId}/edit`
+            : `${apiUrl}/posts/create`; 
+            
+            // Fetch Token
+            const token = localStorage.getItem('serviceToken');
+            const response = await axiosServices.post(apiEndpoint, formData, {
                 headers: {
-                    Authorization: `Bearer ${window.localStorage.getItem('serviceToken')}`
-                }
-            }) 
-            : await axiosServices.post(`${apiUrl}/posts/create`, payload, {
-                headers: {
-                    Authorization: `Bearer ${window.localStorage.getItem('serviceToken')}`
+                    'Authorization': `Bearer ${token}`, 
+                    'Content-Type': 'multipart/form-data' 
                 }
             });
+
             console.log('Publication ${isEditMode ? `Edited` : `Created`}:', response.data);
             dispatch(
                 openSnackbar({
@@ -136,13 +165,16 @@ const Write = () => {
                     close: true,
                 })
             );
+            
+            // Redirect user after successful post creation or update
+            navigate('/publication');
         } catch (error) {
             console.error(`Failed to ${isEditMode ? 'update' : 'create'} post:`, error);
             
             dispatch(
                 openSnackbar({
                     open: true,
-                    message: `Failed to ${isEditMode ? 'update' : 'create'} post, try aain:`,
+                    message: `Failed to ${isEditMode ? 'update' : 'create'} post, try again:`,
                     variant:'alert',
                     alert:{
                         color: 'error'
@@ -188,7 +220,7 @@ const Write = () => {
                             value={title}
                             onChange={e => setTitle(e.target.value)}
                         />
-                        <ReactQuillDemo
+                        <ReactDraftWysiwyg
                             value={value}
                             onChange={setValue}
                         />

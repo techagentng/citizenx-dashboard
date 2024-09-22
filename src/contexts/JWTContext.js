@@ -1,39 +1,24 @@
 import PropTypes from 'prop-types';
 import { createContext, useEffect, useReducer } from 'react';
-
-// third-party
-// import { Chance } from 'chance';
-// import jwtDecode from 'jwt-decode';
-
-// reducer - state management
+// Reducer - state management
 import { LOGIN, LOGOUT } from 'store/actions';
 import accountReducer from 'store/accountReducer';
 
-// project imports
+// Project imports
 import Loader from 'ui-component/Loader';
 import axios from 'utils/axios';
 
-// const chance = new Chance();
+const apiUrl = 'https://citizenx-9hk2.onrender.com/api/v1'
 
-// constant
+// Initial state
 const initialState = {
     isLoggedIn: false,
     isInitialized: false,
-    user: null
+    user: null,
+    role_name: ''
 };
 
-// const verifyToken = (serviceToken) => {
-//     if (!serviceToken) {
-//         return false;
-//     }
-//     const decoded = jwtDecode(serviceToken);
-//     /**
-//      * Property 'exp' does not exist on type '<T = unknown>(token, options?: JwtDecodeOptions | undefined) => T'.
-//      */
-//     return decoded.exp > Date.now() / 1000;
-// };
-
-const setSession = (serviceToken) => {
+const setSession = (serviceToken, role_name = '') => {
     if (serviceToken) {
         localStorage.setItem('serviceToken', serviceToken);
         axios.defaults.headers.common.Authorization = `Bearer ${serviceToken}`;
@@ -41,9 +26,15 @@ const setSession = (serviceToken) => {
         localStorage.removeItem('serviceToken');
         delete axios.defaults.headers.common.Authorization;
     }
+
+    if (role_name) {
+        localStorage.setItem('role_name', role_name);
+    } else {
+        localStorage.removeItem('role_name');
+    }
 };
 
-// ==============================|| JWT CONTEXT & PROVIDER ||============================== //
+// Create context
 const JWTContext = createContext(null);
 
 export const JWTProvider = ({ children }) => {
@@ -53,10 +44,11 @@ export const JWTProvider = ({ children }) => {
         const init = async () => {
             try {
                 const serviceToken = window.localStorage.getItem('serviceToken');
-                if (serviceToken) {
-                    setSession(serviceToken);
-                    const response = await axios.get('/me');
-                    const isOnLine = await axios.get('/user/is_online');
+                const serviceRole = window.localStorage.getItem('role_name');
+                if (serviceToken && serviceRole) {
+                    setSession(serviceToken, serviceRole);
+                    const response = await axios.get('https://citizenx-9hk2.onrender.com/api/v1/me');
+                    const isOnLine = await axios.get('https://citizenx-9hk2.onrender.com/api/v1/user/is_online');
 
                     const { valid } = isOnLine.data;
                     const { data } = response.data;
@@ -65,59 +57,75 @@ export const JWTProvider = ({ children }) => {
 
                     dispatch({
                         type: LOGIN,
-                        payload: { user: data }
+                        payload: {
+                            user: data,
+                            role_name: data.role_name,
+                            isLoggedIn: true,
+                            isInitialized: true
+                        }
                     });
                 } else {
-                    dispatch({
-                        type: LOGOUT
-                    });
+                    console.warn('Token or role missing from localStorage');
+                    dispatch({ type: LOGOUT });
                 }
             } catch (err) {
-                console.error(err);
-                dispatch({
-                    type: LOGOUT
-                });
+                if (err.response && err.response.status === 401) {
+                    // Handle unauthorized (e.g., token expired)
+                    console.warn('Token expired or unauthorized');
+                } else {
+                    console.error('Error during initialization: ', err);
+                }
+                dispatch({ type: LOGOUT });
             }
         };
 
         init();
     }, [dispatch]);
 
-    const login = async (email, password) => {
-        const response = await axios.post('/auth/login', { email, password });
-        const { access_token, data } = response.data.data;
-        setSession(access_token);
-        dispatch({
-            type: LOGIN,
-            payload: {
-                isLoggedIn: true,
-                data
-            }
-        });
-        return response;
+    const login = async (email, password, navigate) => {
+        try {
+            const response = await axios.post('https://citizenx-9hk2.onrender.com/api/v1/auth/login', { email, password });
+            const { access_token, role_name, ...data } = response.data.data;
+            const roleName = role_name || 'User';
+            setSession(access_token, role_name);
+            dispatch({
+                type: LOGIN,
+                payload: {
+                    isLoggedIn: true,
+                    user: data,
+                    role_name: roleName,
+                    isInitialized: true
+                }
+            });
+            navigate('/dashboard'); // Redirect to dashboard
+            return response;
+        } catch (error) {
+            console.error('Login error:', error);
+            throw error;
+        }
     };
 
     const loginWithGoogle = async () => {
         try {
-            const response = await axios.get('/google/login');
-
+            const response = await axios.get('https://citizenx-9hk2.onrender.com/api/v1/google/login');
             if (response.status === 200) {
-                const accessToken = response.data.data.access_token; // Assuming access token is in response.data.data
+                const accessToken = response.data.data.access_token;
                 setSession(accessToken);
 
-                // Fetch user info if needed
-                const userResponse = await axios.get('/me');
+                const userResponse = await axios.get('https://citizenx-9hk2.onrender.com/api/v1/me');
                 const { data } = userResponse.data;
 
                 dispatch({
                     type: LOGIN,
                     payload: {
                         isLoggedIn: true,
-                        user: data
+                        user: data,
+                        role_name: data.role_name,
+                        isInitialized: true
                     }
                 });
 
-                window.location.href = `/dashboard?access_token=${accessToken}`;
+                window.location.replace(`/dashboard?access_token=${accessToken}`);
             } else {
                 console.error('Login error:', response.data.message || 'Unknown error');
             }
@@ -126,37 +134,43 @@ export const JWTProvider = ({ children }) => {
         }
     };
 
-    const register = async (fullName, userName, telephone, email, password) => {
+    const register = async (fullName, userName, telephone, email, password, profile_image) => {
         try {
-            const response = await axios.post('/auth/signup', {
-                fullName,
-                userName,
-                telephone,
-                email,
-                password
+            const formData = new FormData();
+            if (profile_image && profile_image instanceof File) {
+                formData.append('profile_image', profile_image);
+            }
+            formData.append('fullName', fullName);
+            formData.append('userName', userName);
+            formData.append('telephone', telephone);
+            formData.append('email', email);
+            formData.append('password', password);
+
+            const response = await axios.post('https://citizenx-9hk2.onrender.com/api/v1/auth/signup', formData, {
+                headers: { 'Content-Type': 'multipart/form-data' }
             });
-            console.log('Registration response:', response);
 
             let user = response.data.data;
 
-            if (window.localStorage.getItem('users')) {
-                let storedUsers = JSON.parse(window.localStorage.getItem('users'));
+            let storedUsers = window.localStorage.getItem('users');
+            if (storedUsers) {
+                storedUsers = JSON.parse(storedUsers);
                 storedUsers.push(user);
                 window.localStorage.setItem('users', JSON.stringify(storedUsers));
             } else {
                 window.localStorage.setItem('users', JSON.stringify([user]));
             }
 
-            return response; // Return the entire response
+            return response;
         } catch (error) {
             console.error('Registration error:', error);
-            throw error; // Throw the error to be caught by the caller
+            throw error;
         }
     };
 
     const logout = async () => {
         try {
-            await axios.get('/logout');
+            await axios.get('https://citizenx-9hk2.onrender.com/api/v1/logout');
         } catch (error) {
             console.error('Logout error:', error);
         }
@@ -164,18 +178,27 @@ export const JWTProvider = ({ children }) => {
         dispatch({ type: LOGOUT });
     };
 
-    const resetPassword = async (email) => {
-        console.log(email);
+    const forgotPassword = async (email) => {
+        try {
+            const response = await axios.post('https://citizenx-9hk2.onrender.com/api/v1/password/forgot', { email });
+            console.log('Forgot password response:', response.data);
+            return response.data;
+        } catch (error) {
+            console.error('Error while resetting password:', error.response?.data || error.message);
+            throw new Error(error.response?.data?.message || 'Failed to send password reset email.');
+        }
     };
 
     const updateProfile = () => {};
 
-    if (state.isInitialized !== undefined && !state.isInitialized) {
+    if (!state.isInitialized) {
         return <Loader />;
     }
 
     return (
-        <JWTContext.Provider value={{ ...state, login, logout, register, resetPassword, updateProfile, loginWithGoogle }}>{children}</JWTContext.Provider>
+        <JWTContext.Provider value={{ ...state, login, logout, register, forgotPassword, updateProfile, loginWithGoogle }}>
+            {children}
+        </JWTContext.Provider>
     );
 };
 

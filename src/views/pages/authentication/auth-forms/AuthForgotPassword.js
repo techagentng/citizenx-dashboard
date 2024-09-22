@@ -14,7 +14,7 @@ import useAuth from 'hooks/useAuth';
 import useScriptRef from 'hooks/useScriptRef';
 import { openSnackbar } from 'store/slices/snackbar';
 
-// ========================|| FIREBASE - FORGOT PASSWORD ||======================== //
+// ========================|| FORGOT PASSWORD ||======================== //
 
 const AuthForgotPassword = ({ ...others }) => {
     const theme = useTheme();
@@ -22,13 +22,12 @@ const AuthForgotPassword = ({ ...others }) => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
-    const { resetPassword } = useAuth();
+    const { forgotPassword } = useAuth(); 
 
     return (
         <Formik
             initialValues={{
                 email: '',
-                password: '',
                 submit: null
             }}
             validationSchema={Yup.object().shape({
@@ -36,7 +35,7 @@ const AuthForgotPassword = ({ ...others }) => {
             })}
             onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
                 try {
-                    await resetPassword(values.email);
+                    await forgotPassword(values.email); // Call forgotPassword function
 
                     if (scriptedRef.current) {
                         setStatus({ success: true });
@@ -44,7 +43,7 @@ const AuthForgotPassword = ({ ...others }) => {
                         dispatch(
                             openSnackbar({
                                 open: true,
-                                message: 'Check mail for reset password link',
+                                message: 'Check your email for the reset password link',
                                 variant: 'alert',
                                 alert: {
                                     color: 'success'

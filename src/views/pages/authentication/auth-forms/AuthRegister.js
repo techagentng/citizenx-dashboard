@@ -82,11 +82,12 @@ const JWTRegister = ({ ...others }) => {
 
             <Formik
                 initialValues={{
-                    fullName: 'Nnah kenneth',
-                    userName: 'knoi',
-                    telephone: '090887655',
-                    email: 't@gmail.com',
-                    password: 'kenneth1',
+                    profile_image: '',
+                    fullName: '',
+                    userName: '',
+                    telephone: '',
+                    email: '',
+                    password: '',
                     submit: null
                 }}
                 validationSchema={Yup.object().shape({
@@ -102,9 +103,9 @@ const JWTRegister = ({ ...others }) => {
                         console.log('Response receivedREG:', response);
 
                         if (scriptedRef.current) {
-                            if (errors) {
+                            if (response.errors) {
                                 // If there are errors in the response, set them and mark registration as unsuccessful
-                                setErrors({ submit: errors });
+                                setErrors({ submit: response.errors });
                                 setStatus({ success: false });
                                 setSubmitting(false);
                             } else {
@@ -140,8 +141,7 @@ const JWTRegister = ({ ...others }) => {
                                 setErrors({ submit: err.errors });
                             } else {
                                 // Handle other types of errors
-                                setStatus({ success: true });
-                                navigate('/login', { replace: true });
+                                setErrors({ submit: 'An unexpected error occurred. Please try again.' });
                             }
 
                             setStatus({ success: false });
@@ -196,8 +196,8 @@ const JWTRegister = ({ ...others }) => {
                                     onBlur={handleBlur}
                                     onChange={handleChange}
                                     sx={{ ...theme.typography.customInput }}
-                                    error={Boolean(touched.userName && errors.userName)}
-                                    helperText={touched.userName && errors.userName}
+                                    error={Boolean(touched.telephone && errors.telephone)}
+                                    helperText={touched.telephone && errors.telephone}
                                 />
                             </Grid>
                             <Grid item xs={12} sm={6}>
