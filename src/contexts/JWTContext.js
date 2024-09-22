@@ -8,8 +8,6 @@ import accountReducer from 'store/accountReducer';
 import Loader from 'ui-component/Loader';
 import axios from 'utils/axios';
 
-const apiUrl = 'https://citizenx-9hk2.onrender.com/api/v1'
-
 // Initial state
 const initialState = {
     isLoggedIn: false,

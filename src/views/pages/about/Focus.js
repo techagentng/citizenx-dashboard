@@ -72,7 +72,6 @@ IconBox.propTypes = {
 }
 
 const Focus = () => {
-    const theme = useTheme();
 
   return (
     <Container 

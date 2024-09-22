@@ -1,7 +1,6 @@
 // material-ui
 import { useTheme, styled } from '@mui/material/styles';
-import { Button, Box, Typography, Grid, Stack, ButtonBase, Avatar } from '@mui/material';
-import { Link } from 'react-router-dom';
+import { Button, Box, Typography, Grid, Stack, ButtonBase} from '@mui/material';
 
 // third party
 import { useTimer } from 'react-timer-hook';
@@ -138,7 +137,6 @@ const socialLinks = [
 // ===========================|| COMING SOON 2 ||=========================== // 
 
 const ComingSoon2 = () => {
-    const theme = useTheme();
     const time = new Date('2024-10-01T11:59:59');
     time.setSeconds(time.getSeconds() + 3600 * 24 * 2 - 3600 * 15.5);
 
