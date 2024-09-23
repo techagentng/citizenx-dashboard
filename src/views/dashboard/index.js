@@ -130,7 +130,7 @@ const DashboardPage = () => {
         <>
             <MainCard
                 title={
-                    <Typography variant="h2" align="center">
+                    <Typography variant="h4" align="left">
                         State and LGA Dashboard
                     </Typography>
                 }
@@ -149,17 +149,17 @@ const DashboardPage = () => {
                         <EarningCard count="230" details="Average Daily Users" icon={EarningIcon} />
                     </Grid>
                 </Grid>
+                <Grid container spacing={2}>
+                    <Grid item xs={12}>
+                        <Typography variant="h4" align="left" sx={{ mt: 4, mb: 4 }}>
+                            LGA Incident Report Charts
+                        </Typography>
+                    </Grid>
+                </Grid>
                 <Grid container spacing={gridSpacing}>
                     {/* First Column */}
                     <Grid item xs={12} md={6}>
-                        <MainCard
-                            content={false}
-                            title={
-                                <Typography variant="h3" align="center">
-                                    Most Reported Incidents
-                                </Typography>
-                            }
-                        >
+                        <MainCard content={false}>
                             {!reportTypes || reportTypes.length === 0 ? (
                                 <Grid container justifyContent="center">
                                     <Grid item>
@@ -181,14 +181,7 @@ const DashboardPage = () => {
 
                     {/* Second Column */}
                     <Grid item xs={12} md={6}>
-                        <MainCard
-                            content={false}
-                            title={
-                                <Typography variant="h3" align="center">
-                                    Most Active States
-                                </Typography>
-                            }
-                        >
+                        <MainCard content={false}>
                             {!reportTypes || reportTypes.length === 0 ? (
                                 <Grid container justifyContent="center">
                                     <Grid item>
@@ -207,17 +200,19 @@ const DashboardPage = () => {
                 </Grid>
                 <Grid container spacing={gridSpacing}>
                     <Grid item xs={12} md={12}>
-                        <MainCard   title={
+                        <MainCard
+                            title={
                                 <Typography variant="h3" align="center">
-                                    State & Report Count
+                                    Map of Nigeria & State Report Counts
                                 </Typography>
-                            }>
+                            }
+                        >
                             <NigerianMap />
                         </MainCard>
                     </Grid>
                     <Grid item xs={6} md={4}>
                         <PopularCard
-                            title={`Top Reported cases in ${selectedState || 'State'}`}
+                            title={`Top Reported cases in ${selectedLga || 'State'}`}
                             data={reportTypes?.map((type, index) => ({
                                 reportType: type,
                                 reportCount: reportCounts[index]
