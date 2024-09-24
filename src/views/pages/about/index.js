@@ -1,4 +1,4 @@
-import React from 'react'
+import React from 'react';
 // material-ui
 import { styled, useTheme } from '@mui/material/styles';
 
@@ -11,7 +11,7 @@ import Jumbo from './Jumbo';
 import Trends from '../landing/Trends';
 import Footer from 'views/pages/landing/Footer';
 
-// custom stlye
+// custom styles
 const HeaderWrapper = styled('div')(({ theme }) => ({
     overflowX: 'hidden',
     overflowY: 'clip',
@@ -19,56 +19,54 @@ const HeaderWrapper = styled('div')(({ theme }) => ({
         theme.palette.mode === 'dark'
             ? theme.palette.background.default
             : `linear-gradient(360deg, #c7f7e7 1.09%, ${theme.palette.background.paper} 100%)`,
-    [theme.breakpoints.down('md')]: {}
 }));
 
-const SectionWrapper = styled('div')({
+const SectionWrapper = styled('div')(() => ({
     paddingTop: 100,
-    paddingBottom: 100
-});
+    paddingBottom: 100,
+}));
 
-const about = () => {
-    const theme = useTheme()
-  return (
-    <>
-        {/* 1. header and hero section */}
-        <HeaderWrapper id="home">
-            <AppBar />
-            <HeaderSection/>
-        </HeaderWrapper>
+const About = () => {
+    const theme = useTheme();
+    return (
+        <>
+            {/* 1. header and hero section */}
+            <HeaderWrapper id="home">
+                <AppBar />
+                <HeaderSection />
+            </HeaderWrapper>
 
-        {/* 2. Focus Section */}
-        <SectionWrapper >
-              <Focus/>
-        </SectionWrapper>
+            {/* 2. Focus Section */}
+            <SectionWrapper>
+                <Focus />
+            </SectionWrapper>
 
-        {/* 3. Partners section */}
-        <SectionWrapper sx={{background: theme.palette.grey[100]}} >
-              <Partners/>
-        </SectionWrapper>
+            {/* 3. Partners section */}
+            <SectionWrapper style={{ background: theme.palette.grey[100] }}>
+                <Partners />
+            </SectionWrapper>
 
-        {/* 6. Jumbo section */}
-        <SectionWrapper >
-              <Jumbo/>
-        </SectionWrapper>
+            {/* 6. Jumbo section */}
+            <SectionWrapper>
+                <Jumbo />
+            </SectionWrapper>
 
-        {/* 7. FAQ section */}
-        <SectionWrapper >
-              <FAQ/>
-        </SectionWrapper>
+            {/* 7. FAQ section */}
+            <SectionWrapper>
+                <FAQ />
+            </SectionWrapper>
 
-        {/* 8. Trends section */}
-        <SectionWrapper >
-              <Trends/>
-        </SectionWrapper>
-         
+            {/* 8. Trends section */}
+            <SectionWrapper>
+                <Trends />
+            </SectionWrapper>
 
-            {/* 9. card section */}
-         <SectionWrapper sx={{ paddingTop: 0, paddingBottom: 0}}>
-            <Footer/>
-        </SectionWrapper>
-    </>
-  )
-}
+            {/* 9. Footer section */}
+            <SectionWrapper style={{ paddingTop: 0, paddingBottom: 0 }}>
+                <Footer />
+            </SectionWrapper>
+        </>
+    );
+};
 
-export default about
+export default About;
