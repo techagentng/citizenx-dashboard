@@ -10,7 +10,6 @@ import AppInfo from './AppInfo';
 import Analytics from './Analytics';
 import Impact from './Impact';
 import Publication from './Publication';
-import Testimonial from './Testimonial';
 import Trends from './Trends';
 import Subscribe from './Subscribe';
 import Footer from './Footer';
@@ -47,17 +46,17 @@ const Landing = () => {
                 <HeaderSection />
             </HeaderWrapper>
 
-            {/* 2. card section */}
+            {/* 2. Jumbo section */}
             <SectionWrapper sx={{ bgcolor: theme.palette.mode === 'dark' ? 'dark.dark' : 'background.default' }}>
                 <Jumbo />
             </SectionWrapper>
 
-            {/* 3. about section */}
+            {/* 3. Whats the buzz section */}
             <SectionWrapper sx={{ bgcolor: theme.palette.mode === 'dark' ? 'dark.dark' : 'background.default' }}>
                 <Cards />
             </SectionWrapper>
 
-            {/* 4. about section */}
+            {/* 4. Community for change and phone screens section */}
             <SectionWrapper sx={{ bgcolor: theme.palette.mode === 'dark' ? 'dark.dark' : 'background.default' }}>
                 <AppInfo />
             </SectionWrapper>
@@ -67,19 +66,14 @@ const Landing = () => {
                 <Analytics />
             </SectionWrapper>
 
-            {/* 6. Impact */}
+            {/* 6. Impact Projections */}
             <SectionWrapper>
                 <Impact />
             </SectionWrapper>
             
-            {/* 7. Impact */}
+            {/* 7. Publications */}
             <SectionWrapper>
                 <Publication />
-            </SectionWrapper>
-
-            {/* 8. Impact */}
-            <SectionWrapper>
-                <Testimonial />
             </SectionWrapper>
 
             {/* 8. Trends */}
@@ -87,8 +81,8 @@ const Landing = () => {
                 <Trends />
             </SectionWrapper>
 
-            {/* 9. Trends */}
-            <SectionWrapper>
+            {/* 9. Trends & Download */}
+            <SectionWrapper >
                 <Subscribe />
             </SectionWrapper>
 

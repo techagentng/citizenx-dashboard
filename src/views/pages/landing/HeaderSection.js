@@ -116,7 +116,10 @@ const HeaderSection = () => {
                                     variant="body1"
                                     sx={{ fontSize: { xs: '1rem', md: '1.125rem' } }}
                                 >
-                                    Join us in making a difference Engage, <br/>report and stay informed
+                                    <Box component="span" sx={{ fontWeight: 'bold' }}>
+                                        Your Reports, Your Community, Your Impact -
+                                    </Box><br/>
+                                    Join us in making a difference by engaging, reporting, and staying informed. 
                                 </Typography>
                             </motion.div>
                         </Grid>

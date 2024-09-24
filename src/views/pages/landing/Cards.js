@@ -5,7 +5,7 @@ import { useTheme } from '@mui/material/styles';
 import { Container, Grid, Typography, Stack, CardMedia } from '@mui/material';
 
 // project imports
-import FadeInWhenVisible from './Animation';
+import FadeInWhenVisible from './Animation2';
 import SubCard from 'ui-component/cards/SubCard';
 import Avatar from 'ui-component/extended/Avatar';
 
@@ -19,7 +19,7 @@ const OfferCard = ({ title, caption, image }) => {
     const theme = useTheme();
     const AvaterSx = { background: 'transparent', color: theme.palette.secondary.main, width: 56, height: 56 };
     return (
-        <FadeInWhenVisible>
+        <FadeInWhenVisible animationType='fadeIn' delay={0.3}>
             <SubCard
                 sx={{
                     border: '1px solid',
@@ -85,7 +85,7 @@ const Cards = () => {
                     <Grid item md={3} sm={6}>
                         <OfferCard
                             title="Reward System"
-                            caption="Earn rewards for your engagement and contributions"
+                            caption="Earn reward points for your engagement and contributions."
                             image={Offer2}
                         />
                     </Grid> 
@@ -93,7 +93,7 @@ const Cards = () => {
                     <Grid item md={3} sm={6}>
                         <OfferCard
                             title="Dashboard Data Analysis"
-                            caption="Access insightful data to stay informed and make a difference"
+                            caption="Dive into insightful report analyses, track trends, and understand community issues."
                             image={Offer3}
                         />
                     </Grid> 
@@ -101,7 +101,7 @@ const Cards = () => {
                     <Grid item md={3} sm={6}>
                         <OfferCard
                             title="Transparency and Accountability"
-                            caption="Promoting open and honest governance"
+                            caption="Foster transparency and accountability through every report."
                             image={Offer4}
                         />
                     </Grid> 

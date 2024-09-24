@@ -7,6 +7,7 @@ import { styled, useTheme } from '@mui/material/styles';
 // assets
 import FormatQuoteIcon from '@mui/icons-material/FormatQuote';
 import { Link } from 'react-router-dom';
+import FadeInWhenVisible from './Animation2';
 
 const JumboContainer = styled(Paper)(({ theme }) => ({
     backgroundColor: '#0A4833',
@@ -28,6 +29,7 @@ const Jumbo = () => {
         <Container>
             <Grid container alignItems="center" justifyContent="center">
                 <Grid item xs={12}>
+                    <FadeInWhenVisible animationType='fadeInCenter' delay={0.3}>
                     <JumboContainer elevation={2}>
                         <Stack
                             direction="column"
@@ -50,7 +52,8 @@ const Jumbo = () => {
                                     paddingX: {xs: 5, md: 2}
                                 }}
                             >
-                                We are on a mission to transform the way citizens<br /> engage with governance, ensuring transparency,<br /> accountability, and community empowerment.
+                                We are on a mission to leverage technology to revolutionize <br/>citizen engagement 
+                                with governance, promote transparency and accountability, and empower communities.
                             </Typography>
                             <Button
                                 component={Link}
@@ -72,6 +75,7 @@ const Jumbo = () => {
                             </Button>
                         </Stack>
                     </JumboContainer>
+                    </FadeInWhenVisible>
                 </Grid>
             </Grid>
         </Container>
