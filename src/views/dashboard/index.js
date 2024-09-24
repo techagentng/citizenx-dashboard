@@ -202,7 +202,7 @@ const DashboardPage = () => {
                     <Grid item xs={12} md={12}>
                         <MainCard
                             title={
-                                <Typography variant="h3" align="center">
+                                <Typography variant="h3" align="left">
                                     Map of Nigeria & State Report Counts
                                 </Typography>
                             }
