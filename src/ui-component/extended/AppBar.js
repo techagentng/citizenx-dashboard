@@ -71,7 +71,7 @@ const AppBar = ({ ...others }) => {
             <MuiAppBar>
                 <Container>
                     <Toolbar sx={{ py: 2.5, px: `0 !important` }}>
-                        <Typography component="div" sx={{ flexGrow: 1, textAlign: 'left' }}>
+                        <Typography component="a" href="/" sx={{ flexGrow: 1, textAlign: 'left' }}>
                             <Logo />
                         </Typography>
                         <Stack direction="row" sx={{ display: { xs: 'none', sm: 'block' } }} spacing={{ xs: 1.5, md: 2.5 }}>

@@ -57,18 +57,18 @@ const Analytics = () => {
                 <Grid item xs={12}>
                     <Lists>
                         <Box>
-                            <ListItem>Earn Rewards</ListItem>
-                            <ListItem>Participate in Community</ListItem>
-                            <ListItem>Report Incidents</ListItem>
+                            <ListItem>View Real-Time Reports</ListItem>
+                            <ListItem>Export Report Data</ListItem>
+                            <ListItem>Compare Reports</ListItem>
                         </Box>
                         <Box>
-                            <ListItem>Follow Up on Reports</ListItem>
-                            <ListItem>See Top Reports Hotspots</ListItem>
-                            <ListItem>Engage with Local Governance</ListItem>
+                            <ListItem>View Report Location on Maps</ListItem>
+                            <ListItem>Visualize Report Data</ListItem>
+                            <ListItem>Access Analytics on our Dashboard</ListItem>
                         </Box>
                     </Lists>
                     <Box sx={{ mt: 5, textAlign: 'left' }}>
-                        <Button component={Link} sx={{backgroundColor: '#17a877'}} variant='contained' to="/" size="large">
+                        <Button component={Link} sx={{backgroundColor: '#17a877'}} variant='contained' to="/dashboard" size="large">
                             Explore Dashboard
                         </Button>
                     </Box>

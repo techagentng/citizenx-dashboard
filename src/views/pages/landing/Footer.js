@@ -102,9 +102,7 @@ const Footer = () => {
                                 </Typography>
                             </Stack>
                             <Typography variant="body2" color={textColor} lineHeight={1.7}>
-                                        Berry React is a dashboard template that utilizes the Material-UI framework and the React JavaScript
-                                        library. It offers a range of features and customization options to help you create a powerful and
-                                        user-friendly admin panel.
+                            Citizen X empowers citizens and enhances community engagement. We continuously evolve, adding features to amplify your voice. The future of citizen engagement is in your hands. With Citizen X, you're an active participant in shaping your community. Join us and be part of the change!
                          </Typography>
                          {/* Social Icons */}
                          <Stack direction="row" alignItems="center" spacing={{ xs: 3, sm: 1.5, md: 2 }}>
@@ -155,21 +153,21 @@ const Footer = () => {
                                 Quick Links
                             </Typography>
                                 <Stack spacing={{ xs: 1.5, md: 2.5 }}>
-                                    <FooterLink href="https://links.codedthemes.com/HTIBc" target="_blank" underline="none">
-                                        Dashboard
+                                    <FooterLink href="/about" target="_blank" underline="none">
+                                        About Us
                                     </FooterLink>
-                                    <FooterLink href="https://codedthemes.gitbook.io/berry/" target="_blank" underline="none">
-                                        Documentation
+                                    <FooterLink href="" target="_blank" underline="none">
+                                        Download App
                                    </FooterLink>
                                  <FooterLink
-                                    href="https://codedthemes.gitbook.io/berry/changelog"
+                                    href="/dashboard"
                                         target="_blank"
                                         underline="none"
                                         >
-                                        Change Log
+                                        Dashboard
                                     </FooterLink>
-                                    <FooterLink href="https://codedthemes.support-hub.io/" target="_blank" underline="none">
-                                        Support
+                                    <FooterLink href="/publication" target="_blank" underline="none">
+                                        Publication
                                     </FooterLink>
                                 </Stack>
                             </Stack>
@@ -188,7 +186,7 @@ const Footer = () => {
                                             <IconMapPin size="25px" color='white' />
                                         </Box>
                                         <Typography variant="body1" sx={ContactSX}>
-                                            Adetokunbo Ademola Crescent, Wuse 2, Abuja 904101, Federal Capital Territory
+                                        11 Herbert Macaulay Crescent GRA Ikeja, Lagos. Nigeria
                                         </Typography>
                                     </Stack>
                                     <Stack spacing={1} display="flex" alignItems="flex-start" direction="row">
@@ -196,7 +194,7 @@ const Footer = () => {
                                             <IconMailbox size="25px" color='white' />
                                         </Box>
                                         <Typography variant="body1" sx={ContactSX} paddingTop={1}>
-                                            hello@citizenx.ng
+                                            Admin@citizenx.ng
                                         </Typography>
                                     </Stack>
                                     <Stack spacing={1} display="flex" alignItems="flex-start" direction="row">
@@ -204,7 +202,7 @@ const Footer = () => {
                                             <IconPhone size="25px" color='white' />
                                         </Box>
                                         <Typography variant="body1" sx={ContactSX} paddingTop={1}>
-                                            +800 000 0000
+                                            +234 7003 151 358
                                         </Typography>
                                     </Stack>
                                 </Stack>

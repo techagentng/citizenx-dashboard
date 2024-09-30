@@ -77,7 +77,7 @@ const Cards = () => {
                     <Grid item md={3} sm={6}>
                         <OfferCard
                             title="Incident Reporting"
-                            caption="Easily report incidents and contribute to community safety and development"
+                            caption="Easily report incidents and contribute to community safety and development."
                             image={Offer1}
                         />
                     </Grid> 

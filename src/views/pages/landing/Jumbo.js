@@ -57,7 +57,7 @@ const Jumbo = () => {
                             </Typography>
                             <Button
                                 component={Link}
-                                to="#"
+                                to="/about"
                                 variant="contained"
                                 size="large"
                                 sx={{

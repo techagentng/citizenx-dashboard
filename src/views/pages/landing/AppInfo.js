@@ -152,7 +152,7 @@ const AppInfo = () => {
                         <Grid item xs={12} md={4}>
                             <ScreeColumn
                                 title='Earn Rewards'
-                                caption="Get involved on CitizenX today, make your voice heard, and start earning rewards quickly!"
+                                caption="Get actively involved, make your voice heard, and get reward points all at your fingertips!"
                                 image={screenthree}
                             />
                         </Grid>
