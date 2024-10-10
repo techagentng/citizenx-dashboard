@@ -12,13 +12,13 @@ const Lists = styled(Box)(({ theme }) => ({
     flexDirection: 'column',
     gap: theme.spacing(2),
     [theme.breakpoints.up('sm')]: {
-        flexDirection: 'row',
+        flexDirection: 'row'
     }
 }));
 
 const Analytics = () => {
     const theme = useTheme();
-    
+
     const listSX = {
         display: 'flex',
         alignItems: 'center',
@@ -31,9 +31,9 @@ const Analytics = () => {
 
     const ListItem = ({ children }) => (
         <Typography sx={listSX}>
-          <IconCircleCheckFilled size={20} /> {children}
+            <IconCircleCheckFilled size={20} /> {children}
         </Typography>
-      );
+    );
 
     return (
         <Container sx={{ py: 0 }}>
@@ -43,14 +43,17 @@ const Analytics = () => {
                         Citizen X Dashboard: <br />
                         Incident Reports & Analytics
                     </Typography>
-                    <Typography sx={{
-                        fontSize: '1rem',
-                        zIndex: '99',
-                        pt: 1,
-                        lineHeight: 1.7,
-                        width: { xs: '100%', sm: '100%', md: 'calc(100% - 20%)' }
-                    }}>
-                        Explore our data-driven dashboard for insights into<br /> citizen engagements and governance
+                    <Typography
+                        sx={{
+                            fontSize: '1rem',
+                            zIndex: '99',
+                            pt: 1,
+                            lineHeight: 1.7,
+                            width: { xs: '100%', sm: '100%', md: 'calc(100% - 20%)' }
+                        }}
+                    >
+                        Explore our data-driven dashboard for insights into
+                        <br /> citizen engagements and governance
                     </Typography>
                 </Grid>
 
@@ -68,22 +71,22 @@ const Analytics = () => {
                         </Box>
                     </Lists>
                     <Box sx={{ mt: 5, textAlign: 'left' }}>
-                        <Button component={Link} sx={{backgroundColor: '#17a877'}} variant='contained' to="/" size="large">
+                        <Button component={Link} sx={{ backgroundColor: '#17a877' }} variant="contained" to="/dashboard" size="large">
                             Explore Dashboard
                         </Button>
                     </Box>
                 </Grid>
 
-                <Grid item xs={12} >
-                <FadeInWhenVisible animationType='fadeInCenter' delay={0.4}>
-                    <Box sx={{ textAlign: 'center' }}>
-                        <img src={Dashboard} width="100%" alt="Dashboard" style={{ borderRadius: '30px', padding: 10 }} />
-                    </Box>
-                </FadeInWhenVisible>
+                <Grid item xs={12}>
+                    <FadeInWhenVisible animationType="fadeInCenter" delay={0.4}>
+                        <Box sx={{ textAlign: 'center' }}>
+                            <img src={Dashboard} width="100%" alt="Dashboard" style={{ borderRadius: '30px', padding: 10 }} />
+                        </Box>
+                    </FadeInWhenVisible>
                 </Grid>
             </Grid>
         </Container>
     );
-}
+};
 
 export default Analytics;
