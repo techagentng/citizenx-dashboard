@@ -20,13 +20,13 @@ const FloatingCart = () => {
         // Fetch the reward count on component mount
         getRewardBalance()
             .then((count) => {
-                console.log('Reward count:', count); // Debugging
-                dispatch(setTotalQuantity(count)); // Dispatch to store
+                console.log('Reward count:', count); 
+                dispatch(setTotalQuantity(count)); 
                 setLoading(false);
             })
             .catch((err) => {
                 console.error('Error fetching reward count:', err);
-                setError(err.message); // Display error message
+                setError(err.message); 
                 setLoading(false);
             });
     }, [dispatch]); // Ensure dispatch is a dependency to avoid unnecessary re-fetches

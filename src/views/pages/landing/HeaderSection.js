@@ -28,10 +28,10 @@ const HeaderImage = styled('img')(({ theme }) => ({
     transformOrigin: theme.direction === 'rtl' ? '100% 50%' : '0 50%',
     [theme.breakpoints.down('xl')]: {
         transform: 'scale(1.5)',
-        marginBottom: '-60px',
+        marginBottom: '-60px'
     },
     [theme.breakpoints.down('lg')]: {
-        transform: 'scale(1.2)',
+        transform: 'scale(1.2)'
     }
 }));
 
@@ -42,8 +42,7 @@ const HeaderAnimationImage = styled('img')({
 
 // Icon style
 const iconStyle = {
-    padding: '20px',
-
+    padding: '20px'
 };
 
 const Icon = styled('img')({
@@ -57,8 +56,8 @@ const HeaderSection = () => {
     const theme = useTheme();
     const { rtlLayout } = useConfig();
 
-    const headerSX = { 
-        fontSize: { xs: '2rem', sm: '3rem', md: '3rem', lg: '3rem' }, 
+    const headerSX = {
+        fontSize: { xs: '2rem', sm: '3rem', md: '3rem', lg: '3rem' }
     };
 
     const HeaderAnimationImagememo = useMemo(
@@ -99,7 +98,7 @@ const HeaderSection = () => {
                             >
                                 <Stack spacing={1}>
                                     <Typography textAlign={{ xs: 'center', md: 'left' }} variant="h1" sx={headerSX}>
-                                        Revolutionizing Citizen Engagement and Governance in Nigeria 
+                                        Revolutionizing Citizen Engagement in Nigeria
                                     </Typography>
                                 </Stack>
                             </motion.div>
@@ -118,8 +117,9 @@ const HeaderSection = () => {
                                 >
                                     <Box component="span" sx={{ fontWeight: 'bold' }}>
                                         Your Reports, Your Community, Your Impact -
-                                    </Box><br/>
-                                    Join us in making a difference by engaging, reporting, and staying informed. 
+                                    </Box>
+                                    <br />
+                                    Join us in making a difference by engaging, reporting, and staying informed.
                                 </Typography>
                             </motion.div>
                         </Grid>
@@ -145,19 +145,25 @@ const HeaderSection = () => {
                                         </AnimateButton>
                                     </Grid>
                                     <Grid item>
-                                        <Button component={Link} variant='outlined' href="" target="_blank" size="large" sx={{ color: '#17a877', borderColor: '#17a877' }}>
+                                        <Button
+                                            component={Link}
+                                            variant="outlined"
+                                            href=""
+                                            target="_blank"
+                                            size="large"
+                                            sx={{ color: '#17a877', borderColor: '#17a877' }}
+                                        >
                                             Download App
                                         </Button>
                                     </Grid>
                                 </Grid>
                             </motion.div>
                         </Grid>
-                        
                     </Grid>
                 </Grid>
-                <Grid item xs={12} md={7} sx={{ display: { xs: 'none', md: 'flex' }, }}>
+                <Grid item xs={12} md={7} sx={{ display: { xs: 'none', md: 'flex' } }}>
                     <Box sx={{ position: 'relative', mt: 8.75, zIndex: 9 }}>
-                        <HeaderImage src={Hero} alt="Berry" /> 
+                        <HeaderImage src={Hero} alt="Berry" />
                         <Box
                             sx={{
                                 position: 'absolute',
@@ -172,10 +178,8 @@ const HeaderSection = () => {
                                 animate={{ opacity: 1, scale: 1 }}
                                 transition={{ type: 'spring', stiffness: 150, damping: 30, delay: 0.2 }}
                             >
-                                <Box style={iconStyle}>
-                                   
-                                </Box>
-                                <Icon src={Discuss} width='50%' height='50%'  />
+                                <Box style={iconStyle}></Box>
+                                <Icon src={Discuss} width="50%" height="50%" />
                             </motion.div>
                         </Box>
                         <Box
@@ -194,7 +198,7 @@ const HeaderSection = () => {
                                 transition={{ type: 'spring', stiffness: 150, damping: 30, delay: 0.4 }}
                             >
                                 <Box style={iconStyle}>
-                                    <Icon  width='80%' height='80%' src={Report}   />
+                                    <Icon width="80%" height="80%" src={Report} />
                                 </Box>
                             </motion.div>
                         </Box>

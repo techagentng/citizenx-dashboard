@@ -1,36 +1,22 @@
 import React, { useState, useEffect } from 'react';
-import { Avatar, Button, Grid, TextField, Typography, Box } from '@mui/material';
+import { Avatar, Button, Grid, TextField, Box } from '@mui/material';
 import SubCard from 'ui-component/cards/SubCard';
 import AnimateButton from 'ui-component/extended/AnimateButton';
 import CircularProgress from '@mui/material/CircularProgress';
 import { updateUserProfile, getUserProfile, uploadToS3 } from 'services/userService';
-import { gridSpacing } from 'store/constant';
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
-import { useDispatch, useSelector } from 'store';
+import { useDispatch } from 'store';
 import { openSnackbar } from 'store/slices/snackbar';
 import { setAvatarUrl } from 'store/slices/users';
-
-const TitleWithCount = ({ title, rewardBalance }) => {
-    const formattedBalance = rewardBalance !== undefined ? rewardBalance.toLocaleString() : '0';
-
-    return (
-        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-            <Typography variant="h6">{title}</Typography>
-            <Box>
-                <Typography variant="h4" sx={{ fontWeight: 'bold' }}>
-                    {formattedBalance} <span style={{ fontWeight: 'normal' }}>points</span>
-                </Typography>
-            </Box>
-        </Box>
-    );
-};
+import { deleteUser } from './../../services/userService';
+import { Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material';
 
 const Profile = () => {
     const [avatarSrc, setAvatarSrc] = useState('');
     const [loading, setLoading] = useState(false);
     const dispatch = useDispatch();
-    const { avatarUrl, rewardBalance } = useSelector((state) => state.user);
+    const [open, setOpen] = useState(false);
     const [initialValues, setInitialValues] = useState({
         fullname: '',
         email: '',
@@ -42,10 +28,13 @@ const Profile = () => {
     const [selectedFile, setSelectedFile] = useState(null);
     const defaultAvatarUrl = 'path/to/default/avatar.jpg'; // Update with actual default URL
 
-    useEffect(() => {
-        setAvatarSrc(avatarUrl || defaultAvatarUrl);
-    }, [avatarUrl]);
+    const handleClickOpen = () => {
+        setOpen(true);
+    };
 
+    const handleClose = () => {
+        setOpen(false);
+    };
     const handleFileChange = (event) => {
         const file = event.target.files[0];
         if (file) {
@@ -178,21 +167,37 @@ const Profile = () => {
         }
     };
 
+    const handleDelete = () => {
+        setLoading(true);
+        handleClose();
+        deleteUser()
+            .then((data) => {
+                console.log('User deleted successfully:', data);
+                alert('Your account has been deleted.');
+                localStorage.removeItem('serviceToken');
+                window.location.href = '/login';
+            })
+            .catch((error) => {
+                console.error('Failed to delete user:', error);
+                alert('Failed to delete account. Please try again later.');
+            })
+            .finally(() => {
+                setLoading(false);
+            });
+    };
+
     return (
         <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={handleSubmit} enableReinitialize>
             {({ values, errors, touched, handleChange, handleBlur }) => (
                 <Form>
-                    <Grid container spacing={gridSpacing}>
+                    <Grid container spacing={3}>
                         <Grid item sm={6} md={4}>
-                            <SubCard
-                                title={<TitleWithCount title="Profile Picture" rewardBalance={rewardBalance} />}
-                                contentSX={{ textAlign: 'center' }}
-                            >
+                            <SubCard title="Profile Picture">
                                 <Grid container spacing={2}>
                                     <Grid item xs={12}>
                                         <Avatar
                                             alt="User Avatar"
-                                            src={avatarSrc || defaultAvatarUrl}
+                                            src={avatarSrc || '/defaultAvatar.png'} // Update this to your default image
                                             sx={{ width: 100, height: 100, margin: '0 auto' }}
                                         />
                                     </Grid>
@@ -215,10 +220,10 @@ const Profile = () => {
                                 </Grid>
                             </SubCard>
                         </Grid>
+
                         <Grid item sm={6} md={8}>
                             <SubCard title="Edit Account Details">
-                                <Grid container spacing={gridSpacing}>
-                                    {/* Form Fields */}
+                                <Grid container spacing={3}>
                                     {/* Full Name */}
                                     <Grid item md={6} xs={12}>
                                         <TextField
@@ -233,6 +238,7 @@ const Profile = () => {
                                             helperText={touched.fullname && errors.fullname}
                                         />
                                     </Grid>
+
                                     {/* Email */}
                                     <Grid item md={6} xs={12}>
                                         <TextField
@@ -247,6 +253,7 @@ const Profile = () => {
                                             helperText={touched.email && errors.email}
                                         />
                                     </Grid>
+
                                     {/* Username */}
                                     <Grid item md={6} xs={12}>
                                         <TextField
@@ -261,6 +268,7 @@ const Profile = () => {
                                             helperText={touched.username && errors.username}
                                         />
                                     </Grid>
+
                                     {/* State */}
                                     <Grid item md={6} xs={12}>
                                         <TextField
@@ -275,6 +283,7 @@ const Profile = () => {
                                             helperText={touched.state && errors.state}
                                         />
                                     </Grid>
+
                                     {/* LGA */}
                                     <Grid item md={6} xs={12}>
                                         <TextField
@@ -289,6 +298,7 @@ const Profile = () => {
                                             helperText={touched.lga && errors.lga}
                                         />
                                     </Grid>
+
                                     {/* Phone */}
                                     <Grid item md={6} xs={12}>
                                         <TextField
@@ -303,9 +313,10 @@ const Profile = () => {
                                             helperText={touched.phone && errors.phone}
                                         />
                                     </Grid>
+
                                     {/* Submit Button */}
                                     <Grid item xs={12}>
-                                        <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+                                        <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
                                             <AnimateButton>
                                                 <Button type="submit" variant="contained" size="large" disabled={loading}>
                                                     {loading ? <CircularProgress size={24} /> : 'Save Changes'}
@@ -313,6 +324,46 @@ const Profile = () => {
                                             </AnimateButton>
                                         </Box>
                                     </Grid>
+
+                                    {/* Delete Account Button */}
+                                    <Grid item xs={12}>
+                                        <Box sx={{ display: 'flex', justifyContent: 'flex-start', mt: 2 }}>
+                                            <AnimateButton>
+                                                <Button
+                                                    variant="outlined"
+                                                    color="error"
+                                                    size="large"
+                                                    onClick={handleClickOpen}
+                                                    disabled={loading}
+                                                >
+                                                    Delete Account
+                                                </Button>
+                                            </AnimateButton>
+                                        </Box>
+                                    </Grid>
+
+                                    {/* Confirmation Dialog */}
+                                    <Dialog
+                                        open={open}
+                                        onClose={handleClose}
+                                        aria-labelledby="alert-dialog-title"
+                                        aria-describedby="alert-dialog-description"
+                                    >
+                                        <DialogTitle id="alert-dialog-title">{'Confirm Account Deletion'}</DialogTitle>
+                                        <DialogContent>
+                                            <DialogContentText id="alert-dialog-description">
+                                                Are you sure you want to delete your account? This action is irreversible.
+                                            </DialogContentText>
+                                        </DialogContent>
+                                        <DialogActions>
+                                            <Button onClick={handleClose} color="primary">
+                                                Cancel
+                                            </Button>
+                                            <Button onClick={handleDelete} color="error" autoFocus>
+                                                {loading ? 'Deleting...' : 'Confirm Delete'}
+                                            </Button>
+                                        </DialogActions>
+                                    </Dialog>
                                 </Grid>
                             </SubCard>
                         </Grid>
@@ -322,5 +373,4 @@ const Profile = () => {
         </Formik>
     );
 };
-
 export default Profile;

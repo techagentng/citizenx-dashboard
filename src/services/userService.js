@@ -183,3 +183,26 @@ export const uploadToS3 = (file) => {
     });
 };
 
+export const deleteUser = () => {
+    return new Promise((resolve, reject) => {
+        const serviceToken = localStorage.getItem('serviceToken');
+
+        axios
+            .delete(`${process.env.REACT_APP_API_URL}/delete/user`, {
+                headers: {
+                    Authorization: `Bearer ${serviceToken}`
+                }
+            })
+            .then((response) => {
+                if (response.status === 200) {
+                    resolve(response.data); // Handle successful delete response
+                } else {
+                    reject(new Error('Failed to delete user'));
+                }
+            })
+            .catch((error) => {
+                console.error('API error:', error);
+                reject(error);
+            });
+    });
+};
