@@ -12,8 +12,8 @@ const icons = {
     IconHome
 };
 const samplePage = {
-    id: 'overview',
-    title: <FormattedMessage id="overview" />,
+    id: 'Overview',
+    title: <FormattedMessage id="Overview" />,
     icon: icons.IconHome,
     type: 'group',
     url: '/dashboard'
