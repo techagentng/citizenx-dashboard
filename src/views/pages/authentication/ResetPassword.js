@@ -25,7 +25,7 @@ const ResetPassword = () => {
 
     const handleSubmit = () => {
         if (newPassword !== confirmPassword) {
-            setError("Passwords do not match");
+            setError('Passwords do not match');
         } else {
             // Call your password reset API here with the new password
             console.log('Reset password:', newPassword);
@@ -81,12 +81,7 @@ const ResetPassword = () => {
                                                 onChange={(e) => setConfirmPassword(e.target.value)}
                                             />
                                             {error && <Typography color="error">{error}</Typography>}
-                                            <Button
-                                                variant="contained"
-                                                color="primary"
-                                                onClick={handleSubmit}
-                                                fullWidth
-                                            >
+                                            <Button variant="contained" color="primary" onClick={handleSubmit} fullWidth>
                                                 Reset Password
                                             </Button>
                                         </Stack>

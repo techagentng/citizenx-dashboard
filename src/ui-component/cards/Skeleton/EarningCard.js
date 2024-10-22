@@ -1,22 +1,10 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-
-// material-ui
 import { styled, useTheme } from '@mui/material/styles';
-import { Avatar, Box, Grid, Typography } from '@mui/material';
-
-// project imports
+import { Avatar, Box, Grid, Typography, useMediaQuery } from '@mui/material';
 import MainCard from 'ui-component/cards/MainCard';
 import SkeletonEarningCard from 'ui-component/cards/Skeleton/EarningCard';
-
-// assets
-// import EarningIcon from 'assets/images/icons/earning.svg';
-// import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
-// import GetAppTwoToneIcon from '@mui/icons-material/GetAppOutlined';
-// import FileCopyTwoToneIcon from '@mui/icons-material/FileCopyOutlined';
-// import PictureAsPdfTwoToneIcon from '@mui/icons-material/PictureAsPdfOutlined';
-// import ArchiveTwoToneIcon from '@mui/icons-material/ArchiveOutlined';
 
 const CardWrapper = styled(MainCard)(({ theme }) => ({
     backgroundColor: theme.palette.mode === 'dark' ? theme.palette.dark.dark : theme.palette.secondary.dark,
@@ -33,8 +21,16 @@ const CardWrapper = styled(MainCard)(({ theme }) => ({
         top: -85,
         right: -95,
         [theme.breakpoints.down('sm')]: {
-            top: -105,
-            right: -140
+            width: 150,
+            height: 150,
+            top: -65,
+            right: -75
+        },
+        [theme.breakpoints.down('xs')]: {
+            width: 120,
+            height: 120,
+            top: -55,
+            right: -65
         }
     },
     '&:before': {
@@ -51,23 +47,36 @@ const CardWrapper = styled(MainCard)(({ theme }) => ({
         right: -15,
         opacity: 0.5,
         [theme.breakpoints.down('sm')]: {
-            top: -155,
-            right: -70
+            width: 150,
+            height: 150,
+            top: -85,
+            right: -10
+        },
+        [theme.breakpoints.down('xs')]: {
+            width: 120,
+            height: 120,
+            top: -75,
+            right: -5
         }
     }
 }));
 
-// ===========================|| DASHBOARD DEFAULT - EARNING CARD ||=========================== //
-
 const EarningCard = ({ count, details, isLoading }) => {
     const theme = useTheme();
+    const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+    const isExtraSmall = useMediaQuery(theme.breakpoints.down('xs'));
 
-    // const [anchorEl, setAnchorEl] = React.useState(null);
+    const getFontSize = () => {
+        if (isExtraSmall) return '1.5rem';
+        if (isMobile) return '1.75rem';
+        return '2.125rem';
+    };
 
-
-    // const handleClose = () => {
-    //     setAnchorEl(null);
-    // };
+    const getDetailsFontSize = () => {
+        if (isExtraSmall) return '0.875rem';
+        if (isMobile) return '0.925rem';
+        return '1rem';
+    };
 
     return (
         <>
@@ -75,13 +84,28 @@ const EarningCard = ({ count, details, isLoading }) => {
                 <SkeletonEarningCard />
             ) : (
                 <CardWrapper border={false} content={false}>
-                    <Box sx={{ p: 1.25 }}>
-                        <Grid container direction="column">
-                            
+                    <Box
+                        sx={{
+                            p: isMobile ? 1 : 1.25,
+                            height: '100%',
+                            display: 'flex',
+                            flexDirection: 'column',
+                            justifyContent: 'center'
+                        }}
+                    >
+                        <Grid container direction="column" spacing={isMobile ? 1 : 2}>
                             <Grid item>
-                                <Grid container alignItems="center">
+                                <Grid container alignItems="center" spacing={1}>
                                     <Grid item>
-                                        <Typography sx={{ fontSize: '2.125rem', fontWeight: 500, mr: 1, mt: 1.75, mb: 0.75 }}>
+                                        <Typography
+                                            sx={{
+                                                fontSize: getFontSize(),
+                                                fontWeight: 500,
+                                                mr: 1,
+                                                mt: isMobile ? 1 : 1.75,
+                                                mb: isMobile ? 0.5 : 0.75
+                                            }}
+                                        >
                                             {count}
                                         </Typography>
                                     </Grid>
@@ -89,22 +113,27 @@ const EarningCard = ({ count, details, isLoading }) => {
                                         <Avatar
                                             sx={{
                                                 cursor: 'pointer',
-                                                ...theme.typography.smallAvatar,
+                                                width: isMobile ? 24 : 32,
+                                                height: isMobile ? 24 : 32,
                                                 backgroundColor: theme.palette.secondary[200],
                                                 color: theme.palette.secondary.dark
                                             }}
                                         >
-                                            <ArrowUpwardIcon fontSize="inherit" sx={{ transform: 'rotate3d(1, 1, 1, 45deg)' }} />
+                                            <ArrowUpwardIcon
+                                                fontSize={isMobile ? 'small' : 'inherit'}
+                                                sx={{ transform: 'rotate3d(1, 1, 1, 45deg)' }}
+                                            />
                                         </Avatar>
                                     </Grid>
                                 </Grid>
                             </Grid>
-                            <Grid item sx={{ mb: 1.25 }}>
+                            <Grid item sx={{ mb: isMobile ? 0.75 : 1.25 }}>
                                 <Typography
                                     sx={{
-                                        fontSize: '1rem',
+                                        fontSize: getDetailsFontSize(),
                                         fontWeight: 500,
-                                        color: theme.palette.mode === 'dark' ? theme.palette.text.secondary : theme.palette.secondary[200]
+                                        color: theme.palette.mode === 'dark' ? theme.palette.text.secondary : theme.palette.secondary[200],
+                                        lineHeight: 1.3
                                     }}
                                 >
                                     {details}
@@ -119,7 +148,9 @@ const EarningCard = ({ count, details, isLoading }) => {
 };
 
 EarningCard.propTypes = {
-    isLoading: PropTypes.bool
+    isLoading: PropTypes.bool,
+    count: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+    details: PropTypes.string.isRequired
 };
 
 export default EarningCard;
