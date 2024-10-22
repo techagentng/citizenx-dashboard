@@ -1,29 +1,25 @@
-// material-ui
 import React, { useState, useEffect, useCallback } from 'react';
 import { useTheme } from '@mui/material/styles';
 import { Avatar, Box, useMediaQuery, MenuItem, TextField, Grid } from '@mui/material';
-// project imports
-import LAYOUT_CONST from 'constant';
-import useConfig from 'hooks/useConfig';
-import LogoSection from '../LogoSection';
-// import SearchSection from './SearchSection';
-import MobileSection from './MobileSection';
-import ProfileSection from './ProfileSection';
-import FullScreenSection from './FullScreenSection';
-// import LocalizationSection from './LocalizationSection';
-// import MegaMenuSection from './MegaMenuSection';
 import { LocalizationProvider } from '@mui/x-date-pickers-pro/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers-pro/AdapterDayjs';
 import { DateRangePicker } from '@mui/x-date-pickers-pro/DateRangePicker';
-import NotificationSection from './NotificationSection';
-
 import { useDispatch, useSelector } from 'store';
 import { openDrawer } from 'store/slices/menu';
 import { setState, setLga, getGraph } from 'store/slices/graphs';
 import statesAndLgas from './statesAndLgas.json';
-// assets
-import { IconMenu2 } from '@tabler/icons-react';
 import { getCategories } from 'services/reportService';
+
+import LogoSection from '../LogoSection';
+import MobileSection from './MobileSection';
+import ProfileSection from './ProfileSection';
+import FullScreenSection from './FullScreenSection';
+import NotificationSection from './NotificationSection';
+import LAYOUT_CONST from 'constant';
+import useConfig from 'hooks/useConfig';
+import FloatingCart from './FloatingCart';
+import { IconMenu2 } from '@tabler/icons-react';
+
 const Header = () => {
     const theme = useTheme();
     const dispatch = useDispatch();
@@ -32,16 +28,33 @@ const Header = () => {
     const { layout } = useConfig();
     const [states, setStates] = useState([]);
     const [lgas, setLgas] = useState([]);
-    const [selectedState, setSelectedState] = useState('State');
-    const [selectedLga, setSelectedLga] = useState('LGA');
+    const [selectedState, setSelectedState] = useState('');
+    const [selectedLga, setSelectedLga] = useState('');
     const [dateRange, setDateRange] = useState([null, null]);
-    const [value, setValue] = React.useState('');
-    const [reportTypes, setReportTypes] = useState(["Selecte type"]);
+    const [, setValue] = useState('');
+    const [, setReportTypes] = useState(['Select type']);
+    const selectedReportType = useSelector((state) => state.graphs.reportType);
 
     useEffect(() => {
+        // Initialize states and LGAs
         const stateNames = statesAndLgas.map((state) => ({ value: state.state, label: state.state }));
         setStates(stateNames);
-    }, []);
+
+        // Set default state and LGA
+        const defaultState = 'Anambra';
+        const defaultLGA = 'Aguata';
+
+        const defaultStateData = statesAndLgas.find((state) => state.state === defaultState);
+        if (defaultStateData) {
+            const lgaOptions = defaultStateData.lgas.map((lga) => ({ value: lga, label: lga }));
+            setLgas(lgaOptions);
+            setSelectedLga(defaultLGA);
+        }
+
+        // Dispatch default values
+        dispatch(setState(defaultState));
+        dispatch(setLga(defaultLGA));
+    }, [dispatch]);
 
     const handleStateChange = (event) => {
         const stateName = event.target.value;
@@ -69,8 +82,8 @@ const Header = () => {
 
     const handleSearch = useCallback(() => {
         const [startDate, endDate] = dateRange;
-        dispatch(getGraph(selectedState, selectedLga, startDate?.format('YYYY-MM-DD'), endDate?.format('YYYY-MM-DD')));
-    }, [dispatch, selectedState, selectedLga, dateRange]);
+        dispatch(getGraph(selectedState, selectedLga, startDate?.format('YYYY-MM-DD'), endDate?.format('YYYY-MM-DD'), selectedReportType));
+    }, [dispatch, selectedState, selectedReportType, selectedLga, dateRange]);
 
     useEffect(() => {
         if (selectedState !== 'State' && selectedLga !== 'LGA') {
@@ -78,19 +91,23 @@ const Header = () => {
         }
     }, [selectedState, selectedLga, dateRange, handleSearch]);
 
-
     useEffect(() => {
-        // Fetch categories and set them in the state
         getCategories()
             .then((types) => {
                 const reportTypeOptions = ['Select Report Type', ...types];
                 setReportTypes(reportTypeOptions);
-                setValue(reportTypeOptions[0]); 
+                setValue(reportTypeOptions[0]);
             })
             .catch((error) => {
                 console.error('Failed to fetch categories:', error);
             });
     }, []);
+
+    const percentCount = useSelector((state) => state.graphs.percentCount);
+
+    useEffect(() => {
+        console.log('Percent Count:', percentCount);
+    }, [percentCount]);
 
     return (
         <>
@@ -132,16 +149,7 @@ const Header = () => {
 
             <Box sx={{ flexGrow: 1 }} />
             <Box sx={{ flexGrow: 1 }} />
-            <Grid item>
-                <TextField id="standard-select-currency" select value={value} onChange={(e) => setValue(e.target.value)}>
-                    <MenuItem value=""></MenuItem>
-                    {reportTypes.map((option, index) => (
-                        <MenuItem key={index} value={option}>
-                            {option}
-                        </MenuItem>
-                    ))}
-                </TextField>
-            </Grid>
+            <Grid item></Grid>
             <Box sx={{ flexGrow: 1 }} />
             <Box sx={{ display: { xs: 'none', sm: 'flex' }, alignItems: 'center', gap: 2 }}>
                 <TextField id="standard-select-currency-1" select value={selectedState} onChange={handleStateChange} label="Select State">
@@ -171,7 +179,9 @@ const Header = () => {
                         </MenuItem>
                     ))}
                 </TextField>
-                <Box>
+                <Box sx={{ width: '300px' }}>
+                    {' '}
+                    {/* Adjust the width as per your need */}
                     <LocalizationProvider dateAdapter={AdapterDayjs}>
                         <DateRangePicker
                             localeText={{ start: 'Start Date', end: 'End Date' }}
@@ -185,6 +195,9 @@ const Header = () => {
             <NotificationSection />
             <Box sx={{ display: { xs: 'none', lg: 'block' } }}>
                 <FullScreenSection />
+            </Box>
+            <Box sx={{ display: { xs: 'block' } }}>
+                <FloatingCart />
             </Box>
             <ProfileSection />
             <Box sx={{ display: { xs: 'block', sm: 'none' } }}>

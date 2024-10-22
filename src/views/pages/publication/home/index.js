@@ -21,6 +21,7 @@ const HeaderWrapper = styled('div')(({ theme }) => ({
             ? theme.palette.background.default
             : `linear-gradient(360deg, ${theme.palette.grey[100]} 1.09%, ${theme.palette.background.paper} 100%)`,
     [theme.breakpoints.down('md')]: {}
+<<<<<<< HEAD
   }));
   
   const SectionWrapper = styled('div')({
@@ -30,10 +31,21 @@ const HeaderWrapper = styled('div')(({ theme }) => ({
 
   const Home = () => {
 
+=======
+}));
+
+const SectionWrapper = styled('div')({
+    paddingTop: 100,
+    paddingBottom: 100
+});
+
+const Home = () => {
+>>>>>>> upstream/main
     return (
         <>
             {/* 1. header and hero section */}
             <HeaderWrapper id="home">
+<<<<<<< HEAD
                   <AppBar />
                   <HeaderSection/>
               </HeaderWrapper>
@@ -44,6 +56,18 @@ const HeaderWrapper = styled('div')(({ theme }) => ({
             </SectionWrapper>
 
               {/* 3. Featured publications */}
+=======
+                <AppBar />
+                <HeaderSection />
+            </HeaderWrapper>
+
+            {/* 2. Featured publications */}
+            <SectionWrapper>
+                <Category />
+            </SectionWrapper>
+
+            {/* 3. Featured publications */}
+>>>>>>> upstream/main
             <SectionWrapper>
                 <LatestBlog />
             </SectionWrapper>
@@ -67,6 +91,7 @@ const HeaderWrapper = styled('div')(({ theme }) => ({
             <SectionWrapper>
                 <Subscribe />
             </SectionWrapper>
+<<<<<<< HEAD
               
               {/* 8. footer section */}
               <SectionWrapper sx={{ paddingTop: 0, paddingBottom: 0}}>
@@ -77,3 +102,15 @@ const HeaderWrapper = styled('div')(({ theme }) => ({
   };
   
   export default Home;
+=======
+
+            {/* 8. footer section */}
+            <SectionWrapper sx={{ paddingTop: 0, paddingBottom: 0 }}>
+                <Footer />
+            </SectionWrapper>
+        </>
+    );
+};
+
+export default Home;
+>>>>>>> upstream/main

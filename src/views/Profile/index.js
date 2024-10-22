@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import { Link } from 'react-router-dom';
 
 // material-ui
@@ -40,6 +40,21 @@ function a11yProps(index) {
 const Profile3 = () => {
     const theme = useTheme();
     const [value, setValue] = React.useState(0);
+    const [rewardBalance, setRewardBalance] = useState(0);
+
+    useEffect(() => {
+        const fetchRewardBalance = async () => {
+            try {
+                const response = await getRewardBalance(); // Assuming the response contains the balance
+                setRewardBalance(response.total_balance); // Update the balance
+            } catch (error) {
+                console.error('Error fetching reward balance:', error);
+            }
+        };
+
+        fetchRewardBalance(); // Fetch the reward balance when the component mounts
+    }, []);
+
     const handleChange = (event, newValue) => {
         setValue(newValue);
     };
@@ -78,7 +93,7 @@ const Profile3 = () => {
                     <Tab component={Link} to="#" label="Notifications" {...a11yProps(3)} />
                 </Tabs>
                 <TabPanel value={value} index={0}>
-                    <Profile />
+                    <Profile rewardBalance={rewardBalance} />
                 </TabPanel>
                 <TabPanel value={value} index={1}>
                     <Billing />

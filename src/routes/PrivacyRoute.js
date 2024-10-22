@@ -6,15 +6,11 @@ import Loadable from 'ui-component/Loadable';
 import MinimalLayout from 'layout/MinimalLayout';
 
 // other pages routing
-const Write = Loadable(lazy(() => import('views/pages/publication/Write')));
+const Privacy = Loadable(lazy(() => import('views/pages/privacy')));
 
-<<<<<<< HEAD
-
-=======
->>>>>>> upstream/main
 // ==============================|| PUBLICATION ROUTING ||============================== //
 
-const PublicationRoutes = {
+const PrivacyRoutes = {
     path: '/',
     element: (
         <AuthGuard>
@@ -23,15 +19,10 @@ const PublicationRoutes = {
     ),
     children: [
         {
-            path: '/publication/write',
-            element: <Write />
-<<<<<<< HEAD
-        },
-        
-=======
+            path: '/privacy',
+            element: <Privacy />
         }
->>>>>>> upstream/main
     ]
 };
 
-export default PublicationRoutes;
+export default PrivacyRoutes;

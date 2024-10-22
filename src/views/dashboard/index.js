@@ -1,60 +1,60 @@
-// material-ui
-import { Grid } from '@mui/material';
 import React, { useEffect, useContext, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-// project imports
+import { Grid, TextField, MenuItem, Box, Typography } from '@mui/material';
 import MainCard from 'ui-component/cards/MainCard';
 import EarningCard from 'ui-component/cards/Skeleton/EarningCard';
 import EarningIcon from 'assets/images/icons/earning.svg';
-// import EarningCard from './EarningCard';
 import PopularCard from './PopularCard';
+// import PopularCard2 from './PopularCard2';
+import BarChart from './barchart';
+import PieChart from './piechart';
+import PieChart2 from './piechart2';
+// import LineChart from './linechart';
+import NigerianMap from './nigeria-map';
 import { gridSpacing } from 'store/constant';
 import JWTContext from 'contexts/JWTContext';
 import { getAllUserCount, getAllReportsToday, getOnlineUsers } from 'services/userService';
-
-// React Leaflet imports
-// import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
-import 'leaflet/dist/leaflet.css';
-import L from 'leaflet';
-import BarChart from './barchart';
-import PieChart from './piechart';
-import LineChart from './linechart';
-import { getGraph } from 'store/slices/graphs';
-// import NigeriaMap from './nigeria-map-index';
+import { getStateReportCountList } from 'services/reportService';
+import { getGraph, getPercentCount, setReportType } from 'store/slices/graphs';
+import { getCategories, getReportCountsByState } from 'services/reportService';
 import CompareForms from './CompareForms';
-
-
-// import AudioPlayer from 'material-ui-audio-player';
-// Fix the default icon issue
-// delete L.Icon.Default.prototype._getIconUrl;
-
-L.Icon.Default.mergeOptions({
-    iconRetinaUrl: require('leaflet/dist/images/marker-icon-2x.png').default,
-    iconUrl: require('leaflet/dist/images/marker-icon.png').default,
-    shadowUrl: require('leaflet/dist/images/marker-shadow.png').default
-});
 
 const DashboardPage = () => {
     const dispatch = useDispatch();
-    const { state: selectedState, lga: selectedLga } = useSelector((state) => state.graphs.lgaState);
+    const { lga: selectedLga } = useSelector((state) => state.graphs.lgaState);
+    const selectedState = useSelector((state) => state.graphs.lgaState.state);
     const { isLoggedIn } = useContext(JWTContext);
-    const { reportTypes, reportCounts, loading, error } = useSelector((state) => state.graphs.graphs);
+    const { reportTypes, reportCounts, topStates, total_users, loading, error } = useSelector((state) => state.graphs.graphs);
+    const { good_percentage, bad_percentage } = useSelector((state) => state.graphs.reportPercent);
     const [userCount, setUserCount] = useState(0);
     const [todayReportCount, setTodayReportCount] = useState(0);
     const [onlineUsers, setOnlineUsers] = useState(0);
- 
-    // Define the bounds for Nigeria
-    // const nigeriaBounds = [
-    //     [4.272, 2.6769], // Southwest corner (approx)
-    //     [13.865, 14.678] // Northeast corner (approx)
-    // ];
-
-    // Example markers (replace with your actual data)
-    // const markers = [
-    //     { lat: 9.082, lng: 8.6753, popup: 'Marker 1' },
-    //     { lat: 6.5244, lng: 3.3792, popup: 'Marker 2' }
-    //     // Add more markers as needed
-    // ];
+    const [formattedTopStates, setFormattedTopStates] = useState([]);
+    const [reportTypeOptions, setReportTypes] = useState([]);
+    const [selectedReportType, setSelectedReportType] = useState('Accidents');
+    // const [lgas, setLgas] = useState([]);
+    // const [lgareportCounts, setLgaReportCounts] = useState([]);
+    const [reportData, setReportData] = useState(null);
+    useEffect(() => {
+        if (selectedState) {
+            // setLoading(true);
+            getReportCountsByState(selectedState)
+                .then((data) => {
+                    setReportData(
+                        data.lgas.map((lga, index) => ({
+                            lgaName: lga,
+                            reportCount: data.report_counts[index]
+                        }))
+                    );
+                    // setLoading(false);
+                })
+                .catch((err) => {
+                    // setError(err);
+                    // setLoading(false);
+                    console.log(err);
+                });
+        }
+    }, [selectedState]);
 
     useEffect(() => {
         if (selectedState && selectedLga) {
@@ -62,17 +62,19 @@ const DashboardPage = () => {
         }
     }, [dispatch, selectedState, selectedLga]);
 
-    // Fetch users data on component mount
+    useEffect(() => {
+        if (reportTypes?.length > 0 && selectedState) {
+            dispatch(getPercentCount(selectedReportType, selectedState));
+        }
+    }, [dispatch, selectedReportType, selectedState, reportTypes]);
+
     useEffect(() => {
         if (isLoggedIn) {
-            console.log('Fetching user data, report data, and online users');
             Promise.all([getAllUserCount(), getAllReportsToday(), getOnlineUsers()])
-                .then(([userCountData, todayReportCountData, onlineUserData]) => {                    console.log('User count:', userCountData);
-                    console.log('Today report count:', todayReportCountData);
-                    console.log('Online users data:', onlineUserData);
+                .then(([userCountData, todayReportCountData, onlineUserData]) => {
                     setUserCount(userCountData);
                     setTodayReportCount(todayReportCountData);
-                    setOnlineUsers(onlineUserData); // Set the count correctly
+                    setOnlineUsers(onlineUserData);
                 })
                 .catch((error) => {
                     console.log(error.message);
@@ -80,18 +82,65 @@ const DashboardPage = () => {
         }
     }, [isLoggedIn]);
 
+    useEffect(() => {
+        getStateReportCountList()
+            .then((data) => {
+                setFormattedTopStates(
+                    data.map((state) => ({
+                        stateName: state.state_name,
+                        reportCount: state.report_count
+                    }))
+                );
+            })
+            .catch((error) => {
+                console.error('Failed to fetch top states:', error);
+            });
+    }, []);
+
+    useEffect(() => {
+        getCategories()
+            .then((types) => {
+                const reportTypeOptions = ['Select Report Type', ...types];
+                setReportTypes(reportTypeOptions);
+                setSelectedReportType(reportTypeOptions[0]);
+                dispatch(setReportType(reportTypeOptions[0]));
+            })
+            .catch((error) => {
+                console.error('Failed to fetch categories:', error);
+            });
+    }, [dispatch]);
+    const defaultReportType = 'Accidents';
+    const handleReportTypeChange = (event) => {
+        const reportType = event.target.value || defaultReportType;
+        setSelectedReportType(reportType);
+        console.log('Selected Report Type:', reportType);
+        dispatch(setReportType(reportType));
+        dispatch(getPercentCount(reportType, selectedState));
+    };
+
     if (loading) return <div>Loading...</div>;
     if (error) return <div>Error: {error.message}</div>;
 
+    const todayReportCountSteroid = selectedState && topStates ? topStates[selectedState] || todayReportCount : todayReportCount;
+
+    const detailsText = selectedState ? `${selectedState}'s Overall Report` : "Today's Report";
+    const detailUsers = selectedState ? `${selectedState}'s Overall Report` : "Today's Report";
+    const totalUsersCountSteroid = total_users || userCount;
     return (
         <>
-            <MainCard title="State and LGA dashboard">
-                <Grid container spacing={2}>
+            <MainCard
+                title={
+                    <Typography variant="h4" align="left">
+                        State and LGA Dashboard
+                    </Typography>
+                }
+            >
+                <Grid container spacing={2} sx={{ mb: 3 }}>
                     <Grid item xs={3}>
-                        <EarningCard count={todayReportCount} details="Today's Report" icon={EarningIcon} />
+                        <EarningCard count={todayReportCountSteroid} details={detailsText} icon={EarningIcon} />
                     </Grid>
                     <Grid item xs={3}>
-                        <EarningCard count={userCount} details="Total Users" icon={EarningIcon} />
+                        <EarningCard count={totalUsersCountSteroid} details={detailUsers} icon={EarningIcon} />
                     </Grid>
                     <Grid item xs={3}>
                         <EarningCard count={onlineUsers} details="Active Users" icon={EarningIcon} />
@@ -100,55 +149,113 @@ const DashboardPage = () => {
                         <EarningCard count="230" details="Average Daily Users" icon={EarningIcon} />
                     </Grid>
                 </Grid>
-
-                <Grid container spacing={2} justifyContent="center" alignItems="flex-end">
-                    {!reportTypes || reportTypes.length === 0 ? (
-                        <Grid item xs={12}>
-                            <p>No data available for the selected state and LGA.</p>
-                        </Grid>
-                    ) : (
-                        <>
-                            <Grid item xs={12} md={6}>
-                                <BarChart reportTypes={reportTypes} reportCounts={reportCounts} />
-                            </Grid>
-                            <Grid item xs={12} md={3}>
-                                <PieChart reportTypes={reportTypes} reportCounts={reportCounts} />
-                            </Grid>
-                            <Grid item xs={12} md={3}>
-                                <LineChart reportTypes={reportTypes} reportCounts={reportCounts} />
-                            </Grid>
-                        </>
-                    )}
+                <Grid container spacing={2}>
+                    <Grid item xs={12}>
+                        <Typography variant="h4" align="left" sx={{ mt: 4, mb: 4 }}>
+                            LGA Incident Report Charts
+                        </Typography>
+                    </Grid>
                 </Grid>
-
                 <Grid container spacing={gridSpacing}>
-                    <Grid item xs={12} md={8}>
-                        <MainCard title="Markers & Popups">
-                            {/* <NigeriaMap /> */}
-                            {/* <MapContainer
-                                bounds={nigeriaBounds}
-                                zoom={6}
-                                style={{ height: '100vh', width: '100%' }}
-                                scrollWheelZoom={false}
-                                maxBounds={nigeriaBounds} // Set the max bounds to constrain the map to Nigeria
-                            >
-                                <TileLayer
-                                    url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                                    attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                                />
-                                {markers.map((marker, index) => (
-                                    <Marker key={index} position={[marker.lat, marker.lng]}>
-                                        <Popup>{marker.popup}</Popup>
-                                    </Marker>
-                                ))}
-                            </MapContainer> */}
+                    {/* First Column */}
+                    <Grid item xs={12} md={6}>
+                        <MainCard content={false}>
+                            {!reportTypes || reportTypes.length === 0 ? (
+                                <Grid container justifyContent="center">
+                                    <Grid item>
+                                        <p>No data available for the selected state and LGA.</p>
+                                    </Grid>
+                                </Grid>
+                            ) : (
+                                <Grid container>
+                                    {/* <Grid item xs={12}>
+                                            <BarChart reportTypes={reportTypes} reportCounts={reportCounts} />
+                                        </Grid> */}
+                                    <Grid item xs={12}>
+                                        <PieChart reportTypes={reportTypes} reportCounts={reportCounts} />
+                                    </Grid>
+                                </Grid>
+                            )}
+                        </MainCard>
+                    </Grid>
+
+                    {/* Second Column */}
+                    <Grid item xs={12} md={6}>
+                        <MainCard content={false}>
+                            {!reportTypes || reportTypes.length === 0 ? (
+                                <Grid container justifyContent="center">
+                                    <Grid item>
+                                        <p>No data available for the selected state and LGA.</p>
+                                    </Grid>
+                                </Grid>
+                            ) : (
+                                <Grid container>
+                                    <Grid item xs={12}>
+                                        <BarChart reportTypes={reportTypes} reportCounts={reportCounts} />
+                                    </Grid>
+                                </Grid>
+                            )}
+                        </MainCard>
+                    </Grid>
+                </Grid>
+                <Grid container spacing={gridSpacing}>
+                    <Grid item xs={12} md={12}>
+                        <MainCard
+                            title={
+                                <Typography variant="h3" align="left">
+                                    Map of Nigeria & State Report Counts
+                                </Typography>
+                            }
+                        >
+                            <NigerianMap />
                         </MainCard>
                     </Grid>
                     <Grid item xs={6} md={4}>
-                        <PopularCard reportTypes={reportTypes} reportCounts={reportCounts} />
+                        <PopularCard
+                            title={`Top Reported cases in ${selectedLga || 'State'}`}
+                            data={reportTypes?.map((type, index) => ({
+                                reportType: type,
+                                reportCount: reportCounts[index]
+                            }))}
+                            type="reportTypes"
+                        />
+                    </Grid>
+                    <Grid item xs={6} md={4}>
+                        {/* Top LGAs View */}
+                        <PopularCard title={`Top Reported LGAs in ${selectedState || 'State'}`} data={reportData} />
+                    </Grid>
+
+                    <Grid item xs={6} md={4}>
+                        <PopularCard title="Top Reported States in Nigeria" data={formattedTopStates} type="states" />
+                    </Grid>
+                    <Grid item xs={12} md={4} sx={{ backgroundColor: 'white' }}>
+                        <Box
+                            display="flex"
+                            justifyContent="space-between"
+                            alignItems="center"
+                            p={2} // Optional padding for better spacing
+                        >
+                            <Typography variant="h3">Overall Ratings</Typography>
+                            <TextField
+                                id="standard-select-currency-1"
+                                label="Select Report Type"
+                                select
+                                value={selectedReportType || ''}
+                                onChange={handleReportTypeChange}
+                                sx={{ minWidth: 200 }} // Adjust width as needed
+                            >
+                                {reportTypeOptions.map((type) => (
+                                    <MenuItem key={type} value={type} disabled={type === 'Select Report Type'}>
+                                        {type}
+                                    </MenuItem>
+                                ))}
+                            </TextField>
+                        </Box>
+                        <PieChart2 title="" reportPercent={{ good_percentage, bad_percentage }} />
                     </Grid>
                 </Grid>
             </MainCard>
+
             <MainCard title="Compare reports">
                 <Grid item xs={12} md={6}>
                     <CompareForms />

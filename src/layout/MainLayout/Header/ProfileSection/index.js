@@ -32,12 +32,12 @@ import MainCard from 'ui-component/cards/MainCard';
 import Transitions from 'ui-component/extended/Transitions';
 // import UpgradePlanCard from './UpgradePlanCard';
 import useAuth from 'hooks/useAuth';
-import User1 from 'assets/images/users/user-round.svg';
+// import User1 from 'assets/images/users/user-round.svg';
 
 // assets
 import { IconLogout, IconSettings } from '@tabler/icons-react';
 import useConfig from 'hooks/useConfig';
-
+// import { useSelector } from 'react-redux';
 // ==============================|| PROFILE MENU ||============================== //
 
 const ProfileSection = () => {
@@ -51,15 +51,23 @@ const ProfileSection = () => {
     const { logout } = useAuth();
     const [user, setUser] = useState(null);
     const [open, setOpen] = useState(false);
+    // const { avatarUrl } = useSelector((state) => state.user);
 
     useEffect(() => {
-        console.log('User data:', user?.name);
         const userData = localStorage.getItem('user');
         if (userData) {
-            // Parse the JSON string back to an object
-            setUser(JSON.parse(userData));
+            const parsedUserData = JSON.parse(userData);
+            setUser(parsedUserData);
         }
-    }, [user?.name]);
+        const storedAvatarUrl = localStorage.getItem('avatarSrc');
+        if (storedAvatarUrl) {
+            setUser(prevState => ({
+                ...prevState,
+                avatarUrl: storedAvatarUrl
+            }));
+        }
+    }, []);
+    
 
     /**
      * anchorRef is used on different components and specifying one type leads to other components throwing an error
@@ -100,6 +108,21 @@ const ProfileSection = () => {
         prevOpen.current = open;
     }, [open]);
 
+    function getTimeOfDay() {
+        const now = new Date();
+        const hours = now.getHours();
+    
+        if (hours >= 5 && hours < 12) {
+            return 'Good Morning';
+        } else if (hours >= 12 && hours < 17) {
+            return 'Good Afternoon';
+        } else if (hours >= 17 && hours < 21) {
+            return 'Good Evening';
+        } else {
+            return 'Good Night';
+        }
+    }
+    const greeting = getTimeOfDay();
     return (
         <>
             <Chip
@@ -124,7 +147,7 @@ const ProfileSection = () => {
                 }}
                 icon={
                     <Avatar
-                        src={User1}
+                    src={user?.avatarUrl || '/default-avatar.png'}
                         sx={{
                             ...theme.typography.mediumAvatar,
                             margin: '8px 0 8px 8px !important',
@@ -171,7 +194,7 @@ const ProfileSection = () => {
                                         <Box sx={{ p: 2, pb: 0 }}>
                                             <Stack>
                                                 <Stack direction="row" spacing={0.5} alignItems="center">
-                                                    <Typography variant="h4">Good Morning,</Typography>
+                                                    <Typography variant="h4">{greeting}{ ' '}</Typography>
                                                     <Typography component="span" variant="h4" sx={{ fontWeight: 400 }}>
                                                         {user?.name}
                                                     </Typography>

@@ -9,7 +9,8 @@ import { dispatch } from '../index';
 
 const initialState = {
     error: null,
-    rewardData: []
+    rewardData: [],
+    totalQuantity: 0, 
 };
 
 const slice = createSlice({
@@ -24,19 +25,23 @@ const slice = createSlice({
         // GET REWARDS
         getRewardSuccess(state, action) {
             state.rewardData = action.payload;
+        },
+
+        setTotalQuantity(state, action) {
+            state.totalQuantity = action.payload;
         }
     }
 });
 
 // Reducer
 export default slice.reducer;
-
+export const { setTotalQuantity } = slice.actions;
 // ----------------------------------------------------------------------
 
 export function getAllRewards() {
     return async () => {
         try {
-            const response = await axios.get('/rewards/list');
+            const response = await axios.get('/count/all/rewards');
             dispatch(slice.actions.getRewardSuccess(response.data));
         } catch (error) {
             dispatch(slice.actions.hasError(error));

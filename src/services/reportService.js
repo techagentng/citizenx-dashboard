@@ -107,7 +107,7 @@ export const getBarChartData = (requestBody) => {
             })
             .then((response) => {
                 if (response && response.data) {
-                    resolve(response.data); // Changed this line to resolve response.data
+                    resolve(response.data);
                 } else {
                     reject(new Error('No data found'));
                 }
@@ -126,7 +126,7 @@ export const getCategories = () => {
         }
 
         axios
-            .get('http://localhost:8080/api/v1/categories', {
+            .get(`${process.env.REACT_APP_API_URL}/categories`, {
                 headers: {
                     Authorization: `Bearer ${serviceToken}`
                 }
@@ -152,7 +152,7 @@ export const getStates = () => {
         }
 
         axios
-            .get('http://localhost:8080/api/v1/states', {
+            .get(`${process.env.REACT_APP_API_URL}/states`, {
                 headers: {
                     Authorization: `Bearer ${serviceToken}`
                 }
@@ -170,3 +170,107 @@ export const getStates = () => {
     });
 };
 
+export const getStateReportCountList = () => {
+    return new Promise((resolve, reject) => {
+        const serviceToken = localStorage.getItem('serviceToken');
+        if (!serviceToken) {
+            return reject(new Error('No token found'));
+        }
+
+        axios
+            .get(`${process.env.REACT_APP_API_URL}/state/report/count`, {
+                headers: {
+                    Authorization: `Bearer ${serviceToken}`
+                }
+            })
+            .then((response) => {
+                if (response && response.data && response.data.top_states) {
+                    resolve(response.data.top_states);
+                } else {
+                    reject(new Error('No data found'));
+                }
+            })
+            .catch((error) => {
+                reject(error);
+            });
+    });
+};
+
+export const getTotalReportCount = () => {
+    return new Promise((resolve, reject) => {
+        const serviceToken = localStorage.getItem('serviceToken');
+        if (!serviceToken) {
+            return reject(new Error('No token found'));
+        }
+
+        axios
+            .get(`${process.env.REACT_APP_API_URL}/report/total/count`, {
+                headers: {
+                    Authorization: `Bearer ${serviceToken}`
+                }
+            })
+            .then((response) => {
+                if (response && response.data && response.data.total_report_count !== undefined) {
+                    resolve(response.data.total_report_count);
+                } else {
+                    reject(new Error('No data found'));
+                }
+            })
+            .catch((error) => {
+                reject(error);
+            });
+    });
+};
+
+export const getSubReportsByCategory = (category) => {
+    return new Promise((resolve, reject) => {
+        const serviceToken = localStorage.getItem('serviceToken');
+        if (!serviceToken) {
+            return reject(new Error('No token found'));
+        }
+
+        axios
+            .get(`${process.env.REACT_APP_API_URL}/report/sub_reports`, {
+                params: { category },
+                headers: {
+                    Authorization: `Bearer ${serviceToken}`
+                }
+            })
+            .then((response) => {
+                if (response && response.data && Array.isArray(response.data.data)) {
+                    resolve(response.data.data);
+                } else {
+                    reject(new Error('No data found'));
+                }
+            })
+            .catch((error) => {
+                reject(error);
+            });
+    });
+};
+
+export const getReportCountsByState = (state) => {
+    return new Promise((resolve, reject) => {
+        const serviceToken = localStorage.getItem('serviceToken');
+        if (!serviceToken) {
+            return reject(new Error('No token found'));
+        }
+
+        axios
+            .get(`${process.env.REACT_APP_API_URL}/report/counts/state/${state}`, {
+                headers: {
+                    Authorization: `Bearer ${serviceToken}`
+                }
+            })
+            .then((response) => {
+                if (response && response.data) {
+                    resolve(response.data);
+                } else {
+                    reject(new Error('No data found'));
+                }
+            })
+            .catch((error) => {
+                reject(error);
+            });
+    });
+};

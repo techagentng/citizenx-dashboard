@@ -35,7 +35,7 @@ import { IconBell } from '@tabler/icons-react';
 const status = [
     {
         value: 'all',
-        label: 'All Notification'
+        label: 'All Notificationx'
     },
     {
         value: 'new',

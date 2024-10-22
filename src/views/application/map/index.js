@@ -9,27 +9,25 @@ import L from 'leaflet';
 delete L.Icon.Default.prototype._getIconUrl;
 
 L.Icon.Default.mergeOptions({
-  iconRetinaUrl: require('leaflet/dist/images/marker-icon-2x.png').default,
-  iconUrl: require('leaflet/dist/images/marker-icon.png').default,
-  shadowUrl: require('leaflet/dist/images/marker-shadow.png').default,
+    iconRetinaUrl: require('leaflet/dist/images/marker-icon-2x.png').default,
+    iconUrl: require('leaflet/dist/images/marker-icon.png').default,
+    shadowUrl: require('leaflet/dist/images/marker-shadow.png').default
 });
 
 const NigeriaMap = () => {
-  const nigeriaPosition = [9.0820, 8.6753]; // Latitude and Longitude for Nigeria
+    const nigeriaPosition = [9.082, 8.6753]; // Latitude and Longitude for Nigeria
 
-  return (
-    <MapContainer center={nigeriaPosition} zoom={6} style={{ height: '100vh', width: '100%' }}>
-      <TileLayer
-        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-      />
-      <Marker position={nigeriaPosition}>
-        <Popup>
-          Nigeriaxx
-        </Popup>
-      </Marker>
-    </MapContainer>
-  );
+    return (
+        <MapContainer center={nigeriaPosition} zoom={6} style={{ height: '100vh', width: '100%' }}>
+            <TileLayer
+                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            />
+            <Marker position={nigeriaPosition}>
+                <Popup>Nigeriaxx</Popup>
+            </Marker>
+        </MapContainer>
+    );
 };
 
 export default NigeriaMap;

@@ -7,6 +7,10 @@ import MinimalLayout from 'layout/MinimalLayout';
 // other pages routing
 const PagesAbout = Loadable(lazy(() => import('views/pages/about')));
 const Publication = Loadable(lazy(() => import('views/pages/publication/home')));
+<<<<<<< HEAD
+=======
+const Privacy = Loadable(lazy(() => import('views/pages/privacy')));
+>>>>>>> upstream/main
 const PagesHome = Loadable(lazy(() => import('views/pages/landing')));
 
 // maintenance routing
@@ -14,7 +18,6 @@ const MaintenanceError = Loadable(lazy(() => import('views/pages/maintenance/Err
 const MaintenanceComingSoon1 = Loadable(lazy(() => import('views/pages/maintenance/ComingSoon/ComingSoon1')));
 // const MaintenanceComingSoon2 = Loadable(lazy(() => import('views/pages/maintenance/ComingSoon/ComingSoon2')));
 const MaintenanceUnderConstruction = Loadable(lazy(() => import('views/pages/maintenance/UnderConstruction')));
-
 // ==============================|| AUTHENTICATION ROUTING ||============================== //
 
 const AuthenticationRoutes = {
@@ -29,12 +32,22 @@ const AuthenticationRoutes = {
             path: '/home',
             element: <PagesHome />
         },
+<<<<<<< HEAD
         
+=======
+>>>>>>> upstream/main
         {
             path: '/publication',
             element: <Publication />
         },
         {
+<<<<<<< HEAD
+=======
+            path: '/privacy',
+            element: <Privacy />
+        },
+        {
+>>>>>>> upstream/main
             path: '/pages/error',
             element: <MaintenanceError />
         },

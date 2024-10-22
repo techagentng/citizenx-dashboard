@@ -1,15 +1,22 @@
-// import other from './other';
-// import pages from './pages';
+import AuthService from 'utils/identityServer';
 import dashboard from './dashboard';
 import settings from './settings';
 import reports from './reports';
 import rewards from './rewards';
 import users from './users';
 
-// ==============================|| MENU ITEMS ||============================== //
+// Create an instance of the AuthService
+const authService = new AuthService();
 
-const menuItems = {
-    items: [dashboard, reports, rewards, users, settings]
-};
+// Determine the role
+const userRole = authService.getRole();
+
+// Define menu items based on the user role
+const menuItems =
+    userRole === 'Admin'
+        ? {
+              items: [dashboard, reports, rewards, users, settings]
+          }
+        : { items: [dashboard, reports, rewards, settings] };
 
 export default menuItems;

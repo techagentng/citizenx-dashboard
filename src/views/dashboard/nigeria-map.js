@@ -1,52 +1,85 @@
-import React, { useEffect } from 'react';
-// import 'jsvectormap/dist/js/jsvectormap.min.js'; 
-// import 'jsvectormap/dist/css/jsvectormap.min.css'; 
-// import nigeriaMap from './nigeria-map'; 
+import React, { useState, useEffect } from 'react';
+import { ComposableMap, Geographies, Geography } from 'react-simple-maps';
+import { Tooltip } from 'react-tooltip';
+import geoData from './nigeria_lga_boundaries.geojson';
+import './tooltip.css';
+import { getMapMarkers } from 'services/mapService';
 
-const NigeriaMap = () => {
+const NigerianMap = () => {
+    const [reportCountsMap, setReportCountsMap] = useState({});
+
+    // Fetch data on component mount
     useEffect(() => {
-        const markers = [
-            { name: 'Lagos', coords: [6.5244, 3.3792] },
-            { name: 'Abuja', coords: [9.0579, 7.4951] }
-            // Add more markers if needed
-        ];
+        getMapMarkers()
+            .then((data) => {
+                console.log('Fetched MAP Data:', data);
 
-        new jsVectorMap({
-            map: 'nigeriaMap', 
-            selector: '#map',
-            zoomButtons: true,
-            zoomOnScroll: true,
+                // Create a mapping of state names to their report counts
+                const reportCounts = data.reduce((acc, item) => {
+                    const stateName = item.state_name.trim(); // Trim any extra spaces
+                    acc[stateName] = item.report_count;
+                    return acc;
+                }, {});
 
-            regionStyle: {
-                initial: {
-                    fill: '#d1d5db'
-                }
-            },
-
-            labels: {
-                markers: {
-                    render: (marker) => marker.name
-                }
-            },
-
-            markersSelectable: true,
-            selectedMarkers: markers.map((marker, index) => index),
-            markers: markers,
-            markerStyle: {
-                initial: { fill: '#5c5cff' },
-                selected: { fill: '#ff5050' }
-            },
-            markerLabelStyle: {
-                initial: {
-                    fontFamily: 'Roboto',
-                    fontWeight: 400,
-                    fontSize: 13
-                }
-            }
-        });
+                setReportCountsMap(reportCounts);
+            })
+            .catch((error) => console.error('API error:', error));
     }, []);
 
-    return <div id="map" style={{ width: '100%', height: '600px' }} />;
+    // Get the count for a given state directly from the map
+    const getCountForState = (stateName) => {
+        return reportCountsMap[stateName.trim()] || 0;
+    };
+
+    // Determine the fill color based on the report count
+    const getFillColor = (count) => {
+        return count > 0 ? '#0e4934' : '#ffff'; // Green if count > 0, otherwise default color
+    };
+
+    return (
+        <>
+            <ComposableMap
+                projection="geoMercator"
+                projectionConfig={{
+                    scale: 2500,
+                    center: [8, 9]
+                }}
+                width={700}
+                height={500}
+            >
+                <Geographies geography={geoData}>
+                    {({ geographies }) =>
+                        geographies.map((geo) => {
+                            const stateName = geo.properties.admin1Name.trim();
+                            const count = getCountForState(stateName);
+
+                            // Debugging output for each state
+                            console.log('State Name from GeoJSON:', stateName);
+                            console.log('Report Count for State:', count);
+
+                            return (
+                                <Geography
+                                    key={geo.rsmKey}
+                                    geography={geo}
+                                    style={{
+                                        default: { fill: getFillColor(count), stroke: '#0e4934', strokeWidth: 1.5 },
+                                        hover: { fill: '#0e4934', stroke: '#000', strokeWidth: 0.75 },
+                                        pressed: { fill: '#E42', stroke: '#000', strokeWidth: 0.75 }
+                                    }}
+                                    data-tooltip-id="state-tooltip"
+                                    data-tooltip-content={`
+                                        State: ${stateName}, 
+                                        Report Count: ${count}
+                                    `}
+                                />
+                            );
+                        })
+                    }
+                </Geographies>
+            </ComposableMap>
+            <Tooltip id="state-tooltip" className="custom-tooltip" />
+        </>
+    );
 };
 
-export default NigeriaMap;
+export default NigerianMap;

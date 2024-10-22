@@ -25,12 +25,12 @@ const MenuList = () => {
     // last menu-item to show in horizontal menu bar
     const lastItem = layout === LAYOUT_CONST.HORIZONTAL_LAYOUT && !matchDownMd ? HORIZONTAL_MAX_ITEM : null;
 
-    let lastItemIndex = menuItem.items.length - 1;
+    let lastItemIndex = menuItem.items?.length - 1;
     let remItems = [];
     let lastItemId;
 
     if (lastItem && lastItem < menuItem.items.length) {
-        lastItemId = menuItem.items[lastItem - 1].id;
+        lastItemId = menuItem?.items[lastItem - 1].id;
         lastItemIndex = lastItem - 1;
         remItems = menuItem.items.slice(lastItem - 1, menuItem.items.length).map((item) => ({
             title: item.title,
@@ -42,7 +42,7 @@ const MenuList = () => {
         }));
     }
 
-    const navItems = menuItem.items.slice(0, lastItemIndex + 1).map((item) => {
+    const navItems = menuItem.items?.slice(0, lastItemIndex + 1).map((item) => {
         switch (item.type) {
             case 'group':
                 if (item.url && item.id !== lastItemId) {

@@ -3,19 +3,18 @@ import axios from 'axios';
 export const getMapMarkers = () => {
     return new Promise((resolve, reject) => {
         const serviceToken = localStorage.getItem('serviceToken');
-
         axios
-            .get(`${process.env.REACT_APP_API_URL}/lgas/lat/lng`, {
+            .get(`${process.env.REACT_APP_API_URL}/incident-report/state/count`, {
                 headers: {
                     Authorization: `Bearer ${serviceToken}`
                 }
             })
-            .then(response => {
-                console.log('API response:', response.data); // Log the entire response data
-                resolve(response.data);
+            .then((response) => {
+                console.log('API response:::::', response);
+                resolve(response.data.data);
             })
-            .catch(error => {
-                console.log('API error:', error); // Log any errors
+            .catch((error) => {
+                console.log('API error:', error);
                 reject(new Error('An error occurred while fetching markers'));
             });
     });
@@ -23,7 +22,12 @@ export const getMapMarkers = () => {
 
 export const getStateCount = async () => {
     try {
-        const response = await axios.get('http://localhost:8080/api/v1/incident-report/state/count');
+        const response = await axios.get(`${process.env.REACT_APP_API_URL}/incident-report/state/count`, {
+            headers: {
+                Authorization: `Bearer ${serviceToken}` 
+            }
+        });
+        console.log('Response:', response);
         if (response.status === 200) {
             return response.data.data;
         } else {
