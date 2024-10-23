@@ -17,11 +17,23 @@ const SubReportDetailsPage = () => {
         if (state) {
             getSubReportsByCategory(state)
                 .then((data) => {
-                    // Remove duplicates by sub_report_type
-                    const uniqueSubReports = data.filter(
-                        (report, index, self) => index === self.findIndex((r) => r.sub_report_type === report.sub_report_type)
-                    );
-                    setSubReports(uniqueSubReports);
+                    // Aggregate sub_report_types and count occurrences
+                    const subReportsCount = data.reduce((acc, report) => {
+                        if (acc[report.sub_report_type]) {
+                            acc[report.sub_report_type] += 1; // Increment count if the type already exists
+                        } else {
+                            acc[report.sub_report_type] = 1; // Initialize count if the type is new
+                        }
+                        return acc;
+                    }, {});
+
+                    // Transform the object back into an array of { sub_report_type, count } for easier usage
+                    const structuredSubReports = Object.keys(subReportsCount).map((key) => ({
+                        sub_report_type: key,
+                        count: subReportsCount[key]
+                    }));
+
+                    setSubReports(structuredSubReports);
                     setLoading(false);
                 })
                 .catch((err) => {
@@ -152,7 +164,7 @@ const SubReportDetailsPage = () => {
                                                 State
                                             </Typography>
                                             <Typography variant="subtitle1" color="textSecondary">
-                                               {selectedState}
+                                                {selectedState}
                                             </Typography>
                                         </Grid>
                                     </Grid>
@@ -174,7 +186,9 @@ const SubReportDetailsPage = () => {
             {!loading && !error && (
                 <ul>
                     {subReports.map((subReport) => (
-                        <li key={subReport.id}>{subReport.sub_report_type}</li>
+                        <li key={subReport.sub_report_type}>
+                            {subReport.sub_report_type}: {subReport.count} occurrences
+                        </li>
                     ))}
                 </ul>
             )}
