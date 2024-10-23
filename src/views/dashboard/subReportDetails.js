@@ -4,6 +4,10 @@ import { getSubReportsByCategory } from 'services/reportService';
 import { useSelector } from 'react-redux';
 import { Card, CardContent, Grid, Typography } from '@mui/material';
 import tin from './tin.jpg';
+import BarChart from './barchart';
+import PieChart from './piechart';
+import MainCard from 'ui-component/cards/MainCard';
+import { gridSpacing } from 'store/constant';
 
 const SubReportDetailsPage = () => {
     const location = useLocation();
@@ -17,7 +21,6 @@ const SubReportDetailsPage = () => {
         if (state) {
             getSubReportsByCategory(state)
                 .then((data) => {
-                    // Aggregate sub_report_types and count occurrences
                     const subReportsCount = data.reduce((acc, report) => {
                         if (acc[report.sub_report_type]) {
                             acc[report.sub_report_type] += 1; // Increment count if the type already exists
@@ -27,7 +30,6 @@ const SubReportDetailsPage = () => {
                         return acc;
                     }, {});
 
-                    // Transform the object back into an array of { sub_report_type, count } for easier usage
                     const structuredSubReports = Object.keys(subReportsCount).map((key) => ({
                         sub_report_type: key,
                         count: subReportsCount[key]
@@ -45,29 +47,27 @@ const SubReportDetailsPage = () => {
 
     return (
         <div>
+            {/* Card section for displaying various details */}
             <Card variant="outlined" sx={{ border: '1px solid #ccc', boxShadow: 'none', padding: 2 }}>
                 <CardContent>
                     <Grid container spacing={2}>
-                        {/* First Card with img of tin src */}
+                        {/* First Card with Governor info */}
                         <Grid item xs={12} sm={6} md={3}>
                             <Card variant="outlined" sx={{ border: '1px solid #ccc', boxShadow: 'none', padding: 2 }}>
                                 <CardContent>
                                     <Grid container direction="column" alignItems="flex-start">
-                                        {/* Image Element */}
                                         <Grid item>
                                             <img
                                                 alt="Icon"
-                                                src={tin} // Image source for tin
-                                                style={{ width: 56, height: 56, borderRadius: '50%' }} // Circle with size 56x56px
+                                                src={tin}
+                                                style={{ width: 56, height: 56, borderRadius: '50%' }}
                                             />
                                         </Grid>
-                                        {/* Subtitle */}
                                         <Grid item>
                                             <Typography variant="subtitle2" color="textSecondary">
                                                 Governor
                                             </Typography>
                                         </Grid>
-                                        {/* Bigger, Bolder Text */}
                                         <Grid item>
                                             <Typography variant="h6" sx={{ fontWeight: 'bold' }}>
                                                 John Doe
@@ -78,26 +78,23 @@ const SubReportDetailsPage = () => {
                             </Card>
                         </Grid>
 
-                        {/* Second Card with img of tin src */}
+                        {/* Second Card with Deputy info */}
                         <Grid item xs={12} sm={6} md={3}>
                             <Card variant="outlined" sx={{ border: '1px solid #ccc', boxShadow: 'none', padding: 2 }}>
                                 <CardContent>
                                     <Grid container direction="column" alignItems="flex-start">
-                                        {/* Image Element */}
                                         <Grid item>
                                             <img
                                                 alt="Icon"
-                                                src={tin} // Image source for tin
-                                                style={{ width: 56, height: 56, borderRadius: '50%' }} // Circle with size 56x56px
+                                                src={tin}
+                                                style={{ width: 56, height: 56, borderRadius: '50%' }}
                                             />
                                         </Grid>
-                                        {/* Subtitle */}
                                         <Grid item>
                                             <Typography variant="subtitle2" color="textSecondary">
                                                 Deputy
                                             </Typography>
                                         </Grid>
-                                        {/* Bigger, Bolder Text */}
                                         <Grid item>
                                             <Typography variant="h6" sx={{ fontWeight: 'bold' }}>
                                                 Jane Smith
@@ -108,26 +105,23 @@ const SubReportDetailsPage = () => {
                             </Card>
                         </Grid>
 
-                        {/* Third Card with img of tin src */}
+                        {/* Third Card with Local Government Chairman info */}
                         <Grid item xs={12} sm={6} md={3}>
                             <Card variant="outlined" sx={{ border: '1px solid #ccc', boxShadow: 'none', padding: 2 }}>
                                 <CardContent>
                                     <Grid container direction="column" alignItems="flex-start">
-                                        {/* Image Element */}
                                         <Grid item>
                                             <img
                                                 alt="Icon"
-                                                src={tin} // Image source for tin
-                                                style={{ width: 56, height: 56, borderRadius: '50%' }} // Circle with size 56x56px
+                                                src={tin}
+                                                style={{ width: 56, height: 56, borderRadius: '50%' }}
                                             />
                                         </Grid>
-                                        {/* Subtitle */}
                                         <Grid item>
                                             <Typography variant="subtitle2" color="textSecondary">
                                                 Local Government Chairman
                                             </Typography>
                                         </Grid>
-                                        {/* Bigger, Bolder Text */}
                                         <Grid item>
                                             <Typography variant="h6" sx={{ fontWeight: 'bold' }}>
                                                 50
@@ -138,7 +132,7 @@ const SubReportDetailsPage = () => {
                             </Card>
                         </Grid>
 
-                        {/* Fourth Card with Text and Value Spilling to the Next Line */}
+                        {/* Fourth Card with report details */}
                         <Grid item xs={12} sm={6} md={3}>
                             <Card variant="outlined" sx={{ border: '1px solid #ccc', boxShadow: 'none', padding: 2 }}>
                                 <CardContent>
@@ -174,6 +168,31 @@ const SubReportDetailsPage = () => {
                     </Grid>
                 </CardContent>
             </Card>
+
+            {/* Chart section */}
+            <Grid container spacing={gridSpacing}>
+                <Grid item xs={12} md={6}>
+                    <MainCard content={false}>
+                        <Grid container>
+                            <Grid item xs={12}>
+                                <PieChart reportTypes={subReports.map(report => report.sub_report_type)} reportCounts={subReports.map(report => report.count)} />
+                            </Grid>
+                        </Grid>
+                    </MainCard>
+                </Grid>
+
+                <Grid item xs={12} md={6}>
+                    <MainCard content={false}>
+                        <Grid container>
+                            <Grid item xs={12}>
+                                <BarChart reportTypes={subReports.map(report => report.sub_report_type)} reportCounts={subReports.map(report => report.count)} />
+                            </Grid>
+                        </Grid>
+                    </MainCard>
+                </Grid>
+            </Grid>
+
+            {/* SubReport Details */}
             <h1>SubReport details page for {selectedState} </h1>
             <p>Report Type: {state}</p>
             <p>LGA: {lga}</p>
