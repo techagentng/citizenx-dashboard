@@ -34,6 +34,7 @@ const AuthenticationRoutes = {
             element: <Publication />
         },
         {
+
             path: '/privacy',
             element: <Privacy />
         },

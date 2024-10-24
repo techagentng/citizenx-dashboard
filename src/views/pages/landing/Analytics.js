@@ -18,7 +18,6 @@ const Lists = styled(Box)(({ theme }) => ({
 
 const Analytics = () => {
     const theme = useTheme();
-
     const listSX = {
         display: 'flex',
         alignItems: 'center',
@@ -76,13 +75,13 @@ const Analytics = () => {
                         </Button>
                     </Box>
                 </Grid>
+                <Grid item xs={12} >
+                <FadeInWhenVisible animationType='fadeInCenter' delay={0.4}>
+                    <Box sx={{ textAlign: 'center' }}>
+                        <img src={Dashboard} width="100%" alt="Dashboard" style={{ borderRadius: '30px', padding: 10 }} />
+                    </Box>
+                </FadeInWhenVisible>
 
-                <Grid item xs={12}>
-                    <FadeInWhenVisible animationType="fadeInCenter" delay={0.4}>
-                        <Box sx={{ textAlign: 'center' }}>
-                            <img src={Dashboard} width="100%" alt="Dashboard" style={{ borderRadius: '30px', padding: 10 }} />
-                        </Box>
-                    </FadeInWhenVisible>
                 </Grid>
             </Grid>
         </Container>

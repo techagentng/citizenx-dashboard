@@ -43,7 +43,7 @@ const Subscribe = () => {
                     textAlign: { xs: 'center', md: 'left' },
                     }}
                 >
-                    Receive updates from all 774 local governments with over 1,000 active citizens keeping us informed in their communities—join them!
+                    Receive updates from all 774 local governments, with active citizens keeping you informed about your local communities. Subscribe now!
                 </Typography>
                 </Grid>
                 <Grid item xs={12} md={6}>

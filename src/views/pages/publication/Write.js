@@ -3,7 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 // material ui
 import { useTheme } from '@mui/material/styles';
 import { Button, Grid, Stack, Typography, FormGroup, FormControlLabel, Checkbox, TextField, Box } from '@mui/material';
-// Project
+// Project 
 import ReactDraftWysiwyg from './forms/ReactDraftWysiwyg';
 import MainCard from 'ui-component/cards/MainCard';
 import { gridSpacing } from 'store/constant';
@@ -14,7 +14,7 @@ import JWTContext from 'contexts/JWTContext';
 import { useDispatch } from 'react-redux';
 import { openSnackbar } from 'store/slices/snackbar';
 
-const apiUrl = 'https://citizenx-9hk2.onrender.com/api/v1';
+const apiUrl = "https://citizenx-9hk2.onrender.com/api/v1";
 
 const categories = [
     { name: 'crime', label: 'Crime' },
@@ -22,57 +22,57 @@ const categories = [
     { name: 'entertainment', label: 'Entertainment' },
     { name: 'trasnport', label: 'Transport' },
     { name: 'foodstuff', label: 'Foodstuff' },
-    { name: 'religion', label: 'Religion' }
+    { name: 'religion', label: 'Religion' },
 ];
 
 const Write = () => {
     const theme = useTheme();
     const { user } = useContext(JWTContext);
-    const { postId } = useParams();
+    const {postId} = useParams();
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
-    const [value, setValue] = useState('');
-    const [title, setTitle] = useState('');
+    const [value, setValue] = useState("");
+    const [title, setTitle] = useState("");
     const [file, setFile] = useState(null);
     const [cat, setCat] = useState([]);
     // Check Edit Mode
-    const [isEditMode, setIsEditMode] = useState(false);
+    const [isEditMode, setIsEditMode] = useState(false);    
 
     useEffect(() => {
         const token = localStorage.getItem('serviceToken');
         if (!token) {
-            console.log('User is not logged in');
-        } else {
-            console.log('User is Logged in');
-        }
+            console.log("User is not logged in");
+        }else {
+                console.log("User is Logged in");
+            }
         if (postId) {
             fetchPost();
         }
-    }, [user, postId, fetchPost]);
+    }, [user, postId]);
 
     // Fetch Post
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    const fetchPost = async () => {
+    const fetchPost= async()=>{
         try {
-            const response = await axiosServices.get(`${apiUrl}/posts/${postId}`);
+            const response = await axiosServices.get(`${apiUrl}/posts/${postId}`);            
             const post = response.data;
             setTitle(post.title);
             setValue(post.post_description);
             setCat(post.post_category.split(', '));
             setIsEditMode(true);
-            console.log('my titless', title, value, cat);
+            console.log('my titless', title, value, cat)
         } catch (error) {
             console.error('Failed to fetch post:', error);
         }
     };
+
 
     const handleCategoryChange = (event) => {
         const categoryName = event.target.name;
         if (event.target.checked) {
             setCat([...cat, categoryName]);
         } else {
-            setCat(cat.filter((item) => item !== categoryName));
+            setCat(cat.filter(item => item !== categoryName));
         }
     };
 
@@ -80,53 +80,53 @@ const Write = () => {
         e.preventDefault();
 
         // Validate that title, description, and category are filled
-        if (!title.trim()) {
-            console.error('Title is required');
-            dispatch(
-                openSnackbar({
-                    open: true,
-                    message: 'Title is required',
-                    variant: 'alert',
-                    alert: {
-                        color: 'error'
-                    },
-                    close: true
-                })
-            );
-            return;
-        }
+    if (!title.trim()) {
+        console.error('Title is required');
+        dispatch(
+            openSnackbar({
+                open: true,
+                message: 'Title is required',
+                variant: 'alert',
+                alert: {
+                    color: 'error'
+                },
+                close: true,
+            })
+        );
+        return;
+    }
 
-        if (!value.trim()) {
-            console.error('Description is required');
-            dispatch(
-                openSnackbar({
-                    open: true,
-                    message: 'Description is required',
-                    variant: 'alert',
-                    alert: {
-                        color: 'error'
-                    },
-                    close: true
-                })
-            );
-            return;
-        }
+    if (!value.trim()) {
+        console.error('Description is required');
+        dispatch(
+            openSnackbar({
+                open: true,
+                message: 'Description is required',
+                variant: 'alert',
+                alert: {
+                    color: 'error'
+                },
+                close: true,
+            })
+        );
+        return;
+    }
 
-        if (cat.length === 0) {
-            console.error('At least one category must be selected');
-            dispatch(
-                openSnackbar({
-                    open: true,
-                    message: 'At least one category must be selected',
-                    variant: 'alert',
-                    alert: {
-                        color: 'error'
-                    },
-                    close: true
-                })
-            );
-            return;
-        }
+    if (cat.length === 0) {
+        console.error('At least one category must be selected');
+        dispatch(
+            openSnackbar({
+                open: true,
+                message: 'At least one category must be selected',
+                variant: 'alert',
+                alert: {
+                    color: 'error'
+                },
+                close: true,
+            })
+        );
+        return;
+    }
 
         try {
             // FormData Objects
@@ -135,19 +135,21 @@ const Write = () => {
             formData.append('post_description', value);
             formData.append('post_category', cat.join(', '));
 
-            if (file) {
+            if(file){
                 formData.append('postImage', file);
             }
 
             // Determine if the request is for creating or updating
-            const apiEndpoint = isEditMode ? `${apiUrl}/posts/${postId}/edit` : `${apiUrl}/posts/create`;
-
+            const apiEndpoint = isEditMode 
+            ? `${apiUrl}/posts/${postId}/edit`
+            : `${apiUrl}/posts/create`; 
+            
             // Fetch Token
             const token = localStorage.getItem('serviceToken');
             const response = await axiosServices.post(apiEndpoint, formData, {
                 headers: {
-                    Authorization: `Bearer ${token}`,
-                    'Content-Type': 'multipart/form-data'
+                    'Authorization': `Bearer ${token}`, 
+                    'Content-Type': 'multipart/form-data' 
                 }
             });
 
@@ -160,35 +162,35 @@ const Write = () => {
                     alert: {
                         color: 'success'
                     },
-                    close: true
+                    close: true,
                 })
             );
-
+            
             // Redirect user after successful post creation or update
             navigate('/publication');
         } catch (error) {
             console.error(`Failed to ${isEditMode ? 'update' : 'create'} post:`, error);
-
+            
             dispatch(
                 openSnackbar({
                     open: true,
                     message: `Failed to ${isEditMode ? 'update' : 'create'} post, try again:`,
-                    variant: 'alert',
-                    alert: {
+                    variant:'alert',
+                    alert:{
                         color: 'error'
                     },
-                    close: true
+                    close: true, 
                 })
             );
         }
     };
 
+
     return (
         <Box>
             <Grid container spacing={gridSpacing}>
                 <Grid item xs={8}>
-                    <Stack
-                        spacing={gridSpacing}
+                    <Stack spacing={gridSpacing}
                         sx={{
                             '& .quill': {
                                 bgcolor: theme.palette.mode === 'dark' ? 'dark.main' : 'grey.50',
@@ -209,17 +211,19 @@ const Write = () => {
                                     }
                                 }
                             }
-                        }}
-                    >
-                        <Typography variant="h2">{isEditMode ? 'Edit Publication' : 'Add New Publication'}</Typography>
+                        }}>
+                        <Typography variant="h2">{isEditMode ? "Edit Publication" : "Add New Publication"}</Typography>
                         <TextField
                             fullWidth
                             id="outlined-default-email-address"
                             placeholder="Enter Title"
                             value={title}
-                            onChange={(e) => setTitle(e.target.value)}
+                            onChange={e => setTitle(e.target.value)}
                         />
-                        <ReactDraftWysiwyg value={value} onChange={setValue} />
+                        <ReactDraftWysiwyg
+                            value={value}
+                            onChange={setValue}
+                        />
                     </Stack>
                 </Grid>
                 <Grid item xs={4} paddingX={3}>
@@ -233,7 +237,7 @@ const Write = () => {
                                     <b>Visibility:</b> Public
                                 </span>
                             </Stack>
-                            <Stack direction="row" mt={5} justifyContent="space-between">
+                            <Stack direction="row" mt={5} justifyContent='space-between'>
                                 <Button variant="contained">Save as draft</Button>
                                 <Button
                                     variant="contained"
@@ -254,31 +258,36 @@ const Write = () => {
                                     style={{ display: 'none' }}
                                     id="upload-button-file"
                                     type="file"
-                                    onChange={(e) => setFile(e.target.files[0])}
+                                    onChange={e => setFile(e.target.files[0])}
                                 />
                                 <label htmlFor="upload-button-file" style={{ backgroundColor: '#1976d2', color: '#fff' }}>
-                                    <Button variant="contained" color="primary" component="span" startIcon={<ArrowUpward />}>
+                                     <Button
+                                        variant="contained"
+                                        color="primary"
+                                        component="span"
+                                        startIcon={<ArrowUpward />}
+                                    >
                                         Add image for Product
                                     </Button>
                                 </label>
                             </Stack>
                         </MainCard>
                         <MainCard title="Categories">
-                            <FormGroup>
-                                {categories.map((category, index) => (
-                                    <FormControlLabel
-                                        key={index}
-                                        control={
-                                            <Checkbox
-                                                name={category.name}
-                                                onChange={handleCategoryChange}
-                                                checked={cat.includes(category.name)} // Check if the category is included in the current state
-                                            />
-                                        }
-                                        label={category.label}
-                                    />
-                                ))}
-                            </FormGroup>
+                        <FormGroup>
+                            {categories.map((category, index) => (
+                                <FormControlLabel
+                                    key={index}
+                                    control={
+                                        <Checkbox
+                                            name={category.name}
+                                            onChange={handleCategoryChange}
+                                            checked={cat.includes(category.name)} // Check if the category is included in the current state
+                                        />
+                                    }
+                                    label={category.label}
+                                />
+                            ))}
+                        </FormGroup>
                         </MainCard>
                     </Stack>
                 </Grid>

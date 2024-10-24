@@ -9,7 +9,7 @@ import Cards from './Cards';
 import AppInfo from './AppInfo';
 import Analytics from './Analytics';
 import Impact from './Impact';
-import Publication from './Publication';
+import LatestBlog from '../publication/home/LatestBlog';
 import Trends from './Trends';
 import Subscribe from './Subscribe';
 import Footer from './Footer';
@@ -73,7 +73,7 @@ const Landing = () => {
             
             {/* 7. Publications */}
             <SectionWrapper>
-                <Publication />
+                <LatestBlog />
             </SectionWrapper>
 
             {/* 8. Trends */}
