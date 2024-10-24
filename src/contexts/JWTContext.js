@@ -45,14 +45,8 @@ export const JWTProvider = ({ children }) => {
                 const serviceRole = window.localStorage.getItem('role_name');
                 if (serviceToken && serviceRole) {
                     setSession(serviceToken, serviceRole);
-<<<<<<< HEAD
                     const response = await axios.get('https://citizenx-9hk2.onrender.com/api/v1/me');
                     const isOnLine = await axios.get('https://citizenx-9hk2.onrender.com/api/v1/user/is_online');
-=======
-                    const response = await axios.get('/me');
-                    const isOnLine = await axios.get('/user/is_online');
->>>>>>> upstream/main
-
                     const { valid } = isOnLine.data;
                     const { data } = response.data;
                     localStorage.setItem('user', JSON.stringify(data));
@@ -87,11 +81,7 @@ export const JWTProvider = ({ children }) => {
 
     const login = async (email, password, navigate) => {
         try {
-<<<<<<< HEAD
             const response = await axios.post('https://citizenx-9hk2.onrender.com/api/v1/auth/login', { email, password });
-=======
-            const response = await axios.post('/auth/login', { email, password });
->>>>>>> upstream/main
             const { access_token, role_name, ...data } = response.data.data;
             const roleName = role_name || 'User';
             setSession(access_token, role_name);
@@ -114,22 +104,12 @@ export const JWTProvider = ({ children }) => {
 
     const loginWithGoogle = async () => {
         try {
-<<<<<<< HEAD
             const response = await axios.get('https://citizenx-9hk2.onrender.com/api/v1/google/login');
-=======
-            const response = await axios.get('/google/login');
->>>>>>> upstream/main
             if (response.status === 200) {
                 const accessToken = response.data.data.access_token;
                 setSession(accessToken);
-
-<<<<<<< HEAD
                 const userResponse = await axios.get('https://citizenx-9hk2.onrender.com/api/v1/me');
-=======
-                const userResponse = await axios.get('/me');
->>>>>>> upstream/main
                 const { data } = userResponse.data;
-
                 dispatch({
                     type: LOGIN,
                     payload: {
@@ -161,11 +141,8 @@ export const JWTProvider = ({ children }) => {
             formData.append('email', email);
             formData.append('password', password);
 
-<<<<<<< HEAD
             const response = await axios.post('https://citizenx-9hk2.onrender.com/api/v1/auth/signup', formData, {
-=======
-            const response = await axios.post('/auth/signup', formData, {
->>>>>>> upstream/main
+
                 headers: { 'Content-Type': 'multipart/form-data' }
             });
 
@@ -199,11 +176,7 @@ export const JWTProvider = ({ children }) => {
 
     const forgotPassword = async (email) => {
         try {
-<<<<<<< HEAD
             const response = await axios.post('https://citizenx-9hk2.onrender.com/api/v1/password/forgot', { email });
-=======
-            const response = await axios.post('/password/forgot', { email });
->>>>>>> upstream/main
             console.log('Forgot password response:', response.data);
             return response.data;
         } catch (error) {

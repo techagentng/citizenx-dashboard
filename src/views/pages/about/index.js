@@ -26,7 +26,6 @@ const SectionWrapper = styled('div')(() => ({
     paddingBottom: 100,
 }));
 
-<<<<<<< HEAD
 const about = () => {
     const theme = useTheme()
   return (
@@ -36,17 +35,6 @@ const about = () => {
             <AppBar />
             <HeaderSection/>
         </HeaderWrapper>
-=======
-const About = () => {
-    const theme = useTheme();
-    return (
-        <>
-            {/* 1. header and hero section */}
-            <HeaderWrapper id="home">
-                <AppBar />
-                <HeaderSection />
-            </HeaderWrapper>
->>>>>>> upstream/main
 
             {/* 2. Focus Section */}
             <SectionWrapper>
@@ -57,24 +45,14 @@ const About = () => {
             <SectionWrapper style={{ background: theme.palette.grey[100] }}>
                 <Partners />
             </SectionWrapper>
-
-<<<<<<< HEAD
-        {/* 6. Jumbo section */}
-        <SectionWrapper >
-              <Jumbo/>
-        </SectionWrapper>
-=======
             {/* 6. Jumbo section */}
             <SectionWrapper>
                 <Jumbo />
             </SectionWrapper>
-
             {/* 7. FAQ section */}
             <SectionWrapper>
                 <FAQ />
             </SectionWrapper>
->>>>>>> upstream/main
-
             {/* 8. Trends section */}
             <SectionWrapper>
                 <Trends />

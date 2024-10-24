@@ -117,14 +117,9 @@ const HeaderSection = () => {
                                 >
                                     <Box component="span" sx={{ fontWeight: 'bold' }}>
                                         Your Reports, Your Community, Your Impact -
-<<<<<<< HEAD
-                                    </Box><br/>
-                                    Join us in making a difference by engaging, reporting, and staying informed. 
-=======
                                     </Box>
                                     <br />
                                     Join us in making a difference by engaging, reporting, and staying informed.
->>>>>>> upstream/main
                                 </Typography>
                             </motion.div>
                         </Grid>

@@ -8,10 +8,6 @@ import MinimalLayout from 'layout/MinimalLayout';
 // other pages routing
 const Write = Loadable(lazy(() => import('views/pages/publication/Write')));
 
-<<<<<<< HEAD
-
-=======
->>>>>>> upstream/main
 // ==============================|| PUBLICATION ROUTING ||============================== //
 
 const PublicationRoutes = {
@@ -25,12 +21,7 @@ const PublicationRoutes = {
         {
             path: '/publication/write',
             element: <Write />
-<<<<<<< HEAD
         },
-        
-=======
-        }
->>>>>>> upstream/main
     ]
 };
 

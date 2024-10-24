@@ -18,11 +18,6 @@ const Lists = styled(Box)(({ theme }) => ({
 
 const Analytics = () => {
     const theme = useTheme();
-<<<<<<< HEAD
-    
-=======
-
->>>>>>> upstream/main
     const listSX = {
         display: 'flex',
         alignItems: 'center',
@@ -35,15 +30,9 @@ const Analytics = () => {
 
     const ListItem = ({ children }) => (
         <Typography sx={listSX}>
-<<<<<<< HEAD
-          <IconCircleCheckFilled size={20} /> {children}
-        </Typography>
-      );
-=======
             <IconCircleCheckFilled size={20} /> {children}
         </Typography>
     );
->>>>>>> upstream/main
 
     return (
         <Container sx={{ py: 0 }}>
@@ -70,16 +59,6 @@ const Analytics = () => {
                 <Grid item xs={12}>
                     <Lists>
                         <Box>
-<<<<<<< HEAD
-                            <ListItem>Earn Rewards</ListItem>
-                            <ListItem>Participate in Community</ListItem>
-                            <ListItem>Report Incidents</ListItem>
-                        </Box>
-                        <Box>
-                            <ListItem>Follow Up on Reports</ListItem>
-                            <ListItem>See Top Reports Hotspots</ListItem>
-                            <ListItem>Engage with Local Governance</ListItem>
-=======
                             <ListItem>View realtime reports</ListItem>
                             <ListItem>Export report data</ListItem>
                             <ListItem>Compare reports</ListItem>
@@ -88,7 +67,6 @@ const Analytics = () => {
                             <ListItem>View report location map</ListItem>
                             <ListItem>Visualize report data</ListItem>
                             <ListItem>Access analytics on our dashboard</ListItem>
->>>>>>> upstream/main
                         </Box>
                     </Lists>
                     <Box sx={{ mt: 5, textAlign: 'left' }}>
@@ -97,22 +75,13 @@ const Analytics = () => {
                         </Button>
                     </Box>
                 </Grid>
-
-<<<<<<< HEAD
                 <Grid item xs={12} >
                 <FadeInWhenVisible animationType='fadeInCenter' delay={0.4}>
                     <Box sx={{ textAlign: 'center' }}>
                         <img src={Dashboard} width="100%" alt="Dashboard" style={{ borderRadius: '30px', padding: 10 }} />
                     </Box>
                 </FadeInWhenVisible>
-=======
-                <Grid item xs={12}>
-                    <FadeInWhenVisible animationType="fadeInCenter" delay={0.4}>
-                        <Box sx={{ textAlign: 'center' }}>
-                            <img src={Dashboard} width="100%" alt="Dashboard" style={{ borderRadius: '30px', padding: 10 }} />
-                        </Box>
-                    </FadeInWhenVisible>
->>>>>>> upstream/main
+
                 </Grid>
             </Grid>
         </Container>
