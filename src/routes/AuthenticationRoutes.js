@@ -3,11 +3,13 @@ import { lazy } from 'react';
 // project imports
 import Loadable from 'ui-component/Loadable';
 import MinimalLayout from 'layout/MinimalLayout';
+// import { element } from 'prop-types';
 
 // other pages routing
 const PagesAbout = Loadable(lazy(() => import('views/pages/about')));
 const Publication = Loadable(lazy(() => import('views/pages/publication/home')));
 const Privacy = Loadable(lazy(() => import('views/pages/privacy')));
+const Disclaimer = Loadable(lazy(() => import('views/pages/disclaimer')));
 const PagesHome = Loadable(lazy(() => import('views/pages/landing')));
 
 // maintenance routing
@@ -38,6 +40,10 @@ const AuthenticationRoutes = {
             element: <Privacy />
         },
         {
+            path: '/disclaimer',
+            element: <Disclaimer />
+        },
+        {
             path: '/pages/error',
             element: <MaintenanceError />
         },
@@ -52,8 +58,7 @@ const AuthenticationRoutes = {
         {
             path: '/pages/under-construction',
             element: <MaintenanceUnderConstruction />
-        },
-
+        }
     ]
 };
 

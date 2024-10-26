@@ -6,9 +6,9 @@ import Loadable from 'ui-component/Loadable';
 import MinimalLayout from 'layout/MinimalLayout';
 
 // other pages routing
-const Privacy = Loadable(lazy(() => import('views/pages/privacy')));
+// const Privacy = Loadable(lazy(() => import('views/pages/privacy')));
 const Disclaimer = Loadable(lazy(() => import('views/pages/disclaimer')));
-const Terms = Loadable(lazy(() => import('views/pages/terms')));
+// const Terms = Loadable(lazy(() => import('views/pages/terms')));
 // ==============================|| PUBLICATION ROUTING ||============================== //
 
 const PrivacyRoutes = {
@@ -20,16 +20,8 @@ const PrivacyRoutes = {
     ),
     children: [
         {
-            path: '/privacy',
-            element: <Privacy />
-        },
-        {
-            path: '/disclaimer',
+            path: '/disclaimer2',
             element: <Disclaimer />
-        },
-        {
-            path: '/terms',
-            element: <Terms />
         }
     ]
 };

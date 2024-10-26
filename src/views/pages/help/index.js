@@ -2,7 +2,7 @@ import React from 'react';
 import { Container, Typography, Link } from '@mui/material';
 import AppBar from 'ui-component/extended/AppBar';
 
-function HelpAndSupport() {
+function Help() {
     return (
         <Container maxWidth="lg" sx={{ py: 4 }}>
             <AppBar />
@@ -97,4 +97,4 @@ function HelpAndSupport() {
     );
 }
 
-export default HelpAndSupport;
+export default Help;
