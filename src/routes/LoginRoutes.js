@@ -14,6 +14,7 @@ const AuthForgotPassword = Loadable(lazy(() => import('views/pages/authenticatio
 const PagesAbout = Loadable(lazy(() => import('views/pages/about')));
 const PagesPuplication = Loadable(lazy(() => import('views/pages/landing/Publication')));
 const PagesPrivacy = Loadable(lazy(() => import('views/pages/privacy')));
+const PagesDisclaimer = Loadable(lazy(() => import('views/pages/disclaimer')));
 const AuthResetPassword = Loadable(lazy(() => import('views/pages/authentication/ResetPassword')));
 
 
@@ -56,6 +57,10 @@ const LoginRoutes = {
         {
             path: '/privacy',
             element: <PagesPrivacy />
+        },
+        {
+            path: '/disclaimer',
+            element: <PagesDisclaimer />
         },
         {
             // Dynamic route for reset password with token
