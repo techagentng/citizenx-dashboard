@@ -9,6 +9,7 @@ import MinimalLayout from 'layout/MinimalLayout';
 const Privacy = Loadable(lazy(() => import('views/pages/privacy')));
 const Disclaimer = Loadable(lazy(() => import('views/pages/disclaimer')));
 const Terms = Loadable(lazy(() => import('views/pages/terms')));
+const Help = Loadable(lazy(() => import('views/pages/help')));
 // ==============================|| PUBLICATION ROUTING ||============================== //
 
 const PrivacyRoutes = {
@@ -30,6 +31,10 @@ const PrivacyRoutes = {
         {
             path: '/terms',
             element: <Terms />
+        },
+        {
+            path: '/help',
+            element: <Help />
         }
     ]
 };
