@@ -10,6 +10,8 @@ const PagesAbout = Loadable(lazy(() => import('views/pages/about')));
 const Publication = Loadable(lazy(() => import('views/pages/publication/home')));
 const Privacy = Loadable(lazy(() => import('views/pages/privacy')));
 const Disclaimer = Loadable(lazy(() => import('views/pages/disclaimer')));
+const Terms = Loadable(lazy(() => import('views/pages/terms')));
+const Help = Loadable(lazy(() => import('views/pages/help')));
 const PagesHome = Loadable(lazy(() => import('views/pages/landing')));
 
 // maintenance routing
@@ -42,6 +44,14 @@ const AuthenticationRoutes = {
         {
             path: '/disclaimer',
             element: <Disclaimer />
+        },
+        {
+            path: '/terms',
+            element: <Terms />
+        },
+        {
+            path: '/help',
+            element: <Help />
         },
         {
             path: '/pages/error',
