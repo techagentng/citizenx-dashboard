@@ -18,23 +18,23 @@ const HeaderWrapper = styled('div')(({ theme }) => ({
     background:
         theme.palette.mode === 'dark'
             ? theme.palette.background.default
-            : `linear-gradient(360deg, #c7f7e7 1.09%, ${theme.palette.background.paper} 100%)`,
+            : `linear-gradient(360deg, #c7f7e7 1.09%, ${theme.palette.background.paper} 100%)`
 }));
 
 const SectionWrapper = styled('div')(() => ({
     paddingTop: 100,
-    paddingBottom: 100,
+    paddingBottom: 100
 }));
 
-const about = () => {
-    const theme = useTheme()
-  return (
-    <>
-        {/* 1. header and hero section */}
-        <HeaderWrapper id="home">
-            <AppBar />
-            <HeaderSection/>
-        </HeaderWrapper>
+const About = () => {
+    const theme = useTheme();
+    return (
+        <>
+            {/* 1. header and hero section */}
+            <HeaderWrapper id="home">
+                <AppBar />
+                <HeaderSection />
+            </HeaderWrapper>
 
             {/* 2. Focus Section */}
             <SectionWrapper>
