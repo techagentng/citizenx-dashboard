@@ -21,7 +21,7 @@ const PublicationRoutes = {
         {
             path: '/publication/write',
             element: <Write />
-        }
+        },
     ]
 };
 
