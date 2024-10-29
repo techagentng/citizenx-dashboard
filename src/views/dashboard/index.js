@@ -229,12 +229,7 @@ const DashboardPage = () => {
                         <PopularCard title="Top Reported States in Nigeria" data={formattedTopStates} type="states" />
                     </Grid>
                     <Grid item xs={12} md={4} sx={{ backgroundColor: 'white' }}>
-                        <Box
-                            display="flex"
-                            justifyContent="space-between"
-                            alignItems="center"
-                            p={2} // Optional padding for better spacing
-                        >
+                        <Box display="flex" justifyContent="space-between" alignItems="center" p={2}>
                             <Typography variant="h3">Overall Ratings</Typography>
                             <TextField
                                 id="standard-select-currency-1"
@@ -242,7 +237,7 @@ const DashboardPage = () => {
                                 select
                                 value={selectedReportType || ''}
                                 onChange={handleReportTypeChange}
-                                sx={{ minWidth: 200 }} // Adjust width as needed
+                                sx={{ minWidth: 200 }}
                             >
                                 {reportTypeOptions.map((type) => (
                                     <MenuItem key={type} value={type} disabled={type === 'Select Report Type'}>
@@ -251,7 +246,7 @@ const DashboardPage = () => {
                                 ))}
                             </TextField>
                         </Box>
-                        <PieChart2 title="" reportPercent={{ good_percentage, bad_percentage }} />
+                        <PieChart2 title="xxxxxx" reportPercent={{ good_percentage, bad_percentage }} />
                     </Grid>
                 </Grid>
             </MainCard>

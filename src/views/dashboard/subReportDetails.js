@@ -8,6 +8,8 @@ import BarChart from './barchart';
 import PieChart from './piechart';
 import MainCard from 'ui-component/cards/MainCard';
 import { gridSpacing } from 'store/constant';
+// import { getPercentCount } from 'store/slices/graphs';
+// import PieChart from './piechart';
 
 const SubReportDetailsPage = () => {
     const location = useLocation();
@@ -16,6 +18,7 @@ const SubReportDetailsPage = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const { state: selectedState, lga } = useSelector((state) => state.graphs.lgaState);
+    // const dispatch = useDispatch();
 
     useEffect(() => {
         if (state) {

@@ -116,7 +116,7 @@ const HeaderSection = () => {
                                     sx={{ fontSize: { xs: '1rem', md: '1.125rem' } }}
                                 >
                                     <Box component="span" sx={{ fontWeight: 'bold' }}>
-                                        Your Reports, Your Community, Your Impact -
+                                        Your Reports, Your Community, Your Impact
                                     </Box>
                                     <br />
                                     Join us in making a difference by engaging, reporting, and staying informed.
