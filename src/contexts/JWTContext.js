@@ -45,8 +45,8 @@ export const JWTProvider = ({ children }) => {
                 const serviceRole = window.localStorage.getItem('role_name');
                 if (serviceToken && serviceRole) {
                     setSession(serviceToken, serviceRole);
-                    const response = await axios.get('https://citizenx-9hk2.onrender.com/api/v1/me');
-                    const isOnLine = await axios.get('https://citizenx-9hk2.onrender.com/api/v1/user/is_online');
+                    const response = await axios.get('/me');
+                    const isOnLine = await axios.get('/user/is_online');
                     const { valid } = isOnLine.data;
                     const { data } = response.data;
                     localStorage.setItem('user', JSON.stringify(data));
@@ -81,7 +81,7 @@ export const JWTProvider = ({ children }) => {
 
     const login = async (email, password, navigate) => {
         try {
-            const response = await axios.post('https://citizenx-9hk2.onrender.com/api/v1/auth/login', { email, password });
+            const response = await axios.post('/auth/login', { email, password });
             const { access_token, role_name, ...data } = response.data.data;
             const roleName = role_name || 'User';
             setSession(access_token, role_name);
@@ -104,11 +104,11 @@ export const JWTProvider = ({ children }) => {
 
     const loginWithGoogle = async () => {
         try {
-            const response = await axios.get('https://citizenx-9hk2.onrender.com/api/v1/google/login');
+            const response = await axios.get('/google/login');
             if (response.status === 200) {
                 const accessToken = response.data.data.access_token;
                 setSession(accessToken);
-                const userResponse = await axios.get('https://citizenx-9hk2.onrender.com/api/v1/me');
+                const userResponse = await axios.get('/me');
                 const { data } = userResponse.data;
                 dispatch({
                     type: LOGIN,
@@ -141,8 +141,7 @@ export const JWTProvider = ({ children }) => {
             formData.append('email', email);
             formData.append('password', password);
 
-            const response = await axios.post('https://citizenx-9hk2.onrender.com/api/v1/auth/signup', formData, {
-
+            const response = await axios.post('/auth/signup', formData, {
                 headers: { 'Content-Type': 'multipart/form-data' }
             });
 
@@ -166,7 +165,7 @@ export const JWTProvider = ({ children }) => {
 
     const logout = async () => {
         try {
-            await axios.get('https://citizenx-9hk2.onrender.com/api/v1/logout');
+            await axios.get('/logout');
         } catch (error) {
             console.error('Logout error:', error);
         }
@@ -176,7 +175,7 @@ export const JWTProvider = ({ children }) => {
 
     const forgotPassword = async (email) => {
         try {
-            const response = await axios.post('https://citizenx-9hk2.onrender.com/api/v1/password/forgot', { email });
+            const response = await axios.post('/password/forgot', { email });
             console.log('Forgot password response:', response.data);
             return response.data;
         } catch (error) {
