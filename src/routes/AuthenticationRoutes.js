@@ -11,6 +11,7 @@ const Publication = Loadable(lazy(() => import('views/pages/publication/home')))
 const Privacy = Loadable(lazy(() => import('views/pages/privacy')));
 const Disclaimer = Loadable(lazy(() => import('views/pages/disclaimer')));
 const Terms = Loadable(lazy(() => import('views/pages/terms')));
+const Community = Loadable(lazy(() => import('views/pages/communityGuidelines')));
 const Help = Loadable(lazy(() => import('views/pages/help')));
 const PagesHome = Loadable(lazy(() => import('views/pages/landing')));
 
@@ -49,6 +50,10 @@ const AuthenticationRoutes = {
         {
             path: '/terms',
             element: <Terms />
+        },
+        {
+            path: '/guidelines',
+            element: <Community />
         },
         {
             path: '/help',

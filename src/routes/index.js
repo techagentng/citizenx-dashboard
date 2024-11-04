@@ -8,6 +8,7 @@ import AuthenticationRoutes from './AuthenticationRoutes';
 import PublicationRoutes from './PublicationRoutes';
 import PrivacyRoutes from './PrivacyRoute';
 import DisclaimerRoutes from './DisclaimerRoute';
+import CommunityRoutes from './CommunityRoute';
 
 
 // ==============================|| ROUTING RENDER ||============================== //
@@ -23,6 +24,7 @@ const router = createBrowserRouter(
         PublicationRoutes,
         PrivacyRoutes,
         DisclaimerRoutes,
+        CommunityRoutes,
         MainRoutes
     ],
     {

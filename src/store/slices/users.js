@@ -3,7 +3,7 @@ import { createSlice } from '@reduxjs/toolkit';
 const initialState = {
     error: null,
     users: [],
-    avatarUrl: '', 
+    avatarUrl: '',
     role_name: ''
 };
 
@@ -17,10 +17,10 @@ const slice = createSlice({
         getUsersReviewSuccess(state, action) {
             state.users = action.payload;
         },
-        setAvatarUrl(state, action) { 
+        setAvatarUrl(state, action) {
             state.avatarUrl = action.payload;
         },
-        setRoleName(state, action) { 
+        setRoleName(state, action) {
             state.role_name = action.payload;
         }
     }

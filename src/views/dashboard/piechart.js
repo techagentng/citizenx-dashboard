@@ -15,34 +15,17 @@ const PieChart = ({ reportTypes, reportCounts }) => {
             {
                 label: 'Report Counts',
                 data: reportCounts,
-                backgroundColor: [
-                    'rgb(255, 99, 132)', // Red
-                    'rgb(54, 162, 235)', // Blue
-                    'rgb(255, 206, 86)', // Yellow
-                    'rgb(75, 192, 192)', // Teal
-                    'rgb(153, 102, 255)', // Purple
-                    'rgb(255, 159, 64)', // Orange
-                    'rgb(199, 199, 199)', // Grey
-                    'rgb(83, 102, 128)', // Dark Blue
-                    'rgb(100, 200, 100)', // Light Green
-                    'rgb(255, 140, 0)' // Dark Orange
-                ],
-                borderColor: [
-                    'rgba(255, 99, 132, 1)', // Red
-                    'rgba(54, 162, 235, 1)', // Blue
-                    'rgba(255, 206, 86, 1)', // Yellow
-                    'rgba(75, 192, 192, 1)', // Teal
-                    'rgba(153, 102, 255, 1)', // Purple
-                    'rgba(255, 159, 64, 1)', // Orange
-                    'rgba(199, 199, 199, 1)', // Grey
-                    'rgba(83, 102, 128, 1)', // Dark Blue
-                    'rgba(100, 200, 100, 1)', // Light Green
-                    'rgba(255, 140, 0, 1)' // Dark Orange
-                ],
+                backgroundColor: reportTypes.map(type => {
+                    if (type.toLowerCase().includes('good')) return 'rgb(100, 200, 100)'; // Green for Good
+                    if (type.toLowerCase().includes('bad')) return 'rgb(255, 99, 132)';   // Red for Bad
+                    return 'rgb(54, 162, 235)'; // Default Blue if neither Good nor Bad
+                }),
+                borderColor: 'rgba(255, 255, 255, 1)', // White border for clarity
                 borderWidth: 1
             }
         ]
     };
+    
 
     const options = {
         plugins: {
