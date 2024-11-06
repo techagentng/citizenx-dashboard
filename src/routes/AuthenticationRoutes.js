@@ -12,6 +12,7 @@ const Privacy = Loadable(lazy(() => import('views/pages/privacy')));
 const Disclaimer = Loadable(lazy(() => import('views/pages/disclaimer')));
 const Terms = Loadable(lazy(() => import('views/pages/terms')));
 const Community = Loadable(lazy(() => import('views/pages/communityGuidelines')));
+const Cookies = Loadable(lazy(() => import('views/pages/cookies')));
 const Help = Loadable(lazy(() => import('views/pages/help')));
 const PagesHome = Loadable(lazy(() => import('views/pages/landing')));
 
@@ -50,6 +51,10 @@ const AuthenticationRoutes = {
         {
             path: '/terms',
             element: <Terms />
+        },
+        {
+            path: '/cookies',
+            element: <Cookies />
         },
         {
             path: '/guidelines',

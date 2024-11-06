@@ -98,7 +98,7 @@ const HeaderSection = () => {
                             >
                                 <Stack spacing={1}>
                                     <Typography textAlign={{ xs: 'center', md: 'left' }} variant="h1" sx={headerSX}>
-                                        Revolutionizing Citizen Engagement in Nigeria
+                                    Shaping the Future of Citizen Engagement in Nigeria
                                     </Typography>
                                 </Stack>
                             </motion.div>

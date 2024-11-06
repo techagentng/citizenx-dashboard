@@ -17,6 +17,6 @@ const menuItems =
         ? {
               items: [dashboard, reports, rewards, users, settings]
           }
-        : { items: [dashboard, reports, rewards, settings] };
+        : { items: [dashboard, rewards, settings] };
 
 export default menuItems;
