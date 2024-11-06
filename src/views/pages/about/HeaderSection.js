@@ -40,7 +40,7 @@ const HeaderSection = () => {
                             >
                                 <Stack spacing={1}>
                                     <Typography textAlign={{ xs: 'center', md: 'left' }} variant="h1" sx={headerSX}>
-                                        Our Story: Empowering Voices for Transparent Governance
+                                        Strengthening Voices for Accountability and Transparency
                                     </Typography>
                                 </Stack>
                             </motion.div>
@@ -89,11 +89,11 @@ const HeaderSection = () => {
                             variant="body1"
                             sx={{ fontSize: { xs: '0.8rem', md: '1rem' }, paddingY: '10px', width: '100%' }}
                         >
-                            As we look to the future, CitizenX is committed to continuing its mission of empowering citizens and enhancing
-                            community engagement. We are constantly evolving, adding new features, and finding innovative ways to make your
-                            voice heard. The future of citizen engagement is here, and it’s in your hands. With CitizenX, you’re not just a
-                            spectator—you’re an active participant in shaping the future of your local community. Join us and be part of the
-                            change.
+                            As we look to the future, CitizenX Nigeria is committed to continuing its mission of empowering citizens and
+                            enhancing community engagement. We are constantly evolving, adding new features, and finding innovative ways to
+                            make your voice heard. The future of citizen engagement is here, and it’s in your hands. With the CitizenX
+                            platform, you’re not just a spectator—you’re an active participant in shaping the future of your local community
+                            in Nigeria. Join us and be part of the change.
                         </Typography>
                     </motion.div>
                 </Grid>

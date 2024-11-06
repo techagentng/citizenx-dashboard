@@ -54,8 +54,8 @@ const Jumbo = () => {
                                         paddingX: { xs: 5, md: 2 }
                                     }}
                                 >
-                                    Our mission is to harness technology to enhance citizen engagement with governance, <br />
-                                    foster transparency and accountability, and empower local communities in Nigeria..
+                                    Our mission is to harness technology to enhance citizen engagement with governance, foster transparency
+                                    and accountability, and empower local communities in Nigeria...
                                 </Typography>
                                 <Button
                                     component={Link}

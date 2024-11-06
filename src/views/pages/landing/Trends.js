@@ -8,7 +8,7 @@ import AppleIcon from '@mui/icons-material/Apple';
 import GooglePlay from 'assets/images/landing/playstore_300218.png';
 
 // Images
-import BarcodeI from 'assets/images/landing/image 14.png';
+import BarcodeI from 'assets/images/landing/barc.jpeg';
 import HandImg from 'assets/images/landing/Free iPhone 15 Pro Hand Mockup (Mockuuups Studio).png';
 import FadeInWhenVisible from './Animation2';
 

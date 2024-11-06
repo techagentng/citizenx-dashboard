@@ -127,7 +127,7 @@ const Footer = () => {
                                             <IconButton
                                                 size="small"
                                                 component={Link}
-                                                href="https://twitter.com/"
+                                                href="#"
                                                 target="_blank"
                                                 aria-label="twitter"
                                             >
@@ -160,7 +160,7 @@ const Footer = () => {
                                                     <FooterLink href="#" target="_blank" underline="none">
                                                         Download App
                                                     </FooterLink>
-                                                    <FooterLink href="#" target="_blank" underline="none">
+                                                    <FooterLink href="/dashboard" target="_blank" underline="none">
                                                         Dashboard
                                                     </FooterLink>
                                                     <FooterLink href="/publication" target="_blank" underline="none">
