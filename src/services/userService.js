@@ -206,3 +206,22 @@ export const deleteUser = () => {
             });
     });
 };
+
+export const resetPassword = (token, newPassword) => {
+    return new Promise((resolve, reject) => {
+        axios
+            .post(`${process.env.REACT_APP_API_URL}/password/reset/${token}`, { newPassword })
+            .then((response) => {
+                if (response.status === 200) {
+                    resolve(response.data); // Success
+                } else {
+                    reject(new Error('Failed to reset password'));
+                }
+            })
+            .catch((error) => {
+                const message = error.response?.data?.error || 'An unexpected error occurred. Please try again.';
+                console.error('API error:', error);
+                reject(new Error(message));
+            });
+    });
+};

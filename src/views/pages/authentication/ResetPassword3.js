@@ -113,7 +113,7 @@ const AuthResetPassword = ({ ...others }) => {
                                 variant="contained"
                                 color="secondary"
                             >
-                                Reset Password
+                                Reset Passwordxx
                             </Button>
                         </AnimateButton>
                     </Box>

@@ -1,36 +1,46 @@
-import { Link } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import { useState } from 'react';
-
-// material-ui
 import { useTheme } from '@mui/material/styles';
-import { Divider, Grid, Typography, useMediaQuery, TextField, Button, Stack } from '@mui/material';
-
-// project imports
+import { Divider, Grid, Typography, useMediaQuery, TextField, Button, Stack, CircularProgress } from '@mui/material';
 import AuthWrapper1 from '../AuthWrapper1';
 import AuthCardWrapper from '../AuthCardWrapper';
 import Logo from 'ui-component/Logo';
 import AuthFooter from 'ui-component/cards/AuthFooter';
-import useAuth from 'hooks/useAuth';
-
-// ============================|| AUTH3 - RESET PASSWORD ||============================ //
+import { resetPassword } from 'services/userService';
 
 const ResetPassword = () => {
     const theme = useTheme();
-    const { isLoggedIn } = useAuth();
     const matchDownSM = useMediaQuery(theme.breakpoints.down('md'));
+    const navigate = useNavigate();
+    const { token } = useParams();
 
     const [newPassword, setNewPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [error, setError] = useState('');
+    const [success, setSuccess] = useState('');
+    const [loading, setLoading] = useState(false);
 
     const handleSubmit = () => {
+        setError('');
+        setSuccess('');
+
         if (newPassword !== confirmPassword) {
             setError('Passwords do not match');
-        } else {
-            // Call your password reset API here with the new password
-            console.log('Reset password:', newPassword);
-            // Navigate to the login page or display success message
+            return;
         }
+
+        setLoading(true);
+        resetPassword(token, newPassword)
+            .then(() => {
+                setSuccess('Password reset successful');
+                setError('');
+                setTimeout(() => navigate('/login'), 2000);
+            })
+            .catch((error) => {
+                setError(error.message);
+                setSuccess('');
+            })
+            .finally(() => setLoading(false));
     };
 
     return (
@@ -54,12 +64,12 @@ const ResetPassword = () => {
                                                     gutterBottom
                                                     variant={matchDownSM ? 'h3' : 'h2'}
                                                 >
-                                                    Reset Your Password
+                                                    Reset Your Passwordxxxx
                                                 </Typography>
                                             </Grid>
                                             <Grid item xs={12}>
                                                 <Typography variant="caption" fontSize="16px" textAlign="center">
-                                                    Please enter and confirm your new password
+                                                    Please enter and confirm your new passwordxxx
                                                 </Typography>
                                             </Grid>
                                         </Grid>
@@ -81,8 +91,16 @@ const ResetPassword = () => {
                                                 onChange={(e) => setConfirmPassword(e.target.value)}
                                             />
                                             {error && <Typography color="error">{error}</Typography>}
-                                            <Button variant="contained" color="primary" onClick={handleSubmit} fullWidth>
-                                                Reset Password
+                                            {success && <Typography color="primary">{success}</Typography>}
+                                            <Button
+                                                variant="contained"
+                                                color="primary"
+                                                onClick={handleSubmit}
+                                                fullWidth
+                                                disabled={loading}
+                                                startIcon={loading ? <CircularProgress size={20} /> : null}
+                                            >
+                                                {loading ? 'Resetting...' : 'Reset Password'}
                                             </Button>
                                         </Stack>
                                     </Grid>
@@ -91,12 +109,7 @@ const ResetPassword = () => {
                                     </Grid>
                                     <Grid item xs={12}>
                                         <Grid item container direction="column" alignItems="center" xs={12}>
-                                            <Typography
-                                                component={Link}
-                                                to={isLoggedIn ? '/pages/login/login3' : '/login'}
-                                                variant="subtitle1"
-                                                sx={{ textDecoration: 'none' }}
-                                            >
+                                            <Typography component={Link} to="/login" variant="subtitle1" sx={{ textDecoration: 'none' }}>
                                                 Already have an account?
                                             </Typography>
                                         </Grid>
