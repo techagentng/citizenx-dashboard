@@ -64,12 +64,12 @@ const ResetPassword = () => {
                                                     gutterBottom
                                                     variant={matchDownSM ? 'h3' : 'h2'}
                                                 >
-                                                    Reset Your Passwordxxxx
+                                                    Reset Your Password
                                                 </Typography>
                                             </Grid>
                                             <Grid item xs={12}>
                                                 <Typography variant="caption" fontSize="16px" textAlign="center">
-                                                    Please enter and confirm your new passwordxxx
+                                                    Please enter and confirm your new password
                                                 </Typography>
                                             </Grid>
                                         </Grid>
