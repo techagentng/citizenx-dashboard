@@ -1,5 +1,5 @@
 import React from 'react';
-import { useTheme, styled } from '@mui/material/styles';
+import { styled } from '@mui/material/styles';
 import { Box, Container, Grid, IconButton, Link, Stack, Typography } from '@mui/material';
 import {
     IconBrandFacebookFilled,
@@ -13,31 +13,20 @@ import {
 
 import Logo from 'assets/images/landing/citizenX-logo.png';
 
-const fadeIn = `
-  @keyframes fadeIn {
-    0% { opacity: 0; }
-    100% { opacity: 0.8; }
-  }
-`;
-
-const FooterContainer = styled('div')({
+const FooterContainer = styled('div')(() => ({
     position: 'relative',
     width: '100%',
-    height: '100%',
     padding: '80px 20px',
     backgroundColor: '#C7F7E7',
-    backgroundImage:
-        "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1600 900'%3E%3Cpolygon fill='%23c7d3f7' points='957 450 539 900 1396 900'/%3E%3Cpolygon fill='%230a4833' points='957 450 872.9 900 1396 900'/%3E%3Cpolygon fill='%2393b8d8' points='-60 900 398 662 816 900'/%3E%3Cpolygon fill='%230c5a40' points='337 900 398 662 816 900'/%3E%3Cpolygon fill='%23629cb3' points='1203 546 1552 900 876 900'/%3E%3Cpolygon fill='%230f6d4d' points='1203 546 1552 900 1162 900'/%3E%3Cpolygon fill='%23378189' points='641 695 886 900 367 900'/%3E%3Cpolygon fill='%2311805b' points='587 900 641 695 886 900'/%3E%3Cpolygon fill='%2317645e' points='1710 900 1401 632 1096 900'/%3E%3Cpolygon fill='%23149469' points='1710 900 1401 632 1365 900'/%3E%3Cpolygon fill='%230a4833' points='1210 900 971 687 725 900'/%3E%3Cpolygon fill='%2317a877' points='943 900 1210 900 971 687'/%3E%3C/svg%3E\")",
-    backgroundAttachment: 'fixed',
+    backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1600 900'%3E%3Cpolygon fill='%23c7d3f7' points='957 450 539 900 1396 900'/%3E...")`,
     backgroundSize: 'cover',
     backgroundPosition: 'left',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center'
-});
+}));
 
 const FooterFeet = styled('div')({
-    bottom: 0,
     width: '100%',
     padding: '20px 40px',
     backgroundColor: '#0A4833',
@@ -56,7 +45,10 @@ const Overlay = styled('div')({
     opacity: 0.8,
     animation: 'fadeIn 2s ease-in-out',
     zIndex: 0,
-    ...fadeIn
+    '@keyframes fadeIn': {
+        '0%': { opacity: 0 },
+        '100%': { opacity: 0.8 }
+    }
 });
 
 const FooterContent = styled(Container)({
@@ -69,26 +61,14 @@ const FooterLogo = styled('img')({
     width: 'auto'
 });
 
-// Link - custom style
 const FooterLink = styled(Link)(({ theme }) => ({
-    color: theme.palette.mode === 'dark' ? theme.palette.text.secondary : theme.palette.text.hint,
+    color: theme.palette.text.secondary,
     '&:hover': {
-        color: theme.palette.primary.main
-    },
-    '&:active': {
         color: theme.palette.primary.main
     }
 }));
 
 const Footer = () => {
-    const theme = useTheme();
-    const ContactSX = {
-        color: 'white',
-        '&hover': {
-            color: theme.palette.primary.main
-        }
-    };
-    const textColor = theme.palette.mode === 'dark' ? 'text.secondary' : 'text.hint';
     return (
         <>
             <FooterContainer>
@@ -98,110 +78,74 @@ const Footer = () => {
                         <Grid item xs={12}>
                             <Grid container spacing={8}>
                                 <Grid item xs={12} md={4}>
-                                    <Stack spacing={{ xs: 2, md: 5 }}>
-                                        <Stack
-                                            sx={{
-                                                alignItems: 'center'
-                                            }}
-                                            direction="row"
-                                            spacing={1}
-                                        >
-                                            <FooterLogo src={Logo} />
-                                            <Typography variant="h2" align="center">
-                                                CitizenX
-                                            </Typography>
+                                    <Stack spacing={5}>
+                                        <Stack direction="row" alignItems="center" spacing={1}>
+                                            <FooterLogo src={Logo} alt="CitizenX Logo" />
+                                            <Typography variant="h2">CitizenX</Typography>
                                         </Stack>
-                                        <Typography variant="body2" color={textColor} lineHeight={1.7}>
-                                            Citizen X is dedicated to empowering citizens and enhancing community engagement. We
-                                            continuously evolve by adding new features and innovative ways to amplify your voice. With
-                                            Citizen X, no one is a spectator; every user is an active participant in shaping your local
-                                            communitys future. Join us and be part of the change!
+                                        <Typography variant="body2" lineHeight={1.7}>
+                                            Citizen X is dedicated to empowering citizens and enhancing community engagement. Join us and be
+                                            part of the change!
                                         </Typography>
-                                        {/* Social Icons */}
-                                        <Stack direction="row" alignItems="center" spacing={{ xs: 3, sm: 1.5, md: 2 }}>
-                                            <IconButton size="small" component={Link} href="#" target="_blank" aria-label="facebook">
-                                                <IconBrandFacebookFilled
-                                                    sx={{ color: 'text.secondary', '&:hover': { color: 'error.main' } }}
-                                                />
-                                            </IconButton>
-                                            <IconButton
-                                                size="small"
-                                                component={Link}
-                                                href="#"
-                                                target="_blank"
-                                                aria-label="twitter"
-                                            >
-                                                <IconBrandX sx={{ color: 'text.secondary', '&:hover': { color: 'primary.main' } }} />
-                                            </IconButton>
-                                            <IconButton size="small" component={Link} href="#" target="_blank" aria-label="tiktok">
-                                                <IconBrandTiktokFilled
-                                                    sx={{ color: 'text.secondary', '&:hover': { color: 'warning.main' } }}
-                                                />
-                                            </IconButton>
-                                            <IconButton size="small" component={Link} href="#" target="_blank" aria-label="instagram">
-                                                <IconBrandInstagram
-                                                    sx={{ color: 'text.secondary', '&:hover': { color: 'warning.main' } }}
-                                                />
-                                            </IconButton>
+                                        <Stack direction="row" spacing={2}>
+                                            {[
+                                                { icon: IconBrandFacebookFilled, label: 'Facebook', href: '#' },
+                                                { icon: IconBrandX, label: 'Twitter', href: '#' },
+                                                { icon: IconBrandTiktokFilled, label: 'TikTok', href: '#' },
+                                                { icon: IconBrandInstagram, label: 'Instagram', href: '#' }
+                                            ].map((social, idx) => (
+                                                <IconButton
+                                                    key={idx}
+                                                    size="small"
+                                                    component={Link}
+                                                    href={social.href}
+                                                    aria-label={social.label}
+                                                >
+                                                    <social.icon />
+                                                </IconButton>
+                                            ))}
                                         </Stack>
                                     </Stack>
                                 </Grid>
                                 <Grid item xs={12} md={8}>
-                                    <Grid container spacing={{ xs: 5, md: 2 }} sx={{ mt: { xs: '0px', sm: '5px' } }}>
-                                        <Grid item sm={4} xs={6}>
-                                            <Stack spacing={{ xs: 3, md: 5 }}>
-                                                <Typography variant="h3" color={textColor} sx={{ fontWeight: 600 }}>
-                                                    Quick Links
-                                                </Typography>
-                                                <Stack spacing={{ xs: 1.5, md: 2.5 }}>
-                                                    <FooterLink href="/about" target="_blank" underline="none">
-                                                        About Us
-                                                    </FooterLink>
-                                                    <FooterLink href="#" target="_blank" underline="none">
-                                                        Download App
-                                                    </FooterLink>
-                                                    <FooterLink href="/dashboard" target="_blank" underline="none">
-                                                        Dashboard
-                                                    </FooterLink>
-                                                    <FooterLink href="/publication" target="_blank" underline="none">
-                                                        Publications
-                                                    </FooterLink>
-                                                </Stack>
+                                    <Grid container spacing={5}>
+                                        <Grid item sm={4}>
+                                            <Stack spacing={{ xs: 1.5, md: 2.5 }}>
+                                                <FooterLink href="https://www.citizenx.ng/about" target="_blank">
+                                                    About Us
+                                                </FooterLink>
+                                                <FooterLink href="https://www.citizenx.ng/terms" target="_blank">
+                                                    Terms & Conditions
+                                                </FooterLink>
+                                                <FooterLink href="https://www.citizenx.ng/disclaimer" target="_blank">
+                                                    Disclaimer
+                                                </FooterLink>
+                                                <FooterLink href="https://www.citizenx.ng/cookies" target="_blank">
+                                                    Cookie Policy
+                                                </FooterLink>
+                                                <FooterLink href="https://www.citizenx.ng/guidelines" target="_blank">
+                                                    Community Guidelines
+                                                </FooterLink>
                                             </Stack>
                                         </Grid>
-                                        <Grid item xs={6} sm={4}>
-                                            <Stack spacing={{ xs: 3, md: 5 }}>
-                                                {/* Title */}
-                                                <Typography variant="h3" color={textColor} sx={{ fontWeight: 600 }}>
+                                        <Grid item sm={4}>
+                                            <Stack spacing={3}>
+                                                <Typography variant="h3" sx={{ fontWeight: 600 }}>
                                                     Contact Us
                                                 </Typography>
-
-                                                {/* Contact Boxes */}
-                                                <Stack spacing={{ xs: 1.5, md: 2.5 }}>
-                                                    <Stack spacing={1} display="flex" alignItems="flex-start" direction="row">
-                                                        <Box display="flex" alignItems="flex-start">
-                                                            <IconMapPin size="25px" color="white" />
-                                                        </Box>
-                                                        <Typography variant="body1" sx={ContactSX}>
-                                                            11 Herbert Macaulay Crescent GRA Ikeja, Lagos. Nigeria
-                                                        </Typography>
-                                                    </Stack>
-                                                    <Stack spacing={1} display="flex" alignItems="flex-start" direction="row">
-                                                        <Box display="flex" alignItems="center">
-                                                            <IconMailbox size="25px" color="white" />
-                                                        </Box>
-                                                        <Typography variant="body1" sx={ContactSX} paddingTop={1}>
-                                                            admin@citizenx.ng
-                                                        </Typography>
-                                                    </Stack>
-                                                    <Stack spacing={1} display="flex" alignItems="flex-start" direction="row">
-                                                        <Box display="flex" alignItems="center">
-                                                            <IconPhone size="25px" color="white" />
-                                                        </Box>
-                                                        <Typography variant="body1" sx={ContactSX} paddingTop={1}>
-                                                            +2347003151358
-                                                        </Typography>
-                                                    </Stack>
+                                                <Stack spacing={2}>
+                                                    {[
+                                                        { icon: IconMapPin, text: '11 Herbert Macaulay Crescent, Lagos' },
+                                                        { icon: IconMailbox, text: 'admin@citizenx.ng' },
+                                                        { icon: IconPhone, text: '+2347003151358' }
+                                                    ].map((contact, idx) => (
+                                                        <Stack key={idx} direction="row" spacing={1} alignItems="center">
+                                                            <Box>
+                                                                <contact.icon size="25px" />
+                                                            </Box>
+                                                            <Typography variant="body1">{contact.text}</Typography>
+                                                        </Stack>
+                                                    ))}
                                                 </Stack>
                                             </Stack>
                                         </Grid>
@@ -213,27 +157,14 @@ const Footer = () => {
                 </FooterContent>
             </FooterContainer>
             <FooterFeet>
-                <Stack spacing={2} direction="row">
-                    <Link
-                        href="#"
-                        target="_blank"
-                        underline="hover"
-                        sx={{ color: theme.palette.success.main, fontSize: '0.85rem', '&hover': { color: 'white' } }}
-                    >
-                        Privacy Policy
-                    </Link>
-                    <Link
-                        href="#"
-                        target="_blank"
-                        underline="hover"
-                        sx={{ color: theme.palette.success.main, fontSize: '0.85rem', '&hover': { color: 'white' } }}
-                    >
-                        Terms & Conditions
-                    </Link>
+                <Stack direction="row" spacing={2}>
+                    {['Privacy Policy', 'Terms & Conditions'].map((text, idx) => (
+                        <FooterLink key={idx} href="#">
+                            {text}
+                        </FooterLink>
+                    ))}
                 </Stack>
-                <Typography variant="span" align="center" sx={{ color: 'white', fontSize: '0.85rem', '&hover': { color: 'success' } }}>
-                    © 2024 CitizenX - all rights reserved
-                </Typography>
+                <Typography sx={{ color: 'white' }}>&copy; 2024 CitizenX - All rights reserved</Typography>
             </FooterFeet>
         </>
     );
