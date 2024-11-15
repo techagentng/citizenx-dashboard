@@ -16,7 +16,8 @@ const samplePage = {
     title: <FormattedMessage id="Overview" />,
     icon: icons.IconHome,
     type: 'group',
-    url: '/dashboard'
+    url: '/dashboard',
+    Breadcrumbs: true
 };
 
 export default samplePage;
