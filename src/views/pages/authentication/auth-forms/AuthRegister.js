@@ -298,7 +298,7 @@ const JWTRegister = ({ ...others }) => {
                                     label={
                                         <Typography variant="subtitle1">
                                             Agree with &nbsp;
-                                            <Typography variant="subtitle1" component={Link} to="/disclaimer">
+                                            <Typography variant="subtitle1" component={Link} to="/terms">
                                                 Terms & Condition.
                                             </Typography>
                                         </Typography>

@@ -83,7 +83,7 @@ const AppBar = ({ ...others }) => {
                             <Button color="inherit" component={RouterLink} to="/login" target="_blank">
                                 Dashboard
                             </Button>
-                            <Button color="inherit" component={Link} href="#" target="_blank">
+                            <Button color="inherit" component={Link} href="https://expo.dev/artifacts/eas/4e14uvcDzVrzVqe1NsfTMR.apk" target="_blank">
                                 Download App
                             </Button>
                             <Button component={RouterLink} to="/login" disableElevation variant="outlined" color="secondary">

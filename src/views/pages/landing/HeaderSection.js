@@ -98,7 +98,7 @@ const HeaderSection = () => {
                             >
                                 <Stack spacing={1}>
                                     <Typography textAlign={{ xs: 'center', md: 'left' }} variant="h1" sx={headerSX}>
-                                    Shaping the Future of Citizen Engagement in Nigeria
+                                        Shaping the Future of Citizen Engagement in Nigeria
                                     </Typography>
                                 </Stack>
                             </motion.div>
@@ -148,7 +148,7 @@ const HeaderSection = () => {
                                         <Button
                                             component={Link}
                                             variant="outlined"
-                                            href=""
+                                            href="https://expo.dev/artifacts/eas/4e14uvcDzVrzVqe1NsfTMR.apk"
                                             target="_blank"
                                             size="large"
                                             sx={{ color: '#17a877', borderColor: '#17a877' }}
