@@ -9,23 +9,36 @@ const PieChart = ({ reportTypes, reportCounts }) => {
         return <p>No data available</p>;
     }
 
+    // Predefined pool of distinct colors
+    const colorPool = [
+        'rgb(100, 200, 100)', // Green
+        'rgb(255, 99, 132)',  // Red
+        'rgb(54, 162, 235)',  // Blue
+        'rgb(255, 206, 86)',  // Yellow
+        'rgb(75, 192, 192)',  // Teal
+        'rgb(153, 102, 255)', // Purple
+        'rgb(255, 159, 64)'   // Orange
+    ];
+
+    // Dynamically assign colors from the pool without duplication
+    const assignedColors = reportTypes.map((type, index) => {
+        if (type.toLowerCase().includes('good')) return 'rgb(100, 200, 100)'; // Green for Good
+        if (type.toLowerCase().includes('bad')) return 'rgb(255, 99, 132)';   // Red for Bad
+        return colorPool[index % colorPool.length]; // Cycle through colorPool
+    });
+
     const data = {
         labels: reportTypes,
         datasets: [
             {
                 label: 'Report Counts',
                 data: reportCounts,
-                backgroundColor: reportTypes.map(type => {
-                    if (type.toLowerCase().includes('good')) return 'rgb(100, 200, 100)'; // Green for Good
-                    if (type.toLowerCase().includes('bad')) return 'rgb(255, 99, 132)';   // Red for Bad
-                    return 'rgb(54, 162, 235)'; // Default Blue if neither Good nor Bad
-                }),
+                backgroundColor: assignedColors,
                 borderColor: 'rgba(255, 255, 255, 1)', // White border for clarity
                 borderWidth: 1
             }
         ]
     };
-    
 
     const options = {
         plugins: {
