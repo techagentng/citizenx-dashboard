@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import { cloneElement, useState } from 'react';
 
-import { Link as RouterLink } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 // material-ui
 import { useTheme } from '@mui/material/styles';
@@ -80,7 +80,7 @@ const AppBar = ({ ...others }) => {
                             <Button color="inherit" component={Link} href="/publication" target="_blank">
                                 Publications
                             </Button>
-                            <Button color="inherit" component={RouterLink} to="/login" target="_blank">
+                            <Button color="inherit" component={Link} to="/login" target="_blank">
                                 Dashboard
                             </Button>
                             <Button color="inherit" component={Link} href="https://expo.dev/artifacts/eas/4e14uvcDzVrzVqe1NsfTMR.apk" target="_blank">
