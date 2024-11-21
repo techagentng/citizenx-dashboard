@@ -9,23 +9,19 @@ const PieChart = ({ reportTypes, reportCounts }) => {
         return <p>No data available</p>;
     }
 
-    // Predefined pool of distinct colors
-    const colorPool = [
-        'rgb(100, 200, 100)', // Green
-        'rgb(255, 99, 132)',  // Red
-        'rgb(54, 162, 235)',  // Blue
-        'rgb(255, 206, 86)',  // Yellow
-        'rgb(75, 192, 192)',  // Teal
-        'rgb(153, 102, 255)', // Purple
-        'rgb(255, 159, 64)'   // Orange
+    // Define a color palette for the slices
+    const colorPalette = [
+        'rgba(255, 99, 132, 0.8)',  // Red
+        'rgba(54, 162, 235, 0.8)',  // Blue
+        'rgba(255, 206, 86, 0.8)',  // Yellow
+        'rgba(75, 192, 192, 0.8)',  // Green
+        'rgba(153, 102, 255, 0.8)', // Purple
+        'rgba(255, 159, 64, 0.8)',  // Orange
+        'rgba(199, 199, 199, 0.8)', // Gray
     ];
 
-    // Dynamically assign colors from the pool without duplication
-    const assignedColors = reportTypes.map((type, index) => {
-        if (type.toLowerCase().includes('good')) return 'rgb(100, 200, 100)'; // Green for Good
-        if (type.toLowerCase().includes('bad')) return 'rgb(255, 99, 132)';   // Red for Bad
-        return colorPool[index % colorPool.length]; // Cycle through colorPool
-    });
+    // Generate colors based on the reportTypes array
+    const backgroundColors = reportTypes.map((_, index) => colorPalette[index % colorPalette.length]);
 
     const data = {
         labels: reportTypes,
@@ -33,7 +29,7 @@ const PieChart = ({ reportTypes, reportCounts }) => {
             {
                 label: 'Report Counts',
                 data: reportCounts,
-                backgroundColor: assignedColors,
+                backgroundColor: backgroundColors,
                 borderColor: 'rgba(255, 255, 255, 1)', // White border for clarity
                 borderWidth: 1
             }
@@ -47,7 +43,7 @@ const PieChart = ({ reportTypes, reportCounts }) => {
             },
             tooltip: {
                 callbacks: {
-                    label: function(context) {
+                    label: function (context) {
                         return `${context.label}: ${context.raw}`;
                     }
                 }
@@ -57,11 +53,11 @@ const PieChart = ({ reportTypes, reportCounts }) => {
         maintainAspectRatio: false,
         elements: {
             arc: {
-                borderWidth: 1, // Controls the spacing between slices
-                borderColor: '#fff' // Controls the border color between slices
+                borderWidth: 1,
+                borderColor: '#fff'
             }
         },
-        cutout: '50%' // Adjust this to simulate spacing; set to a smaller value to create space
+        cutout: '50%' // Adjust this for donut-style spacing
     };
 
     return (

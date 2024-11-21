@@ -1,126 +1,66 @@
-import { useTheme } from '@mui/material/styles';
-import { Box, Button, FormControl, FormHelperText, InputLabel, OutlinedInput } from '@mui/material';
-import { useDispatch } from 'store';
-import { Formik } from 'formik';
+import React from 'react';
+import { Formik, Form, Field } from 'formik';
 import * as Yup from 'yup';
-import AnimateButton from 'ui-component/extended/AnimateButton';
-import { openSnackbar } from 'store/slices/snackbar';
 
-const AuthResetPassword = ({ ...others }) => {
-    const theme = useTheme();
-    const dispatch = useDispatch();
-
+const ResetPasswordForm = () => {
     return (
         <Formik
             initialValues={{
                 newPassword: '',
-                confirmPassword: '',
-                submit: null
+                confirmPassword: ''
             }}
             validationSchema={Yup.object().shape({
-                newPassword: Yup.string().min(8, 'Password must be at least 8 characters').required('New password is required'),
+                newPassword: Yup.string()
+                    .min(8, 'Password must be at least 8 characters')
+                    .required('New password is required'),
                 confirmPassword: Yup.string()
                     .oneOf([Yup.ref('newPassword'), null], 'Passwords must match')
                     .required('Confirm password is required')
             })}
-            onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
-                try {
-                    // Handle reset password logic here
-                    // await resetPassword(values.newPassword);
-
-                    setStatus({ success: true });
+            onSubmit={(values, { setSubmitting }) => {
+                console.log('Form values:', values);
+                // Simulate API call
+                setTimeout(() => {
+                    alert('Password reset successful!');
                     setSubmitting(false);
-                    dispatch(
-                        openSnackbar({
-                            open: true,
-                            message: 'Password reset successful',
-                            variant: 'alert',
-                            alert: { color: 'success' },
-                            close: false
-                        })
-                    );
-                } catch (err) {
-                    setStatus({ success: false });
-                    setErrors({ submit: err.message });
-                    setSubmitting(false);
-                }
+                }, 1000);
             }}
         >
-            {({ errors, handleBlur, handleChange, handleSubmit, isSubmitting, touched, values }) => (
-                <form noValidate onSubmit={handleSubmit} {...others}>
-                    {/* New Password Field */}
-                    <FormControl
-                        fullWidth
-                        error={Boolean(touched.newPassword && errors.newPassword)}
-                        sx={{ ...theme.typography.customInput }}
-                    >
-                        <InputLabel htmlFor="outlined-adornment-new-password">New Password</InputLabel>
-                        <OutlinedInput
-                            id="outlined-adornment-new-password"
+            {({ errors, touched, isSubmitting }) => (
+                <Form>
+                    <div>
+                        <label htmlFor="newPassword">New Password</label>
+                        <Field
                             type="password"
-                            value={values.newPassword}
+                            id="newPassword"
                             name="newPassword"
-                            onBlur={handleBlur}
-                            onChange={handleChange}
-                            label="New Password"
+                            placeholder="Enter your new password"
                         />
-                        {touched.newPassword && errors.newPassword && (
-                            <FormHelperText error id="helper-text-new-password">
-                                {errors.newPassword}
-                            </FormHelperText>
+                        {errors.newPassword && touched.newPassword && (
+                            <div style={{ color: 'red' }}>{errors.newPassword}</div>
                         )}
-                    </FormControl>
+                    </div>
 
-                    {/* Confirm Password Field */}
-                    <FormControl
-                        fullWidth
-                        error={Boolean(touched.confirmPassword && errors.confirmPassword)}
-                        sx={{ ...theme.typography.customInput }}
-                    >
-                        <InputLabel htmlFor="outlined-adornment-confirm-password">Confirm Password</InputLabel>
-                        <OutlinedInput
-                            id="outlined-adornment-confirm-password"
+                    <div>
+                        <label htmlFor="confirmPassword">Confirm Password</label>
+                        <Field
                             type="password"
-                            value={values.confirmPassword}
+                            id="confirmPassword"
                             name="confirmPassword"
-                            onBlur={handleBlur}
-                            onChange={handleChange}
-                            label="Confirm Password"
+                            placeholder="Confirm your new password"
                         />
-                        {touched.confirmPassword && errors.confirmPassword && (
-                            <FormHelperText error id="helper-text-confirm-password">
-                                {errors.confirmPassword}
-                            </FormHelperText>
+                        {errors.confirmPassword && touched.confirmPassword && (
+                            <div style={{ color: 'red' }}>{errors.confirmPassword}</div>
                         )}
-                    </FormControl>
+                    </div>
 
-                    {/* Submission Error */}
-                    {errors.submit && (
-                        <Box sx={{ mt: 3 }}>
-                            <FormHelperText error>{errors.submit}</FormHelperText>
-                        </Box>
-                    )}
-
-                    {/* Submit Button */}
-                    <Box sx={{ mt: 2 }}>
-                        <AnimateButton>
-                            <Button
-                                disableElevation
-                                disabled={isSubmitting}
-                                fullWidth
-                                size="large"
-                                type="submit"
-                                variant="contained"
-                                color="secondary"
-                            >
-                                Reset Passwordxx
-                            </Button>
-                        </AnimateButton>
-                    </Box>
-                </form>
+                    <button type="submit" disabled={isSubmitting}>
+                        {isSubmitting ? 'Submitting...' : 'Reset Password'}
+                    </button>
+                </Form>
             )}
         </Formik>
     );
 };
 
-export default AuthResetPassword;
+export default ResetPasswordForm;
