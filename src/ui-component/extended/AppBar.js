@@ -1,9 +1,6 @@
 import PropTypes from 'prop-types';
 import { cloneElement, useState } from 'react';
-
-// import { Link } from 'react-router-dom';
-
-// material-ui
+import { Link } from 'react-router-dom'; // Use react-router-dom for internal routing
 import { useTheme } from '@mui/material/styles';
 import {
     AppBar as MuiAppBar,
@@ -12,25 +9,19 @@ import {
     Container,
     Drawer,
     IconButton,
-    Link,
     List,
     ListItemButton,
-    ListItemIcon,
     ListItemText,
+    ListItemIcon,
     Stack,
     Toolbar,
     Typography,
     useScrollTrigger
 } from '@mui/material';
-
-// project imports
-import Logo from 'ui-component/Logo';
-
-// assets
 import MenuIcon from '@mui/icons-material/Menu';
 import PersonIcon from '@mui/icons-material/Person';
+import Logo from 'ui-component/Logo';
 
-// elevation scroll
 function ElevationScroll({ children, window }) {
     const theme = useTheme();
     const trigger = useScrollTrigger({
@@ -53,8 +44,6 @@ ElevationScroll.propTypes = {
     window: PropTypes.object
 };
 
-// ==============================|| MINIMAL LAYOUT APP BAR ||============================== //
-
 const AppBar = ({ ...others }) => {
     const [drawerToggle, setDrawerToggle] = useState(false);
 
@@ -74,16 +63,21 @@ const AppBar = ({ ...others }) => {
                             <Logo />
                         </Typography>
                         <Stack direction="row" sx={{ display: { xs: 'none', sm: 'block' } }} spacing={{ xs: 1.5, md: 2.5 }}>
-                            <Button color="inherit" component={Link} href="/about" target="_blank">
+                            <Button color="inherit" component={Link} to="/about">
                                 About
                             </Button>
-                            <Button color="inherit" component={Link} href="/publication" target="_blank">
+                            <Button color="inherit" component={Link} to="/publication">
                                 Publications
                             </Button>
-                            <Button color="inherit" component={Link} to="/login" target="_blank">
+                            <Button color="inherit" component={Link} to="/dashboard">
                                 Dashboard
                             </Button>
-                            <Button color="inherit" component={Link} href="https://expo.dev/artifacts/eas/4e14uvcDzVrzVqe1NsfTMR.apk" target="_blank">
+                            <Button
+                                color="inherit"
+                                component="a"
+                                href="https://expo.dev/artifacts/eas/4e14uvcDzVrzVqe1NsfTMR.apk"
+                                target="_blank"
+                            >
                                 Download App
                             </Button>
                             <Button component={Link} to="/login" disableElevation variant="outlined" color="secondary">
@@ -103,47 +97,24 @@ const AppBar = ({ ...others }) => {
                                         onKeyDown={drawerToggler(false)}
                                     >
                                         <List>
-                                            <Link style={{ textDecoration: 'none' }} to="/" target="_blank">
-                                                <ListItemButton component="a">
-                                                    {/* <ListItemIcon>
-                                                        <IconHome2 />
-                                                    </ListItemIcon> */}
-                                                    <ListItemText primary="Home" />
-                                                </ListItemButton>
-                                            </Link>
-                                            <Link style={{ textDecoration: 'none' }} to="/about">
-                                                <ListItemButton component="a">
-                                                    {/* <ListItemIcon>
-                                                        <IconHome2 />
-                                                    </ListItemIcon> */}
-                                                    <ListItemText primary="About Us" />
-                                                </ListItemButton>
-                                            </Link>
-                                            <Link style={{ textDecoration: 'none' }} href="/login">
-                                                <ListItemButton component="a">
-                                                    {/* <ListItemIcon>
-                                                        <IconDashboard />
-                                                    </ListItemIcon> */}
-                                                    <ListItemText primary="Dashboard" />
-                                                </ListItemButton>
-                                            </Link>
-                                            <Link style={{ textDecoration: 'none' }} href="/publication">
-                                                <ListItemButton component="a">
-                                                    {/* <ListItemIcon>
-                                                        <IconDashboard />
-                                                    </ListItemIcon> */}
-                                                    <ListItemText primary="Publications" />
-                                                </ListItemButton>
-                                            </Link>
-                                            {/* Button */}
-                                            <Link style={{ textDecoration: 'none' }} href="#" target="_blank">
-                                                <ListItemButton component="a">
-                                                    <ListItemIcon>
-                                                        <PersonIcon />
-                                                    </ListItemIcon>
-                                                    <ListItemText primary="Sign In" />
-                                                </ListItemButton>
-                                            </Link>
+                                            <ListItemButton component={Link} to="/">
+                                                <ListItemText primary="Home" />
+                                            </ListItemButton>
+                                            <ListItemButton component={Link} to="/about">
+                                                <ListItemText primary="About Us" />
+                                            </ListItemButton>
+                                            <ListItemButton component={Link} to="/dashboard">
+                                                <ListItemText primary="Dashboard" />
+                                            </ListItemButton>
+                                            <ListItemButton component={Link} to="/publication">
+                                                <ListItemText primary="Publications" />
+                                            </ListItemButton>
+                                            <ListItemButton component={Link} to="/login">
+                                                <ListItemIcon>
+                                                    <PersonIcon />
+                                                </ListItemIcon>
+                                                <ListItemText primary="Sign In" />
+                                            </ListItemButton>
                                         </List>
                                     </Box>
                                 )}
