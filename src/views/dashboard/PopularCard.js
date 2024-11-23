@@ -1,26 +1,29 @@
 import React, { useState, useEffect } from 'react';
 import { useTheme } from '@mui/material/styles';
-import { Avatar, CardContent, Divider, Grid, Menu, MenuItem, Typography } from '@mui/material';
+import { Avatar, CardContent, Divider, Grid, Menu, MenuItem, Typography, Button } from '@mui/material';
 import BajajAreaChartCard from './BajajAreaChartCard';
 import MainCard from 'ui-component/cards/MainCard';
 import SkeletonPopularCard from 'ui-component/cards/Skeleton/PopularCard';
 import { gridSpacing } from 'store/constant';
-// import ChevronRightOutlinedIcon from '@mui/icons-material/ChevronRightOutlined';
 import MoreHorizOutlinedIcon from '@mui/icons-material/MoreHorizOutlined';
 import KeyboardArrowUpOutlinedIcon from '@mui/icons-material/KeyboardArrowUpOutlined';
 import KeyboardArrowDownOutlinedIcon from '@mui/icons-material/KeyboardArrowDownOutlined';
 
-const PopularCard = ({ isLoading, title, data, type }) => {
+const PopularCard = ({ isLoading, title, data = [], type }) => {  // Default to an empty array
     const theme = useTheme();
-    const [anchorEl, setAnchorEl] = React.useState(null);
+    const [anchorEl, setAnchorEl] = useState(null);
     const [totalReportCount, setTotalReportCount] = useState(null);
     const [, setError] = useState('');
     const [, setLoading] = useState('');
+    const [showAll, setShowAll] = useState(false);  // State to toggle the visibility of the entire list
+
+    // Limit for how many items to show initially
+    const ITEM_LIMIT = 7;
 
     useEffect(() => {
         const fetchReportCount = async () => {
             try {
-                const count = await getTotalReportCount();
+                const count = await getTotalReportCount(); // Assuming this is a function that gets the count
                 setTotalReportCount(count);
                 setLoading(false);
             } catch (err) {
@@ -40,7 +43,14 @@ const PopularCard = ({ isLoading, title, data, type }) => {
         setAnchorEl(null);
     };
 
+    const toggleList = () => {
+        setShowAll(!showAll); // Toggle between showing all items or just the first 7
+    };
+
     if (isLoading) return <SkeletonPopularCard />;
+
+    // Ensure data is an array before using slice or accessing properties
+    const itemsToDisplay = showAll ? (Array.isArray(data) ? data : []) : (Array.isArray(data) ? data.slice(0, ITEM_LIMIT) : []);
 
     return (
         <MainCard content={false}>
@@ -78,7 +88,7 @@ const PopularCard = ({ isLoading, title, data, type }) => {
                                         horizontal: 'right'
                                     }}
                                 >
-                                    <MenuItem onClick={handleClose}> Download pdf</MenuItem>
+                                    <MenuItem onClick={handleClose}>Download pdf</MenuItem>
                                 </Menu>
                             </Grid>
                         </Grid>
@@ -123,8 +133,8 @@ const PopularCard = ({ isLoading, title, data, type }) => {
                             </Grid>
                         </Grid>
                         <Divider sx={{ my: 1.5 }} />
-                        {data && data?.length > 0 ? (
-                            data.map((item, index) => (
+                        {itemsToDisplay && itemsToDisplay.length > 0 ? (
+                            itemsToDisplay.map((item, index) => (
                                 <Grid container direction="column" key={index}>
                                     <Grid item>
                                         <Grid container alignItems="center" justifyContent="space-between">
@@ -173,15 +183,16 @@ const PopularCard = ({ isLoading, title, data, type }) => {
                                 </Grid>
                             </Grid>
                         )}
+                        {data?.length > ITEM_LIMIT && (
+                            <Grid item xs={12} sx={{ pt: 2 }}>
+                                <Button onClick={toggleList} sx={{ textTransform: 'none' }}>
+                                    {showAll ? 'Read Less' : 'Read More'}
+                                </Button>
+                            </Grid>
+                        )}
                     </Grid>
                 </Grid>
             </CardContent>
-            {/* <CardActions sx={{ p: 1.25, pt: 0, justifyContent: 'center' }}>
-                <Button size="small" disableElevation>
-                    View All
-                    <ChevronRightOutlinedIcon />
-                </Button>
-            </CardActions> */}
         </MainCard>
     );
 };

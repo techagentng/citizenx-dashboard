@@ -24,7 +24,7 @@ const DashboardPage = () => {
     const { lga: selectedLga } = useSelector((state) => state.graphs.lgaState);
     const selectedState = useSelector((state) => state.graphs.lgaState.state);
     const { isLoggedIn } = useContext(JWTContext);
-    const { reportTypes, reportCounts, topStates, total_users, loading, error } = useSelector((state) => state.graphs.graphs);
+    const { reportTypes, reportCounts, topStates, total_users } = useSelector((state) => state.graphs.graphs);
     const { good_percentage, bad_percentage } = useSelector((state) => state.graphs.reportPercent);
     const [userCount, setUserCount] = useState(0);
     const [todayReportCount, setTodayReportCount] = useState(0);
@@ -118,8 +118,8 @@ const DashboardPage = () => {
         dispatch(getPercentCount(reportType, selectedState));
     };
 
-    if (loading) return <div>Loading...</div>;
-    if (error) return <div>Error: {error.message}</div>;
+    // if (loading) return <div>Loading...</div>;
+    // if (error) return <div>Error: {error.message}</div>;
 
     const todayReportCountSteroid = selectedState && topStates ? topStates[selectedState] || todayReportCount : todayReportCount;
 
@@ -230,7 +230,7 @@ const DashboardPage = () => {
                     </Grid>
                     <Grid item xs={12} md={4} sx={{ backgroundColor: 'white' }}>
                         <Box display="flex" justifyContent="space-between" alignItems="center" p={2}>
-                            <Typography variant="h3">Overall Ratings</Typography>
+                            <Typography variant="h5">Overall Ratings</Typography>
                             <TextField
                                 id="standard-select-currency-1"
                                 label="Select Report Type"
@@ -246,7 +246,7 @@ const DashboardPage = () => {
                                 ))}
                             </TextField>
                         </Box>
-                        <PieChart2 title="xxxxxx" reportPercent={{ good_percentage, bad_percentage }} />
+                        <PieChart2 reportPercent={{ good_percentage, bad_percentage }} />
                     </Grid>
                 </Grid>
             </MainCard>

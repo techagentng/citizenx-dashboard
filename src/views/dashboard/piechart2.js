@@ -28,7 +28,7 @@ const PieChart2 = ({ reportPercent, title }) => {
             <Grid item>
                 <Typography variant="h4">{title}</Typography>
             </Grid>
-            {good_percentage || bad_percentage ? <Pie data={reportsPercentData} /> : <p>Loading...</p>}
+            {good_percentage || bad_percentage ? <Pie data={reportsPercentData} /> : <p></p>}
         </div>
     );
 };

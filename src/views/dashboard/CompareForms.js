@@ -21,7 +21,7 @@ const CompareForms = () => {
     const [valueSecond, setValueSecond] = useState(new Date());
     const [compare, setCompare] = useState([{ id: Date.now(), states: defaultState }]);
     const [reportTypeInputs, setReportTypeInputs] = useState([{ id: Date.now(), types: defaultReportType }]);
-    const [loading, setLoading] = useState(false);
+    const [, setLoading] = useState(false);
     const [, setError] = useState(false);
     const [states, setStates] = useState([]);
     const [chartData, setChartData] = useState([]);
@@ -114,9 +114,9 @@ const CompareForms = () => {
         }
     }, [reportTypeInputs, compare, valueBasic, valueSecond]);
 
-    if (loading) {
-        return <div>Loading...</div>;
-    }
+    // if (loading) {
+    //     return <div>Loading...</div>;
+    // }
 
     return (
         <MainCard>
