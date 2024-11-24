@@ -24,7 +24,7 @@ const Login = () => {
 
     const handleGoogleLogin = async () => {
         try {
-            await loginWithGoogle(); 
+            await loginWithGoogle();
         } catch (error) {
             console.error('Google login failed:', error);
         }
@@ -70,13 +70,24 @@ const Login = () => {
                                                         borderRadius: '40px',
                                                         width: '260px',
                                                         height: '50px',
-                                                        fontSize: '18px'
+                                                        fontSize: '16px',
+                                                        border: '1px solid #B0B0B0', // Thin grey outline
+                                                        color: '#000', // Black text
+                                                        textTransform: 'none', // Preserve capitalization
+                                                        display: 'flex',
+                                                        justifyContent: 'center',
+                                                        alignItems: 'center',
+                                                        '&:hover': {
+                                                            backgroundColor: '#F5F5F5', // Subtle hover effect
+                                                            border: '1px solid #A0A0A0' // Slightly darker grey on hover
+                                                        }
                                                     }}
                                                     onClick={handleGoogleLogin}
                                                 >
                                                     Continue with Google
                                                 </Button>
                                             </Grid>
+
                                             <Grid item>
                                                 <Stack alignItems="center" spacing={1}>
                                                     <Typography
