@@ -120,7 +120,8 @@ export const JWTProvider = ({ children }) => {
                     }
                 });
 
-                window.location.replace(`/dashboard?access_token=${accessToken}`);
+                // Redirect to the dashboard
+                navigate('/dashboard', { state: { accessToken } });
             } else {
                 console.error('Login error:', response.data.message || 'Unknown error');
             }
