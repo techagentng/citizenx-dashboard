@@ -20,16 +20,18 @@ import { useContext } from 'react';
 const Login = () => {
     const theme = useTheme();
     const matchDownSM = useMediaQuery(theme.breakpoints.down('md'));
-    const { loginWithGoogle, isLoggedIn } = useContext(JWTContext);
+    const { isLoggedIn } = useContext(JWTContext);
+    const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
+    const GOOGLE_REDIRECT_URI = process.env.GOOGLE_REDIRECT_URL;
 
     const handleGoogleLogin = async () => {
         try {
-            await loginWithGoogle();
+            // Redirects user to Google OAuth login page
+            window.location.href = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${GOOGLE_CLIENT_ID}&redirect_uri=${GOOGLE_REDIRECT_URI}&response_type=code&scope=email profile`;
         } catch (error) {
             console.error('Google login failed:', error);
         }
     };
-
 
     return (
         <AuthWrapper1>

@@ -104,29 +104,23 @@ export const JWTProvider = ({ children }) => {
 
     const loginWithGoogle = async () => {
         try {
-            const response = await axios.get('/google/login');
-            if (response.status === 200) {
-                const accessToken = response.data.data.access_token;
-                setSession(accessToken);
-                const userResponse = await axios.get('/me');
-                const { data } = userResponse.data;
-                dispatch({
-                    type: LOGIN,
-                    payload: {
-                        isLoggedIn: true,
-                        user: data,
-                        role_name: data.role_name,
-                        isInitialized: true
-                    }
-                });
+            // Step 1: Redirect user to Google OAuth consent screen
+            const googleAuthUrl = 'https://accounts.google.com/o/oauth2/v2/auth';
+            const clientId = process.env.REACT_APP_GOOGLE_CLIENT_ID;
+            const redirectUri = GOOGLE_REDIRECT_UR;
+            const responseType = 'code';
+            const scope = 'openid email profile';
 
-                // Redirect to the dashboard
-                navigate('/dashboard', { state: { accessToken } });
-            } else {
-                console.error('Login error:', response.data.message || 'Unknown error');
-            }
+            // Construct the Google OAuth URL
+            const authUrl = `${googleAuthUrl}?client_id=${clientId}&redirect_uri=${redirectUri}&response_type=${responseType}&scope=${scope}`;
+
+            // Redirect to Google's OAuth consent screen
+            window.location.href = authUrl;
+
+            // Step 2: User is redirected back to your app with a code
+            // This part is handled by your backend server through the `redirectUri`.
         } catch (error) {
-            console.error('Error during login:', error);
+            console.error('Error during Google login:', error);
         }
     };
 
