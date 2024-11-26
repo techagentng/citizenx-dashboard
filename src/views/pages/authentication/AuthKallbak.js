@@ -11,7 +11,7 @@ const AuthCallback = () => {
             const code = searchParams.get('code');
             if (code) {
                 try {
-                    const response = await axios.post('/api/v1/google/login', { code });
+                    const response = await axios.post(`${process.env.REACT_APP_API_URL}/google/login`, { code });
                     const { access_token } = response.data.data;
 
                     localStorage.setItem('serviceToken', access_token);
