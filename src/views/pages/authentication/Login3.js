@@ -21,14 +21,15 @@ const Login = () => {
     const theme = useTheme();
     const matchDownSM = useMediaQuery(theme.breakpoints.down('md'));
     const { isLoggedIn } = useContext(JWTContext);
-    const GOOGLE_CLIENT_ID = "3542246689-jutm6p6ctc8he0k9ec4rg4f2eid0krmb.apps.googleusercontent.com";
-    const GOOGLE_REDIRECT_URI = "https://citizenx-9hk2.onrender.com/api/v1/auth/google/callback";
+    const GOOGLE_CLIENT_ID = '3542246689-jutm6p6ctc8he0k9ec4rg4f2eid0krmb.apps.googleusercontent.com';
+    const GOOGLE_REDIRECT_URI = 'https://citizenx-9hk2.onrender.com/api/v1/auth/google/callback';
 
     const handleGoogleLogin = async () => {
         try {
             console.log('Redirect URI:', GOOGLE_REDIRECT_URI);
-            // Redirects user to Google OAuth login page
-            window.location.href = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${GOOGLE_CLIENT_ID}&redirect_uri=${GOOGLE_REDIRECT_URI}&response_type=code&scope=email profile`;
+            const state = 'random-generated-string';
+
+            window.location.href = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${GOOGLE_CLIENT_ID}&redirect_uri=${GOOGLE_REDIRECT_URI}&response_type=code&scope=email profile&state=${state}`;
         } catch (error) {
             console.error('Google login failed:', error);
         }
