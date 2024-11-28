@@ -21,7 +21,7 @@ const Login = () => {
     const theme = useTheme();
     const matchDownSM = useMediaQuery(theme.breakpoints.down('md'));
     const { isLoggedIn } = useContext(JWTContext);
-    const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
+    const GOOGLE_CLIENT_ID = "3542246689-jutm6p6ctc8he0k9ec4rg4f2eid0krmb.apps.googleusercontent.com";
     const GOOGLE_REDIRECT_URI = "https://citizenx-9hk2.onrender.com/api/v1/auth/google/callback";
 
     const handleGoogleLogin = async () => {
