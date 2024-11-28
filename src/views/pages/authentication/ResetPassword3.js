@@ -25,7 +25,7 @@ const ResetPasswordForm = () => {
                     .required('Confirm password is required')
             })}
             onSubmit={(values, { setSubmitting }) => {
-                const payload = { newPassword: values.newPassword };
+                const payload = { new_password: values.newPassword };
 
                 fetch(`https://citizenx-9hk2.onrender.com/api/v1/password/reset/${token}`, {
                     method: 'POST',
