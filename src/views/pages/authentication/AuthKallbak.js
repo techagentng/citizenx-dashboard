@@ -1,6 +1,5 @@
 import { useEffect } from 'react';
-import { useNavigate, useSearchParams } from 'react-router-dom';
-import axios from 'utils/axios';
+import { useSearchParams, useNavigate } from 'react-router-dom';
 
 const AuthCallback = () => {
     const [searchParams] = useSearchParams();
@@ -11,21 +10,35 @@ const AuthCallback = () => {
             const code = searchParams.get('code');
             if (code) {
                 try {
-                    const response = await axios.post(`${process.env.REACT_APP_API_URL}/google/login`, { code });
-                    const { access_token } = response.data.data;
+                    // Send the `code` to the backend to exchange it for an access token
+                    const response = await fetch('/api/v1/auth/google/callback', {
+                        method: 'POST',
+                        body: JSON.stringify({ code }),
+                        headers: { 'Content-Type': 'application/json' },
+                    });
 
-                    localStorage.setItem('serviceToken', access_token);
-                    axios.defaults.headers.common.Authorization = `Bearer ${access_token}`;
+                    const data = await response.json();
 
-                    navigate('/dashboard');
+                    if (data && data.access_token) {
+                        // Store the access token in local storage
+                        localStorage.setItem('serviceToken', data.access_token);
+
+                        // Optionally, set the authorization header for future API calls
+                        axios.defaults.headers.common.Authorization = `Bearer ${data.access_token}`;
+
+                        // Navigate to the dashboard or other authenticated page
+                        navigate('/dashboard');
+                    } else {
+                        console.error('No access token returned:', data);
+                    }
                 } catch (error) {
-                    console.error('Google login failed:', error);
+                    console.error('Token exchange failed:', error);
                 }
             }
         };
 
         handleCallback();
-    }, [navigate, searchParams]);
+    }, [searchParams, navigate]);
 
     return <div>Processing Google login...</div>;
 };
