@@ -26,6 +26,7 @@ const Login = () => {
 
     const handleGoogleLogin = async () => {
         try {
+            console.log('Redirect URI:', GOOGLE_REDIRECT_URI);
             // Redirects user to Google OAuth login page
             window.location.href = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${GOOGLE_CLIENT_ID}&redirect_uri=${GOOGLE_REDIRECT_URI}&response_type=code&scope=email profile`;
         } catch (error) {
