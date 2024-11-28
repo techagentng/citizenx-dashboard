@@ -39,7 +39,7 @@ const LoginRoutes = {
             element: <AuthLogin />
         },
         {
-            path: '/auth/callback',
+            path: '/auth/google/callback',
             element: <AuthKall />
         },
         {

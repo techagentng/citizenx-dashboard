@@ -11,7 +11,7 @@ const AuthCallback = () => {
             if (code) {
                 try {
                     // Send the `code` to the backend to exchange it for an access token
-                    const response = await fetch('/api/v1/auth/google/callback', {
+                    const response = await fetch('https://citizenx-9hk2.onrender.com/api/v1/auth/google/callback', {
                         method: 'POST',
                         body: JSON.stringify({ code }),
                         headers: { 'Content-Type': 'application/json' },
