@@ -1,8 +1,15 @@
 import React from 'react';
 import { Formik, Form, Field } from 'formik';
 import * as Yup from 'yup';
+import { useParams } from 'react-router-dom'; // Use to extract the token from the URL
 
 const ResetPasswordForm = () => {
+    const { token } = useParams(); // Extract token from the route parameter
+
+    if (!token) {
+        return <div>Token is missing or invalid.</div>;
+    }
+
     return (
         <Formik
             initialValues={{
@@ -20,8 +27,7 @@ const ResetPasswordForm = () => {
             onSubmit={(values, { setSubmitting }) => {
                 const payload = { newPassword: values.newPassword };
 
-                // Simulate API call
-                fetch('/api/reset-password', {
+                fetch(`https://citizenx-9hk2.onrender.com/api/v1/password/reset/${token}`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
