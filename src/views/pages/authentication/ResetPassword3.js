@@ -24,7 +24,8 @@ const ResetPasswordForm = () => {
     const handleSubmit = async (values, { setSubmitting }) => {
         // Map `newPassword` to `new_password` in the payload
         const payload = { new_password: values.newPassword };
-
+        console.log('Payload:', JSON.stringify(payload)); // Debugging log
+    
         try {
             const response = await fetch(`https://citizenx-9hk2.onrender.com/api/v1/password/reset/${token}`, {
                 method: 'POST',
@@ -33,11 +34,11 @@ const ResetPasswordForm = () => {
                 },
                 body: JSON.stringify(payload), // Sends `new_password` in the payload
             });
-
+    
             if (!response.ok) {
                 throw new Error('Failed to reset password');
             }
-
+    
             const data = await response.json();
             alert('Password reset successful!');
             console.log('Server Response:', data);
@@ -48,6 +49,7 @@ const ResetPasswordForm = () => {
             setSubmitting(false);
         }
     };
+    
 
     return (
         <Formik
