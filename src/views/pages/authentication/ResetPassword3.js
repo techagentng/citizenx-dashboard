@@ -10,6 +10,7 @@ const ResetPasswordForm = () => {
         return <div>Token is missing or invalid.</div>;
     }
 
+    // Validation schema for Formik
     const validationSchema = Yup.object().shape({
         newPassword: Yup.string()
             .min(8, 'Password must be at least 8 characters')
@@ -19,20 +20,19 @@ const ResetPasswordForm = () => {
             .required('Confirm password is required'),
     });
 
+    // Submit handler for Formik
     const handleSubmit = async (values, { setSubmitting }) => {
+        // Map `newPassword` to `new_password` in the payload
         const payload = { new_password: values.newPassword };
 
         try {
-            const response = await fetch(
-                `https://citizenx-9hk2.onrender.com/api/v1/password/reset/${token}`,
-                {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify(payload),
-                }
-            );
+            const response = await fetch(`https://citizenx-9hk2.onrender.com/api/v1/password/reset/${token}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(payload), // Sends `new_password` in the payload
+            });
 
             if (!response.ok) {
                 throw new Error('Failed to reset password');
@@ -67,10 +67,7 @@ const ResetPasswordForm = () => {
                             aria-describedby="newPasswordError"
                         />
                         {errors.newPassword && touched.newPassword && (
-                            <div
-                                id="newPasswordError"
-                                style={{ color: 'red', marginTop: '0.5rem' }}
-                            >
+                            <div id="newPasswordError" style={{ color: 'red', marginTop: '0.5rem' }}>
                                 {errors.newPassword}
                             </div>
                         )}
@@ -86,10 +83,7 @@ const ResetPasswordForm = () => {
                             aria-describedby="confirmPasswordError"
                         />
                         {errors.confirmPassword && touched.confirmPassword && (
-                            <div
-                                id="confirmPasswordError"
-                                style={{ color: 'red', marginTop: '0.5rem' }}
-                            >
+                            <div id="confirmPasswordError" style={{ color: 'red', marginTop: '0.5rem' }}>
                                 {errors.confirmPassword}
                             </div>
                         )}
