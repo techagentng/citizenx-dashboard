@@ -20,7 +20,8 @@ import { useContext } from 'react';
 const Login = () => {
     const theme = useTheme();
     const matchDownSM = useMediaQuery(theme.breakpoints.down('md'));
-    const { isLoggedIn } = useContext(JWTContext);
+    const { isLoggedIn,  } = useContext(JWTContext); // Added state for JWT Context
+
     const GOOGLE_CLIENT_ID = '3542246689-jutm6p6ctc8he0k9ec4rg4f2eid0krmb.apps.googleusercontent.com';
     const GOOGLE_REDIRECT_URI = 'https://citizenx-9hk2.onrender.com/api/v1/auth/google/callback';
 
