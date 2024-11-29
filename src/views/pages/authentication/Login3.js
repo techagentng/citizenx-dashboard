@@ -27,20 +27,34 @@ const Login = () => {
     const handleGoogleLogin = async () => {
         try {
             console.log('Redirect URI:', GOOGLE_REDIRECT_URI);
-    
+
             // Fetch the JWT state from your backend
             const response = await fetch('https://citizenx-9hk2.onrender.com/api/v1/auth/google/state');
-            const { state } = await response.json(); // Expect a JWT state from the server
-    
-            if (!state) throw new Error('Failed to fetch state from backend');
-    
-            // Redirect to Google login with the generated state
+
+            // Check if the response is successful
+            if (!response.ok) {
+                throw new Error('Failed to fetch state from backend');
+            }
+
+            // Parse the JSON response
+            const data = await response.json();
+
+            // Destructure the state from the response
+            const { state } = data;
+
+            // Validate that the state is available
+            if (!state) {
+                throw new Error('State is not provided by the backend');
+            }
+
+            // Redirect to Google login with the fetched state
             window.location.href = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${GOOGLE_CLIENT_ID}&redirect_uri=${GOOGLE_REDIRECT_URI}&response_type=code&scope=email profile&state=${state}`;
         } catch (error) {
-            console.error('Google login failed:', error);
+            // Log error and show a user-friendly message
+            console.error('Google login failed:', error.message || error);
+            alert('Google login failed. Please try again later.');
         }
     };
-    
 
     return (
         <AuthWrapper1>
