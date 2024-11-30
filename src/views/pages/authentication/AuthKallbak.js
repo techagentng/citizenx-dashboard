@@ -20,11 +20,18 @@ const AuthCallback = () => {
             }
 
             try {
-                await loginWithGoogle(code, navigate);
+                // Assuming loginWithGoogle handles token retrieval and storage
+                const success = await loginWithGoogle(code);
+
+                if (success) {
+                    navigate('/dashboard'); // Redirect to dashboard on success
+                } else {
+                    throw new Error('Login with Google failed.');
+                }
             } catch (error) {
-                console.error('Google login failed:', error);
+                console.error('Google login failed:', error.message || error);
                 alert('Authentication failed. Please try again.');
-                navigate('/login');
+                navigate('/login'); // Redirect to login on failure
             }
         };
 

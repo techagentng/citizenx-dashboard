@@ -105,7 +105,13 @@ export const JWTProvider = ({ children }) => {
     const loginWithGoogle = async (code, navigate) => {
         try {
             // Step 1: Exchange the authorization code for tokens from your backend
-            const response = await axios.post('/auth/google/callback', { code });
+            const response = await axios.post('https://citizenx-9hk2.onrender.com/auth/google/callback', { code });
+
+            // Ensure the response contains the expected data
+            if (!response.data || !response.data.access_token || !response.data.role_name || !response.data.user) {
+                throw new Error('Invalid response from backend');
+            }
+
             const { access_token, role_name, user } = response.data;
 
             // Step 2: Set the token and role in local storage
@@ -126,7 +132,9 @@ export const JWTProvider = ({ children }) => {
             navigate('/dashboard');
         } catch (error) {
             console.error('Google login failed:', error);
-            throw error;
+            alert('Login failed. Please try again.');
+            // Optionally navigate to a login page if needed
+            navigate('/login');
         }
     };
 
