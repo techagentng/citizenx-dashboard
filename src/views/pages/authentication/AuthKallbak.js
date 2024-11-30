@@ -11,7 +11,7 @@ const AuthCallback = () => {
     useEffect(() => {
         const handleGoogleAuth = async () => {
             const code = searchParams.get('code');
-
+console.log("zzzzzzz", code)
             if (!code) {
                 console.error('Authorization code not found in URL.');
                 alert('Login failed. Please try again.');
