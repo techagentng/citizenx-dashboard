@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import { useContext } from 'react';
-import JWTContext from 'path-to-jwt-context';
+import JWTContext from 'contexts/JWTContext';
 
 const AuthCallback = () => {
     const [searchParams] = useSearchParams();
