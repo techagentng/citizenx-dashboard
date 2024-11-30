@@ -20,7 +20,7 @@ import { useContext } from 'react';
 const Login = () => {
     const theme = useTheme();
     const matchDownSM = useMediaQuery(theme.breakpoints.down('md'));
-    const { isLoggedIn,  } = useContext(JWTContext); // Added state for JWT Context
+    const { isLoggedIn, setIsLoggedIn } = useContext(JWTContext); // Added state for JWT Context
 
     const GOOGLE_CLIENT_ID = '3542246689-jutm6p6ctc8he0k9ec4rg4f2eid0krmb.apps.googleusercontent.com';
     const GOOGLE_REDIRECT_URI = 'https://citizenx-9hk2.onrender.com/api/v1/auth/google/callback';
@@ -32,18 +32,13 @@ const Login = () => {
             // Fetch the JWT state from your backend
             const response = await fetch('https://citizenx-9hk2.onrender.com/api/v1/auth/google/state');
 
-            // Check if the response is successful
             if (!response.ok) {
                 throw new Error('Failed to fetch state from backend');
             }
 
-            // Parse the JSON response
             const data = await response.json();
-
-            // Destructure the state from the response
             const { state } = data;
 
-            // Validate that the state is available
             if (!state) {
                 throw new Error('State is not provided by the backend');
             }
@@ -51,7 +46,6 @@ const Login = () => {
             // Redirect to Google login with the fetched state
             window.location.href = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${GOOGLE_CLIENT_ID}&redirect_uri=${GOOGLE_REDIRECT_URI}&response_type=code&scope=email profile&state=${state}`;
         } catch (error) {
-            // Log error and show a user-friendly message
             console.error('Google login failed:', error.message || error);
             alert('Google login failed. Please try again later.');
         }
