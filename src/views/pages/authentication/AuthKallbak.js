@@ -21,6 +21,7 @@ const AuthCallback = () => {
 
             try {
                 // Assuming loginWithGoogle handles token retrieval and storage
+                console.log("xxxxxxx", code)
                 const success = await loginWithGoogle(code);
 
                 if (success) {
