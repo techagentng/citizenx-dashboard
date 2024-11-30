@@ -11,35 +11,58 @@ const AuthCallback = () => {
     useEffect(() => {
         const handleGoogleAuth = async () => {
             const code = searchParams.get('code');
-console.log("zzzzzzz", code)
+            // const state = searchParams.get('state'); // Optional: validate state
+
             if (!code) {
                 console.error('Authorization code not found in URL.');
-                alert('Login failed. Please try again.');
-                navigate('/login'); // Redirect to login if no code is found
+                navigate('/login', { 
+                    state: { error: 'Login failed. No authorization code.' }
+                });
                 return;
             }
 
             try {
-                // Assuming loginWithGoogle handles token retrieval and storage
-                console.log("xxxxxxx", code)
                 const success = await loginWithGoogle(code);
 
                 if (success) {
-                    navigate('/dashboard'); // Redirect to dashboard on success
+                    navigate('/dashboard', { 
+                        replace: true // Prevents going back to callback page
+                    }); 
                 } else {
                     throw new Error('Login with Google failed.');
                 }
             } catch (error) {
-                console.error('Google login failed:', error.message || error);
-                alert('Authentication failed. Please try again.');
-                navigate('/login'); // Redirect to login on failure
+                console.error('Google login failed:', error);
+                navigate('/login', { 
+                    state: { 
+                        error: error.message || 'Authentication failed'
+                    }
+                });
             }
         };
 
         handleGoogleAuth();
     }, [searchParams, navigate, loginWithGoogle]);
 
-    return <div>Processing Google login...</div>;
+    return (
+        <div className="flex justify-center items-center h-screen">
+            <div className="text-center">
+                <div role="status">
+                    <svg 
+                        aria-hidden="true" 
+                        className="inline w-10 h-10 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600" 
+                        viewBox="0 0 100 101" 
+                        fill="none" 
+                        xmlns="http://www.w3.org/2000/svg"
+                    >
+                        {/* SVG spinner content */}
+                    </svg>
+                    <span className="sr-only">Loading...</span>
+                </div>
+                <p className="mt-4 text-gray-600">Processing Google login...</p>
+            </div>
+        </div>
+    );
 };
 
 export default AuthCallback;
