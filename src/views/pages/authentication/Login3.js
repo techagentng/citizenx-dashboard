@@ -25,10 +25,15 @@ const Login = () => {
     const GOOGLE_CLIENT_ID = '3542246689-jutm6p6ctc8he0k9ec4rg4f2eid0krmb.apps.googleusercontent.com';
     const GOOGLE_REDIRECT_URI = 'https://citizenx.ng/auth/google/callback';
 
+    const generateState = () => {
+        // Generate a random state value (could be a UUID or a random string)
+        return Math.random().toString(36).substring(2);  // Simple random string
+    };
+
     const handleGoogleLogin = async () => {
         try {
             console.log('Redirect URI:', GOOGLE_REDIRECT_URI);
-
+            const state = generateState();
             // Fetch the JWT state from your backend
             const response = await fetch('https://citizenx-9hk2.onrender.com/api/v1/auth/google/state');
 
