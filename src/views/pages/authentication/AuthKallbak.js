@@ -11,7 +11,8 @@ const AuthCallback = () => {
     useEffect(() => {
         const handleGoogleAuth = async () => {
             const code = searchParams.get('code');
-            // const state = searchParams.get('state'); // Optional: validate state
+            // Optional: You can validate the state here if needed
+            // const state = searchParams.get('state');
 
             if (!code) {
                 console.error('Authorization code not found in URL.');
@@ -22,11 +23,12 @@ const AuthCallback = () => {
             }
 
             try {
+                // Call your function to login and process the response
                 const success = await loginWithGoogle(code);
 
                 if (success) {
                     navigate('/dashboard', { 
-                        replace: true // Prevents going back to callback page
+                        replace: true // Prevent going back to callback page
                     }); 
                 } else {
                     throw new Error('Login with Google failed.');

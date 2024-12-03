@@ -102,39 +102,30 @@ export const JWTProvider = ({ children }) => {
         }
     };
 
-    const loginWithGoogle = async (code, navigate) => {
+    const loginWithGoogle = async (code) => {
         try {
-            // Step 1: Exchange the authorization code for tokens from your backend
-            const response = await axios.post('https://citizenx-9hk2.onrender.com/auth/google/callback', { code });
-
-            // Ensure the response contains the expected data
-            if (!response.data || !response.data.access_token || !response.data.role_name || !response.data.user) {
-                throw new Error('Invalid response from backend');
-            }
-
-            const { access_token, role_name, user } = response.data;
-
-            // Step 2: Set the token and role in local storage
-            setSession(access_token, role_name);
-
-            // Step 3: Dispatch the login action
-            dispatch({
-                type: LOGIN,
-                payload: {
-                    isLoggedIn: true,
-                    user,
-                    role_name: role_name || 'User',
-                    isInitialized: true
-                }
+            // Send the authorization code to your backend API to exchange for a JWT
+            const response = await fetch('https://citizenx-9hk2.onrender.com/api/v1/auth/google/callback', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ code })
             });
 
-            // Step 4: Redirect to dashboard
-            navigate('/dashboard');
+            const data = await response.json();
+
+            if (response.ok && data.token) {
+                // Save the JWT token in local storage or context
+                setToken(data.token);
+                localStorage.setItem('token', data.token);
+                return true;
+            }
+
+            throw new Error('Failed to retrieve JWT token');
         } catch (error) {
             console.error('Google login failed:', error);
-            alert('Login failed. Please try again.');
-            // Optionally navigate to a login page if needed
-            navigate('/login');
+            return false;
         }
     };
 
