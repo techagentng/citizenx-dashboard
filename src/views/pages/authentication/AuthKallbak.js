@@ -12,7 +12,7 @@ const AuthCallback = () => {
         const handleGoogleAuth = async () => {
             const code = searchParams.get('code');
             const state = searchParams.get('state');
-            const storedState = localStorage.getItem('state'); // Get the stored state
+            const storedState = localStorage.getItem('google_oauth_state'); // Use the correct key
 
             // Validate the state for CSRF protection
             if (state !== storedState) {
