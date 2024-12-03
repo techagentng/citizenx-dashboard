@@ -11,15 +11,24 @@ const AuthCallback = () => {
     useEffect(() => {
         const handleGoogleAuth = async () => {
             const code = searchParams.get('code');
-            // const state = searchParams.get('state');
-            // const storedState = localStorage.getItem('google_oauth_state'); // Example for getting state from localStorage
+            const state = searchParams.get('state');
+            const storedState = localStorage.getItem('state'); // Get the stored state
 
-            // Optional: Validate the state for CSRF protection
+            // Validate the state for CSRF protection
+            if (state !== storedState) {
+                console.error('State mismatch. Possible CSRF attack.');
+                navigate('/login', {
+                    state: { error: 'State mismatch. Possible CSRF attack.' }
+                });
+                return;
+            }
 
+            // Remove state from localStorage after validation
+            localStorage.removeItem('state');
 
             if (!code) {
                 console.error('Authorization code not found in URL.');
-                navigate('/login', { 
+                navigate('/login', {
                     state: { error: 'Login failed. No authorization code.' }
                 });
                 return;
@@ -27,19 +36,19 @@ const AuthCallback = () => {
 
             try {
                 // Call your function to login and process the response
-                const success = await loginWithGoogle(code);
+                const success = await loginWithGoogle(state, code);  // Pass both state and code
 
                 if (success) {
                     navigate('/dashboard', { 
                         replace: true // Prevent going back to callback page
-                    }); 
+                    });
                 } else {
                     throw new Error('Login with Google failed.');
                 }
             } catch (error) {
                 console.error('Google login failed:', error);
-                navigate('/login', { 
-                    state: { 
+                navigate('/login', {
+                    state: {
                         error: error.message || 'Authentication failed'
                     }
                 });
