@@ -35,7 +35,6 @@ const Login = () => {
             // Generate a random state on the frontend
             const state = generateState();
             console.log('Generated state:', state);
-
             // Store the generated state in localStorage or sessionStorage
             localStorage.setItem('google_oauth_state', state);
 
