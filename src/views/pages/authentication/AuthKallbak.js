@@ -11,17 +11,11 @@ const AuthCallback = () => {
     useEffect(() => {
         const handleGoogleAuth = async () => {
             const code = searchParams.get('code');
-            const state = searchParams.get('state');
-            const storedState = localStorage.getItem('google_oauth_state'); // Example for getting state from localStorage
+            // const state = searchParams.get('state');
+            // const storedState = localStorage.getItem('google_oauth_state'); // Example for getting state from localStorage
 
             // Optional: Validate the state for CSRF protection
-            if (state !== storedState) {
-                console.error('State mismatch! Possible CSRF attack.');
-                navigate('/login', { 
-                    state: { error: 'State mismatch! Login failed.' }
-                });
-                return;
-            }
+
 
             if (!code) {
                 console.error('Authorization code not found in URL.');
