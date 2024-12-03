@@ -104,24 +104,25 @@ export const JWTProvider = ({ children }) => {
 
     const loginWithGoogle = async (code) => {
         try {
-            const response = await fetch(`/api/v1/auth/google/callback?code=${code}`, {
-                method: 'POST'
+            // Send the authorization code to your backend API to exchange for a JWT
+            const response = await fetch('https://citizenx-9hk2.onrender.com/api/v1/auth/google/callback', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ code })
             });
 
-            // Ensure the response is valid JSON
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
+            const data = await response.json();
 
-            const data = await response.json(); // Parse the JSON response
-
-            // Check if the data contains the expected fields
-            if (data.access_token && data.refresh_token) {
-                // Continue with your login flow, e.g., store tokens and navigate
+            if (response.ok && data.token) {
+                // Save the JWT token in local storage or context
+                setToken(data.token);
+                localStorage.setItem('token', data.token);
                 return true;
-            } else {
-                throw new Error('Login failed, missing tokens');
             }
+
+            throw new Error('Failed to retrieve JWT token');
         } catch (error) {
             console.error('Google login failed:', error);
             return false;
