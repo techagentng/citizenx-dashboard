@@ -20,35 +20,26 @@ import { useContext } from 'react';
 const Login = () => {
     const theme = useTheme();
     const matchDownSM = useMediaQuery(theme.breakpoints.down('md'));
-    const { isLoggedIn} = useContext(JWTContext); // Added state for JWT Context
+    const { isLoggedIn } = useContext(JWTContext); // Added state for JWT Context
 
     const GOOGLE_CLIENT_ID = '3542246689-jutm6p6ctc8he0k9ec4rg4f2eid0krmb.apps.googleusercontent.com';
     const GOOGLE_REDIRECT_URI = 'https://citizenx.ng/auth/google/callback';
 
     const generateState = () => {
         // Generate a random state value (could be a UUID or a random string)
-        return Math.random().toString(36).substring(2);  // Simple random string
+        return Math.random().toString(36).substring(2); // Simple random string
     };
 
     const handleGoogleLogin = async () => {
         try {
-            console.log('Redirect URI:', GOOGLE_REDIRECT_URI);
+            // Generate a random state on the frontend
             const state = generateState();
-            // Fetch the JWT state from your backend
-            const response = await fetch('https://citizenx-9hk2.onrender.com/api/v1/auth/google/state');
+            console.log('Generated state:', state);
 
-            if (!response.ok) {
-                throw new Error('Failed to fetch state from backend');
-            }
+            // Store the generated state in localStorage or sessionStorage
+            localStorage.setItem('google_oauth_state', state);
 
-            const data = await response.json();
-            const { state } = data;
-
-            if (!state) {
-                throw new Error('State is not provided by the backend');
-            }
-
-            // Redirect to Google login with the fetched state
+            // Redirect to Google login with the generated state
             window.location.href = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${GOOGLE_CLIENT_ID}&redirect_uri=${GOOGLE_REDIRECT_URI}&response_type=code&scope=email profile&state=${state}`;
         } catch (error) {
             console.error('Google login failed:', error.message || error);
