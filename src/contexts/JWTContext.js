@@ -102,63 +102,33 @@ export const JWTProvider = ({ children }) => {
         }
     };
 
-    const loginWithGoogle = async (state, code, navigate) => {
+    const loginWithGoogle = async (state, code) => {
         try {
-            const response = await axios.post(
-                '/auth/google/callback',
-                { code },
-                {
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-Client-State': state
-                    }
-                }
-            );
-
-            const { token, user } = response.data;
-
-            // Assuming you have a setSession function similar to your other login method
-            setSession(token, user.role_name || 'User');
-
-            // Dispatch login action to update global state
-            dispatch({
-                type: LOGIN,
-                payload: {
-                    isLoggedIn: true,
-                    user: user,
-                    role_name: user.role_name || 'User',
-                    isInitialized: true
-                }
+            // Send both the authorization code and state to your backend API to exchange for a JWT
+            const response = await fetch('https://citizenx-9hk2.onrender.com/api/v1/auth/google/callback', { 
+                method: 'POST', 
+                headers: { 
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ code, state }) // Include both code and state in request body
             });
-
-            // Navigate to dashboard
-            navigate('/dashboard');
-
-            return true;
-        } catch (error) {
-            // Handle different types of errors
-            if (error.response) {
-                // The request was made and the server responded with a status code
-                // that falls out of the range of 2xx
-                console.error('Google login error response:', error.response.data);
-
-                // You might want to show a specific error message based on the response
-                // For example:
-                // toast.error(error.response.data.message || 'Google login failed');
-            } else if (error.request) {
-                // The request was made but no response was received
-                console.error('No response received:', error.request);
-                // toast.error('No response from server. Please try again.');
-            } else {
-                // Something happened in setting up the request that triggered an Error
-                console.error('Error setting up Google login:', error.message);
-                // toast.error('An unexpected error occurred');
+    
+            const data = await response.json();
+    
+            if (response.ok && data.token) {
+                // Save the JWT token in local storage or context
+                setToken(data.token);
+                localStorage.setItem('token', data.token);
+                return true;
             }
-
+    
+            throw new Error('Failed to retrieve JWT token');
+        } catch (error) {
+            console.error('Google login failed:', error);
             return false;
         }
     };
-
+    
     const register = async (fullName, userName, telephone, email, password, profile_image) => {
         try {
             const formData = new FormData();

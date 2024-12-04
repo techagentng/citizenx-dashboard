@@ -12,7 +12,7 @@ const AuthCallback = () => {
         const handleGoogleAuth = async () => {
             const code = searchParams.get('code');
             const state = searchParams.get('state');
-            const storedState = localStorage.getItem('google_oauth_state'); // Use the correct key
+            const storedState = localStorage.getItem('google_oauth_state'); // Correct key
 
             // Validate the state for CSRF protection
             if (state !== storedState) {
@@ -24,7 +24,7 @@ const AuthCallback = () => {
             }
 
             // Remove state from localStorage after validation
-            localStorage.removeItem('state');
+            localStorage.removeItem('google_oauth_state');
 
             if (!code) {
                 console.error('Authorization code not found in URL.');

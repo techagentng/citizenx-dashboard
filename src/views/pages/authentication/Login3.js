@@ -25,10 +25,13 @@ const Login = () => {
     const GOOGLE_CLIENT_ID = '3542246689-jutm6p6ctc8he0k9ec4rg4f2eid0krmb.apps.googleusercontent.com';
     const GOOGLE_REDIRECT_URI = 'https://citizenx.ng/auth/google/callback';
 
-    const generateState = () => {
-        // Generate a random state value (could be a UUID or a random string)
-        return Math.random().toString(36).substring(2); // Simple random string
-    };
+    function generateState() {
+        const array = new Uint8Array(32);
+        window.crypto.getRandomValues(array);
+        return Array.from(array)
+            .map((byte) => byte.toString(16).padStart(2, '0'))
+            .join('');
+    }
 
     const handleGoogleLogin = async () => {
         try {
