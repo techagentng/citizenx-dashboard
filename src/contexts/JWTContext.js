@@ -105,11 +105,13 @@ export const JWTProvider = ({ children }) => {
     const loginWithGoogle = async (state, code) => {
         try {
             // Send both the authorization code and state to your backend API to exchange for a JWT
-            const response = await fetch(`https://citizenx-9hk2.onrender.com/api/v1/auth/google/callback?state=${state}&code=${code}`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                }
+            const response = await fetch('https://citizenx-9hk2.onrender.com/api/v1/auth/google/callback', { 
+                method: 'POST', 
+                headers: { 
+                    'Content-Type': 'application/json',
+                    'X-Client-State': state // Add state in header
+                },
+                body: JSON.stringify({ code }) // Send code in request body
             });
 
             const data = await response.json();
