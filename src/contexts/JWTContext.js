@@ -105,7 +105,7 @@ export const JWTProvider = ({ children }) => {
     const loginWithGoogle = async (state, code) => {
         try {
             const response = await axios.post(
-                'https://citizenx-9hk2.onrender.com/api/v1/auth/google/callback',
+                '/auth/google/callback',
                 { code, state }, // Pass the data as the second argument
                 {
                     headers: {
