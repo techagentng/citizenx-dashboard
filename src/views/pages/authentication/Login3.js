@@ -1,5 +1,4 @@
 import { Link } from 'react-router-dom';
-import { useEffect } from 'react';
 // material-ui
 import { useTheme } from '@mui/material/styles';
 import { Divider, Grid, Stack, Typography, useMediaQuery, Button } from '@mui/material';
@@ -22,34 +21,28 @@ const Login = () => {
     const matchDownSM = useMediaQuery(theme.breakpoints.down('md'));
     const { isLoggedIn } = useContext(JWTContext); // Added state for JWT Context
     const { loginWithGoogle } = useContext(JWTContext);
-    const handleGoogleLogin = () => {
-        const clientId = "3542246689-jutm6p6ctc8he0k9ec4rg4f2eid0krmb.apps.googleusercontent.com";
-        const redirectUri = "https://citizenx-9hk2.onrender.com/api/v1/auth/google/callback"
-        const scope = 'openid email profile';
-        const state = Math.random().toString(36).substring(7); // CSRF token
-        localStorage.setItem('googleState', state);
-        const googleAuthUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${clientId}&redirect_uri=${redirectUri}&response_type=code&scope=${scope}&state=${state}`;
 
-        window.location.href = googleAuthUrl;
+    const handleGoogleLogin = () => {
+        loginWithGoogle(); // This will handle redirecting the user to Google
     };
 
     // Step 3: Handle Redirect After Google Login
-    useEffect(() => {
-        console.log('useEffect triggered');
-        const queryParams = new URLSearchParams(window.location.search);
-        const code = queryParams.get('code');
-        const state = queryParams.get('state');
-        const savedState = localStorage.getItem('googleState');  // Retrieve stored state
-        console.log('Saved state:', savedState);
-        console.log('Received state:', state);
+    // useEffect(() => {
+    //     console.log('useEffect triggered');
+    //     const queryParams = new URLSearchParams(window.location.search);
+    //     const code = queryParams.get('code');
+    //     const state = queryParams.get('state');
+    //     const savedState = localStorage.getItem('googleState');  // Retrieve stored state
+    //     console.log('Saved state:', savedState);
+    //     console.log('Received state:', state);
 
-        // If code and state exist in URL, process the Google login
-        if (savedState === state && code) {
-            loginWithGoogle(state, code);
-        } else {
-            console.error('State mismatch or missing code');
-        }
-    }, []);
+    //     // If code and state exist in URL, process the Google login
+    //     if (savedState === state && code) {
+    //         loginWithGoogle(state, code);
+    //     } else {
+    //         console.error('State mismatch or missing code');
+    //     }
+    // }, []);
 
     return (
         <AuthWrapper1>

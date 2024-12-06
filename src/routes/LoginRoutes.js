@@ -11,7 +11,7 @@ import Loadable from 'ui-component/Loadable';
 const AuthLogin = Loadable(lazy(() => import('views/pages/authentication/Login3')));
 const AuthRegister = Loadable(lazy(() => import('views/pages/authentication/Register3')));
 const AuthForgotPassword = Loadable(lazy(() => import('views/pages/authentication/ForgotPassword3')));
-// const SamplePage = Loadable(lazy(() => import('views/sample-page')));
+const Callback = Loadable(lazy(() => import('views/pages/authentication/callback')));
 const PagesAbout = Loadable(lazy(() => import('views/pages/about')));
 const PagesPuplication = Loadable(lazy(() => import('views/pages/landing/Publication')));
 const AuthResetPassword = Loadable(lazy(() => import('views/pages/authentication/ResetPassword')));
@@ -48,6 +48,10 @@ const LoginRoutes = {
         {
             path: '/about',
             element: <PagesAbout />
+        },
+        {
+            path: '/auth/google/callback',
+            element: <Callback />
         },
         {
             path: '/publication',
