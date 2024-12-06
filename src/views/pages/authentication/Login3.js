@@ -35,6 +35,7 @@ const Login = () => {
 
     // Step 3: Handle Redirect After Google Login
     useEffect(() => {
+        console.log('useEffect triggered');
         const queryParams = new URLSearchParams(window.location.search);
         const code = queryParams.get('code');
         const state = queryParams.get('state');
