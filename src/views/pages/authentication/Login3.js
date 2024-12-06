@@ -21,7 +21,7 @@ const Login = () => {
     const theme = useTheme();
     const matchDownSM = useMediaQuery(theme.breakpoints.down('md'));
     const { isLoggedIn } = useContext(JWTContext); // Added state for JWT Context
-
+    const { loginWithGoogle } = useContext(JWTContext);
     const handleGoogleLogin = () => {
         const clientId = process.env.GOOGLE_CLIENT_ID;
         const redirectUri = process.env.GOOGLE_REDIRECT_URI;
@@ -44,7 +44,7 @@ const Login = () => {
             loginWithGoogle(state, code);
         }
     }, []);
-    
+
     return (
         <AuthWrapper1>
             <Grid container direction="column" justifyContent="flex-end" sx={{ minHeight: '100vh' }}>
