@@ -114,58 +114,6 @@ export const JWTProvider = ({ children }) => {
         }
     };
 
-    useEffect(() => {
-        const init = async () => {
-            try {
-                // Check for token and role in localStorage
-                const serviceToken = window.localStorage.getItem('serviceToken');
-                const serviceRole = window.localStorage.getItem('role_name');
-
-                if (serviceToken && serviceRole) {
-                    // Set session if token is found
-                    setSession(serviceToken, serviceRole);
-
-                    // Check if the token is valid by hitting the /me endpoint
-                    const response = await axios.get('/me');
-                    const isOnLine = await axios.get('/user/is_online');
-                    const { valid } = isOnLine.data;
-                    const { data } = response.data;
-
-                    // Store user data and online status in localStorage
-                    localStorage.setItem('user', JSON.stringify(data));
-                    localStorage.setItem('online', JSON.stringify(valid));
-
-                    // Dispatch login action to set state
-                    dispatch({
-                        type: LOGIN,
-                        payload: {
-                            user: data,
-                            role_name: data.role_name,
-                            isLoggedIn: true,
-                            isInitialized: true
-                        }
-                    });
-
-                    // Redirect to dashboard if the user is successfully logged in
-                    window.location.href = '/dashboard'; // This will take the user to the dashboard
-                } else {
-                    console.warn('Token or role missing from localStorage');
-                    dispatch({ type: LOGOUT });
-                }
-            } catch (err) {
-                // Handle token expiration or other errors
-                if (err.response && err.response.status === 401) {
-                    console.warn('Token expired or unauthorized');
-                } else {
-                    console.error('Error during initialization: ', err);
-                }
-                dispatch({ type: LOGOUT });
-            }
-        };
-
-        init();
-    }, [dispatch]);
-
     const register = async (fullName, userName, telephone, email, password, profile_image) => {
         try {
             const formData = new FormData();
