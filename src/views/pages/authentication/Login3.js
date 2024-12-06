@@ -27,7 +27,7 @@ const Login = () => {
         const redirectUri = "https://citizenx-9hk2.onrender.com/api/v1/auth/google/callback"
         const scope = 'openid email profile';
         const state = Math.random().toString(36).substring(7); // CSRF token
-
+        localStorage.setItem('googleState', state);
         const googleAuthUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${clientId}&redirect_uri=${redirectUri}&response_type=code&scope=${scope}&state=${state}`;
 
         window.location.href = googleAuthUrl;
@@ -38,10 +38,15 @@ const Login = () => {
         const queryParams = new URLSearchParams(window.location.search);
         const code = queryParams.get('code');
         const state = queryParams.get('state');
+        const savedState = localStorage.getItem('googleState');  // Retrieve stored state
+        console.log('Saved state:', savedState);
+        console.log('Received state:', state);
 
         // If code and state exist in URL, process the Google login
-        if (code && state) {
+        if (savedState === state && code) {
             loginWithGoogle(state, code);
+        } else {
+            console.error('State mismatch or missing code');
         }
     }, []);
 
