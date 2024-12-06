@@ -33,6 +33,18 @@ const Login = () => {
         window.location.href = googleAuthUrl;
     };
 
+    // Step 3: Handle Redirect After Google Login
+    useEffect(() => {
+        const queryParams = new URLSearchParams(window.location.search);
+        const code = queryParams.get('code');
+        const state = queryParams.get('state');
+
+        // If code and state exist in URL, process the Google login
+        if (code && state) {
+            loginWithGoogle(state, code);
+        }
+    }, []);
+    
     return (
         <AuthWrapper1>
             <Grid container direction="column" justifyContent="flex-end" sx={{ minHeight: '100vh' }}>

@@ -102,23 +102,47 @@ export const JWTProvider = ({ children }) => {
         }
     };
 
-    const loginWithGoogle = async (state, code) => {
+    const loginWithGoogle = async (state, code, navigate) => {
         try {
+            // Send code and state to the backend for token exchange
             const response = await axios.post(
                 '/auth/google/callback',
-                { code, state }, // Pass the data as the second argument
+                { code, state }, // Pass the code and state
                 {
                     headers: {
-                        'Content-Type': 'application/json', // Specify the headers
-                    },
+                        'Content-Type': 'application/json' // Set headers
+                    }
                 }
             );
-            console.log(response.data); // Handle the response
+
+            // Destructure the relevant data from the backend response
+            const { access_token, role_name, user } = response.data.data;
+
+            // Store token and role in localStorage (or wherever you manage session)
+            setSession(access_token, role_name);
+
+            // Dispatch login action to update context or Redux state
+            dispatch({
+                type: LOGIN,
+                payload: {
+                    isLoggedIn: true,
+                    user: user,
+                    role_name: role_name || 'User', // Default to 'User' if role is not provided
+                    isInitialized: true
+                }
+            });
+
+            // Redirect user to the dashboard
+            navigate('/dashboard');
         } catch (error) {
-            console.error('Error occurred:', error.response ? error.response.data : error.message);
+            // Log error for debugging
+            console.error('Error during Google login:', error.response ? error.response.data : error.message);
+
+            // Optionally, display an error message to the user (e.g., toast notification)
+            // Example: toast.error('Failed to log in with Google');
         }
     };
-    
+
     const register = async (fullName, userName, telephone, email, password, profile_image) => {
         try {
             const formData = new FormData();
