@@ -23,7 +23,7 @@ const Login = () => {
     const { isLoggedIn } = useContext(JWTContext); // Added state for JWT Context
 
     const handleGoogleLogin = () => {
-        const clientId = process.env.GOOGLE_REDIRECT_URI;
+        const clientId = process.env.GOOGLE_CLIENT_ID;
         const redirectUri = process.env.GOOGLE_REDIRECT_URI;
         const scope = 'openid email profile';
         const state = Math.random().toString(36).substring(7); // CSRF token
