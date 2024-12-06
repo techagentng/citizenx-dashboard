@@ -22,31 +22,15 @@ const Login = () => {
     const matchDownSM = useMediaQuery(theme.breakpoints.down('md'));
     const { isLoggedIn } = useContext(JWTContext); // Added state for JWT Context
 
-    const GOOGLE_CLIENT_ID = '3542246689-jutm6p6ctc8he0k9ec4rg4f2eid0krmb.apps.googleusercontent.com';
-    const GOOGLE_REDIRECT_URI = 'https://citizenx.ng/auth/google/callback';
+    const handleGoogleLogin = () => {
+        const clientId = process.env.GOOGLE_REDIRECT_URI;
+        const redirectUri = process.env.GOOGLE_REDIRECT_URI;
+        const scope = 'openid email profile';
+        const state = Math.random().toString(36).substring(7); // CSRF token
 
-    function generateState() {
-        const array = new Uint8Array(32);
-        window.crypto.getRandomValues(array);
-        return Array.from(array)
-            .map((byte) => byte.toString(16).padStart(2, '0'))
-            .join('');
-    }
+        const googleAuthUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${clientId}&redirect_uri=${redirectUri}&response_type=code&scope=${scope}&state=${state}`;
 
-    const handleGoogleLogin = async () => {
-        try {
-            // Generate a random state on the frontend
-            const state = generateState();
-            console.log('Generated state:', state);
-            // Store the generated state in localStorage or sessionStorage
-            localStorage.setItem('google_oauth_state', state);
-
-            // Redirect to Google login with the generated state
-            window.location.href = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${GOOGLE_CLIENT_ID}&redirect_uri=${GOOGLE_REDIRECT_URI}&response_type=code&scope=email profile&state=${state}`;
-        } catch (error) {
-            console.error('Google login failed:', error.message || error);
-            alert('Google login failed. Please try again later.');
-        }
+        window.location.href = googleAuthUrl;
     };
 
     return (
