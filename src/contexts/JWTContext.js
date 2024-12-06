@@ -105,7 +105,7 @@ export const JWTProvider = ({ children }) => {
     const loginWithGoogle = async () => {
         try {
             // Step 1: Redirect the user to the backend to get the Google auth URL
-            const response = await axios.get('https://citizenx-9hk2.onrender.com/api/v1/google/login');
+            const response = await axios.get('/google/login');
             const authUrl = response.data.auth_url;
             window.location.href = authUrl; // Redirect to Google login page
         } catch (error) {
