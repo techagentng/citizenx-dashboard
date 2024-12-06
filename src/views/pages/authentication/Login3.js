@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-
+import { useEffect } from 'react';
 // material-ui
 import { useTheme } from '@mui/material/styles';
 import { Divider, Grid, Stack, Typography, useMediaQuery, Button } from '@mui/material';
@@ -23,8 +23,8 @@ const Login = () => {
     const { isLoggedIn } = useContext(JWTContext); // Added state for JWT Context
     const { loginWithGoogle } = useContext(JWTContext);
     const handleGoogleLogin = () => {
-        const clientId = process.env.GOOGLE_CLIENT_ID;
-        const redirectUri = process.env.GOOGLE_REDIRECT_URI;
+        const clientId = "3542246689-jutm6p6ctc8he0k9ec4rg4f2eid0krmb.apps.googleusercontent.com";
+        const redirectUri = "https://citizenx-9hk2.onrender.com/api/v1/auth/google/callback"
         const scope = 'openid email profile';
         const state = Math.random().toString(36).substring(7); // CSRF token
 
