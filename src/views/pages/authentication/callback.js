@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
- const GoogleCallback = () => {
+const GoogleCallback = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -12,9 +12,11 @@ import axios from 'axios';
         const savedState = localStorage.getItem('googleState'); // Retrieve stored state
 
         if (savedState === state && code) {
-            // Make an API call to the backend to exchange the code for a JWT token
+            // Make a GET request to the backend with the code and state as query parameters
             axios
-                .post('https://citizenx-9hk2.onrender.com/api/v1/auth/google/callback', { code, state })
+                .get('https://citizenx-9hk2.onrender.com/api/v1/auth/google/callback', {
+                    params: { code, state } // Send code and state as query parameters
+                })
                 .then((response) => {
                     const { token, user } = response.data;
 
@@ -24,8 +26,8 @@ import axios from 'axios';
                     // Optionally, store user data in localStorage
                     localStorage.setItem('user', JSON.stringify(user));
 
-                    // Redirect the user to the home page (or any protected page)
-                    navigate('/dashboard'); // Or wherever you want to redirect
+                    // Redirect the user to the dashboard
+                    navigate('/dashboard');
                 })
                 .catch((error) => {
                     console.error('Error during Google login:', error);
@@ -35,7 +37,7 @@ import axios from 'axios';
             console.error('State mismatch or missing code');
             // Handle error (e.g., show a message)
         }
-    }, []);
+    }, [navigate]);
 
     return <div>Loading...</div>; // Or a loading spinner
 };
