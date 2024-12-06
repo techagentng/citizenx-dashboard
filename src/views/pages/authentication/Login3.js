@@ -20,10 +20,18 @@ const Login = () => {
     const theme = useTheme();
     const matchDownSM = useMediaQuery(theme.breakpoints.down('md'));
     const { isLoggedIn } = useContext(JWTContext); // Added state for JWT Context
-    const { loginWithGoogle } = useContext(JWTContext);
+    // const { loginWithGoogle } = useContext(JWTContext);
 
-    const handleGoogleLogin = () => {
-        loginWithGoogle(); // This will handle redirecting the user to Google
+    const handleGoogleLogin = async () => {
+        try {
+            // Step 1: Redirect the user to the backend to get the Google auth URL
+            const response = await axios.get('/google/login');
+            const authUrl = response.data.auth_url;
+            window.location.href = authUrl; // Redirect to Google login page
+        } catch (error) {
+            console.error('Error initiating Google login:', error);
+            // Optionally handle errors (e.g., show a message)
+        }
     };
 
     // Step 3: Handle Redirect After Google Login
