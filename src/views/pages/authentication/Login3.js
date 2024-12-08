@@ -12,6 +12,7 @@ import Logo from 'ui-component/Logo';
 import AuthFooter from 'ui-component/cards/AuthFooter';
 import JWTContext from 'contexts/JWTContext';
 import { useContext } from 'react';
+import axios from 'utils/axios';
 // assets
 
 // ================================|| AUTH3 - LOGIN ||================================ //
