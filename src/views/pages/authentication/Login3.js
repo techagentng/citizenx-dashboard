@@ -8,7 +8,7 @@ import GoogleIcon from '@mui/icons-material/Google';
 import AuthWrapper1 from '../AuthWrapper1';
 import AuthCardWrapper from '../AuthCardWrapper';
 import AuthLogin from './auth-forms/AuthLogin';
-import Logo from 'ui-component/Logo';
+// import Logo from 'ui-component/Logo';
 import AuthFooter from 'ui-component/cards/AuthFooter';
 import JWTContext from 'contexts/JWTContext';
 import { useContext } from 'react';
@@ -30,7 +30,7 @@ const Login = () => {
             const authUrl = response.data.auth_url;
             window.location.href = authUrl; // Redirect to Google login page
         } catch (error) {
-            console.error('Error initiating Google login:', error);
+            console.error('Error initiating Google logingg:', error);
             // Optionally handle errors (e.g., show a message)
         }
     };
@@ -63,7 +63,7 @@ const Login = () => {
                                 <Grid container spacing={2} alignItems="center" justifyContent="center">
                                     <Grid item sx={{ mb: 3 }}>
                                         <Link to="#" aria-label="theme-logo">
-                                            <Logo />
+                                           
                                         </Link>
                                     </Grid>
                                     <Grid item xs={12}>
