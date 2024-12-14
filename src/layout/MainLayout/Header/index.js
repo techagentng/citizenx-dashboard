@@ -10,7 +10,7 @@ import { setState, setLga, getGraph } from 'store/slices/graphs';
 import statesAndLgas from './statesAndLgas.json';
 import { getCategories } from 'services/reportService';
 
-import LogoSection from '../LogoSection';
+// import LogoSection from '../LogoSection';
 import MobileSection from './MobileSection';
 import ProfileSection from './ProfileSection';
 import FullScreenSection from './FullScreenSection';
@@ -121,7 +121,7 @@ const Header = () => {
                 }}
             >
                 <Box component="span" sx={{ display: { xs: 'none', md: 'block' }, flexGrow: 1 }}>
-                    <LogoSection />
+                    {/* <LogoSection /> */}
                 </Box>
 
                 {layout === LAYOUT_CONST.VERTICAL_LAYOUT || (layout === LAYOUT_CONST.HORIZONTAL_LAYOUT && matchDownMd) ? (
