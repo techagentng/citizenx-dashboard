@@ -5,7 +5,7 @@ import { Link } from '@mui/material';
 
 // project imports
 import { HOME_PATH } from 'config';
-import Logo from 'ui-component/Logo';
+// import Logo from 'ui-component/Logo';
 
 // ==============================|| MAIN LOGO ||============================== //
 
@@ -17,7 +17,7 @@ const LogoSection = () => (
         sx={{ display: 'flex', alignItems: 'space-between', textDecoration: 'none' }}
     >
         {/* <h2>Citizen</h2>  */}
-        <Logo />
+       
     </Link>
 );
 
