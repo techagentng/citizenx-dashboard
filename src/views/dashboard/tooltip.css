@@ -1,0 +1,12 @@
+/* styles.css */
+.custom-tooltip {
+    background-color: white;
+    color: black;
+    padding: 10px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    width: 200px; /* Adjust width */
+    height: auto; /* Adjust height */
+    max-width: none; /* Remove max-width constraint */
+}
