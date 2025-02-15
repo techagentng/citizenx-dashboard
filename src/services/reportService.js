@@ -309,8 +309,28 @@ export const getReportCount = () => {
     });
 };
 
-// export const getReportCountsByState(selectedState, token) => {
-//     return new Promise((resolv) => {
-//         resolve({ total_reports: 0})
-//     })
-// }
+export const getReportCountByState = (state) => {
+    return new Promise((resolve, reject) => {
+        const serviceToken = localStorage.getItem('serviceToken');
+        if (!serviceToken) {
+            return reject(new Error('No token found'));
+        }
+
+        axios
+            .get(`http://localhost:8080/api/v1/incident_reports/state/${state}/count`, {
+                headers: {
+                    Authorization: `Bearer ${serviceToken}`
+                }
+            })
+            .then((response) => {
+                if (response && response.data) {
+                    resolve(response.data);
+                } else {
+                    reject(new Error('No data found'));
+                }
+            })
+            .catch((error) => {
+                reject(error);
+            });
+    });
+};
