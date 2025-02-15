@@ -276,10 +276,10 @@ export const getReportCountsByState = (state) => {
 };
 
 export const getReportCountsByLGA = (lga) => {
-    return new Promise((resolve) => {
+    return new Promise((resolve, reject) => {
         const serviceToken = localStorage.getItem('serviceToken');
         if (!serviceToken) {
-            return resolve({ total_reports: 0 }); // Return default empty value if no token
+            return reject(new Error('No token found'));
         }
 
         axios
@@ -290,17 +290,17 @@ export const getReportCountsByLGA = (lga) => {
             })
             .then((response) => {
                 if (response && response.data) {
-                    resolve(response.data); // Return API response
+                    resolve(response.data);
                 } else {
-                    resolve({ total_reports: 0 }); // Default empty response
+                    reject(new Error('No data found'));
                 }
             })
             .catch((error) => {
-                console.error("Error fetching LGA report counts:", error);
-                resolve({ total_reports: 0 }); // Return default value on error
+                reject(error);
             });
     });
 };
+
 
 
 export const getReportCount = () => {
