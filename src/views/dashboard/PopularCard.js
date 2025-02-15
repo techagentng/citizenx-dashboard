@@ -9,10 +9,9 @@ import MoreHorizOutlinedIcon from '@mui/icons-material/MoreHorizOutlined';
 import KeyboardArrowUpOutlinedIcon from '@mui/icons-material/KeyboardArrowUpOutlined';
 import KeyboardArrowDownOutlinedIcon from '@mui/icons-material/KeyboardArrowDownOutlined';
 
-const PopularCard = ({ isLoading, title, data = [], type }) => {  // Default to an empty array
+const PopularCard = ({ isLoading, title, data = [], type, totalReportCount }) => {  // Default to an empty array
     const theme = useTheme();
     const [anchorEl, setAnchorEl] = useState(null);
-    const [totalReportCount, setTotalReportCount] = useState(null);
     const [, setError] = useState('');
     const [, setLoading] = useState('');
     const [showAll, setShowAll] = useState(false);  // State to toggle the visibility of the entire list
@@ -94,7 +93,7 @@ const PopularCard = ({ isLoading, title, data = [], type }) => {  // Default to 
                         </Grid>
                     </Grid>
                     <Grid item xs={12} sx={{ pt: '16px !important' }}>
-                        <BajajAreaChartCard />
+                        <BajajAreaChartCard totalReportCount={totalReportCount}/>
                     </Grid>
                     <Grid item xs={12}>
                         <Grid container direction="column">

@@ -274,3 +274,21 @@ export const getReportCountsByState = (state) => {
             });
     });
 };
+
+export const getReportCountsByLGA = () => {
+    return new Promise((resolve) => {
+        resolve({ total_reports: 0 }); // Always return default empty value
+    });
+};
+
+export const getReportCount = () => {
+    return new Promise((resolve) => {
+        resolve({ total_reports: 0 }); // Default empty return
+    });
+};
+
+// export const getReportCountsByState(selectedState, token) => {
+//     return new Promise((resolv) => {
+//         resolve({ total_reports: 0})
+//     })
+// }

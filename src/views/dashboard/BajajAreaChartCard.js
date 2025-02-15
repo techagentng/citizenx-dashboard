@@ -7,12 +7,10 @@ import useConfig from 'hooks/useConfig';
 import getChartData from './bajaj-area-chart';
 import { getTotalReportCount, getReportCountsByState } from 'services/reportService';
 
-const BajajAreaChartCard = ({ reportType, stateName }) => {
+const BajajAreaChartCard = ({ reportType, stateName, totalReportCount }) => {
     const theme = useTheme();
     const { navType } = useConfig();
     const orangeDark = theme.palette.secondary[800];
-
-    const [totalReportCount, setTotalReportCount] = useState(null);
     const [chartData, setChartData] = useState({
         type: 'area',
         height: 95,
@@ -54,7 +52,6 @@ const BajajAreaChartCard = ({ reportType, stateName }) => {
         ]
     });
     const [, setError] = useState('');
-    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         const fetchReportCount = async () => {
@@ -115,7 +112,7 @@ const BajajAreaChartCard = ({ reportType, stateName }) => {
                         </Grid>
                         <Grid item>
                             <Typography variant="h4" sx={{ color: theme.palette.grey[800] }}>
-                                {loading ? 'Loading...' : totalReportCount || 'No Data'}
+                            {totalReportCount || 'No Data'}
                             </Typography>
                         </Grid>
                     </Grid>
