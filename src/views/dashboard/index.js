@@ -252,7 +252,7 @@ const DashboardPage = () => {
                     <Grid item xs={6} md={4}>
                         {/* Top LGAs View */}
                         <PopularCard
-                            title={`Top Reported LGAs in ${selectedState || 'State'}`}
+                            title={`Top Reported Cases In ${selectedState || 'State'}`}
                             data={reportData}
                             totalReportCount={totalStateReports}
                         />

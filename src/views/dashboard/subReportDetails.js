@@ -60,11 +60,7 @@ const SubReportDetailsPage = () => {
                                 <CardContent>
                                     <Grid container direction="column" alignItems="flex-start">
                                         <Grid item>
-                                            <img
-                                                alt="Icon"
-                                                src={tin}
-                                                style={{ width: 56, height: 56, borderRadius: '50%' }}
-                                            />
+                                            <img alt="Icon" src={tin} style={{ width: 56, height: 56, borderRadius: '50%' }} />
                                         </Grid>
                                         <Grid item>
                                             <Typography variant="subtitle2" color="textSecondary">
@@ -87,11 +83,7 @@ const SubReportDetailsPage = () => {
                                 <CardContent>
                                     <Grid container direction="column" alignItems="flex-start">
                                         <Grid item>
-                                            <img
-                                                alt="Icon"
-                                                src={tin}
-                                                style={{ width: 56, height: 56, borderRadius: '50%' }}
-                                            />
+                                            <img alt="Icon" src={tin} style={{ width: 56, height: 56, borderRadius: '50%' }} />
                                         </Grid>
                                         <Grid item>
                                             <Typography variant="subtitle2" color="textSecondary">
@@ -114,11 +106,7 @@ const SubReportDetailsPage = () => {
                                 <CardContent>
                                     <Grid container direction="column" alignItems="flex-start">
                                         <Grid item>
-                                            <img
-                                                alt="Icon"
-                                                src={tin}
-                                                style={{ width: 56, height: 56, borderRadius: '50%' }}
-                                            />
+                                            <img alt="Icon" src={tin} style={{ width: 56, height: 56, borderRadius: '50%' }} />
                                         </Grid>
                                         <Grid item>
                                             <Typography variant="subtitle2" color="textSecondary">
@@ -178,7 +166,10 @@ const SubReportDetailsPage = () => {
                     <MainCard content={false}>
                         <Grid container>
                             <Grid item xs={12}>
-                                <PieChart reportTypes={subReports.map(report => report.sub_report_type)} reportCounts={subReports.map(report => report.count)} />
+                                <PieChart
+                                    reportTypes={subReports.map((report) => report.sub_report_type)}
+                                    reportCounts={subReports.map((report) => report.count)}
+                                />
                             </Grid>
                         </Grid>
                     </MainCard>
@@ -188,7 +179,10 @@ const SubReportDetailsPage = () => {
                     <MainCard content={false}>
                         <Grid container>
                             <Grid item xs={12}>
-                                <BarChart reportTypes={subReports.map(report => report.sub_report_type)} reportCounts={subReports.map(report => report.count)} />
+                                <BarChart
+                                    reportTypes={subReports.map((report) => report.sub_report_type)}
+                                    reportCounts={subReports.map((report) => report.count)}
+                                />
                             </Grid>
                         </Grid>
                     </MainCard>
