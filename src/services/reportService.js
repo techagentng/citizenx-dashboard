@@ -275,11 +275,33 @@ export const getReportCountsByState = (state) => {
     });
 };
 
-export const getReportCountsByLGA = () => {
+export const getReportCountsByLGA = (lga) => {
     return new Promise((resolve) => {
-        resolve({ total_reports: 0 }); // Always return default empty value
+        const serviceToken = localStorage.getItem('serviceToken');
+        if (!serviceToken) {
+            return resolve({ total_reports: 0 }); // Return default empty value if no token
+        }
+
+        axios
+            .get(`${process.env.REACT_APP_API_URL}/incident_reports/lga/${lga}/count`, {
+                headers: {
+                    Authorization: `Bearer ${serviceToken}`
+                }
+            })
+            .then((response) => {
+                if (response && response.data) {
+                    resolve(response.data); // Return API response
+                } else {
+                    resolve({ total_reports: 0 }); // Default empty response
+                }
+            })
+            .catch((error) => {
+                console.error("Error fetching LGA report counts:", error);
+                resolve({ total_reports: 0 }); // Return default value on error
+            });
     });
 };
+
 
 export const getReportCount = () => {
     return new Promise((resolve) => {

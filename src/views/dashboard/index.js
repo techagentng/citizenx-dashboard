@@ -55,9 +55,9 @@ const DashboardPage = () => {
 
             // Fetch LGA report count
             if (selectedLga) {
-                getReportCountsByLGA(selectedLga, token)
-                    .then((data) => setTotalLGAReports(data.total_reports || 0))
-                    .catch((error) => console.error('Error fetching LGA reports:', error));
+                getReportCountsByLGA(selectedLga, token).then((data) => {
+                    setTotalLGAReports(data?.total_reports || 0);
+                });
             }
         }
     }, [token, selectedState, selectedLga]);
