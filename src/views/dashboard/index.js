@@ -34,7 +34,7 @@ const DashboardPage = () => {
     const [selectedReportType, setSelectedReportType] = useState('Accidents');
     // const [lgas, setLgas] = useState([]);
     // const [lgareportCounts, setLgaReportCounts] = useState([]);
-    const [, setTotalOverallReports] = useState(0);
+    const [totalOverallReports, setTotalOverallReports] = useState(0);
     const [totalStateReports, setTotalStateReports] = useState(0);
     const [totalLGAReports, setTotalLGAReports] = useState(0);
     const [reportData, setReportData] = useState(null);
@@ -254,7 +254,7 @@ const DashboardPage = () => {
                         <PopularCard
                             title={`Top Reported LGAs in ${selectedState || 'State'}`}
                             data={reportData}
-                            totalReportCount={totalLGAReports}
+                            totalReportCount={totalStateReports}
                         />
                     </Grid>
 
@@ -263,7 +263,7 @@ const DashboardPage = () => {
                             title="Top Reported States in Nigeria"
                             data={formattedTopStates}
                             type="states"
-                            totalReportCount={totalStateReports}
+                            totalReportCount={totalOverallReports}
                         />
                     </Grid>
                     <Grid item xs={12} md={4} sx={{ backgroundColor: 'white' }}>

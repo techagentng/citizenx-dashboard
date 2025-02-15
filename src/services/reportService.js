@@ -301,8 +301,6 @@ export const getReportCountsByLGA = (lga) => {
     });
 };
 
-
-
 export const getReportCount = () => {
     return new Promise((resolve, reject) => {
         const serviceToken = localStorage.getItem('serviceToken');
@@ -338,7 +336,7 @@ export const getReportCountByState = (state) => {
         }
 
         axios
-            .get(`http://localhost:8080/api/v1/incident_reports/state/${state}/count`, {
+            .get(`${process.env.REACT_APP_API_URL}/incident_reports/state/${state}/count`, {
                 headers: {
                     Authorization: `Bearer ${serviceToken}`
                 }
