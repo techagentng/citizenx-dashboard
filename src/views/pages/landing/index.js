@@ -30,9 +30,6 @@ const SectionWrapper = styled('div')({
     paddingBottom: 100
 });
 
-
-
-
 // =============================|| LANDING MAIN ||============================= //
 
 const Landing = () => {
@@ -40,8 +37,8 @@ const Landing = () => {
 
     return (
         <>
-          {/* 1. header and hero section */}
-          <HeaderWrapper id="home">
+            {/* 1. header and hero section */}
+            <HeaderWrapper id="home">
                 <AppBar />
                 <HeaderSection />
             </HeaderWrapper>
@@ -62,7 +59,7 @@ const Landing = () => {
             </SectionWrapper>
 
             {/* 5. Analytics */}
-            <SectionWrapper >
+            <SectionWrapper>
                 <Analytics />
             </SectionWrapper>
 
@@ -70,7 +67,7 @@ const Landing = () => {
             <SectionWrapper>
                 <Impact />
             </SectionWrapper>
-            
+
             {/* 7. Publications */}
             <SectionWrapper>
                 <LatestBlog />
@@ -82,12 +79,12 @@ const Landing = () => {
             </SectionWrapper>
 
             {/* 9. Trends & Download */}
-            <SectionWrapper >
+            <SectionWrapper>
                 <Subscribe />
             </SectionWrapper>
 
             {/* 10. footer section */}
-            <SectionWrapper sx={{ paddingTop: 0, paddingBottom: 0}}>
+            <SectionWrapper sx={{ paddingTop: 0, paddingBottom: 0 }}>
                 <Footer />
             </SectionWrapper>
         </>
