@@ -304,10 +304,31 @@ export const getReportCountsByLGA = (lga) => {
 
 
 export const getReportCount = () => {
-    return new Promise((resolve) => {
-        resolve({ total_reports: 0 }); // Default empty return
+    return new Promise((resolve, reject) => {
+        const serviceToken = localStorage.getItem('serviceToken');
+        if (!serviceToken) {
+            return reject(new Error('No token found'));
+        }
+
+        axios
+        .get(`${process.env.REACT_APP_API_URL}/incident_reports/count`, {
+                headers: {
+                    Authorization: `Bearer ${serviceToken}`
+                }
+            })
+            .then((response) => {
+                if (response && response.data) {
+                    resolve(response.data);
+                } else {
+                    reject(new Error('No data found'));
+                }
+            })
+            .catch((error) => {
+                reject(error);
+            });
     });
 };
+
 
 export const getReportCountByState = (state) => {
     return new Promise((resolve, reject) => {
