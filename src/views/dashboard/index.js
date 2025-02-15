@@ -43,26 +43,25 @@ const DashboardPage = () => {
         // Fetch overall report count
         getReportCount()
             .then((data) => setTotalOverallReports(data.total_reports || 0))
-            .catch((error) => console.error("Error fetching overall reports:", error));
-    
+            .catch((error) => console.error('Error fetching overall reports:', error));
+
         // Fetch state report count
         if (selectedState) {
             getReportCountsByState(selectedState)
                 .then((data) => setTotalStateReports(data.total_reports || 0))
-                .catch((error) => console.error("Error fetching state reports:", error));
+                .catch((error) => console.error('Error fetching state reports:', error));
         }
-    
+
         // Fetch LGA report count
         if (selectedLga) {
             getReportCountsByLGA(selectedLga)
                 .then((data) => {
-                    console.log("LGA Report Data:", data);
+                    console.log('LGA Report Data:', data);
                     setTotalLGAReports(data?.total_reports || 0);
                 })
-                .catch((error) => console.error("Error fetching LGA reports:", error));
+                .catch((error) => console.error('Error fetching LGA reports:', error));
         }
     }, [selectedState, selectedLga]);
-    
 
     useEffect(() => {
         if (selectedState) {

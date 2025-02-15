@@ -10,6 +10,7 @@ import { getTotalReportCount, getReportCountsByState } from 'services/reportServ
 const BajajAreaChartCard = ({ reportType, stateName, totalReportCount }) => {
     const theme = useTheme();
     const { navType } = useConfig();
+    const [, setLoading ] = useState("")
     const orangeDark = theme.palette.secondary[800];
     const [chartData, setChartData] = useState({
         type: 'area',
