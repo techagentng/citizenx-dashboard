@@ -38,7 +38,7 @@ const DashboardPage = () => {
     const [, setTotalStateReports] = useState(0);
     const [totalLGAReports, setTotalLGAReports] = useState(0);
     const [reportData, setReportData] = useState(null);
-    const token = localstorage.getItem('serviceToken');
+    const token = localStorage.getItem('serviceToken');
     useEffect(() => {
         if (token) {
             // Fetch overall report count
