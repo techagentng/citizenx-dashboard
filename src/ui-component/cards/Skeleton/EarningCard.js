@@ -132,7 +132,10 @@ const EarningCard = ({ count, details, isLoading }) => {
                                     sx={{
                                         fontSize: getDetailsFontSize(),
                                         fontWeight: 500,
-                                        color: theme.palette.mode === 'dark' ? theme.palette.text.secondary : theme.palette.secondary[200] || '#e0e0e0', // Fallback color
+                                        color:
+                                            theme.palette.mode === 'dark'
+                                                ? theme.palette.text.secondary
+                                                : theme.palette.secondary[200] || '#e0e0e0', // Fallback color
                                         lineHeight: 1.3
                                     }}
                                 >

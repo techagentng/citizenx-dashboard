@@ -7,10 +7,8 @@ import MainCard from 'ui-component/cards/MainCard';
 import Accordion from 'ui-component/extended/Accordion';
 import { gridSpacing } from 'store/constant';
 
-import React from 'react'
+import React from 'react';
 import FadeInWhenVisible from '../landing/Animation2';
-
-
 
 const basicData = [
     {
@@ -23,12 +21,14 @@ const basicData = [
     {
         id: 'basic2',
         title: 'How does CitizenX work?',
-        content: 'CitizenX allows users to report incidents by submitting photos, voice notes, or written reports on local events, issues, or achievements. These reports are then made available for the community and local authorities to see and take action on. Users can also earn rewards for their contributions.'
+        content:
+            'CitizenX allows users to report incidents by submitting photos, voice notes, or written reports on local events, issues, or achievements. These reports are then made available for the community and local authorities to see and take action on. Users can also earn rewards for their contributions.'
     },
     {
         id: 'basic3',
         title: 'What type of incidents can I report?',
-        content: 'You can report a wide range of issues, including safety concerns, public events, infrastructure problems, community achievements, and more. Simply choose the appropriate category when submitting your report.'
+        content:
+            'You can report a wide range of issues, including safety concerns, public events, infrastructure problems, community achievements, and more. Simply choose the appropriate category when submitting your report.'
     },
     {
         id: 'basic4',
@@ -87,25 +87,24 @@ const basicData = [
 ];
 
 const FAQ = () => {
-    
-  return (
-    <Container>
-        <Grid container justifyContent="center" spacing={gridSpacing}>
-        <Grid item xs={12}>
-                <Typography variant="h2" sx={{ fontSize: { xs: '1.5rem', sm: '2.125rem' }, textAlign: 'center', mb: 2 }}>
-                    FAQ
-                </Typography>
+    return (
+        <Container>
+            <Grid container justifyContent="center" spacing={gridSpacing}>
+                <Grid item xs={12}>
+                    <Typography variant="h2" sx={{ fontSize: { xs: '1.5rem', sm: '2.125rem' }, textAlign: 'center', mb: 2 }}>
+                        FAQ
+                    </Typography>
+                </Grid>
+                <Grid item xs={12}>
+                    <FadeInWhenVisible animationType="FadeIn" delay={0.3}>
+                        <MainCard sx={{ textAlign: 'left' }} elevation={4} border={false} boxShadow shadow={4}>
+                            <Accordion data={basicData} />
+                        </MainCard>
+                    </FadeInWhenVisible>
+                </Grid>
             </Grid>
-            <Grid item xs={12}>
-                <FadeInWhenVisible animationType='FadeIn' delay={0.3} >
-                <MainCard sx={{ textAlign: 'left' }} elevation={4} border={false} boxShadow shadow={4}>
-                    <Accordion data={basicData} />
-                </MainCard>
-                </FadeInWhenVisible>
-            </Grid>
-        </Grid>
-    </Container>
-  )
-}
+        </Container>
+    );
+};
 
-export default FAQ
+export default FAQ;
