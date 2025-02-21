@@ -1,9 +1,10 @@
 import React, { useEffect, useContext, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Grid, TextField, MenuItem, Box, Typography } from '@mui/material';
+import { Grid, TextField, MenuItem, Box, Typography, Avatar, CardContent, Card } from '@mui/material';
 import MainCard from 'ui-component/cards/MainCard';
-import EarningCard from 'ui-component/cards/Skeleton/EarningCard';
-import EarningIcon from 'assets/images/icons/earning.svg';
+// import EarningCard from 'ui-component/cards/Skeleton/EarningCard';
+// import EarningIcon from 'assets/images/icons/earning.svg';
+import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 import PopularCard from './PopularCard';
 // import PopularCard2 from './PopularCard2';
 import BarChart from './barchart';
@@ -154,6 +155,26 @@ const DashboardPage = () => {
     const detailsText = selectedState ? `${selectedState}'s Overall Report` : "Today's Report";
     const detailUsers = selectedState ? `${selectedState}'s Overall Report` : "Today's Report";
     const totalUsersCountSteroid = total_users || userCount;
+
+    const CardWrapper = ({ border = true, children }) => {
+        return (
+            <Card
+                sx={{
+                    border: border ? '1px solid #e0e0e0' : 'none', // Conditional border
+                    borderRadius: 2,
+                    boxShadow: 3,
+                    backgroundColor: 'background.paper',
+                    height: '100%',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    justifyContent: 'center'
+                }}
+            >
+                <CardContent>{children}</CardContent>
+            </Card>
+        );
+    };
+    
     return (
         <>
             <MainCard
@@ -164,17 +185,268 @@ const DashboardPage = () => {
                 }
             >
                 <Grid container spacing={2} sx={{ mb: 3 }}>
+                    {/* Card 1 */}
                     <Grid item xs={12} sm={6} md={3}>
-                        <EarningCard count={todayReportCountSteroid} details={detailsText} icon={EarningIcon} />
+                        <CardWrapper border={false}>
+                            <Box
+                                sx={{
+                                    p: isMobile ? 1 : 1.25,
+                                    height: '100%',
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    justifyContent: 'center'
+                                }}
+                            >
+                                <Grid container direction="column" spacing={isMobile ? 1 : 2}>
+                                    <Grid item>
+                                        <Grid container alignItems="center" spacing={1}>
+                                            <Grid item>
+                                                <Typography
+                                                    sx={{
+                                                        fontSize: getFontSize(),
+                                                        fontWeight: 500,
+                                                        mr: 1,
+                                                        mt: isMobile ? 1 : 1.75,
+                                                        mb: isMobile ? 0.5 : 0.75
+                                                    }}
+                                                >
+                                                    {todayReportCountSteroid}
+                                                </Typography>
+                                            </Grid>
+                                            <Grid item>
+                                                <Avatar
+                                                    sx={{
+                                                        cursor: 'pointer',
+                                                        width: isMobile ? 24 : 32,
+                                                        height: isMobile ? 24 : 32,
+                                                        backgroundColor: theme.palette.secondary[200] || '#e0e0e0', // Fallback color
+                                                        color: theme.palette.secondary.dark || '#000' // Fallback color
+                                                    }}
+                                                >
+                                                    <ArrowUpwardIcon
+                                                        fontSize={isMobile ? 'small' : 'inherit'}
+                                                        sx={{ transform: 'rotate(45deg)' }}
+                                                    />
+                                                </Avatar>
+                                            </Grid>
+                                        </Grid>
+                                    </Grid>
+                                    <Grid item sx={{ mb: isMobile ? 0.75 : 1.25 }}>
+                                        <Typography
+                                            sx={{
+                                                fontSize: getDetailsFontSize(),
+                                                fontWeight: 500,
+                                                color:
+                                                    theme.palette.mode === 'dark'
+                                                        ? theme.palette.text.secondary
+                                                        : theme.palette.secondary[200] || '#e0e0e0', // Fallback color
+                                                lineHeight: 1.3
+                                            }}
+                                        >
+                                            {detailsText}
+                                        </Typography>
+                                    </Grid>
+                                </Grid>
+                            </Box>
+                        </CardWrapper>
                     </Grid>
+
+                    {/* Card 2 */}
                     <Grid item xs={12} sm={6} md={3}>
-                        <EarningCard count={totalUsersCountSteroid} details={detailUsers} icon={EarningIcon} />
+                        <CardWrapper border={false}>
+                            <Box
+                                sx={{
+                                    p: isMobile ? 1 : 1.25,
+                                    height: '100%',
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    justifyContent: 'center'
+                                }}
+                            >
+                                <Grid container direction="column" spacing={isMobile ? 1 : 2}>
+                                    <Grid item>
+                                        <Grid container alignItems="center" spacing={1}>
+                                            <Grid item>
+                                                <Typography
+                                                    sx={{
+                                                        fontSize: getFontSize(),
+                                                        fontWeight: 500,
+                                                        mr: 1,
+                                                        mt: isMobile ? 1 : 1.75,
+                                                        mb: isMobile ? 0.5 : 0.75
+                                                    }}
+                                                >
+                                                    {totalUsersCountSteroid}
+                                                </Typography>
+                                            </Grid>
+                                            <Grid item>
+                                                <Avatar
+                                                    sx={{
+                                                        cursor: 'pointer',
+                                                        width: isMobile ? 24 : 32,
+                                                        height: isMobile ? 24 : 32,
+                                                        backgroundColor: theme.palette.secondary[200] || '#e0e0e0', // Fallback color
+                                                        color: theme.palette.secondary.dark || '#000' // Fallback color
+                                                    }}
+                                                >
+                                                    <ArrowUpwardIcon
+                                                        fontSize={isMobile ? 'small' : 'inherit'}
+                                                        sx={{ transform: 'rotate(45deg)' }}
+                                                    />
+                                                </Avatar>
+                                            </Grid>
+                                        </Grid>
+                                    </Grid>
+                                    <Grid item sx={{ mb: isMobile ? 0.75 : 1.25 }}>
+                                        <Typography
+                                            sx={{
+                                                fontSize: getDetailsFontSize(),
+                                                fontWeight: 500,
+                                                color:
+                                                    theme.palette.mode === 'dark'
+                                                        ? theme.palette.text.secondary
+                                                        : theme.palette.secondary[200] || '#e0e0e0', // Fallback color
+                                                lineHeight: 1.3
+                                            }}
+                                        >
+                                            {detailUsers}
+                                        </Typography>
+                                    </Grid>
+                                </Grid>
+                            </Box>
+                        </CardWrapper>
                     </Grid>
+
+                    {/* Card 3 */}
                     <Grid item xs={12} sm={6} md={3}>
-                        <EarningCard count={onlineUsers} details="Active Users" icon={EarningIcon} />
+                        <CardWrapper border={false}>
+                            <Box
+                                sx={{
+                                    p: isMobile ? 1 : 1.25,
+                                    height: '100%',
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    justifyContent: 'center'
+                                }}
+                            >
+                                <Grid container direction="column" spacing={isMobile ? 1 : 2}>
+                                    <Grid item>
+                                        <Grid container alignItems="center" spacing={1}>
+                                            <Grid item>
+                                                <Typography
+                                                    sx={{
+                                                        fontSize: getFontSize(),
+                                                        fontWeight: 500,
+                                                        mr: 1,
+                                                        mt: isMobile ? 1 : 1.75,
+                                                        mb: isMobile ? 0.5 : 0.75
+                                                    }}
+                                                >
+                                                    {onlineUsers}
+                                                </Typography>
+                                            </Grid>
+                                            <Grid item>
+                                                <Avatar
+                                                    sx={{
+                                                        cursor: 'pointer',
+                                                        width: isMobile ? 24 : 32,
+                                                        height: isMobile ? 24 : 32,
+                                                        backgroundColor: theme.palette.secondary[200] || '#e0e0e0', // Fallback color
+                                                        color: theme.palette.secondary.dark || '#000' // Fallback color
+                                                    }}
+                                                >
+                                                    <ArrowUpwardIcon
+                                                        fontSize={isMobile ? 'small' : 'inherit'}
+                                                        sx={{ transform: 'rotate(45deg)' }}
+                                                    />
+                                                </Avatar>
+                                            </Grid>
+                                        </Grid>
+                                    </Grid>
+                                    <Grid item sx={{ mb: isMobile ? 0.75 : 1.25 }}>
+                                        <Typography
+                                            sx={{
+                                                fontSize: getDetailsFontSize(),
+                                                fontWeight: 500,
+                                                color:
+                                                    theme.palette.mode === 'dark'
+                                                        ? theme.palette.text.secondary
+                                                        : theme.palette.secondary[200] || '#e0e0e0', // Fallback color
+                                                lineHeight: 1.3
+                                            }}
+                                        >
+                                            Active Users
+                                        </Typography>
+                                    </Grid>
+                                </Grid>
+                            </Box>
+                        </CardWrapper>
                     </Grid>
+
+                    {/* Card 4 */}
                     <Grid item xs={12} sm={6} md={3}>
-                        <EarningCard count="230" details="Average Daily Users" icon={EarningIcon} />
+                        <CardWrapper border={false}>
+                            <Box
+                                sx={{
+                                    p: isMobile ? 1 : 1.25,
+                                    height: '100%',
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    justifyContent: 'center'
+                                }}
+                            >
+                                <Grid container direction="column" spacing={isMobile ? 1 : 2}>
+                                    <Grid item>
+                                        <Grid container alignItems="center" spacing={1}>
+                                            <Grid item>
+                                                <Typography
+                                                    sx={{
+                                                        fontSize: getFontSize(),
+                                                        fontWeight: 500,
+                                                        mr: 1,
+                                                        mt: isMobile ? 1 : 1.75,
+                                                        mb: isMobile ? 0.5 : 0.75
+                                                    }}
+                                                >
+                                                    230
+                                                </Typography>
+                                            </Grid>
+                                            <Grid item>
+                                                <Avatar
+                                                    sx={{
+                                                        cursor: 'pointer',
+                                                        width: isMobile ? 24 : 32,
+                                                        height: isMobile ? 24 : 32,
+                                                        backgroundColor: theme.palette.secondary[200] || '#e0e0e0', // Fallback color
+                                                        color: theme.palette.secondary.dark || '#000' // Fallback color
+                                                    }}
+                                                >
+                                                    <ArrowUpwardIcon
+                                                        fontSize={isMobile ? 'small' : 'inherit'}
+                                                        sx={{ transform: 'rotate(45deg)' }}
+                                                    />
+                                                </Avatar>
+                                            </Grid>
+                                        </Grid>
+                                    </Grid>
+                                    <Grid item sx={{ mb: isMobile ? 0.75 : 1.25 }}>
+                                        <Typography
+                                            sx={{
+                                                fontSize: getDetailsFontSize(),
+                                                fontWeight: 500,
+                                                color:
+                                                    theme.palette.mode === 'dark'
+                                                        ? theme.palette.text.secondary
+                                                        : theme.palette.secondary[200] || '#e0e0e0', // Fallback color
+                                                lineHeight: 1.3
+                                            }}
+                                        >
+                                            Average Daily Users
+                                        </Typography>
+                                    </Grid>
+                                </Grid>
+                            </Box>
+                        </CardWrapper>
                     </Grid>
                 </Grid>
 
