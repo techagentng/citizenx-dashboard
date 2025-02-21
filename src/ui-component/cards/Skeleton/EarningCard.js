@@ -41,7 +41,7 @@ const CardWrapper = styled(MainCard)(({ theme }) => ({
         background:
             theme.palette.mode === 'dark'
                 ? `linear-gradient(140.9deg, ${theme.palette.secondary.dark} -14.02%, rgba(144, 202, 249, 0) 85.50%)`
-                : theme.palette.secondary[800],
+                : theme.palette.secondary[800] || '#1976d2', // Fallback color
         borderRadius: '50%',
         top: -125,
         right: -15,
@@ -83,7 +83,7 @@ const EarningCard = ({ count, details, isLoading }) => {
             {isLoading ? (
                 <SkeletonEarningCard />
             ) : (
-                <CardWrapper border={false} content={false}>
+                <CardWrapper border={false}>
                     <Box
                         sx={{
                             p: isMobile ? 1 : 1.25,
@@ -115,13 +115,13 @@ const EarningCard = ({ count, details, isLoading }) => {
                                                 cursor: 'pointer',
                                                 width: isMobile ? 24 : 32,
                                                 height: isMobile ? 24 : 32,
-                                                backgroundColor: theme.palette.secondary[200],
-                                                color: theme.palette.secondary.dark
+                                                backgroundColor: theme.palette.secondary[200] || '#e0e0e0', // Fallback color
+                                                color: theme.palette.secondary.dark || '#000' // Fallback color
                                             }}
                                         >
                                             <ArrowUpwardIcon
                                                 fontSize={isMobile ? 'small' : 'inherit'}
-                                                sx={{ transform: 'rotate3d(1, 1, 1, 45deg)' }}
+                                                sx={{ transform: 'rotate(45deg)' }}
                                             />
                                         </Avatar>
                                     </Grid>
@@ -132,7 +132,7 @@ const EarningCard = ({ count, details, isLoading }) => {
                                     sx={{
                                         fontSize: getDetailsFontSize(),
                                         fontWeight: 500,
-                                        color: theme.palette.mode === 'dark' ? theme.palette.text.secondary : theme.palette.secondary[200],
+                                        color: theme.palette.mode === 'dark' ? theme.palette.text.secondary : theme.palette.secondary[200] || '#e0e0e0', // Fallback color
                                         lineHeight: 1.3
                                     }}
                                 >

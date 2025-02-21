@@ -164,19 +164,20 @@ const DashboardPage = () => {
                 }
             >
                 <Grid container spacing={2} sx={{ mb: 3 }}>
-                    <Grid item xs={3}>
+                    <Grid item xs={12} sm={6} md={3}>
                         <EarningCard count={todayReportCountSteroid} details={detailsText} icon={EarningIcon} />
                     </Grid>
-                    <Grid item xs={3}>
+                    <Grid item xs={12} sm={6} md={3}>
                         <EarningCard count={totalUsersCountSteroid} details={detailUsers} icon={EarningIcon} />
                     </Grid>
-                    <Grid item xs={3}>
+                    <Grid item xs={12} sm={6} md={3}>
                         <EarningCard count={onlineUsers} details="Active Users" icon={EarningIcon} />
                     </Grid>
-                    <Grid item xs={3}>
+                    <Grid item xs={12} sm={6} md={3}>
                         <EarningCard count="230" details="Average Daily Users" icon={EarningIcon} />
                     </Grid>
                 </Grid>
+
                 <Grid container spacing={2}>
                     <Grid item xs={12}>
                         <Typography variant="h4" align="left" sx={{ mt: 4, mb: 4 }}>
