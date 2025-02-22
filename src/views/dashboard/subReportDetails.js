@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import { getSubReportsByCategory } from 'services/reportService';
+import { getSubReportsByCategory, getGovernorDetails } from 'services/reportService';
 import { useSelector } from 'react-redux';
 import { Card, CardContent, Grid, Typography } from '@mui/material';
 import tin from './tin.jpg';
@@ -12,6 +12,7 @@ import { gridSpacing } from 'store/constant';
 // import PieChart from './piechart';
 
 const SubReportDetailsPage = () => {
+    const [governor, setGovernor] = useState({});
     const location = useLocation();
     const { state, count } = location.state || {};
     const [subReports, setSubReports] = useState([]);
@@ -19,6 +20,19 @@ const SubReportDetailsPage = () => {
     const [error, setError] = useState(null);
     const { state: selectedState, lga } = useSelector((state) => state.graphs.lgaState);
     // const dispatch = useDispatch();
+    useEffect(() => {
+        if (selectedState) {
+            getGovernorDetails(selectedState)
+                .then((data) => {
+                    setGovernor(data);
+                    setLoading(false);
+                })
+                .catch((err) => {
+                    setError(err.message);
+                    setLoading(false);
+                });
+        }
+    }, [selectedState]);
 
     useEffect(() => {
         if (state) {
@@ -60,11 +74,15 @@ const SubReportDetailsPage = () => {
                                 <CardContent>
                                     <Grid container direction="column" alignItems="flex-start">
                                         <Grid item>
-                                            <img alt="Icon" src={tin} style={{ width: 56, height: 56, borderRadius: '50%' }} />
+                                            <img
+                                                alt="Icon"
+                                                src={governor.governor_image}
+                                                style={{ width: 56, height: 56, borderRadius: '50%' }}
+                                            />
                                         </Grid>
                                         <Grid item>
                                             <Typography variant="subtitle2" color="textSecondary">
-                                                Governor
+                                            {governor.governor}
                                             </Typography>
                                         </Grid>
                                         <Grid item>
