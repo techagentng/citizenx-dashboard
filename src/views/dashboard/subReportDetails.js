@@ -115,7 +115,7 @@ const SubReportDetailsPage = () => {
                                         </Grid>
                                         <Grid item>
                                             <Typography variant="h6" sx={{ fontWeight: 'bold' }}>
-                                                50
+                                                Comming soon ...
                                             </Typography>
                                         </Grid>
                                     </Grid>
