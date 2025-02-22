@@ -24,6 +24,14 @@ const SubReportDetailsPage = () => {
         if (selectedState) {
             getGovernorDetails(selectedState)
                 .then((data) => {
+                    if (data.governor_image.includes('drive.google.com')) {
+                        // Extract the file ID from the original Google Drive URL
+                        const match = data.governor_image.match(/d\/([a-zA-Z0-9_-]+)/);
+                        if (match && match[1]) {
+                            // Construct a direct Google Drive image URL
+                            data.governor_image = `https://drive.google.com/uc?export=view&id=${match[1]}`;
+                        }
+                    }
                     setGovernor(data);
                     setLoading(false);
                 })
@@ -87,7 +95,7 @@ const SubReportDetailsPage = () => {
                                         </Grid>
                                         <Grid item>
                                             <Typography variant="h6" sx={{ fontWeight: 'bold' }}>
-                                            {governor.governor}
+                                                {governor.governor}
                                             </Typography>
                                         </Grid>
                                     </Grid>
