@@ -82,12 +82,12 @@ const SubReportDetailsPage = () => {
                                         </Grid>
                                         <Grid item>
                                             <Typography variant="subtitle2" color="textSecondary">
-                                            {governor.governor}
+                                                Governor
                                             </Typography>
                                         </Grid>
                                         <Grid item>
                                             <Typography variant="h6" sx={{ fontWeight: 'bold' }}>
-                                                John Doe
+                                            {governor.governor}
                                             </Typography>
                                         </Grid>
                                     </Grid>
