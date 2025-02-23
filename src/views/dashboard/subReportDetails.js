@@ -13,7 +13,7 @@ import { gridSpacing } from 'store/constant';
 import lagos from './Lagos Gov.jpg';
 import bauchi from './bauchi.jpg';
 import abia from './Lagos Gov.jpg';
-import anambra from './Chibueze-Ofobuike-chairperson-Aguata-local-council-e1700734876575.jpg';
+import anambra from './Anambara Gov.jpg';
 
 const SubReportDetailsPage = () => {
     const [governor, setGovernor] = useState({});
