@@ -10,6 +10,10 @@ import MainCard from 'ui-component/cards/MainCard';
 import { gridSpacing } from 'store/constant';
 // import { getPercentCount } from 'store/slices/graphs';
 // import PieChart from './piechart';
+import lagos from './Lagos Gov.jpg';
+import bauchi from './bauchi.jpg';
+import abia from './Lagos Gov.jpg';
+import anambra from './Chibueze-Ofobuike-chairperson-Aguata-local-council-e1700734876575.jpg';
 
 const SubReportDetailsPage = () => {
     const [governor, setGovernor] = useState({});
@@ -20,19 +24,43 @@ const SubReportDetailsPage = () => {
     const [error, setError] = useState(null);
     const { state: selectedState, lga } = useSelector((state) => state.graphs.lgaState);
     // const dispatch = useDispatch();
+
+    const stateImages = {
+        lagos: lagos,
+        anambra: anambra,
+        abia: abia,
+        bauchi: bauchi
+    };
+
+    // useEffect(() => {
+    //     if (selectedState) {
+    //         getGovernorDetails(selectedState)
+    //             .then((data) => {
+    //                 if (data.governor_image.includes('drive.google.com')) {
+    //                     // Extract the file ID from the original Google Drive URL
+    //                     const match = data.governor_image.match(/d\/([a-zA-Z0-9_-]+)/);
+    //                     if (match && match[1]) {
+    //                         // Construct a direct Google Drive image URL
+    //                         data.governor_image = `https://drive.google.com/uc?export=view&id=${match[1]}`;
+    //                     }
+    //                 }
+    //                 setGovernor(data);
+    //                 setLoading(false);
+    //             })
+    //             .catch((err) => {
+    //                 setError(err.message);
+    //                 setLoading(false);
+    //             });
+    //     }
+    // }, [selectedState]);
     useEffect(() => {
         if (selectedState) {
+            // Fetch governor details without image
             getGovernorDetails(selectedState)
                 .then((data) => {
-                    if (data.governor_image.includes('drive.google.com')) {
-                        // Extract the file ID from the original Google Drive URL
-                        const match = data.governor_image.match(/d\/([a-zA-Z0-9_-]+)/);
-                        if (match && match[1]) {
-                            // Construct a direct Google Drive image URL
-                            data.governor_image = `https://drive.google.com/uc?export=view&id=${match[1]}`;
-                        }
-                    }
-                    setGovernor(data);
+                    // Remove image from server response, use local image instead
+                    const governorData = { ...data, governor_image: stateImages[selectedState.toLowerCase()] || tin }; // Fallback to tin
+                    setGovernor(governorData);
                     setLoading(false);
                 })
                 .catch((err) => {
