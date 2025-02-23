@@ -11,7 +11,7 @@ import { gridSpacing } from 'store/constant';
 // import { getPercentCount } from 'store/slices/graphs';
 // import PieChart from './piechart';
 import lagos from './Lagos Gov.jpg';
-import bauchi from './bauchi.jpg';
+import bauchi from './Bauchi Gov.jpg';
 import abia from './Lagos Gov.jpg';
 import anambra from './Anambara Gov.jpg';
 
