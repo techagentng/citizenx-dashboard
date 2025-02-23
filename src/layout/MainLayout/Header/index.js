@@ -18,7 +18,8 @@ import NotificationSection from './NotificationSection';
 import LAYOUT_CONST from 'constant';
 import useConfig from 'hooks/useConfig';
 import FloatingCart from './FloatingCart';
-import { IconMenu2 } from '@tabler/icons-react';
+import { IconMenu2 } from '@tabler/icons-react' 
+import MenuItemMenuItem from './StateLgaDropdown' 
 
 const Header = () => {
     const theme = useTheme();
@@ -202,6 +203,7 @@ const Header = () => {
             <ProfileSection />
             <Box sx={{ display: { xs: 'block', sm: 'none' } }}>
                 <MobileSection />
+                <MenuItemMenuItem />
             </Box>
         </>
     );
