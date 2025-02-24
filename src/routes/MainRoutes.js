@@ -8,6 +8,7 @@ import Loadable from 'ui-component/Loadable';
 // sample page routing
 const Dashboard = Loadable(lazy(() => import('views/dashboard')));
 const Settings = Loadable(lazy(() => import('views/Profile')));
+const Compare = Loadable(lazy(() => import('views/Compare')));
 const Reports = Loadable(lazy(() => import('views/reports')));
 const Rewards = Loadable(lazy(() => import('views/rewards')));
 const Users = Loadable(lazy(() => import('views/users')));
@@ -38,6 +39,10 @@ const MainRoutes = {
         {
             path: '/rewards',
             element: <Rewards />
+        },
+        {
+            path: '/compare',
+            element: <Compare />
         },
         {
             path: '/users',

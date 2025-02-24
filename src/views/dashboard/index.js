@@ -17,7 +17,7 @@ import { getAllUserCount, getAllReportsToday, getOnlineUsers } from 'services/us
 import { getStateReportCountList } from 'services/reportService';
 import { getGraph, getPercentCount, setReportType } from 'store/slices/graphs';
 import { getCategories, getReportCountsByState, getReportCountByState, getReportCount, getReportCountsByLGA } from 'services/reportService';
-import CompareForms from './CompareForms';
+
 
 const DashboardPage = () => {
     const dispatch = useDispatch();
@@ -151,8 +151,8 @@ const DashboardPage = () => {
 
     const todayReportCountSteroid = selectedState && topStates ? topStates[selectedState] || todayReportCount : todayReportCount;
 
-    const detailsText = selectedState ? `${selectedState}'s "Today Report` : "Today's Report";
-    const detailUsers = selectedState ? `${""}'s Overall Users In App` : "Today's Report";
+    const detailsText = selectedState ? `${selectedState} overall Report` : "Total Report count";
+    const detailUsers = selectedState ? `${""}'s user post count` : "Today's Report";
     const totalUsersCountSteroid = total_users || userCount;
     return (
         <>
@@ -287,12 +287,6 @@ const DashboardPage = () => {
                         </Box>
                         <PieChart2 reportPercent={{ good_percentage, bad_percentage }} />
                     </Grid>
-                </Grid>
-            </MainCard>
-
-            <MainCard title="Compare reports">
-                <Grid item xs={12} md={6}>
-                    <CompareForms />
                 </Grid>
             </MainCard>
         </>

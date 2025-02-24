@@ -136,13 +136,21 @@ const SubReportDetailsPage = () => {
                             </Card>
                         </Grid>
 
-                        {/* Second Card with Deputy info */}
                         <Grid item xs={12} sm={6} md={3}>
                             <Card variant="outlined" sx={{ border: '1px solid #ccc', boxShadow: 'none', padding: 2 }}>
                                 <CardContent>
                                     <Grid container direction="column" alignItems="flex-start">
-                                        <Grid item>
-                                            <img alt="Icon" src={tin} style={{ width: 56, height: 56, borderRadius: '50%' }} />
+                                        <Grid item sx={{ width: '100%' }}>
+                                            <img
+                                                alt="Icon"
+                                                src={deputy.deputy_image} // Assuming `deputy` contains the deputy image
+                                                style={{
+                                                    width: '100%',
+                                                    aspectRatio: '1 / 1', // Ensures the image remains square
+                                                    borderRadius: 8,
+                                                    objectFit: 'cover' // Ensures the image fills the container properly
+                                                }}
+                                            />
                                         </Grid>
                                         <Grid item>
                                             <Typography variant="subtitle2" color="textSecondary">
@@ -151,7 +159,7 @@ const SubReportDetailsPage = () => {
                                         </Grid>
                                         <Grid item>
                                             <Typography variant="h6" sx={{ fontWeight: 'bold' }}>
-                                                Jane Smith
+                                                {deputy.deputy} {/* Assuming `deputy` contains the name */}
                                             </Typography>
                                         </Grid>
                                     </Grid>
@@ -159,13 +167,21 @@ const SubReportDetailsPage = () => {
                             </Card>
                         </Grid>
 
-                        {/* Third Card with Local Government Chairman info */}
                         <Grid item xs={12} sm={6} md={3}>
                             <Card variant="outlined" sx={{ border: '1px solid #ccc', boxShadow: 'none', padding: 2 }}>
                                 <CardContent>
                                     <Grid container direction="column" alignItems="flex-start">
-                                        <Grid item>
-                                            <img alt="Icon" src={tin} style={{ width: 56, height: 56, borderRadius: '50%' }} />
+                                        <Grid item sx={{ width: '100%' }}>
+                                            <img
+                                                alt="Icon"
+                                                src={chairman.chairman_image || tin} // Use default `tin` if no image available
+                                                style={{
+                                                    width: '100%',
+                                                    aspectRatio: '1 / 1', // Ensures the image remains square
+                                                    borderRadius: 8,
+                                                    objectFit: 'cover' // Ensures the image fills the container properly
+                                                }}
+                                            />
                                         </Grid>
                                         <Grid item>
                                             <Typography variant="subtitle2" color="textSecondary">
@@ -174,7 +190,7 @@ const SubReportDetailsPage = () => {
                                         </Grid>
                                         <Grid item>
                                             <Typography variant="h6" sx={{ fontWeight: 'bold' }}>
-                                                Comming soon ...
+                                                {chairman.chairman || 'Coming soon ...'}
                                             </Typography>
                                         </Grid>
                                     </Grid>
