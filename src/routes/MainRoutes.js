@@ -13,6 +13,8 @@ const Reports = Loadable(lazy(() => import('views/reports')));
 const Rewards = Loadable(lazy(() => import('views/rewards')));
 const Users = Loadable(lazy(() => import('views/users')));
 const State = Loadable(lazy(() => import('views/states')));
+const CreateState = Loadable(lazy(() => import('views/states')));
+
 const SubReportDetailsPage = Loadable(lazy(() => import('views/dashboard/subReportDetails')));
 // ==============================|| MAIN ROUTING ||============================== //
 
@@ -43,6 +45,10 @@ const MainRoutes = {
         {
             path: '/compare',
             element: <Compare />
+        },
+        {
+            path: '/state/create',
+            element: <CreateState />
         },
         {
             path: '/users',

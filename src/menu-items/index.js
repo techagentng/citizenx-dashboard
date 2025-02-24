@@ -5,6 +5,7 @@ import reports from './reports';
 import rewards from './rewards';
 import users from './users';
 import compare from './compare';
+import stateEdit from './createState';
 
 // Create an instance of the AuthService
 const authService = new AuthService();
@@ -18,6 +19,6 @@ const menuItems =
         ? {
               items: [dashboard, reports, rewards, users, settings]
           }
-        : { items: [dashboard, rewards, compare, settings] };
+        : { items: [dashboard, rewards, compare, stateEdit, settings] };
 
 export default menuItems;

@@ -1,66 +1,39 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import { getSubReportsByCategory, getGovernorDetails } from 'services/reportService';
 import { useSelector } from 'react-redux';
+import { getSubReportsByCategory, getGovernorDetails } from 'services/reportService';
 import { Card, CardContent, Grid, Typography } from '@mui/material';
-import tin from './tin.jpg';
+import MainCard from 'ui-component/cards/MainCard';
 import BarChart from './barchart';
 import PieChart from './piechart';
-import MainCard from 'ui-component/cards/MainCard';
+import tin from './tin.jpg';
 import { gridSpacing } from 'store/constant';
-// import { getPercentCount } from 'store/slices/graphs';
-// import PieChart from './piechart';
-import lagos from './Lagos Gov.jpg';
-import bauchi from './Bauchi Gov.jpg';
-import abia from './Lagos Gov.jpg';
-import anambra from './Anambara Gov.jpg';
 
 const SubReportDetailsPage = () => {
-    const [governor, setGovernor] = useState({});
-    const location = useLocation();
-    const { state, count } = location.state || {};
+    const [governor, setGovernor] = useState(null); // Initialize as null for better checking
     const [subReports, setSubReports] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const location = useLocation();
+    const { state, count } = location.state || {};
     const { state: selectedState, lga } = useSelector((state) => state.graphs.lgaState);
-    // const dispatch = useDispatch();
 
-    const stateImages = {
-        lagos: lagos,
-        anambra: anambra,
-        abia: abia,
-        bauchi: bauchi
-    };
-
-    // useEffect(() => {
-    //     if (selectedState) {
-    //         getGovernorDetails(selectedState)
-    //             .then((data) => {
-    //                 if (data.governor_image.includes('drive.google.com')) {
-    //                     // Extract the file ID from the original Google Drive URL
-    //                     const match = data.governor_image.match(/d\/([a-zA-Z0-9_-]+)/);
-    //                     if (match && match[1]) {
-    //                         // Construct a direct Google Drive image URL
-    //                         data.governor_image = `https://drive.google.com/uc?export=view&id=${match[1]}`;
-    //                     }
-    //                 }
-    //                 setGovernor(data);
-    //                 setLoading(false);
-    //             })
-    //             .catch((err) => {
-    //                 setError(err.message);
-    //                 setLoading(false);
-    //             });
-    //     }
-    // }, [selectedState]);
+    // Fetch governor details
     useEffect(() => {
         if (selectedState) {
-            // Fetch governor details without image
+            setLoading(true); // Reset loading state
             getGovernorDetails(selectedState)
                 .then((data) => {
-                    // Remove image from server response, use local image instead
-                    const governorData = { ...data, governor_image: stateImages[selectedState.toLowerCase()] || tin }; // Fallback to tin
-                    setGovernor(governorData);
+                    // Handle Google Drive URLs if needed (uncomment if applicable)
+                    /*
+                    if (data.governor_image?.includes('drive.google.com')) {
+                        const match = data.governor_image.match(/d\/([a-zA-Z0-9_-]+)/);
+                        if (match && match[1]) {
+                            data.governor_image = `https://drive.google.com/uc?export=view&id=${match[1]}`;
+                        }
+                    }
+                    */
+                    setGovernor(data);
                     setLoading(false);
                 })
                 .catch((err) => {
@@ -70,22 +43,20 @@ const SubReportDetailsPage = () => {
         }
     }, [selectedState]);
 
+    // Fetch sub-reports
     useEffect(() => {
         if (state) {
+            setLoading(true); // Reset loading state
             getSubReportsByCategory(state)
                 .then((data) => {
                     const subReportsCount = data.reduce((acc, report) => {
-                        if (acc[report.sub_report_type]) {
-                            acc[report.sub_report_type] += 1; // Increment count if the type already exists
-                        } else {
-                            acc[report.sub_report_type] = 1; // Initialize count if the type is new
-                        }
+                        acc[report.sub_report_type] = (acc[report.sub_report_type] || 0) + 1;
                         return acc;
                     }, {});
 
                     const structuredSubReports = Object.keys(subReportsCount).map((key) => ({
                         sub_report_type: key,
-                        count: subReportsCount[key]
+                        count: subReportsCount[key],
                     }));
 
                     setSubReports(structuredSubReports);
@@ -100,24 +71,24 @@ const SubReportDetailsPage = () => {
 
     return (
         <div>
-            {/* Card section for displaying various details */}
+            {/* Cards Section */}
             <Card variant="outlined" sx={{ border: '1px solid #ccc', boxShadow: 'none', padding: 2 }}>
                 <CardContent>
                     <Grid container spacing={2}>
-                        {/* First Card with Governor info */}
+                        {/* Governor Card */}
                         <Grid item xs={12} sm={6} md={3}>
                             <Card variant="outlined" sx={{ border: '1px solid #ccc', boxShadow: 'none', padding: 2 }}>
                                 <CardContent>
                                     <Grid container direction="column" alignItems="flex-start">
                                         <Grid item sx={{ width: '100%' }}>
                                             <img
-                                                alt="Icon"
-                                                src={governor.governor_image}
+                                                alt="Governor"
+                                                src={governor?.governor_image || tin}
                                                 style={{
                                                     width: '100%',
-                                                    aspectRatio: '1 / 1', // Ensures the image remains square
+                                                    aspectRatio: '1 / 1',
                                                     borderRadius: 8,
-                                                    objectFit: 'cover' // Ensures the image fills the container properly
+                                                    objectFit: 'cover',
                                                 }}
                                             />
                                         </Grid>
@@ -128,7 +99,7 @@ const SubReportDetailsPage = () => {
                                         </Grid>
                                         <Grid item>
                                             <Typography variant="h6" sx={{ fontWeight: 'bold' }}>
-                                                {governor.governor}
+                                                {governor?.governor || 'N/A'}
                                             </Typography>
                                         </Grid>
                                     </Grid>
@@ -136,19 +107,20 @@ const SubReportDetailsPage = () => {
                             </Card>
                         </Grid>
 
+                        {/* Deputy Card */}
                         <Grid item xs={12} sm={6} md={3}>
                             <Card variant="outlined" sx={{ border: '1px solid #ccc', boxShadow: 'none', padding: 2 }}>
                                 <CardContent>
                                     <Grid container direction="column" alignItems="flex-start">
                                         <Grid item sx={{ width: '100%' }}>
                                             <img
-                                                alt="Icon"
-                                                src={deputy.deputy_image} // Assuming `deputy` contains the deputy image
+                                                alt="Deputy"
+                                                src={governor?.deputy_image || tin}
                                                 style={{
                                                     width: '100%',
-                                                    aspectRatio: '1 / 1', // Ensures the image remains square
+                                                    aspectRatio: '1 / 1',
                                                     borderRadius: 8,
-                                                    objectFit: 'cover' // Ensures the image fills the container properly
+                                                    objectFit: 'cover',
                                                 }}
                                             />
                                         </Grid>
@@ -159,7 +131,7 @@ const SubReportDetailsPage = () => {
                                         </Grid>
                                         <Grid item>
                                             <Typography variant="h6" sx={{ fontWeight: 'bold' }}>
-                                                {deputy.deputy} {/* Assuming `deputy` contains the name */}
+                                                {governor?.deputy_name || 'N/A'}
                                             </Typography>
                                         </Grid>
                                     </Grid>
@@ -167,19 +139,20 @@ const SubReportDetailsPage = () => {
                             </Card>
                         </Grid>
 
+                        {/* LGAC Card */}
                         <Grid item xs={12} sm={6} md={3}>
                             <Card variant="outlined" sx={{ border: '1px solid #ccc', boxShadow: 'none', padding: 2 }}>
                                 <CardContent>
                                     <Grid container direction="column" alignItems="flex-start">
                                         <Grid item sx={{ width: '100%' }}>
                                             <img
-                                                alt="Icon"
-                                                src={chairman.chairman_image || tin} // Use default `tin` if no image available
+                                                alt="LGAC"
+                                                src={governor?.lgac_image || tin}
                                                 style={{
                                                     width: '100%',
-                                                    aspectRatio: '1 / 1', // Ensures the image remains square
+                                                    aspectRatio: '1 / 1',
                                                     borderRadius: 8,
-                                                    objectFit: 'cover' // Ensures the image fills the container properly
+                                                    objectFit: 'cover',
                                                 }}
                                             />
                                         </Grid>
@@ -190,7 +163,7 @@ const SubReportDetailsPage = () => {
                                         </Grid>
                                         <Grid item>
                                             <Typography variant="h6" sx={{ fontWeight: 'bold' }}>
-                                                {chairman.chairman || 'Coming soon ...'}
+                                                {governor?.lgac || 'Coming soon ...'}
                                             </Typography>
                                         </Grid>
                                     </Grid>
@@ -198,7 +171,7 @@ const SubReportDetailsPage = () => {
                             </Card>
                         </Grid>
 
-                        {/* Fourth Card with report details */}
+                        {/* Report Details Card */}
                         <Grid item xs={12} sm={6} md={3}>
                             <Card variant="outlined" sx={{ border: '1px solid #ccc', boxShadow: 'none', padding: 2 }}>
                                 <CardContent>
@@ -208,7 +181,7 @@ const SubReportDetailsPage = () => {
                                                 Report Type
                                             </Typography>
                                             <Typography variant="subtitle1" color="textSecondary">
-                                                {state}
+                                                {state || 'N/A'}
                                             </Typography>
                                         </Grid>
                                         <Grid item container justifyContent="space-between" alignItems="center">
@@ -216,7 +189,7 @@ const SubReportDetailsPage = () => {
                                                 LGA
                                             </Typography>
                                             <Typography variant="subtitle1" color="textSecondary">
-                                                {lga}
+                                                {lga || 'N/A'}
                                             </Typography>
                                         </Grid>
                                         <Grid item container justifyContent="space-between" alignItems="center">
@@ -224,7 +197,7 @@ const SubReportDetailsPage = () => {
                                                 State
                                             </Typography>
                                             <Typography variant="subtitle1" color="textSecondary">
-                                                {selectedState}
+                                                {governor?.state || selectedState || 'N/A'}
                                             </Typography>
                                         </Grid>
                                     </Grid>
@@ -235,7 +208,7 @@ const SubReportDetailsPage = () => {
                 </CardContent>
             </Card>
 
-            {/* Chart section */}
+            {/* Charts Section */}
             <Grid container spacing={gridSpacing}>
                 <Grid item xs={12} md={6}>
                     <MainCard content={false}>
@@ -249,7 +222,6 @@ const SubReportDetailsPage = () => {
                         </Grid>
                     </MainCard>
                 </Grid>
-
                 <Grid item xs={12} md={6}>
                     <MainCard content={false}>
                         <Grid container>
@@ -264,17 +236,17 @@ const SubReportDetailsPage = () => {
                 </Grid>
             </Grid>
 
-            {/* SubReport Details */}
-            <h1>SubReport details page for {selectedState} </h1>
-            <p>Report Type: {state}</p>
-            <p>LGA: {lga}</p>
-            <p>State: {selectedState}</p>
-            <p>Count: {count}</p>
+            {/* Sub-Report Details */}
+            <h1>SubReport Details for {selectedState}</h1>
+            <p>Report Type: {state || 'N/A'}</p>
+            <p>LGA: {lga || 'N/A'}</p>
+            <p>State: {governor?.state || selectedState || 'N/A'}</p>
+            <p>Count: {count || 'N/A'}</p>
 
             {loading && <p>Loading sub-reports...</p>}
-            {error && <p>Error: {error}</p>}
+            {error && <p style={{ color: 'red' }}>Error: {error}</p>}
 
-            {!loading && !error && (
+            {!loading && !error && subReports.length > 0 && (
                 <ul>
                     {subReports.map((subReport) => (
                         <li key={subReport.sub_report_type}>
