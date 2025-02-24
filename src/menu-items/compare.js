@@ -15,7 +15,7 @@ const icons = {
 };
 const compare = {
     id: 'compare',
-    title: <FormattedMessage id="Compare report" />,
+    title: <FormattedMessage id="compare" />,
     icon: icons.IconUsers,
     type: 'group',
     url: '/compare'
