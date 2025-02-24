@@ -1,7 +1,7 @@
 import React from 'react';
 import { Grid } from '@mui/material';
 import MainCard from '../components/MainCard';
-import CompareForms from './CompareForms';
+import CompareForms from '../compare';
 
 const CompareReportsPage = () => {
     return (
