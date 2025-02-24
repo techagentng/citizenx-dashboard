@@ -12,7 +12,7 @@ import { gridSpacing } from 'store/constant';
 // import PieChart from './piechart';
 import lagos from './Lagos Gov.jpg';
 import bauchi from './Bauchi Gov.jpg';
-import abia from './';
+import abia from './Lagos Gov.jpg';
 import anambra from './Anambara Gov.jpg';
 
 const SubReportDetailsPage = () => {
@@ -109,11 +109,16 @@ const SubReportDetailsPage = () => {
                             <Card variant="outlined" sx={{ border: '1px solid #ccc', boxShadow: 'none', padding: 2 }}>
                                 <CardContent>
                                     <Grid container direction="column" alignItems="flex-start">
-                                        <Grid item>
+                                        <Grid item sx={{ width: '100%' }}>
                                             <img
                                                 alt="Icon"
                                                 src={governor.governor_image}
-                                                style={{ width: 56, height: 56, borderRadius: '50%' }}
+                                                style={{
+                                                    width: '100%',
+                                                    aspectRatio: '1 / 1', // Ensures the image remains square
+                                                    borderRadius: 8,
+                                                    objectFit: 'cover' // Ensures the image fills the container properly
+                                                }}
                                             />
                                         </Grid>
                                         <Grid item>
