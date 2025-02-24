@@ -12,7 +12,7 @@ import { gridSpacing } from 'store/constant';
 // import PieChart from './piechart';
 import lagos from './Lagos Gov.jpg';
 import bauchi from './Bauchi Gov.jpg';
-import abia from './Lagos Gov.jpg';
+import abia from './';
 import anambra from './Anambara Gov.jpg';
 
 const SubReportDetailsPage = () => {
