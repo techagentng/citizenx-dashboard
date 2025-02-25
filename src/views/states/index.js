@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
-import axios from 'axios';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { Box, Button, Card, CardContent, CircularProgress, Grid, TextField, Typography, styled } from '@mui/material';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
-
+import { createGovernor } from "services/stateservice";
 // Styled components for custom styling
 const StyledCard = styled(Card)(({ theme }) => ({
     maxWidth: 900,
@@ -23,6 +22,7 @@ const StyledButton = styled(Button)(({ theme }) => ({
     marginTop: theme.spacing(3),
     padding: theme.spacing(1.5, 4),
     borderRadius: 8,
+    color: 'white',
     textTransform: 'none',
     fontWeight: 'bold',
     background: 'linear-gradient(45deg, #1976d2, #42a5f5)',
@@ -51,17 +51,7 @@ const FileInputLabel = styled('label')(({ theme }) => ({
 
 const StateForm = () => {
     const [loading, setLoading] = useState(false);
-
-    // Mock S3 upload function (replace with actual S3 logic later)
-    const uploadImagesToS3 = async (values) => {
-        // Placeholder: Return file names or dummy URLs until S3 is integrated
-        return {
-            governor_image: values.governor_image ? 's3://bucket/governor_image.jpg' : '',
-            deputy_image: values.deputy_image ? 's3://bucket/deputy_image.jpg' : '',
-            lgac_image: values.lgac_image ? 's3://bucket/lgac_image.jpg' : ''
-        };
-    };
-
+  
     const formik = useFormik({
         initialValues: {
             state: '',
@@ -84,8 +74,6 @@ const StateForm = () => {
         onSubmit: async (values, { resetForm }) => {
             setLoading(true);
             try {
-                const uploadedImages = await uploadImagesToS3(values);
-
                 const payload = {
                     state: values.state,
                     governor: values.governor,
@@ -95,18 +83,19 @@ const StateForm = () => {
                     deputy_image: uploadedImages.deputy_image,
                     lgac_image: uploadedImages.lgac_image
                 };
-
-                await axios.post('https://citizenx-9hk2.onrender.com/create/governor', payload);
-                alert('State data saved successfully!');
+    
+                await createGovernor(payload);
+                alert("State data saved successfully!");
                 resetForm();
             } catch (error) {
-                console.error('Error saving state data:', error);
-                alert('Failed to save state data. Please try again.');
+                console.error("Error saving state data:", error);
+                alert("Failed to save state data. Please try again.");
             } finally {
                 setLoading(false);
             }
         }
     });
+    
 
     const handleImageChange = (event, fieldName) => {
         const file = event.target.files[0];
