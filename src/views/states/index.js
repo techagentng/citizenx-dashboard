@@ -3,7 +3,7 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { Box, Button, Card, CardContent, CircularProgress, Grid, TextField, Typography, styled } from '@mui/material';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
-import { createGovernor } from "services/stateservice";
+import { createGovernor } from 'services/stateservice';
 // Styled components for custom styling
 const StyledCard = styled(Card)(({ theme }) => ({
     maxWidth: 900,
@@ -51,7 +51,7 @@ const FileInputLabel = styled('label')(({ theme }) => ({
 
 const StateForm = () => {
     const [loading, setLoading] = useState(false);
-  
+
     const formik = useFormik({
         initialValues: {
             state: '',
@@ -74,28 +74,38 @@ const StateForm = () => {
         onSubmit: async (values, { resetForm }) => {
             setLoading(true);
             try {
-                const payload = {
-                    state: values.state,
-                    governor: values.governor,
-                    deputy_name: values.deputy_name,
-                    lgac: values.lgac,
-                    governor_image: values.governor_image,
-                    deputy_image: values.deputy_image,
-                    lgac_image: values.lgac_image
-                };
-    
-                await createGovernor(payload);
-                alert("State data saved successfully!");
+                // Create a FormData object
+                const formData = new FormData();
+
+                // Append form fields
+                formData.append('state', values.state);
+                formData.append('governor', values.governor);
+                formData.append('deputy_name', values.deputy_name);
+                formData.append('lgac', values.lgac);
+
+                // Append files
+                if (values.governor_image) {
+                    formData.append('governor_image', values.governor_image);
+                }
+                if (values.deputy_image) {
+                    formData.append('deputy_image', values.deputy_image);
+                }
+                if (values.lgac_image) {
+                    formData.append('lgac_image', values.lgac_image);
+                }
+
+                // Send the FormData to the backend
+                await createGovernor(formData); // Removed the `response` variable
+                alert('State data saved successfully!');
                 resetForm();
             } catch (error) {
-                console.error("Error saving state data:", error);
-                alert("Failed to save state data. Please try again.");
+                console.error('Error saving state data:', error);
+                alert('Failed to save state data. Please try again.');
             } finally {
                 setLoading(false);
             }
         }
     });
-    
 
     const handleImageChange = (event, fieldName) => {
         const file = event.target.files[0];
