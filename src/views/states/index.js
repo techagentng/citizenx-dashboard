@@ -96,7 +96,7 @@ const StateForm = () => {
                     lgac_image: uploadedImages.lgac_image
                 };
 
-                await axios.post('http://localhost:5000/api/states', payload);
+                await axios.post('https://citizenx-dashboard-sbqx.onrender.com/create/governor', payload);
                 alert('State data saved successfully!');
                 resetForm();
             } catch (error) {
