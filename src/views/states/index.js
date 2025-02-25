@@ -79,9 +79,9 @@ const StateForm = () => {
                     governor: values.governor,
                     deputy_name: values.deputy_name,
                     lgac: values.lgac,
-                    governor_image: uploadedImages.governor_image,
-                    deputy_image: uploadedImages.deputy_image,
-                    lgac_image: uploadedImages.lgac_image
+                    governor_image: values.governor_image,
+                    deputy_image: values.deputy_image,
+                    lgac_image: values.lgac_image
                 };
     
                 await createGovernor(payload);
