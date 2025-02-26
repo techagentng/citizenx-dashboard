@@ -76,7 +76,7 @@ const StateForm = () => {
             try {
                 // Create a FormData object
                 const formData = new FormData();
-
+                console.log('Raw Values:', values);
                 // Append form fields
                 formData.append('state', values.state);
                 formData.append('governor', values.governor);
