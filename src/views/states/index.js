@@ -109,7 +109,10 @@ const StateForm = () => {
 
     const handleImageChange = (event, fieldName) => {
         const file = event.target.files[0];
-        formik.setFieldValue(fieldName, file);
+        if (file) {
+            console.log(`${fieldName}:`, file); // Log the file to verify
+            formik.setFieldValue(fieldName, file); // Update Formik state
+        }
     };
 
     return (
