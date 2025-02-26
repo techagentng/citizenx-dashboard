@@ -94,8 +94,12 @@ const StateForm = () => {
                     formData.append('lgac_image', values.lgac_image);
                 }
 
-                // Send the FormData to the backend
-                await createGovernor(formData); // Removed the `response` variable
+                // Log FormData to verify
+                for (let [key, value] of formData.entries()) {
+                    console.log(key, value);
+                }
+
+                await createGovernor(formData);
                 alert('State data saved successfully!');
                 resetForm();
             } catch (error) {
@@ -111,7 +115,7 @@ const StateForm = () => {
         const file = event.target.files[0];
         if (file) {
             console.log(`${fieldName}:`, file); // Log the file to verify
-            formik.setFieldValue(fieldName, file); // Update Formik state
+            formik.setFieldValue(fieldName, file);
         }
     };
 
