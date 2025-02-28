@@ -18,7 +18,6 @@ import { getStateReportCountList } from 'services/reportService';
 import { getGraph, getPercentCount, setReportType } from 'store/slices/graphs';
 import { getCategories, getReportCountsByState, getReportCountByState, getReportCount, getReportCountsByLGA } from 'services/reportService';
 
-
 const DashboardPage = () => {
     const dispatch = useDispatch();
     const { lga: selectedLga } = useSelector((state) => state.graphs.lgaState);
@@ -151,8 +150,8 @@ const DashboardPage = () => {
 
     const todayReportCountSteroid = selectedState && topStates ? topStates[selectedState] || todayReportCount : todayReportCount;
 
-    const detailsText = selectedState ? `${selectedState} overall Report` : "Total Report count";
-    const detailUsers = selectedState ? `${""} User post count` : "Today's Report";
+    // const detailsText = selectedState ? `${selectedState} overall Report` : 'Total Report count';
+    const detailUsers = selectedState ? `${''} User post count` : "Today's Report";
     const totalUsersCountSteroid = total_users || userCount;
     return (
         <>
@@ -165,7 +164,7 @@ const DashboardPage = () => {
             >
                 <Grid container spacing={2} sx={{ mb: 3 }}>
                     <Grid item xs={12} sm={6} md={3}>
-                        <EarningCard count={todayReportCountSteroid} details={detailsText} icon={EarningIcon} />
+                        <EarningCard count={todayReportCountSteroid} details={"0"} icon={EarningIcon} />
                     </Grid>
                     <Grid item xs={12} sm={6} md={3}>
                         <EarningCard count={totalUsersCountSteroid} details={detailUsers} icon={EarningIcon} />
