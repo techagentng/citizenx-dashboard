@@ -150,8 +150,8 @@ const DashboardPage = () => {
 
     const todayReportCountSteroid = selectedState && topStates ? topStates[selectedState] || todayReportCount : todayReportCount;
 
-    const detailsText = selectedState ? `${selectedState} overall Report` : 'Total Report count';
-    const detailUsers = selectedState ? `${''} User post count` : "Today's Report";
+    // const detailsText = selectedState ? `${selectedState} overall Report` : 'Total Report count';
+    // const detailUsers = selectedState ? `${''} User post count` : "Today's Report";
     const totalUsersCountSteroid = total_users || userCount;
     return (
         <>
