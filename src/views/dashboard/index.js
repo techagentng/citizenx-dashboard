@@ -152,7 +152,7 @@ const DashboardPage = () => {
 
     // const detailsText = selectedState ? `${selectedState} overall Report` : 'Total Report count';
     // const detailUsers = selectedState ? `${''} User post count` : "Today's Report";
-    const totalUsersCountSteroid = total_users || userCount;
+    // const totalUsersCountSteroid = total_users || userCount;
     return (
         <>
             <MainCard
@@ -167,13 +167,13 @@ const DashboardPage = () => {
                         <EarningCard count={todayReportCountSteroid} details="Top LGA Cases" icon={EarningIcon} />
                     </Grid>
                     <Grid item xs={12} sm={6} md={3}>
-                        <EarningCard count={totalUsersCountSteroid} details="Top reported cases in State" icon={EarningIcon} />
+                        <EarningCard count={totalStateReports} details="Top reported cases in State" icon={EarningIcon} />
                     </Grid>
                     <Grid item xs={12} sm={6} md={3}>
                         <EarningCard count={onlineUsers} details="Active Users" icon={EarningIcon} />
                     </Grid>
                     <Grid item xs={12} sm={6} md={3}>
-                        <EarningCard count="230" details="Overall report in Nigeria" icon={EarningIcon} />
+                        <EarningCard count={totalOverallReports} details="Overall report in Nigeria" icon={EarningIcon} />
                     </Grid>
                 </Grid>
 
