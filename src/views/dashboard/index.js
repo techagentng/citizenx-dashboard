@@ -167,10 +167,10 @@ const DashboardPage = () => {
                         <EarningCard count={todayReportCountSteroid} details="Top LGA Cases" icon={EarningIcon} />
                     </Grid>
                     <Grid item xs={12} sm={6} md={3}>
-                        <EarningCard count={totalStateReports} details="Top reported cases in State" icon={EarningIcon} />
+                        <EarningCard count={onlineUsers} details="Online users" icon={EarningIcon} />
                     </Grid>
                     <Grid item xs={12} sm={6} md={3}>
-                        <EarningCard count={onlineUsers} details="Active Users" icon={EarningIcon} />
+                        <EarningCard count={totalStateReports} details="Total state reports" icon={EarningIcon} />
                     </Grid>
                     <Grid item xs={12} sm={6} md={3}>
                         <EarningCard count={totalOverallReports} details="Overall report in Nigeria" icon={EarningIcon} />
