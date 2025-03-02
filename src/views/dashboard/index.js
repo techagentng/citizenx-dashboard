@@ -23,9 +23,9 @@ const DashboardPage = () => {
     const { lga: selectedLga } = useSelector((state) => state.graphs.lgaState);
     const selectedState = useSelector((state) => state.graphs.lgaState.state);
     const { isLoggedIn } = useContext(JWTContext);
-    const { reportTypes, reportCounts, topStates, total_users } = useSelector((state) => state.graphs.graphs);
+    const { reportTypes, reportCounts, topStates } = useSelector((state) => state.graphs.graphs);
     const { good_percentage, bad_percentage } = useSelector((state) => state.graphs.reportPercent);
-    const [userCount, setUserCount] = useState(0);
+    const [setUserCount] = useState(0);
     const [todayReportCount, setTodayReportCount] = useState(0);
     const [onlineUsers, setOnlineUsers] = useState(0);
     const [formattedTopStates, setFormattedTopStates] = useState([]);
