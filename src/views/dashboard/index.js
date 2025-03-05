@@ -31,11 +31,11 @@ const DashboardPage = () => {
     const [formattedTopStates, setFormattedTopStates] = useState([]);
     const [reportTypeOptions, setReportTypes] = useState([]);
     const [selectedReportType, setSelectedReportType] = useState('Accidents');
-    // const [lgas, setLgas] = useState([]);
+    // const [ltotalLGAReportsgas, setLgas] = useState([]);
     // const [lgareportCounts, setLgaReportCounts] = useState([]);
     const [totalOverallReports, setTotalOverallReports] = useState(0);
     const [totalStateReports, setTotalStateReports] = useState(0);
-    const [totalLGAReports, setTotalLGAReports] = useState(0);
+    const [, setTotalLGAReports] = useState(0);
     const [reportData, setReportData] = useState(null);
 
     useEffect(() => {
@@ -246,7 +246,7 @@ const DashboardPage = () => {
                                 reportCount: reportCounts[index]
                             }))}
                             type="reportTypes"
-                            totalReportCount={totalLGAReports}
+                            totalReportCount={todayReportCountSteroid}
                         />
                     </Grid>
                     <Grid item xs={12} md={4}>
