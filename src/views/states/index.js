@@ -1,7 +1,8 @@
-import React, { useState, useRef } from 'react';
-import { Box, Button, Card, CardContent, CircularProgress, Grid, TextField, Typography, styled } from '@mui/material';
+import React, { useState, useRef, useEffect } from 'react';
+import { Box, Button, Card, CardContent, CircularProgress, Grid, TextField, Typography, styled, MenuItem } from '@mui/material';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import { createGovernor } from 'services/stateservice';
+import statesAndLgas from './statesAndLgas.json'; // 
 
 // Styled components for custom styling
 const StyledCard = styled(Card)(({ theme }) => ({
@@ -54,25 +55,38 @@ const StateForm = () => {
         state: '',
         governor: '',
         deputy_name: '',
-        lgac: '',
+        lgac: ''
     });
     const [files, setFiles] = useState({
         governor_image: null,
         deputy_image: null,
-        lgac_image: null,
+        lgac_image: null
     });
     const [errors, setErrors] = useState({});
+    const [states, setStates] = useState([]); // State for dropdown options
 
     // Refs for file inputs to reset them after submission
     const governorImageRef = useRef(null);
     const deputyImageRef = useRef(null);
     const lgacImageRef = useRef(null);
 
-    // Handle text field changes
+    // Populate states from statesAndLgas.json on mount
+    useEffect(() => {
+        const stateOptions = statesAndLgas.map((state) => ({
+            value: state.state,
+            label: state.state
+        }));
+        setStates(stateOptions);
+        // Optionally set a default state (e.g., 'Anambra' like StateLgaDropdown)
+        // if (!formValues.state && stateOptions.length > 0) {
+        //     setFormValues((prev) => ({ ...prev, state: 'Anambra' }));
+        // }
+    }, []);
+
+    // Handle text field and dropdown changes
     const handleTextChange = (e) => {
         const { name, value } = e.target;
         setFormValues((prev) => ({ ...prev, [name]: value }));
-        // Clear error on change
         if (errors[name]) {
             setErrors((prev) => ({ ...prev, [name]: '' }));
         }
@@ -84,7 +98,6 @@ const StateForm = () => {
         if (file) {
             setFiles((prev) => ({ ...prev, [fieldName]: file }));
             console.log(`${fieldName}: ${file.name}, ${file.size} bytes, ${file.type}`);
-            // Clear error on change
             if (errors[fieldName]) {
                 setErrors((prev) => ({ ...prev, [fieldName]: '' }));
             }
@@ -113,17 +126,14 @@ const StateForm = () => {
         setLoading(true);
         try {
             const formData = new FormData();
-            // Append text fields
             formData.append('state', formValues.state);
             formData.append('governor', formValues.governor);
             formData.append('deputy_name', formValues.deputy_name);
             formData.append('lgac', formValues.lgac);
-            // Append files
             formData.append('governor_image', files.governor_image);
             formData.append('deputy_image', files.deputy_image);
             formData.append('lgac_image', files.lgac_image);
 
-            // Log FormData contents
             for (let [key, value] of formData.entries()) {
                 if (value instanceof File) {
                     console.log(`${key}: ${value.name}, ${value.size} bytes, ${value.type}`);
@@ -134,11 +144,9 @@ const StateForm = () => {
 
             await createGovernor(formData);
             alert('State data saved successfully!');
-            // Reset form
             setFormValues({ state: '', governor: '', deputy_name: '', lgac: '' });
             setFiles({ governor_image: null, deputy_image: null, lgac_image: null });
             setErrors({});
-            // Reset file inputs
             governorImageRef.current.value = '';
             deputyImageRef.current.value = '';
             lgacImageRef.current.value = '';
@@ -163,9 +171,10 @@ const StateForm = () => {
 
                     <form onSubmit={handleSubmit}>
                         <Grid container spacing={3}>
-                            {/* State */}
+                            {/* State Dropdown */}
                             <Grid item xs={12} sm={6}>
                                 <TextField
+                                    select
                                     fullWidth
                                     label="State Name"
                                     name="state"
@@ -175,7 +184,16 @@ const StateForm = () => {
                                     helperText={errors.state}
                                     variant="outlined"
                                     sx={{ bgcolor: '#fff' }}
-                                />
+                                >
+                                    <MenuItem value="" disabled>
+                                        Select State
+                                    </MenuItem>
+                                    {states.map((option) => (
+                                        <MenuItem key={option.value} value={option.value}>
+                                            {option.label}
+                                        </MenuItem>
+                                    ))}
+                                </TextField>
                             </Grid>
 
                             {/* Governor */}

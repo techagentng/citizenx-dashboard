@@ -38,16 +38,14 @@ const StateLgaDropdown = () => {
 
     return (
         <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-            <TextField
-                select
-                value={selectedState || ''}
-                onChange={handleStateChange}
-                label="Select State"
-                size="small"
-            >
-                <MenuItem value="" disabled>State</MenuItem>
+            <TextField select value={selectedState || ''} onChange={handleStateChange} label="Select State" size="small">
+                <MenuItem value="" disabled>
+                    State
+                </MenuItem>
                 {states.map((option) => (
-                    <MenuItem key={option.value} value={option.value}>{option.label}</MenuItem>
+                    <MenuItem key={option.value} value={option.value}>
+                        {option.label}
+                    </MenuItem>
                 ))}
             </TextField>
             <TextField
@@ -58,9 +56,13 @@ const StateLgaDropdown = () => {
                 disabled={!selectedState}
                 size="small"
             >
-                <MenuItem value="" disabled>LGA</MenuItem>
+                <MenuItem value="" disabled>
+                    LGA
+                </MenuItem>
                 {lgas.map((option) => (
-                    <MenuItem key={option.value} value={option.value}>{option.label}</MenuItem>
+                    <MenuItem key={option.value} value={option.value}>
+                        {option.label}
+                    </MenuItem>
                 ))}
             </TextField>
         </Box>
