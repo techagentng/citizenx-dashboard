@@ -13,7 +13,8 @@ import PieChart2 from './piechart2';
 import NigerianMap from './nigeria-map';
 import { gridSpacing } from 'store/constant';
 import JWTContext from 'contexts/JWTContext';
-import { getAllUserCount, getAllReportsToday, getOnlineUsers } from 'services/userService';
+import { getAllUserCount, getAllReportsToday, getOnlineUsers, getTotalUserCount } from 'services/userService';
+
 import { getStateReportCountList } from 'services/reportService';
 import { getGraph, getPercentCount, setReportType } from 'store/slices/graphs';
 import {
