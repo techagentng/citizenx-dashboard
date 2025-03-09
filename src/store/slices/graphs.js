@@ -100,7 +100,6 @@ export function getPercentCount(reportType, state) {
             });
             dispatch(slice.actions.getPercentCountSuccess(response.data));
         } catch (error) {
-            console.error("xxxxxxxxxxxxxxxx",error);
             dispatch(slice.actions.hasError(error));
         }
     };
