@@ -34,7 +34,7 @@ const DashboardPage = () => {
     const { good_percentage, bad_percentage } = useSelector((state) => state.graphs.reportPercent);
     const [setUserCount] = useState(0);
     const [, setTodayReportCount] = useState(0);
-    const [onlineUsers, setOnlineUsers] = useState(0);
+    const [, setOnlineUsers] = useState(0);
     const [formattedTopStates, setFormattedTopStates] = useState([]);
     const [reportTypeOptions, setReportTypes] = useState([]);
     const [selectedReportType, setSelectedReportType] = useState('Accidents');
@@ -43,6 +43,7 @@ const DashboardPage = () => {
     const [, setTotalLGAReports] = useState(0);
     const [reportData, setReportData] = useState(null);
     const [reportCount, setReportCount] = useState(null);
+    const [totalUsers, setTotalUsers] = useState(0);
 
     useEffect(() => {
         // Fetch overall report count
@@ -168,6 +169,22 @@ const DashboardPage = () => {
                 setError(err.message);
             });
     }, [selectedLga]);
+
+    useEffect(() => {
+        const fetchUserCount = async () => {
+            try {
+                const data = await getTotalUserCount();
+                setTotalUsers(data.totalCount); // Adjust if the response structure is different
+            } catch (err) {
+                setError('Failed to fetch user count');
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchUserCount();
+    }, []);
+
     return (
         <>
             <MainCard
@@ -178,12 +195,12 @@ const DashboardPage = () => {
                 }
             >
                 <Grid container spacing={2} sx={{ mb: 3 }}>
-                    <Grid item xs={12} sm={6} md={3}>
-                        <EarningCard count={reportCount} details="Top LGA Cases" icon={EarningIcon} />
+                <Grid item xs={12} sm={6} md={3}>
+                        <EarningCard count={totalUsers} details="Registered users" icon={EarningIcon} />
                     </Grid>
                     <Grid item xs={12} sm={6} md={3}>
-                        <EarningCard count={onlineUsers} details="Online users" icon={EarningIcon} />
-                    </Grid>
+                        <EarningCard count={reportCount} details="Top LGA Report" icon={EarningIcon} />
+                    </Grid>                   
                     <Grid item xs={12} sm={6} md={3}>
                         <EarningCard count={totalStateReports} details="Total state reports" icon={EarningIcon} />
                     </Grid>
