@@ -73,6 +73,5 @@ const BarChart = ({ reportTypes, reportCounts }) => {
             <Bar data={data} options={options} />
         </div>
     );
-};
-
+}
 export default BarChart;
