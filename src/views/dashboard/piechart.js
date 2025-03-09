@@ -7,7 +7,7 @@ ChartJS.register(ArcElement, Tooltip, Legend);
 
 const PieChart = ({ reportTypes, reportCounts }) => {
     const navigate = useNavigate();
-
+    
     if (!reportTypes || !reportCounts || reportTypes.length === 0 || reportCounts.length === 0) {
         return <p>No data available</p>;
     }
@@ -20,7 +20,7 @@ const PieChart = ({ reportTypes, reportCounts }) => {
 
             const selectedData = {
                 state: reportType,
-                lga: 'LGA Name',
+                lga: "LGA Name",
                 count: clickedPieData
             };
 
@@ -30,23 +30,28 @@ const PieChart = ({ reportTypes, reportCounts }) => {
 
     const data = {
         labels: reportTypes,
-        datasets: [
-            {
-                data: reportCounts,
-                backgroundColor: [
-                    'rgb(16,72,51)'
-                    // Add more colors as needed
-                ]
-            }
-        ]
+        datasets: [{
+            data: reportCounts,
+            backgroundColor: [
+                'rgb(255, 99, 132)',    // Red-pink
+                'rgb(54, 162, 235)',    // Blue
+                'rgb(255, 205, 86)',    // Yellow
+                'rgb(75, 192, 192)',    // Teal
+                'rgb(153, 102, 255)',   // Purple
+                'rgb(255, 159, 64)',    // Orange
+                'rgb(199, 199, 199)',   // Grey
+                'rgb(83, 102, 44)',     // Olive
+            ],
+            hoverOffset: 4          // Adds a nice hover effect
+        }]
     };
 
     const options = {
-        onClick: handleClick
+        onClick: handleClick,
     };
 
     return (
-        <div style={{ width: '100%' }}>
+        <div style={{ width: '60%' }}>
             <Pie data={data} options={options} />
         </div>
     );
