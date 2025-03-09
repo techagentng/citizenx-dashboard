@@ -16,27 +16,33 @@ import JWTContext from 'contexts/JWTContext';
 import { getAllUserCount, getAllReportsToday, getOnlineUsers } from 'services/userService';
 import { getStateReportCountList } from 'services/reportService';
 import { getGraph, getPercentCount, setReportType } from 'store/slices/graphs';
-import { getCategories, getReportCountsByState, getReportCountByState, getReportCount, getReportCountsByLGA } from 'services/reportService';
+import {
+    getCategories,
+    getReportCountsByState,
+    getReportCountByState,
+    getReportCount,
+    getReportCountsByLGA,
+    getReportCountByLGA
+} from 'services/reportService';
 
 const DashboardPage = () => {
     const dispatch = useDispatch();
     const { lga: selectedLga } = useSelector((state) => state.graphs.lgaState);
     const selectedState = useSelector((state) => state.graphs.lgaState.state);
     const { isLoggedIn } = useContext(JWTContext);
-    const { reportTypes, reportCounts, topStates } = useSelector((state) => state.graphs.graphs);
+    const { reportTypes, reportCounts } = useSelector((state) => state.graphs.graphs);
     const { good_percentage, bad_percentage } = useSelector((state) => state.graphs.reportPercent);
     const [setUserCount] = useState(0);
-    const [todayReportCount, setTodayReportCount] = useState(0);
+    const [, setTodayReportCount] = useState(0);
     const [onlineUsers, setOnlineUsers] = useState(0);
     const [formattedTopStates, setFormattedTopStates] = useState([]);
     const [reportTypeOptions, setReportTypes] = useState([]);
     const [selectedReportType, setSelectedReportType] = useState('Accidents');
-    // const [ltotalLGAReportsgas, setLgas] = useState([]);
-    // const [lgareportCounts, setLgaReportCounts] = useState([]);
     const [totalOverallReports, setTotalOverallReports] = useState(0);
     const [totalStateReports, setTotalStateReports] = useState(0);
     const [, setTotalLGAReports] = useState(0);
     const [reportData, setReportData] = useState(null);
+    const [reportCount, setReportCount] = useState(null);
 
     useEffect(() => {
         // Fetch overall report count
@@ -148,11 +154,20 @@ const DashboardPage = () => {
     // if (loading) return <div>Loading...</div>;
     // if (error) return <div>Error: {error.message}</div>;
 
-    const todayReportCountSteroid = selectedState && topStates ? topStates[selectedState] || todayReportCount : todayReportCount;
+    // const todayReportCountSteroid = selectedState && topStates ? topStates[selectedState] || todayReportCount : todayReportCount;
 
     // const detailsText = selectedState ? `${selectedState} overall Report` : 'Total Report count';
     // const detailUsers = selectedState ? `${''} User post count` : "Today's Report";
     // const totalUsersCountSteroid = total_users || userCount;
+    useEffect(() => {
+        getReportCountByLGA(selectedLga)
+            .then((data) => {
+                setReportCount(data.total_reports);
+            })
+            .catch((err) => {
+                setError(err.message);
+            });
+    }, [selectedLga]);
     return (
         <>
             <MainCard
@@ -164,7 +179,7 @@ const DashboardPage = () => {
             >
                 <Grid container spacing={2} sx={{ mb: 3 }}>
                     <Grid item xs={12} sm={6} md={3}>
-                        <EarningCard count={todayReportCountSteroid} details="Top LGA Cases" icon={EarningIcon} />
+                        <EarningCard count={reportCount} details="Top LGA Cases" icon={EarningIcon} />
                     </Grid>
                     <Grid item xs={12} sm={6} md={3}>
                         <EarningCard count={onlineUsers} details="Online users" icon={EarningIcon} />
@@ -246,7 +261,7 @@ const DashboardPage = () => {
                                 reportCount: reportCounts[index]
                             }))}
                             type="reportTypes"
-                            totalReportCount={todayReportCountSteroid}
+                            totalReportCount={reportCount}
                         />
                     </Grid>
                     <Grid item xs={12} md={4}>
