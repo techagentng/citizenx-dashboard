@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { ComposableMap, Geographies, Geography } from 'react-simple-maps';
 import { Tooltip } from 'react-tooltip';
+import { useNavigate } from 'react-router-dom'; // Import useNavigate
 import geoData from './nigeria_lga_boundaries.geojson';
 import './tooltip.css';
 import { getMapMarkers } from 'services/mapService';
 
 const NigerianMap = () => {
     const [reportCountsMap, setReportCountsMap] = useState({});
+    const navigate = useNavigate(); // Hook for navigation
 
     // Fetch data on component mount
     useEffect(() => {
@@ -16,7 +18,7 @@ const NigerianMap = () => {
 
                 // Create a mapping of state names to their report counts
                 const reportCounts = data.reduce((acc, item) => {
-                    const stateName = item.state_name.trim(); // Trim any extra spaces
+                    const stateName = item.state_name.trim();
                     acc[stateName] = item.report_count;
                     return acc;
                 }, {});
@@ -33,7 +35,12 @@ const NigerianMap = () => {
 
     // Determine the fill color based on the report count
     const getFillColor = (count) => {
-        return count > 0 ? '#0e4934' : '#ffff'; // Green if count > 0, otherwise default color
+        return count > 0 ? '#0e4934' : '#ffff';
+    };
+
+    // Handle click on a state tile
+    const handleStateClick = (stateName) => {
+        navigate(`/reports/${stateName.toLowerCase().replace(/\s+/g, '-')}`); // Navigate to sub-report page
     };
 
     return (
@@ -53,7 +60,6 @@ const NigerianMap = () => {
                             const stateName = geo.properties.admin1Name.trim();
                             const count = getCountForState(stateName);
 
-                            // Debugging output for each state
                             console.log('State Name from GeoJSON:', stateName);
                             console.log('Report Count for State:', count);
 
@@ -61,10 +67,11 @@ const NigerianMap = () => {
                                 <Geography
                                     key={geo.rsmKey}
                                     geography={geo}
+                                    onClick={() => handleStateClick(stateName)} // Add click handler
                                     style={{
-                                        default: { fill: getFillColor(count), stroke: '#0e4934', strokeWidth: 1.5 },
-                                        hover: { fill: '#0e4934', stroke: '#000', strokeWidth: 0.75 },
-                                        pressed: { fill: '#E42', stroke: '#000', strokeWidth: 0.75 }
+                                        default: { fill: getFillColor(count), stroke: '#0e4934', strokeWidth: 1.5, cursor: 'pointer' }, // Add cursor pointer
+                                        hover: { fill: '#0e4934', stroke: '#000', strokeWidth: 0.75, cursor: 'pointer' },
+                                        pressed: { fill: '#E42', stroke: '#000', strokeWidth: 0.75, cursor: 'pointer' }
                                     }}
                                     data-tooltip-id="state-tooltip"
                                     data-tooltip-content={`
