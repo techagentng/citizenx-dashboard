@@ -39,8 +39,8 @@ const NigerianMap = () => {
     };
 
     // Handle click on a state tile
-    const handleStateClick = (stateName) => {
-        navigate(`/sub_reports/${stateName.toLowerCase().replace(/\s+/g, '-')}`); // Navigate to sub-report page
+    const handleStateClick = () => {
+        navigate('/sub_reports'); // Navigate to sub-report page
     };
 
     return (
