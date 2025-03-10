@@ -175,7 +175,7 @@ const DashboardPage = () => {
         const fetchUserCount = async () => {
             try {
                 const data = await getTotalUserCount();
-                setTotalUsers(data.totalCount); // Adjust if the response structure is different
+                setTotalUsers(data.total_users); 
             } catch (err) {
                 setError('Failed to fetch user count');
             } finally {
