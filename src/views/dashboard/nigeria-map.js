@@ -40,7 +40,7 @@ const NigerianMap = () => {
 
     // Handle click on a state tile
     const handleStateClick = () => {
-        navigate('/sub_reports'); // Navigate to sub-report page
+        navigate('dashboard/sub_reports'); // Navigate to sub-report page
     };
 
     return (
