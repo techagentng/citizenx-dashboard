@@ -7,8 +7,8 @@ import { DateRangePicker } from '@mui/x-date-pickers-pro/DateRangePicker';
 import { useDispatch, useSelector } from 'store';
 import { openDrawer } from 'store/slices/menu';
 import { setState, setLga, getGraph } from 'store/slices/graphs';
-import statesAndLgas from './statesAndLgas.json';
-import { getCategories } from 'services/reportService';
+import statesAndLgas from './statesAndLgas.json'; // Keep for LGAs temporarily
+import { getCategories, getStates } from 'services/reportService';
 
 import LogoSection from '../LogoSection';
 import MobileSection from './MobileSection';
@@ -18,8 +18,7 @@ import NotificationSection from './NotificationSection';
 import LAYOUT_CONST from 'constant';
 import useConfig from 'hooks/useConfig';
 import FloatingCart from './FloatingCart';
-import { IconMenu2 } from '@tabler/icons-react' 
-import MenuItemMenuItem from './StateLgaDropdown' 
+import { IconMenu2 } from '@tabler/icons-react';
 
 const Header = () => {
     const theme = useTheme();
@@ -36,25 +35,39 @@ const Header = () => {
     const [, setReportTypes] = useState(['Select type']);
     const selectedReportType = useSelector((state) => state.graphs.reportType);
 
+    // Fetch states from backend on mount
     useEffect(() => {
-        // Initialize states and LGAs
-        const stateNames = statesAndLgas.map((state) => ({ value: state.state, label: state.state }));
-        setStates(stateNames);
+        getStates()
+            .then((stateData) => {
+                // Map backend data to { value, label } format for dropdown
+                const stateOptions = stateData.map((state) => ({
+                    value: state.state, // Use state name as value
+                    label: state.state  // Display state name
+                }));
+                setStates(stateOptions);
 
-        // Set default state and LGA
-        const defaultState = 'Anambra';
-        const defaultLGA = 'Aguata';
+                // Set default state and LGA
+                const defaultState = 'Anambra';
+                const defaultLGA = 'Aguata';
 
-        const defaultStateData = statesAndLgas.find((state) => state.state === defaultState);
-        if (defaultStateData) {
-            const lgaOptions = defaultStateData.lgas.map((lga) => ({ value: lga, label: lga }));
-            setLgas(lgaOptions);
-            setSelectedLga(defaultLGA);
-        }
+                setSelectedState(defaultState);
+                dispatch(setState(defaultState));
 
-        // Dispatch default values
-        dispatch(setState(defaultState));
-        dispatch(setLga(defaultLGA));
+                // Temporary: Use JSON for LGAs
+                const defaultStateData = statesAndLgas.find((s) => s.state === defaultState);
+                if (defaultStateData) {
+                    const lgaOptions = defaultStateData.lgas.map((lga) => ({ value: lga, label: lga }));
+                    setLgas(lgaOptions);
+                    setSelectedLga(defaultLGA);
+                    dispatch(setLga(defaultLGA));
+                }
+            })
+            .catch((error) => {
+                console.error('Failed to fetch states:', error);
+                // Fallback to JSON if API fails (optional)
+                const stateNames = statesAndLgas.map((state) => ({ value: state.state, label: state.state }));
+                setStates(stateNames);
+            });
     }, [dispatch]);
 
     const handleStateChange = (event) => {
@@ -62,12 +75,17 @@ const Header = () => {
         setSelectedState(stateName);
         dispatch(setState(stateName));
 
+        // Temporary: Use JSON for LGAs
         const stateData = statesAndLgas.find((state) => state.state === stateName);
         if (stateData) {
             const lgaOptions = stateData.lgas.map((lga) => ({ value: lga, label: lga }));
             setLgas(lgaOptions);
+            setSelectedLga(''); // Reset LGA selection
+            dispatch(setLga(''));
         } else {
             setLgas([]);
+            setSelectedLga('');
+            dispatch(setLga(''));
         }
     };
 
@@ -87,7 +105,7 @@ const Header = () => {
     }, [dispatch, selectedState, selectedReportType, selectedLga, dateRange]);
 
     useEffect(() => {
-        if (selectedState !== 'State' && selectedLga !== 'LGA') {
+        if (selectedState && selectedState !== 'State' && selectedLga && selectedLga !== 'LGA') {
             handleSearch();
         }
     }, [selectedState, selectedLga, dateRange, handleSearch]);
@@ -153,7 +171,13 @@ const Header = () => {
             <Grid item></Grid>
             <Box sx={{ flexGrow: 1 }} />
             <Box sx={{ display: { xs: 'none', sm: 'flex' }, alignItems: 'center', gap: 2 }}>
-                <TextField id="standard-select-currency-1" select value={selectedState} onChange={handleStateChange} label="Select State">
+                <TextField
+                    id="standard-select-currency-1"
+                    select
+                    value={selectedState || 'State'}
+                    onChange={handleStateChange}
+                    label="Select State"
+                >
                     <MenuItem value="State" disabled>
                         State
                     </MenuItem>
@@ -166,7 +190,7 @@ const Header = () => {
                 <TextField
                     id="standard-select-currency-2"
                     select
-                    value={selectedLga}
+                    value={selectedLga || 'LGA'}
                     onChange={handleLgaChange}
                     label="Select LGA"
                     disabled={!selectedState || selectedState === 'State'}
@@ -181,8 +205,6 @@ const Header = () => {
                     ))}
                 </TextField>
                 <Box sx={{ width: '300px' }}>
-                    {' '}
-                    {/* Adjust the width as per your need */}
                     <LocalizationProvider dateAdapter={AdapterDayjs}>
                         <DateRangePicker
                             localeText={{ start: 'Start Date', end: 'End Date' }}
@@ -203,7 +225,6 @@ const Header = () => {
             <ProfileSection />
             <Box sx={{ display: { xs: 'block', sm: 'none' } }}>
                 <MobileSection />
-                <MenuItemMenuItem />
             </Box>
         </>
     );

@@ -144,32 +144,6 @@ export const getCategories = () => {
     });
 };
 
-export const getStates = () => {
-    return new Promise((resolve, reject) => {
-        const serviceToken = localStorage.getItem('serviceToken');
-        if (!serviceToken) {
-            return reject(new Error('No token found'));
-        }
-
-        axios
-            .get(`${process.env.REACT_APP_API_URL}/states`, {
-                headers: {
-                    Authorization: `Bearer ${serviceToken}`
-                }
-            })
-            .then((response) => {
-                if (response && response.data) {
-                    resolve(response.data.states);
-                } else {
-                    reject(new Error('No data found'));
-                }
-            })
-            .catch((error) => {
-                reject(error);
-            });
-    });
-};
-
 export const getStateReportCountList = () => {
     return new Promise((resolve, reject) => {
         const serviceToken = localStorage.getItem('serviceToken');
@@ -398,6 +372,33 @@ export const getReportCountByLGA = (lga) => {
                     resolve(response.data);
                 } else {
                     reject(new Error("No data found"));
+                }
+            })
+            .catch((error) => {
+                reject(error);
+            });
+    });
+};
+
+// New function to fetch states
+export const getStates = () => {
+    return new Promise((resolve, reject) => {
+        const serviceToken = localStorage.getItem("serviceToken");
+        if (!serviceToken) {
+            return reject(new Error("No token found"));
+        }
+
+        axios
+            .get(`${process.env.REACT_APP_API_URL}/states`, {
+                headers: {
+                    Authorization: `Bearer ${serviceToken}`,
+                },
+            })
+            .then((response) => {
+                if (response && response.data) {
+                    resolve(response.data);
+                } else {
+                    reject(new Error("No states found"));
                 }
             })
             .catch((error) => {
