@@ -80,7 +80,7 @@ const Header = () => {
         if (stateData) {
             const lgaOptions = stateData.lgas.map((lga) => ({ value: lga, label: lga }));
             setLgas(lgaOptions);
-            setSelectedLga(''); 
+            setSelectedLga(''); // Reset LGA selection
             dispatch(setLga(''));
         } else {
             setLgas([]);
@@ -174,12 +174,12 @@ const Header = () => {
                 <TextField
                     id="standard-select-currency-1"
                     select
-                    value={selectedState || defaultState}
+                    value={selectedState || 'State'}
                     onChange={handleStateChange}
                     label="Select State"
                 >
                     <MenuItem value="State" disabled>
-                        {defaultState}
+                        State
                     </MenuItem>
                     {states.map((option) => (
                         <MenuItem key={option.value} value={option.value}>
