@@ -80,7 +80,7 @@ const Header = () => {
         if (stateData) {
             const lgaOptions = stateData.lgas.map((lga) => ({ value: lga, label: lga }));
             setLgas(lgaOptions);
-            setSelectedLga(''); // Reset LGA selection
+            setSelectedLga(''); 
             dispatch(setLga(''));
         } else {
             setLgas([]);
