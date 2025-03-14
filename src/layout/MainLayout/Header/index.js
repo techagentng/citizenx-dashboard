@@ -174,12 +174,12 @@ const Header = () => {
                 <TextField
                     id="standard-select-currency-1"
                     select
-                    value={selectedState || 'State'}
+                    value={selectedState || defaultState}
                     onChange={handleStateChange}
                     label="Select State"
                 >
-                    <MenuItem value={defaultState} disabled>
-                        State
+                    <MenuItem value="State" disabled>
+                        {defaultState}
                     </MenuItem>
                     {states.map((option) => (
                         <MenuItem key={option.value} value={option.value}>
