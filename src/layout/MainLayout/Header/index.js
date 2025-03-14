@@ -178,7 +178,7 @@ const Header = () => {
                     onChange={handleStateChange}
                     label="Select State"
                 >
-                    <MenuItem value="State" disabled>
+                    <MenuItem value={defaultState} disabled>
                         State
                     </MenuItem>
                     {states.map((option) => (
