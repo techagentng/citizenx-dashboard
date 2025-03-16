@@ -63,22 +63,20 @@ const Header = () => {
         setSelectedState(stateName);
         dispatch(setState(stateName));
     
-        // Fetch LGAs for the selected state
-        getLGAs(stateName)
-            .then((lgaData) => {
-                const lgaOptions = lgaData.map((lga) => ({ value: lga, label: lga }));
-                setLgas(lgaOptions);
-                setSelectedLga(''); // Reset LGA
-                dispatch(setLga(''));
-            })
-            .catch((error) => {
-                console.error('Failed to fetch LGAs:', error);
-                setLgas([]);
-                setSelectedLga('');
-                dispatch(setLga(''));
-            });
+        // Find the selected state in the states array
+        const selectedStateData = states.find((state) => state.state === stateName);
+        if (selectedStateData && selectedStateData.lgas) {
+            const lgaOptions = selectedStateData.lgas.map((lga) => ({ value: lga, label: lga }));
+            setLgas(lgaOptions);
+            setSelectedLga(''); // Reset LGA
+            dispatch(setLga(''));
+        } else {
+            setLgas([]);
+            setSelectedLga('');
+            dispatch(setLga(''));
+        }
     };
-    
+
     const handleLgaChange = (event) => {
         const lgaName = event.target.value;
         setSelectedLga(lgaName);
