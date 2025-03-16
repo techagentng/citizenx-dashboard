@@ -7,7 +7,6 @@ import { DateRangePicker } from '@mui/x-date-pickers-pro/DateRangePicker';
 import { useDispatch, useSelector } from 'store';
 import { openDrawer } from 'store/slices/menu';
 import { setState, setLga, getGraph } from 'store/slices/graphs';
-import statesAndLgas from './statesAndLgas.json'; // Keep for LGAs temporarily
 import { getCategories, getStates } from 'services/reportService';
 
 import LogoSection from '../LogoSection';
@@ -26,47 +25,39 @@ const Header = () => {
     const { drawerOpen } = useSelector((state) => state.menu);
     const matchDownMd = useMediaQuery(theme.breakpoints.down('md'));
     const { layout } = useConfig();
-    const [states, setStates] = useState([]);
+    const [states, setStates] = useState([]); // Full state objects
     const [lgas, setLgas] = useState([]);
-    const [selectedState, setSelectedState] = useState('');
+    const [selectedState, setSelectedState] = useState('Anambra');
     const [selectedLga, setSelectedLga] = useState('');
     const [dateRange, setDateRange] = useState([null, null]);
     const [, setValue] = useState('');
     const [, setReportTypes] = useState(['Select type']);
     const selectedReportType = useSelector((state) => state.graphs.reportType);
 
-    // Fetch states from backend on mount
     useEffect(() => {
         getStates()
             .then((stateData) => {
-                // Map backend data to { value, label } format for dropdown
+                // Store full state objects with value/label for dropdown
                 const stateOptions = stateData.map((state) => ({
-                    value: state.state, // Use state name as value
-                    label: state.state  // Display state name
+                    ...state,
+                    value: state.state,
+                    label: state.state,
                 }));
                 setStates(stateOptions);
 
-                // Set default state and LGA
-                const defaultState = 'Anambra';
-                const defaultLGA = 'Aguata';
-
-                setSelectedState(defaultState);
-                dispatch(setState(defaultState));
-
-                // Temporary: Use JSON for LGAs
-                const defaultStateData = statesAndLgas.find((s) => s.state === defaultState);
-                if (defaultStateData) {
+                // Set LGAs for the default state ("Anambra")
+                const defaultStateData = stateOptions.find((s) => s.state === 'Anambra');
+                if (defaultStateData && defaultStateData.lgas) {
                     const lgaOptions = defaultStateData.lgas.map((lga) => ({ value: lga, label: lga }));
                     setLgas(lgaOptions);
+                    const defaultLGA = 'Aguata';
                     setSelectedLga(defaultLGA);
                     dispatch(setLga(defaultLGA));
+                    dispatch(setState('Anambra'));
                 }
             })
             .catch((error) => {
                 console.error('Failed to fetch states:', error);
-                // Fallback to JSON if API fails (optional)
-                const stateNames = statesAndLgas.map((state) => ({ value: state.state, label: state.state }));
-                setStates(stateNames);
             });
     }, [dispatch]);
 
@@ -75,12 +66,12 @@ const Header = () => {
         setSelectedState(stateName);
         dispatch(setState(stateName));
 
-        // Temporary: Use JSON for LGAs
-        const stateData = statesAndLgas.find((state) => state.state === stateName);
-        if (stateData) {
+        // Use the full state object to set LGAs
+        const stateData = states.find((state) => state.value === stateName);
+        if (stateData && stateData.lgas) {
             const lgaOptions = stateData.lgas.map((lga) => ({ value: lga, label: lga }));
             setLgas(lgaOptions);
-            setSelectedLga(''); // Reset LGA selection
+            setSelectedLga(''); // Reset LGA
             dispatch(setLga(''));
         } else {
             setLgas([]);
@@ -105,7 +96,7 @@ const Header = () => {
     }, [dispatch, selectedState, selectedReportType, selectedLga, dateRange]);
 
     useEffect(() => {
-        if (selectedState && selectedState !== 'State' && selectedLga && selectedLga !== 'LGA') {
+        if (selectedState && selectedLga && selectedState !== 'State' && selectedLga !== 'LGA') {
             handleSearch();
         }
     }, [selectedState, selectedLga, dateRange, handleSearch]);
@@ -171,16 +162,7 @@ const Header = () => {
             <Grid item></Grid>
             <Box sx={{ flexGrow: 1 }} />
             <Box sx={{ display: { xs: 'none', sm: 'flex' }, alignItems: 'center', gap: 2 }}>
-                <TextField
-                    id="standard-select-currency-1"
-                    select
-                    value={selectedState || 'State'}
-                    onChange={handleStateChange}
-                    label="Select State"
-                >
-                    <MenuItem value="State" disabled>
-                        State
-                    </MenuItem>
+                <TextField id="state-select" select value={selectedState} onChange={handleStateChange} label="Select State">
                     {states.map((option) => (
                         <MenuItem key={option.value} value={option.value}>
                             {option.label}
@@ -188,12 +170,12 @@ const Header = () => {
                     ))}
                 </TextField>
                 <TextField
-                    id="standard-select-currency-2"
+                    id="lga-select"
                     select
                     value={selectedLga || 'LGA'}
                     onChange={handleLgaChange}
                     label="Select LGA"
-                    disabled={!selectedState || selectedState === 'State'}
+                    disabled={!selectedState}
                 >
                     <MenuItem value="LGA" disabled>
                         LGA

@@ -406,3 +406,32 @@ export const getStates = () => {
             });
     });
 };
+
+export const getLGAs = () => {
+    return new Promise((resolve, reject) => {
+        const serviceToken = localStorage.getItem("serviceToken");
+        if (!serviceToken) {
+            return reject(new Error("No authentication token found"));
+        }
+
+        axios
+            .get(`${process.env.REACT_APP_API_URL}/lgas`, {
+                headers: {
+                    Authorization: `Bearer ${serviceToken}`,
+                },
+            })
+            .then((response) => {
+                // Resolve with data, even if empty
+                resolve(response.data || []);
+            })
+            .catch((error) => {
+                if (error.response) {
+                    reject(new Error(`API error: ${error.response.status} - ${error.response.data.error || 'Unknown error'}`));
+                } else if (error.request) {
+                    reject(new Error("Network error: Unable to reach the server"));
+                } else {
+                    reject(error);
+                }
+            });
+    });
+};
