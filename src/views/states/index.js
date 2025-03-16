@@ -1,10 +1,10 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Box, Button, Card, CardContent, CircularProgress, Grid, TextField, Typography, styled, MenuItem } from '@mui/material';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
-import { createGovernor } from 'services/stateservice';
-import statesAndLgas from './statesAndLgas.json'; // 
+import { createState } from 'services/stateservice'; // Renamed from createGovernor
+import { getStates } from 'services/reportService'; // Import getStates
 
-// Styled components for custom styling
+// Styled components remain unchanged
 const StyledCard = styled(Card)(({ theme }) => ({
     maxWidth: 900,
     margin: '0 auto',
@@ -55,7 +55,8 @@ const StateForm = () => {
         state: '',
         governor: '',
         deputy_name: '',
-        lgac: ''
+        lgac: '',
+        lgas: '' // Added for comma-separated LGA input
     });
     const [files, setFiles] = useState({
         governor_image: null,
@@ -63,24 +64,22 @@ const StateForm = () => {
         lgac_image: null
     });
     const [errors, setErrors] = useState({});
-    const [states, setStates] = useState([]); // State for dropdown options
+    const [states, setStates] = useState([]); // Dynamic state options
 
-    // Refs for file inputs to reset them after submission
-    const governorImageRef = useRef(null);
-    const deputyImageRef = useRef(null);
-    const lgacImageRef = useRef(null);
-
-    // Populate states from statesAndLgas.json on mount
+    // Fetch states dynamically on mount
     useEffect(() => {
-        const stateOptions = statesAndLgas.map((state) => ({
-            value: state.state,
-            label: state.state
-        }));
-        setStates(stateOptions);
-        // Optionally set a default state (e.g., 'Anambra' like StateLgaDropdown)
-        // if (!formValues.state && stateOptions.length > 0) {
-        //     setFormValues((prev) => ({ ...prev, state: 'Anambra' }));
-        // }
+        getStates()
+            .then((stateData) => {
+                const stateOptions = stateData.map((state) => ({
+                    value: state.state,
+                    label: state.state
+                }));
+                setStates(stateOptions);
+            })
+            .catch((error) => {
+                console.error('Failed to fetch states:', error);
+                setStates([]); // Empty fallback
+            });
     }, []);
 
     // Handle text field and dropdown changes
@@ -97,20 +96,20 @@ const StateForm = () => {
         const file = e.target.files[0];
         if (file) {
             setFiles((prev) => ({ ...prev, [fieldName]: file }));
-            console.log(`${fieldName}: ${file.name}, ${file.size} bytes, ${file.type}`);
             if (errors[fieldName]) {
                 setErrors((prev) => ({ ...prev, [fieldName]: '' }));
             }
         }
     };
 
-    // Simple validation
+    // Validation
     const validate = () => {
         const newErrors = {};
         if (!formValues.state) newErrors.state = 'State name is required';
         if (!formValues.governor) newErrors.governor = 'Governor name is required';
         if (!formValues.deputy_name) newErrors.deputy_name = 'Deputy name is required';
         if (!formValues.lgac) newErrors.lgac = 'LGA Chair name is required';
+        if (!formValues.lgas) newErrors.lgas = 'At least one LGA is required';
         if (!files.governor_image) newErrors.governor_image = 'Governor image is required';
         if (!files.deputy_image) newErrors.deputy_image = 'Deputy image is required';
         if (!files.lgac_image) newErrors.lgac_image = 'LGAC image is required';
@@ -125,34 +124,26 @@ const StateForm = () => {
 
         setLoading(true);
         try {
-            const formData = new FormData();
-            formData.append('state', formValues.state);
-            formData.append('governor', formValues.governor);
-            formData.append('deputy_name', formValues.deputy_name);
-            formData.append('lgac', formValues.lgac);
-            formData.append('governor_image', files.governor_image);
-            formData.append('deputy_image', files.deputy_image);
-            formData.append('lgac_image', files.lgac_image);
+            const payload = {
+                state: formValues.state,
+                governor: formValues.governor,
+                deputyName: formValues.deputy_name,
+                lgac: formValues.lgac,
+                lgas: formValues.lgas.split(',').map((lga) => lga.trim()), // Convert to array
+                governorImage: files.governor_image,
+                deputyImage: files.deputy_image,
+                lgacImage: files.lgac_image
+            };
 
-            for (let [key, value] of formData.entries()) {
-                if (value instanceof File) {
-                    console.log(`${key}: ${value.name}, ${value.size} bytes, ${value.type}`);
-                } else {
-                    console.log(`${key}: ${value}`);
-                }
-            }
-
-            await createGovernor(formData);
+            await createState(payload); // Assumes createState handles FormData
             alert('State data saved successfully!');
-            setFormValues({ state: '', governor: '', deputy_name: '', lgac: '' });
+            setFormValues({ state: '', governor: '', deputy_name: '', lgac: '', lgas: '' });
             setFiles({ governor_image: null, deputy_image: null, lgac_image: null });
             setErrors({});
-            governorImageRef.current.value = '';
-            deputyImageRef.current.value = '';
-            lgacImageRef.current.value = '';
         } catch (error) {
             console.error('Error saving state data:', error);
-            alert('Failed to save state data. Please try again.');
+            const errorMessage = error.response?.data?.error || 'Failed to save state data. Please try again.';
+            alert(errorMessage);
         } finally {
             setLoading(false);
         }
@@ -241,19 +232,27 @@ const StateForm = () => {
                                 />
                             </Grid>
 
+                            {/* LGAs */}
+                            <Grid item xs={12}>
+                                <TextField
+                                    fullWidth
+                                    label="Local Government Areas (comma-separated)"
+                                    name="lgas"
+                                    value={formValues.lgas}
+                                    onChange={handleTextChange}
+                                    error={!!errors.lgas}
+                                    helperText={errors.lgas || 'e.g., Aguata, Awka North'}
+                                    variant="outlined"
+                                    sx={{ bgcolor: '#fff' }}
+                                />
+                            </Grid>
+
                             {/* Governor Image */}
                             <Grid item xs={12} sm={4}>
                                 <FileInputLabel>
                                     <CloudUploadIcon sx={{ mr: 1, color: '#1976d2' }} />
                                     Upload Governor Image
-                                    <input
-                                        type="file"
-                                        name="governor_image"
-                                        hidden
-                                        accept="image/*"
-                                        ref={governorImageRef}
-                                        onChange={(e) => handleFileChange(e, 'governor_image')}
-                                    />
+                                    <input type="file" hidden accept="image/*" onChange={(e) => handleFileChange(e, 'governor_image')} />
                                 </FileInputLabel>
                                 {files.governor_image && (
                                     <Typography variant="body2" sx={{ mt: 1 }}>
@@ -272,14 +271,7 @@ const StateForm = () => {
                                 <FileInputLabel>
                                     <CloudUploadIcon sx={{ mr: 1, color: '#1976d2' }} />
                                     Upload Deputy Image
-                                    <input
-                                        type="file"
-                                        name="deputy_image"
-                                        hidden
-                                        accept="image/*"
-                                        ref={deputyImageRef}
-                                        onChange={(e) => handleFileChange(e, 'deputy_image')}
-                                    />
+                                    <input type="file" hidden accept="image/*" onChange={(e) => handleFileChange(e, 'deputy_image')} />
                                 </FileInputLabel>
                                 {files.deputy_image && (
                                     <Typography variant="body2" sx={{ mt: 1 }}>
@@ -298,14 +290,7 @@ const StateForm = () => {
                                 <FileInputLabel>
                                     <CloudUploadIcon sx={{ mr: 1, color: '#1976d2' }} />
                                     Upload LGAC Image
-                                    <input
-                                        type="file"
-                                        name="lgac_image"
-                                        hidden
-                                        accept="image/*"
-                                        ref={lgacImageRef}
-                                        onChange={(e) => handleFileChange(e, 'lgac_image')}
-                                    />
+                                    <input type="file" hidden accept="image/*" onChange={(e) => handleFileChange(e, 'lgac_image')} />
                                 </FileInputLabel>
                                 {files.lgac_image && (
                                     <Typography variant="body2" sx={{ mt: 1 }}>
