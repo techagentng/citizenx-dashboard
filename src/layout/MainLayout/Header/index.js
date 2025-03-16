@@ -36,24 +36,21 @@ const Header = () => {
 
     useEffect(() => {
         getStates()
-            .then((stateData) => {
-                // Store full state objects with value/label for dropdown
-                const stateOptions = stateData.map((state) => ({
-                    ...state,
-                    value: state.state,
-                    label: state.state,
-                }));
+            .then((response) => {
+                // Assuming response is { states: [...] }
+                const stateOptions = response.states
+                    .filter((state) => state !== '') // Remove empty strings
+                    .map((stateName) => ({
+                        value: stateName,
+                        label: stateName
+                    }));
                 setStates(stateOptions);
 
-                // Set LGAs for the default state ("Anambra")
-                const defaultStateData = stateOptions.find((s) => s.state === 'Anambra');
-                if (defaultStateData && defaultStateData.lgas) {
-                    const lgaOptions = defaultStateData.lgas.map((lga) => ({ value: lga, label: lga }));
-                    setLgas(lgaOptions);
-                    const defaultLGA = 'Aguata';
-                    setSelectedLga(defaultLGA);
-                    dispatch(setLga(defaultLGA));
-                    dispatch(setState('Anambra'));
+                // Since the API doesn't provide LGAs, skip LGA logic or fetch separately
+                const defaultState = 'Anambra';
+                if (stateOptions.some((s) => s.value === defaultState)) {
+                    setSelectedState(defaultState);
+                    dispatch(setState(defaultState));
                 }
             })
             .catch((error) => {
