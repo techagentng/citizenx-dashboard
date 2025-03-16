@@ -407,7 +407,7 @@ export const getStates = () => {
     });
 };
 
-export const getLGAs = () => {
+export const getLGAs = (state) => {
     return new Promise((resolve, reject) => {
         const serviceToken = localStorage.getItem("serviceToken");
         if (!serviceToken) {
@@ -415,7 +415,7 @@ export const getLGAs = () => {
         }
 
         axios
-            .get(`${process.env.REACT_APP_API_URL}/lgas`, {
+            .get(`${process.env.REACT_APP_API_URL}/lgas?state=${state}`, {
                 headers: {
                     Authorization: `Bearer ${serviceToken}`,
                 },
