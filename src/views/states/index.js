@@ -75,11 +75,23 @@ const StateForm = () => {
     // Fetch states on mount
     useEffect(() => {
         getStates()
-            .then((stateData) => {
-                const stateOptions = stateData.map((state) => ({
-                    value: state.state,
-                    label: state.state
-                }));
+            .then((response) => {
+                console.log('StateForm - Raw response:', response);
+                // Normalize the response
+                let stateArray = response;
+                if (response.states) stateArray = response.states; // Handle {states: [...]}
+                else if (!Array.isArray(response)) stateArray = []; // Fallback for non-array
+    
+                const stateOptions = stateArray
+                    .filter((state) => state && state !== '') // Filter falsy values
+                    .map((state) => {
+                        // Handle both string and object cases
+                        const stateValue = typeof state === 'string' ? state : state.state;
+                        return {
+                            value: stateValue,
+                            label: stateValue
+                        };
+                    });
                 setStates(stateOptions);
             })
             .catch((error) => {
@@ -87,7 +99,6 @@ const StateForm = () => {
                 setStates([]);
             });
     }, []);
-
     // Fetch LGAs when state changes
     useEffect(() => {
         if (formValues.state) {
