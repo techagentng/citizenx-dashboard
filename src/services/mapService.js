@@ -10,7 +10,7 @@ export const getMapMarkers = () => {
                 }
             })
             .then((response) => {
-                console.log('API response:::::', response);
+                // console.log('API response:::::', response);
                 resolve(response.data.data);
             })
             .catch((error) => {
@@ -27,7 +27,7 @@ export const getStateCount = async () => {
                 Authorization: `Bearer ${serviceToken}` 
             }
         });
-        console.log('Response:', response);
+        // console.log('Response:', response);
         if (response.status === 200) {
             return response.data.data;
         } else {
