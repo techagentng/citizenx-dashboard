@@ -36,15 +36,14 @@ const Header = () => {
 
     useEffect(() => {
         getStates()
-            .then((states) => {
-                console.log('Raw states response:', states); // Debug the response
-                // Ensure states is an array before filtering
-                const stateArray = Array.isArray(states) ? states : [];
+            .then((response) => {
+                console.log('Raw states response:', response);
+                const stateArray = response.states || [];
                 const stateOptions = stateArray
-                    .filter((state) => state.State && state.State !== '') // Assumes state.State is a pointer
+                    .filter((state) => state && state !== '') 
                     .map((state) => ({
-                        value: state.State,
-                        label: state.State
+                        value: state,
+                        label: state
                     }));
                 setStates(stateOptions);
     
@@ -52,7 +51,7 @@ const Header = () => {
                 if (stateOptions.some((s) => s.value === defaultState)) {
                     setSelectedState(defaultState);
                     dispatch(setState(defaultState));
-                    getLGAs(defaultState) // Use getLGAs consistently
+                    getLGAs(defaultState)
                         .then((lgas) => {
                             const lgaOptions = lgas.map((lga) => ({ value: lga, label: lga }));
                             setLgas(lgaOptions);
