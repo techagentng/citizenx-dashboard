@@ -299,9 +299,6 @@ const StateForm = () => {
                                     helperText={errors.lgas || 'Select one or more LGAs'}
                                     variant="outlined"
                                     sx={{ bgcolor: '#fff' }}
-                                    SelectProps={{
-                                        renderValue: (selected) => selected.join(', ')
-                                    }}
                                     disabled={!formValues.state}
                                     key={formValues.state} // Force re-render when state changes
                                 >
