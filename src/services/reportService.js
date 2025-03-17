@@ -283,7 +283,7 @@ export const getReportCount = () => {
         }
 
         axios
-        .get(`${process.env.REACT_APP_API_URL}/incident_reports/count`, {
+            .get(`${process.env.REACT_APP_API_URL}/incident_reports/count`, {
                 headers: {
                     Authorization: `Bearer ${serviceToken}`
                 }
@@ -300,7 +300,6 @@ export const getReportCount = () => {
             });
     });
 };
-
 
 export const getReportCountByState = (state) => {
     return new Promise((resolve, reject) => {
@@ -330,22 +329,22 @@ export const getReportCountByState = (state) => {
 
 export const getGovernorDetails = (state) => {
     return new Promise((resolve, reject) => {
-        const serviceToken = localStorage.getItem("serviceToken");
+        const serviceToken = localStorage.getItem('serviceToken');
         if (!serviceToken) {
-            return reject(new Error("No token found"));
+            return reject(new Error('No token found'));
         }
 
         axios
             .get(`${process.env.REACT_APP_API_URL}/state/governor?state=${state}`, {
                 headers: {
-                    Authorization: `Bearer ${serviceToken}`,
-                },
+                    Authorization: `Bearer ${serviceToken}`
+                }
             })
             .then((response) => {
                 if (response && response.data) {
                     resolve(response.data);
                 } else {
-                    reject(new Error("No data found"));
+                    reject(new Error('No data found'));
                 }
             })
             .catch((error) => {
@@ -356,22 +355,22 @@ export const getGovernorDetails = (state) => {
 
 export const getReportCountByLGA = (lga) => {
     return new Promise((resolve, reject) => {
-        const serviceToken = localStorage.getItem("serviceToken");
+        const serviceToken = localStorage.getItem('serviceToken');
         if (!serviceToken) {
-            return reject(new Error("No token found"));
+            return reject(new Error('No token found'));
         }
 
         axios
             .get(`${process.env.REACT_APP_API_URL}/reports/count?lga=${lga}`, {
                 headers: {
-                    Authorization: `Bearer ${serviceToken}`,
-                },
+                    Authorization: `Bearer ${serviceToken}`
+                }
             })
             .then((response) => {
                 if (response && response.data) {
                     resolve(response.data);
                 } else {
-                    reject(new Error("No data found"));
+                    reject(new Error('No data found'));
                 }
             })
             .catch((error) => {
@@ -383,22 +382,22 @@ export const getReportCountByLGA = (lga) => {
 // New function to fetch states
 export const getStates = () => {
     return new Promise((resolve, reject) => {
-        const serviceToken = localStorage.getItem("serviceToken");
+        const serviceToken = localStorage.getItem('serviceToken');
         if (!serviceToken) {
-            return reject(new Error("No token found"));
+            return reject(new Error('No token found'));
         }
 
         axios
             .get(`${process.env.REACT_APP_API_URL}/states`, {
                 headers: {
-                    Authorization: `Bearer ${serviceToken}`,
-                },
+                    Authorization: `Bearer ${serviceToken}`
+                }
             })
             .then((response) => {
                 if (response && response.data) {
                     resolve(response.data);
                 } else {
-                    reject(new Error("No states found"));
+                    reject(new Error('No states found'));
                 }
             })
             .catch((error) => {
@@ -409,26 +408,26 @@ export const getStates = () => {
 
 export const getLGAs = (state) => {
     return new Promise((resolve, reject) => {
-        const serviceToken = localStorage.getItem("serviceToken");
+        const serviceToken = localStorage.getItem('serviceToken');
         if (!serviceToken) {
-            return reject(new Error("No authentication token found"));
+            return reject(new Error('No authentication token found'));
         }
 
         axios
-            .get(`${process.env.REACT_APP_API_URL}/lgas?state=${state}`, {
+            .get(`${process.env.REACT_APP_API_URL}/lgas/${state}`, {
+                // Changed to path parameter
                 headers: {
-                    Authorization: `Bearer ${serviceToken}`,
-                },
+                    Authorization: `Bearer ${serviceToken}`
+                }
             })
             .then((response) => {
-                // Resolve with data, even if empty
                 resolve(response.data || []);
             })
             .catch((error) => {
                 if (error.response) {
                     reject(new Error(`API error: ${error.response.status} - ${error.response.data.error || 'Unknown error'}`));
                 } else if (error.request) {
-                    reject(new Error("Network error: Unable to reach the server"));
+                    reject(new Error('Network error: Unable to reach the server'));
                 } else {
                     reject(error);
                 }
