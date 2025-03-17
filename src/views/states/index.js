@@ -97,7 +97,7 @@ const StateForm = () => {
                     setLgas(lgaOptions);
                 })
                 .catch((error) => {
-                    console.error(`Failed to fetch LGAs for ${formValues.state}:`, error);
+                    console.error(`Failed to fetch LGAs for ${formValues.state}:`, error.message);
                     setLgas([]);
                 });
         } else {
