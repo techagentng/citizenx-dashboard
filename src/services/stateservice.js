@@ -1,3 +1,4 @@
+// stateservice.js
 import axios from 'axios';
 
 export const createState = (payload) => {
@@ -16,11 +17,10 @@ export const createState = (payload) => {
         if (payload.deputyName) formData.append('deputy_name', payload.deputyName);
         if (payload.lgac) formData.append('lgac', payload.lgac);
         if (payload.lgas) {
-            // Send LGAs as a JSON string (backend supports JSON or comma-separated)
-            formData.append('lgas', JSON.stringify(payload.lgas));
+            formData.append('lgas', JSON.stringify(payload.lgas)); // Backend expects JSON string
         }
 
-        // Add file fields from payload (assuming they're File objects)
+        // Add file fields from payload (File objects from StateForm)
         if (payload.governorImage) formData.append('governor_image', payload.governorImage);
         if (payload.deputyImage) formData.append('deputy_image', payload.deputyImage);
         if (payload.lgacImage) formData.append('lgac_image', payload.lgacImage);
@@ -29,7 +29,8 @@ export const createState = (payload) => {
             .post(`${process.env.REACT_APP_API_URL}/states`, formData, {
                 headers: {
                     Authorization: `Bearer ${serviceToken}`,
-                },
+                    'Content-Type': 'multipart/form-data' // Explicitly set
+                }
             })
             .then((response) => {
                 resolve(response.data);
@@ -45,7 +46,3 @@ export const createState = (payload) => {
             });
     });
 };
-
-createState(payload)
-    .then((response) => console.log('Success:', response))
-    .catch((error) => console.error('Error:', error.message));
