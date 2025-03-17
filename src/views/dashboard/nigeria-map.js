@@ -14,7 +14,7 @@ const NigerianMap = () => {
     useEffect(() => {
         getMapMarkers()
             .then((data) => {
-                console.log('Fetched MAP Data:', data);
+                // console.log('Fetched MAP Data:', data);
 
                 // Create a mapping of state names to their report counts
                 const reportCounts = data.reduce((acc, item) => {
