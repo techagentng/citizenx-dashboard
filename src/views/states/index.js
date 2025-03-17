@@ -79,9 +79,10 @@ const StateForm = () => {
                 console.log('StateForm - Raw response:', response);
                 // Normalize the response
                 let stateArray = response;
-                if (response.states) stateArray = response.states; // Handle {states: [...]}
+                if (response.states)
+                    stateArray = response.states; // Handle {states: [...]}
                 else if (!Array.isArray(response)) stateArray = []; // Fallback for non-array
-    
+
                 const stateOptions = stateArray
                     .filter((state) => state && state !== '') // Filter falsy values
                     .map((state) => {
@@ -104,12 +105,16 @@ const StateForm = () => {
         if (formValues.state) {
             getLGAs(formValues.state)
                 .then((lgaData) => {
+                    console.log(`LGA Data for ${formValues.state}:`, lgaData);
                     const lgaOptions = lgaData.map((lga) => ({ value: lga, label: lga }));
+                    console.log('LGA Options:', lgaOptions);
                     setLgas(lgaOptions);
+                    setSelectedLgas([]); // Reset selections when LGAs change
                 })
                 .catch((error) => {
                     console.error(`Failed to fetch LGAs for ${formValues.state}:`, error.message);
                     setLgas([]);
+                    setSelectedLgas([]);
                 });
         } else {
             setLgas([]);
@@ -129,6 +134,7 @@ const StateForm = () => {
     // Handle LGA multi-select
     const handleLgaChange = (e) => {
         const value = e.target.value;
+        console.log('Selected LGAs:', value);
         setSelectedLgas(value);
         if (errors.lgas) {
             setErrors((prev) => ({ ...prev, lgas: '' }));
@@ -298,12 +304,17 @@ const StateForm = () => {
                                         renderValue: (selected) => selected.join(', ')
                                     }}
                                     disabled={!formValues.state}
+                                    key={formValues.state} // Force re-render when state changes
                                 >
-                                    {lgas.map((option) => (
-                                        <MenuItem key={option.value} value={option.value}>
-                                            {option.label}
-                                        </MenuItem>
-                                    ))}
+                                    {lgas.length === 0 ? (
+                                        <MenuItem disabled>No LGAs available</MenuItem>
+                                    ) : (
+                                        lgas.map((option) => (
+                                            <MenuItem key={option.value} value={option.value}>
+                                                {option.label}
+                                            </MenuItem>
+                                        ))
+                                    )}
                                 </TextField>
                             </Grid>
 
