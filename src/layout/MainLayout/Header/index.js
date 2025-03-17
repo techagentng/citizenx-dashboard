@@ -37,23 +37,21 @@ const Header = () => {
     useEffect(() => {
         getStates()
             .then((response) => {
-                console.log('API Response:', response); // Log the API response
+                // Assuming response is { states: [...] }
                 const stateOptions = response.states
-                    .filter((state) => state !== '')
-                    .map((state) => ({
-                        value: state.state,
-                        label: state.state,
-                        lgas: state.lgas || []
+                    .filter((state) => state !== '') // Remove empty strings
+                    .map((stateName) => ({
+                        value: stateName,
+                        label: stateName
                     }));
-                console.log('State Options:', stateOptions); // Log the processed state options
+                    console.log('State Options:', stateOptions);
                 setStates(stateOptions);
+
+                // Since the API doesn't provide LGAs, skip LGA logic or fetch separately
                 const defaultState = 'Anambra';
-                const defaultStateData = stateOptions.find((s) => s.value === defaultState);
-                if (defaultStateData) {
+                if (stateOptions.some((s) => s.value === defaultState)) {
                     setSelectedState(defaultState);
                     dispatch(setState(defaultState));
-                    setLgas(defaultStateData.lgas.map((lga) => ({ value: lga, label: lga })));
-                    console.log('Default LGAs:', defaultStateData.lgas); // Log the default LGAs
                 }
             })
             .catch((error) => {
@@ -65,7 +63,9 @@ const Header = () => {
         const stateName = event.target.value;
         setSelectedState(stateName);
         dispatch(setState(stateName));
-        const selectedStateData = states.find((state) => state.value === stateName);
+    
+        // Find the selected state in the states array
+        const selectedStateData = states.find((state) => state.state === stateName);
         if (selectedStateData && selectedStateData.lgas) {
             const lgaOptions = selectedStateData.lgas.map((lga) => ({ value: lga, label: lga }));
             setLgas(lgaOptions);
