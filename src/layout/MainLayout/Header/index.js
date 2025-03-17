@@ -44,6 +44,7 @@ const Header = () => {
                         value: stateName,
                         label: stateName
                     }));
+                    console.log('State Options:', stateOptions);
                 setStates(stateOptions);
 
                 // Since the API doesn't provide LGAs, skip LGA logic or fetch separately
