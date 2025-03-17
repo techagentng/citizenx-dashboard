@@ -300,7 +300,6 @@ const StateForm = () => {
                                     variant="outlined"
                                     sx={{ bgcolor: '#fff' }}
                                     SelectProps={{
-                                        multiple: true,
                                         renderValue: (selected) => selected.join(', ')
                                     }}
                                     disabled={!formValues.state}
