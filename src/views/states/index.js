@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Box, Button, Card, CardContent, CircularProgress, Grid, TextField, Typography, styled, MenuItem } from '@mui/material';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import { createState } from 'services/stateservice';
-import { getStates, getLgas } from 'services/reportService'; // Import getLgas
+import { getStates, getLGAs } from 'services/reportService'; // Import getLgas
 
 // Styled components (unchanged)
 const StyledCard = styled(Card)(({ theme }) => ({
@@ -91,7 +91,7 @@ const StateForm = () => {
     // Fetch LGAs when state changes
     useEffect(() => {
         if (formValues.state) {
-            getLgas(formValues.state)
+            getLGAs(formValues.state)
                 .then((lgaData) => {
                     const lgaOptions = lgaData.map((lga) => ({ value: lga, label: lga }));
                     setLgas(lgaOptions);
