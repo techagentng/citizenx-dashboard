@@ -37,20 +37,20 @@ const Header = () => {
     useEffect(() => {
         getStates()
             .then((response) => {
-                // Assuming response is { states: [...] }
                 const stateOptions = response.states
-                    .filter((state) => state !== '') // Remove empty strings
-                    .map((stateName) => ({
-                        value: stateName,
-                        label: stateName
+                    .filter((state) => state !== '')
+                    .map((state) => ({
+                        value: state.state,
+                        label: state.state,
+                        lgas: state.lgas || []
                     }));
                 setStates(stateOptions);
-
-                // Since the API doesn't provide LGAs, skip LGA logic or fetch separately
                 const defaultState = 'Anambra';
-                if (stateOptions.some((s) => s.value === defaultState)) {
+                const defaultStateData = stateOptions.find((s) => s.value === defaultState);
+                if (defaultStateData) {
                     setSelectedState(defaultState);
                     dispatch(setState(defaultState));
+                    setLgas(defaultStateData.lgas.map((lga) => ({ value: lga, label: lga })));
                 }
             })
             .catch((error) => {
@@ -62,9 +62,7 @@ const Header = () => {
         const stateName = event.target.value;
         setSelectedState(stateName);
         dispatch(setState(stateName));
-    
-        // Find the selected state in the states array
-        const selectedStateData = states.find((state) => state.state === stateName);
+        const selectedStateData = states.find((state) => state.value === stateName);
         if (selectedStateData && selectedStateData.lgas) {
             const lgaOptions = selectedStateData.lgas.map((lga) => ({ value: lga, label: lga }));
             setLgas(lgaOptions);
