@@ -26,7 +26,7 @@ export const createState = (payload) => {
         if (payload.lgacImage) formData.append('lgac_image', payload.lgacImage);
 
         axios
-            .post(`${process.env.REACT_APP_API_URL}/states`, formData, {
+            .post(`${process.env.REACT_APP_API_URL}/create/governor`, formData, {
                 headers: {
                     Authorization: `Bearer ${serviceToken}`,
                     'Content-Type': 'multipart/form-data' // Explicitly set
