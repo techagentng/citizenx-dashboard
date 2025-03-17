@@ -7,7 +7,7 @@ import { DateRangePicker } from '@mui/x-date-pickers-pro/DateRangePicker';
 import { useDispatch, useSelector } from 'store';
 import { openDrawer } from 'store/slices/menu';
 import { setState, setLga, getGraph } from 'store/slices/graphs';
-import { getCategories, getStates } from 'services/reportService';
+import { getCategories, getStates, getLGAs } from 'services/reportService';
 
 import LogoSection from '../LogoSection';
 import MobileSection from './MobileSection';
@@ -36,27 +36,29 @@ const Header = () => {
 
     useEffect(() => {
         getStates()
-            .then((response) => {
-                // Assuming response is { states: [...] }
-                const stateOptions = response.states
-                    .filter((state) => state !== '') // Remove empty strings
-                    .map((stateName) => ({
-                        value: stateName,
-                        label: stateName
+            .then((states) => {
+                const stateOptions = states
+                    .filter((state) => state.State && state.State !== '')
+                    .map((state) => ({
+                        value: state.State,
+                        label: state.State
                     }));
-                    console.log('State Options:', stateOptions);
                 setStates(stateOptions);
-
-                // Since the API doesn't provide LGAs, skip LGA logic or fetch separately
+    
                 const defaultState = 'Anambra';
                 if (stateOptions.some((s) => s.value === defaultState)) {
                     setSelectedState(defaultState);
                     dispatch(setState(defaultState));
+                    // Fetch LGAs for default state
+                    getLGAs(defaultState)
+                        .then((lgas) => {
+                            const lgaOptions = lgas.map((lga) => ({ value: lga, label: lga }));
+                            setLgas(lgaOptions);
+                        })
+                        .catch((error) => console.error('Error fetching default LGAs:', error));
                 }
             })
-            .catch((error) => {
-                console.error('Failed to fetch states:', error);
-            });
+            .catch((error) => console.error('Failed to fetch states:', error));
     }, [dispatch]);
 
     const handleStateChange = (event) => {
