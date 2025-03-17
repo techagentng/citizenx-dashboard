@@ -46,18 +46,6 @@ export const createState = (payload) => {
     });
 };
 
-// Example usage:
-const payload = {
-    state: 'Test State',
-    governor: 'Test Governor',
-    deputyName: 'Test Deputy',
-    lgac: 'Test LGAC',
-    lgas: ['LGA1', 'LGA2', 'LGA3'],
-    governorImage: fileInput.files[0], 
-    deputyImage: fileInput2.files[0],
-    lgacImage: fileInput3.files[0],
-};
-
 createState(payload)
     .then((response) => console.log('Success:', response))
     .catch((error) => console.error('Error:', error.message));
