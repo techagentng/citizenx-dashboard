@@ -415,20 +415,23 @@ export const getLGAs = (state) => {
 
         axios
             .get(`${process.env.REACT_APP_API_URL}/lgas/${state}`, {
-                // Changed to path parameter
                 headers: {
                     Authorization: `Bearer ${serviceToken}`
                 }
             })
             .then((response) => {
+                console.log(`getLGAs response for ${state}:`, response.data); // Log the raw response
                 resolve(response.data || []);
             })
             .catch((error) => {
                 if (error.response) {
+                    console.error(`getLGAs error for ${state}:`, error.response.status, error.response.data);
                     reject(new Error(`API error: ${error.response.status} - ${error.response.data.error || 'Unknown error'}`));
                 } else if (error.request) {
+                    console.error('getLGAs network error:', error);
                     reject(new Error('Network error: Unable to reach the server'));
                 } else {
+                    console.error('getLGAs unexpected error:', error);
                     reject(error);
                 }
             });
