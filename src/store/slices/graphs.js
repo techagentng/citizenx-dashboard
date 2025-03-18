@@ -61,17 +61,21 @@ export default slice.reducer;
 export const { getGraphStart, hasError, getGraphSuccess, getPercentCountSuccess, setState, setLga, setReportType } = slice.actions;
 
 export function getGraph(state, lga, startDate, endDate) {
-    return async () => {
+    return async (dispatch) => { // Added dispatch parameter for clarity
         dispatch(getGraphStart());
         try {
             let url = `/report/type/count?state=${state}&lga=${lga}`;
-            if (startDate && endDate) {
-                url += `&startDate=${startDate}&endDate=${endDate}`;
+            // Use snake_case to match backend
+            if (startDate) {
+                url += `&start_date=${startDate}`;
+            }
+            if (endDate) {
+                url += `&end_date=${endDate}`;
             }
             const response = await axios.get(url);
             dispatch(getGraphSuccess(response?.data));
         } catch (error) {
-            dispatch(hasError(error));
+            dispatch(hasError(error.response?.data?.error || error.message));
         }
     };
 }
