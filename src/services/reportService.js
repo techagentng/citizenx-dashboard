@@ -437,3 +437,35 @@ export const getLGAs = (state) => {
             });
     });
 };
+
+export const getStateReportCountsState = () => {
+    return new Promise((resolve, reject) => {
+        const serviceToken = localStorage.getItem('serviceToken');
+        if (!serviceToken) {
+            return reject(new Error('No authentication token found'));
+        }
+
+        axios
+            .get(`${process.env.REACT_APP_API_URL}/state/report/count`, {
+                headers: {
+                    Authorization: `Bearer ${serviceToken}`
+                }
+            })
+            .then((response) => {
+                console.log('getStateReportCounts response:', response.data); // Log the raw response
+                resolve(response.data || []);
+            })
+            .catch((error) => {
+                if (error.response) {
+                    console.error('getStateReportCounts API error:', error.response.status, error.response.data);
+                    reject(new Error(`API error: ${error.response.status} - ${error.response.data.error || 'Unknown error'}`));
+                } else if (error.request) {
+                    console.error('getStateReportCounts network error:', error);
+                    reject(new Error('Network error: Unable to reach the server'));
+                } else {
+                    console.error('getStateReportCounts unexpected error:', error);
+                    reject(error);
+                }
+            });
+    });
+};

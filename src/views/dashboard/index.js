@@ -268,7 +268,7 @@ const DashboardPage = () => {
                                 </Typography>
                             }
                         >
-                            <NigerianMap />
+                            <NigerianMap selectedState={selectedState} />
                         </MainCard>
                     </Grid>
                     <Grid item xs={12} md={4}>
