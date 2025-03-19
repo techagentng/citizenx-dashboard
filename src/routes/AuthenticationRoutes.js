@@ -15,7 +15,7 @@ const Community = Loadable(lazy(() => import('views/pages/communityGuidelines'))
 const Cookies = Loadable(lazy(() => import('views/pages/cookies')));
 const Help = Loadable(lazy(() => import('views/pages/help')));
 const PagesHome = Loadable(lazy(() => import('views/pages/landing')));
-
+const Callback = Loadable(lazy(() => import('views/pages/authentication/googleCallBack.js')));
 // maintenance routing
 const MaintenanceError = Loadable(lazy(() => import('views/pages/maintenance/Error')));
 const MaintenanceComingSoon1 = Loadable(lazy(() => import('views/pages/maintenance/ComingSoon/ComingSoon1')));
@@ -72,10 +72,10 @@ const AuthenticationRoutes = {
             path: '/pages/coming-soon1',
             element: <MaintenanceComingSoon1 />
         },
-        // {
-        //     path: '/pages/coming-soon2',
-        //     element: <MaintenanceComingSoon2 />
-        // },
+        {
+            path: '/auth/callback',
+            element: <Callback />
+        },
         {
             path: '/pages/under-construction',
             element: <MaintenanceUnderConstruction />
