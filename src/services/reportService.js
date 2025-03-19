@@ -446,7 +446,7 @@ export const getStateReportCountsState = () => {
         }
 
         axios
-            .get(`${process.env.REACT_APP_API_URL}/state/report/count`, {
+            .get(`${process.env.REACT_APP_API_URL}/map/state/count`, {
                 headers: {
                     Authorization: `Bearer ${serviceToken}`
                 }
