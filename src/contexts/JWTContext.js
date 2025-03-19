@@ -3,11 +3,20 @@ import { createContext, useEffect, useReducer } from 'react';
 // Reducer - state management
 import { LOGIN, LOGOUT } from 'store/actions';
 import accountReducer from 'store/accountReducer';
-
+import { jwtDecode } from 'jwt-decode';
 // Project imports
 import Loader from 'ui-component/Loader';
 import axios from 'utils/axios';
 
+const verifyToken = (serviceToken) => {
+    if (!serviceToken) return false;
+    try {
+        const decoded = jwtDecode(serviceToken);
+        return decoded.exp > Date.now() / 1000;
+    } catch (err) {
+        return false;
+    }
+};
 // Initial state
 const initialState = {
     isLoggedIn: false,
@@ -43,15 +52,13 @@ export const JWTProvider = ({ children }) => {
             try {
                 const serviceToken = window.localStorage.getItem('serviceToken');
                 const serviceRole = window.localStorage.getItem('role_name');
-                if (serviceToken && serviceRole) {
-                    setSession(serviceToken, serviceRole);
+                if (serviceToken && serviceRole && verifyToken(serviceToken)) {
                     const response = await axios.get('/me');
                     const isOnLine = await axios.get('/user/is_online');
                     const { valid } = isOnLine.data;
                     const { data } = response.data;
                     localStorage.setItem('user', JSON.stringify(data));
                     localStorage.setItem('online', JSON.stringify(valid));
-
                     dispatch({
                         type: LOGIN,
                         payload: {
@@ -62,22 +69,22 @@ export const JWTProvider = ({ children }) => {
                         }
                     });
                 } else {
-                    console.warn('Token or role missing from localStorage');
-                    dispatch({ type: LOGOUT });
+                    console.warn('Token or role missing or invalid');
+                    setSession(null); // Clear invalid session
+                    dispatch({ type: LOGOUT, payload: { isInitialized: true } });
                 }
             } catch (err) {
                 if (err.response && err.response.status === 401) {
-                    // Handle unauthorized (e.g., token expired)
                     console.warn('Token expired or unauthorized');
+                    setSession(null);
                 } else {
                     console.error('Error during initialization: ', err);
                 }
-                dispatch({ type: LOGOUT });
+                dispatch({ type: LOGOUT, payload: { isInitialized: true } });
             }
         };
-
         init();
-    }, [dispatch]);
+    }, []);
 
     const login = async (email, password, navigate) => {
         try {
@@ -102,18 +109,6 @@ export const JWTProvider = ({ children }) => {
         }
     };
 
-    const loginWithGoogle = async () => {
-        try {
-            // Step 1: Redirect the user to the backend to get the Google auth URL
-            const response = await axios.get('/google/login');
-            const authUrl = response.data.auth_url;
-            window.location.href = authUrl; // Redirect to Google login page
-        } catch (error) {
-            console.error('Error initiating Google login:', error);
-            // Optionally handle errors (e.g., show a message)
-        }
-    };
-
     const register = async (fullName, userName, telephone, email, password, profile_image) => {
         try {
             const formData = new FormData();
@@ -133,13 +128,9 @@ export const JWTProvider = ({ children }) => {
             let user = response.data.data;
 
             let storedUsers = window.localStorage.getItem('users');
-            if (storedUsers) {
-                storedUsers = JSON.parse(storedUsers);
-                storedUsers.push(user);
-                window.localStorage.setItem('users', JSON.stringify(storedUsers));
-            } else {
-                window.localStorage.setItem('users', JSON.stringify([user]));
-            }
+            storedUsers = storedUsers ? JSON.parse(storedUsers) : [];
+            storedUsers.push(user);
+            window.localStorage.setItem('users', JSON.stringify(storedUsers));
 
             return response;
         } catch (error) {
@@ -155,7 +146,10 @@ export const JWTProvider = ({ children }) => {
             console.error('Logout error:', error);
         }
         setSession(null);
-        dispatch({ type: LOGOUT });
+        dispatch({ 
+            type: LOGOUT, 
+            payload: { isInitialized: true } // Add payload to reset state
+        });
     };
 
     const forgotPassword = async (email) => {

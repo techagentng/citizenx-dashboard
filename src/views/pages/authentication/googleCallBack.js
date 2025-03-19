@@ -1,9 +1,8 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { jwtDecode } from 'jwt-decode';
-import { useDispatch } from 'react-redux';
-import { LOGIN } from 'store/actions';
+import JWTContext from 'contexts/JWTContext';
 import { CircularProgress, Box, Typography } from '@mui/material';
 
 const verifyToken = (token) => {
@@ -11,7 +10,6 @@ const verifyToken = (token) => {
         console.error('Token is null or undefined.');
         return null;
     }
-
     try {
         const decoded = jwtDecode(token);
         if (decoded.exp < Date.now() / 1000) {
@@ -28,12 +26,11 @@ const verifyToken = (token) => {
 const setSession = (serviceToken, role_name = '') => {
     if (serviceToken) {
         localStorage.setItem('serviceToken', serviceToken);
-        axios.defaults.headers.common.Authorization = serviceToken; // Already Bearer-prefixed
+        axios.defaults.headers.common.Authorization = `Bearer ${serviceToken}`;
     } else {
         localStorage.removeItem('serviceToken');
         delete axios.defaults.headers.common.Authorization;
     }
-
     if (role_name) {
         localStorage.setItem('role_name', role_name);
     } else {
@@ -43,7 +40,7 @@ const setSession = (serviceToken, role_name = '') => {
 
 const GoogleCallback = () => {
     const navigate = useNavigate();
-    const dispatch = useDispatch();
+    const { login } = useContext(JWTContext);
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
@@ -60,7 +57,6 @@ const GoogleCallback = () => {
             }
 
             try {
-                // Exchange code for tokens
                 const tokenResponse = await axios.post('https://oauth2.googleapis.com/token', {
                     code,
                     client_id: process.env.REACT_APP_GOOGLE_CLIENT_ID,
@@ -71,39 +67,35 @@ const GoogleCallback = () => {
 
                 const { id_token } = tokenResponse.data;
                 const verifiedToken = verifyToken(id_token);
-
                 if (!verifiedToken) {
-                    console.error('Invalid or expired token.');
+                    console.error('Invalid or expired Google token.');
                     setIsLoading(false);
-                    navigate('/simple', { state: { error: 'Invalid token' } });
+                    navigate('/simple', { state: { error: 'Invalid Google token' } });
                     return;
                 }
 
-                const user = jwtDecode(id_token); 
+                const user = jwtDecode(id_token);
                 const userEmail = user.email;
 
-                // Verify user with your backend and get custom token
-                const loginResponse = await axios.post('https://nailsavvy.vercel.app/auth/google-login', {
+                const loginResponse = await axios.post('https://citizenx-9hk2.onrender.com/api/v1/google/user/login', {
                     email: userEmail
                 });
                 const { token, authuser } = loginResponse.data;
-                const role_name = authuser.userType.name
-                // Set session synchronously
-                setSession(`Bearer ${token}`, user.userType.name);
-                localStorage.setItem('user_info', JSON.stringify(authuser));
+                const role_name = authuser.userType.name;
 
-                // Dispatch LOGIN action to Redux store
-                dispatch({
-                    type: LOGIN,
-                    payload: {
-                        isLoggedIn: true,
-                        role_name,
-                        user,
-                        isInitialized: true
-                    }
-                });
+                const verifiedBackendToken = verifyToken(token);
+                if (!verifiedBackendToken) {
+                    console.error('Invalid or expired backend token.');
+                    setIsLoading(false);
+                    navigate('/simple', { state: { error: 'Invalid backend token' } });
+                    return;
+                }
 
-                // Determine redirect path
+                setSession(token, role_name);
+                localStorage.setItem('user', JSON.stringify(authuser));
+
+                await login(null, null, navigate, { token, user: authuser, role_name });
+
                 let redirectTo = '/dashboard';
                 if (state) {
                     try {
@@ -113,8 +105,6 @@ const GoogleCallback = () => {
                         console.error('Error parsing state:', e);
                     }
                 }
-
-                // Navigate after dispatch
                 navigate(redirectTo, { replace: true });
             } catch (error) {
                 console.error('Authentication error:', error.response?.data || error.message);
@@ -125,7 +115,7 @@ const GoogleCallback = () => {
         };
 
         handleGoogleCallback();
-    }, [navigate, dispatch]); // Removed isLoading from dependencies
+    }, [navigate, login]);
 
     if (isLoading) {
         return (
