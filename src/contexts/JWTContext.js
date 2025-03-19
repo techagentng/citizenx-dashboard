@@ -28,9 +28,11 @@ const initialState = {
 const setSession = (serviceToken, role_name = '') => {
     if (serviceToken) {
         localStorage.setItem('serviceToken', serviceToken);
+        localStorage.setItem('role_name', role_name);
         axios.defaults.headers.common.Authorization = `Bearer ${serviceToken}`;
     } else {
         localStorage.removeItem('serviceToken');
+        localStorage.removeItem('role_name');
         delete axios.defaults.headers.common.Authorization;
     }
 
@@ -52,18 +54,23 @@ export const JWTProvider = ({ children }) => {
             try {
                 const serviceToken = window.localStorage.getItem('serviceToken');
                 const serviceRole = window.localStorage.getItem('role_name');
+
                 if (serviceToken && serviceRole && verifyToken(serviceToken)) {
+                    setSession(serviceToken, serviceRole); 
+
                     const response = await axios.get('/me');
                     const isOnLine = await axios.get('/user/is_online');
                     const { valid } = isOnLine.data;
                     const { data } = response.data;
+
                     localStorage.setItem('user', JSON.stringify(data));
                     localStorage.setItem('online', JSON.stringify(valid));
+
                     dispatch({
                         type: LOGIN,
                         payload: {
                             user: data,
-                            role_name: data.role_name,
+                            role_name: serviceRole, // Ensure role is correctly set
                             isLoggedIn: true,
                             isInitialized: true
                         }
@@ -74,12 +81,8 @@ export const JWTProvider = ({ children }) => {
                     dispatch({ type: LOGOUT, payload: { isInitialized: true } });
                 }
             } catch (err) {
-                if (err.response && err.response.status === 401) {
-                    console.warn('Token expired or unauthorized');
-                    setSession(null);
-                } else {
-                    console.error('Error during initialization: ', err);
-                }
+                console.error('Error during initialization:', err);
+                setSession(null);
                 dispatch({ type: LOGOUT, payload: { isInitialized: true } });
             }
         };
