@@ -3,7 +3,7 @@ import { createContext, useEffect, useReducer } from 'react';
 // Reducer - state management
 import { LOGIN, LOGOUT } from 'store/actions';
 import accountReducer from 'store/accountReducer';
-import { jwtDecode } from 'jwt-decode';
+import jwtDecode from 'jwt-decode';
 // Project imports
 import Loader from 'ui-component/Loader';
 import axios from 'utils/axios';
@@ -146,8 +146,8 @@ export const JWTProvider = ({ children }) => {
             console.error('Logout error:', error);
         }
         setSession(null);
-        dispatch({ 
-            type: LOGOUT, 
+        dispatch({
+            type: LOGOUT,
             payload: { isInitialized: true } // Add payload to reset state
         });
     };
