@@ -9,8 +9,8 @@ const SubReport = () => {
     const selectedState = location.state?.selectedState || 'N/A';
 
     const [reportData, setReportData] = useState([]);
-    const [totalUsers, setTotalUsers] = useState(0);
-    const [totalReports, setTotalReports] = useState(0);
+    const [totalUsers, setTotalUsers] = useState(null);
+    const [totalReports, setTotalReports] = useState(null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
 
@@ -26,8 +26,8 @@ const SubReport = () => {
         getStateReportCountsState(selectedState)
             .then((data) => {
                 setReportData(data.report_counts || []);
-                setTotalUsers(data.total_users || 0);
-                setTotalReports(data.total_reports || 0);
+                setTotalUsers(data.total_users ?? 'N/A'); // Ensure fallback value
+                setTotalReports(data.total_reports ?? 'N/A');
             })
             .catch((err) => {
                 console.error('Error fetching report data:', err);
@@ -47,11 +47,17 @@ const SubReport = () => {
     return (
         <div>
             <h2>Report Data for {selectedState}</h2>
-            <p>Total Users: {totalUsers}</p>
-            <p>Total Reports: {totalReports}</p>
+            <p><strong>Total Users:</strong> {totalUsers}</p>
+            <p><strong>Total Reports:</strong> {totalReports}</p>
 
-            <BarChart data={reportData} title={`Report Types in ${selectedState}`} />
-            <PieChart data={reportData} title={`Report Distribution in ${selectedState}`} />
+            {reportData.length > 0 ? (
+                <>
+                    <BarChart data={reportData} title={`Report Types in ${selectedState}`} />
+                    <PieChart data={reportData} title={`Report Distribution in ${selectedState}`} />
+                </>
+            ) : (
+                <p>No report data available for this state.</p>
+            )}
         </div>
     );
 };
