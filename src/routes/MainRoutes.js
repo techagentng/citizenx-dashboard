@@ -16,6 +16,7 @@ const State = Loadable(lazy(() => import('views/states')));
 const CreateState = Loadable(lazy(() => import('views/states')));
 
 const SubReportDetailsPage = Loadable(lazy(() => import('views/dashboard/subReportDetails')));
+const SubReportStatePage = Loadable(lazy(() => import('views/dashboard/subReportState')));
 // ==============================|| MAIN ROUTING ||============================== //
 
 const MainRoutes = {
@@ -65,6 +66,10 @@ const MainRoutes = {
         {
             path: '/dashboard/sub_reports',
             element: <SubReportDetailsPage />
+        },
+        {
+            path: '/dashboard/sub_report_state',
+            element: <SubReportStatePage />
         }
     ]
 };

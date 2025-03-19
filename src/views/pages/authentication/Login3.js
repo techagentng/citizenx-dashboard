@@ -7,7 +7,6 @@ import { Divider, Grid, Stack, Typography, useMediaQuery, IconButton } from '@mu
 import AuthWrapper1 from '../AuthWrapper1';
 import AuthCardWrapper from '../AuthCardWrapper';
 import AuthLogin from './auth-forms/AuthLogin';
-// import Logo from 'ui-component/Logo';
 import AuthFooter from 'ui-component/cards/AuthFooter';
 import JWTContext from 'contexts/JWTContext';
 import { useContext } from 'react';
