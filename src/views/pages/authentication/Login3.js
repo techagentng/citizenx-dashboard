@@ -19,7 +19,8 @@ const Login = () => {
     const { isLoggedIn } = useContext(JWTContext);
 
     const handleGoogleSignIn = () => {
-        const clientId = process.env.REACT_APP_GOOGLE_CLIENT_ID;
+        // const clientId = process.env.REACT_APP_GOOGLE_CLIENT_ID;
+        const clientId = '3542246689-jutm6p6ctc8he0k9ec4rg4f2eid0krmb.apps.googleusercontent.com'
         const redirectUri = process.env.REACT_APP_GOOGLE_REDIRECT_URL;
         const scope = 'openid email profile';
         const responseType = 'code';
