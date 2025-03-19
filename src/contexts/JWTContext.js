@@ -70,7 +70,7 @@ export const JWTProvider = ({ children }) => {
                         type: LOGIN,
                         payload: {
                             user: data,
-                            role_name: serviceRole, // Ensure role is correctly set
+                            role_name: serviceRole || data.role_name,
                             isLoggedIn: true,
                             isInitialized: true
                         }

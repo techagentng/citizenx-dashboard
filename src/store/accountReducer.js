@@ -1,31 +1,28 @@
-// action - state management
-import { LOGIN, LOGOUT, REGISTER } from './actions';
-
-// ==============================|| ACCOUNT REDUCER ||============================== //
-
 const initialState = {
     isLoggedIn: false,
     isInitialized: false,
-    user: null
+    user: null,
+    role_name: ''  // Add role_name to initial state
 };
 
-// eslint-disable-next-line
 const accountReducer = (state = initialState, action) => {
     switch (action.type) {
         case REGISTER: {
-            const { user } = action.payload;
+            const { user, role_name } = action.payload;
             return {
                 ...state,
-                user
+                user,
+                role_name
             };
         }
         case LOGIN: {
-            const { user } = action.payload;
+            const { user, role_name } = action.payload;
             return {
                 ...state,
                 isLoggedIn: true,
                 isInitialized: true,
-                user
+                user,
+                role_name
             };
         }
         case LOGOUT: {
@@ -33,11 +30,12 @@ const accountReducer = (state = initialState, action) => {
                 ...state,
                 isInitialized: true,
                 isLoggedIn: false,
-                user: null
+                user: null,
+                role_name: ''
             };
         }
         default: {
-            return { ...state };
+            return state;
         }
     }
 };
