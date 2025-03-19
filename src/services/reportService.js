@@ -438,22 +438,26 @@ export const getLGAs = (state) => {
     });
 };
 
-export const getStateReportCountsState = () => {
+export const getStateReportCountsState = (state) => {
     return new Promise((resolve, reject) => {
         const serviceToken = localStorage.getItem('serviceToken');
         if (!serviceToken) {
             return reject(new Error('No authentication token found'));
         }
 
+        if (!state) {
+            return reject(new Error('State parameter is required'));
+        }
+
         axios
-            .get(`${process.env.REACT_APP_API_URL}/map/state/count`, {
+            .get(`${process.env.REACT_APP_API_URL}/map/state/count?state=${encodeURIComponent(state)}`, {
                 headers: {
                     Authorization: `Bearer ${serviceToken}`
                 }
             })
             .then((response) => {
-                console.log('getStateReportCounts response:', response.data); // Log the raw response
-                resolve(response.data || []);
+                console.log('getStateReportCounts response:', response.data);
+                resolve(response.data); // Expecting object with report_types, report_counts, etc.
             })
             .catch((error) => {
                 if (error.response) {
