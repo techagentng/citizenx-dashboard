@@ -14,7 +14,7 @@ const Rewards = Loadable(lazy(() => import('views/rewards')));
 const Users = Loadable(lazy(() => import('views/users')));
 const State = Loadable(lazy(() => import('views/states')));
 const CreateState = Loadable(lazy(() => import('views/states')));
-
+const Callback = Loadable(lazy(() => import('views/pages/authentication/googleCallBack.js')));
 const SubReportDetailsPage = Loadable(lazy(() => import('views/dashboard/subReportDetails')));
 const SubReportStatePage = Loadable(lazy(() => import('views/dashboard/subReportState')));
 // ==============================|| MAIN ROUTING ||============================== //
@@ -34,6 +34,10 @@ const MainRoutes = {
         {
             path: '/dashboard',
             element: <Dashboard />
+        },
+        {
+            path: '/auth/callback',
+            element: <Callback />
         },
         {
             path: '/reports',
