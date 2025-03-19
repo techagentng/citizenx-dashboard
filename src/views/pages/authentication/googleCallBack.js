@@ -77,7 +77,7 @@ const GoogleCallback = () => {
                 const user = jwtDecode(id_token);
                 const userEmail = user.email;
 
-                const loginResponse = await axios.post('https://citizenx-9hk2.onrender.com/api/v1/google/user/login', {
+                const loginResponse = await axios.post(`${API_BASE_URL}/google/user/login`, {
                     email: userEmail
                 });
                 const { token, authuser } = loginResponse.data;
