@@ -1,9 +1,8 @@
 import { Link } from 'react-router-dom';
 // material-ui
 import { useTheme } from '@mui/material/styles';
-import { Divider, Grid, Stack, Typography, useMediaQuery, Button } from '@mui/material';
+import { Divider, Grid, Stack, Typography, useMediaQuery, IconButton } from '@mui/material';
 // import LayersTwoToneIcon from '@mui/icons-material/LayersTwoTone';
-import GoogleIcon from '@mui/icons-material/Google';
 // project imports
 import AuthWrapper1 from '../AuthWrapper1';
 import AuthCardWrapper from '../AuthCardWrapper';
@@ -12,46 +11,29 @@ import AuthLogin from './auth-forms/AuthLogin';
 import AuthFooter from 'ui-component/cards/AuthFooter';
 import JWTContext from 'contexts/JWTContext';
 import { useContext } from 'react';
-import axios from 'utils/axios';
-// assets
-
+import google from 'assets/images/auth/google.png';
 // ================================|| AUTH3 - LOGIN ||================================ //
 
 const Login = () => {
     const theme = useTheme();
     const matchDownSM = useMediaQuery(theme.breakpoints.down('md'));
-    const { isLoggedIn } = useContext(JWTContext); // Added state for JWT Context
-    // const { loginWithGoogle } = useContext(JWTContext);
+    const { isLoggedIn } = useContext(JWTContext);
 
-    const handleGoogleLogin = async () => {
-        try {
-            // Step 1: Redirect the user to the backend to get the Google auth URL
-            const response = await axios.get('/google/login');
-            const authUrl = response.data.auth_url;
-            window.location.href = authUrl; // Redirect to Google login page
-        } catch (error) {
-            console.error('Error initiating Google logingg:', error);
-            // Optionally handle errors (e.g., show a message)
-        }
+    const handleGoogleSignIn = () => {
+        const clientId = process.env.REACT_APP_GOOGLE_CLIENT_ID;
+        const redirectUri = process.env.REACT_APP_GOOGLE_REDIRECT_URL;
+        const scope = 'openid email profile';
+        const responseType = 'code';
+
+        // Add state parameter to maintain redirect destination
+        const state = encodeURIComponent(JSON.stringify({ redirectTo: '/dashboard' }));
+
+        const googleAuthUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${clientId}&redirect_uri=${encodeURIComponent(
+            redirectUri
+        )}&response_type=${responseType}&scope=${encodeURIComponent(scope)}&state=${state}`;
+
+        window.location.href = googleAuthUrl;
     };
-
-    // Step 3: Handle Redirect After Google Login
-    // useEffect(() => {
-    //     console.log('useEffect triggered');
-    //     const queryParams = new URLSearchParams(window.location.search);
-    //     const code = queryParams.get('code');
-    //     const state = queryParams.get('state');
-    //     const savedState = localStorage.getItem('googleState');  // Retrieve stored state
-    //     console.log('Saved state:', savedState);
-    //     console.log('Received state:', state);
-
-    //     // If code and state exist in URL, process the Google login
-    //     if (savedState === state && code) {
-    //         loginWithGoogle(state, code);
-    //     } else {
-    //         console.error('State mismatch or missing code');
-    //     }
-    // }, []);
 
     return (
         <AuthWrapper1>
@@ -62,9 +44,7 @@ const Login = () => {
                             <AuthCardWrapper>
                                 <Grid container spacing={2} alignItems="center" justifyContent="center">
                                     <Grid item sx={{ mb: 3 }}>
-                                        <Link to="#" aria-label="theme-logo">
-                                           
-                                        </Link>
+                                        <Link to="#" aria-label="theme-logo"></Link>
                                     </Grid>
                                     <Grid item xs={12}>
                                         <Grid
@@ -73,42 +53,40 @@ const Login = () => {
                                             alignItems="center"
                                             justifyContent="center"
                                         >
-                                            <Grid item sx={{ mb: 3 }}>
-                                                <Stack alignItems="center" justifyContent="center" spacing={1}>
-                                                    <Typography
-                                                        color={theme.palette.secondary.main}
-                                                        gutterBottom
-                                                        variant={matchDownSM ? 'h3' : 'h2'}
-                                                    >
-                                                        Login to earn points
-                                                    </Typography>
-                                                </Stack>
-                                            </Grid>
-
-                                            <Grid item sx={{ mb: 3 }}>
-                                                <Button
-                                                    variant="outlined"
-                                                    startIcon={<GoogleIcon />}
+                                            <Grid item xs={12} sx={{ textAlign: 'center', marginBottom: 3 }}>
+                                                <IconButton
                                                     sx={{
-                                                        borderRadius: '40px',
-                                                        width: '260px',
-                                                        height: '50px',
-                                                        fontSize: '16px',
-                                                        border: '1px solid #B0B0B0', // Thin grey outline
-                                                        color: '#000', // Black text
-                                                        textTransform: 'none', // Preserve capitalization
                                                         display: 'flex',
-                                                        justifyContent: 'center',
                                                         alignItems: 'center',
+                                                        justifyContent: 'center', // Center content horizontally
+                                                        border: '1px solid #ddd',
+                                                        borderRadius: 2,
+                                                        p: '8px 16px',
+                                                        width: '100%',
+                                                        maxWidth: 300,
+                                                        mx: 'auto',
+                                                        backgroundColor: '#fff',
                                                         '&:hover': {
-                                                            backgroundColor: '#F5F5F5', // Subtle hover effect
-                                                            border: '1px solid #A0A0A0' // Slightly darker grey on hover
+                                                            backgroundColor: '#f5f5f5'
                                                         }
                                                     }}
-                                                    onClick={handleGoogleLogin}
                                                 >
-                                                    Continue with Google
-                                                </Button>
+                                                    <img
+                                                        src={google}
+                                                        alt="Google Icon"
+                                                        width={20}
+                                                        height={20}
+                                                        style={{ marginRight: 8, display: 'block' }} 
+                                                    />
+                                                    <Typography
+                                                        variant="button"
+                                                        onClick={handleGoogleSignIn}
+                                                        color="textPrimary"
+                                                        sx={{ textAlign: 'center' }} 
+                                                    >
+                                                        Sign in with Google
+                                                    </Typography>
+                                                </IconButton>
                                             </Grid>
 
                                             <Grid item>
@@ -147,6 +125,7 @@ const Login = () => {
                         </Grid>
                     </Grid>
                 </Grid>
+
                 <Grid item xs={12} sx={{ m: 3, mt: 1 }}>
                     <AuthFooter />
                 </Grid>
