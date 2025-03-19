@@ -1,8 +1,11 @@
+// store/accountReducer.js
+import { LOGIN, LOGOUT, REGISTER } from 'store/actions';
+
 const initialState = {
     isLoggedIn: false,
     isInitialized: false,
     user: null,
-    role_name: ''  // Add role_name to initial state
+    role_name: '' 
 };
 
 const accountReducer = (state = initialState, action) => {

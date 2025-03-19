@@ -56,7 +56,7 @@ export const JWTProvider = ({ children }) => {
                 const serviceRole = window.localStorage.getItem('role_name');
 
                 if (serviceToken && serviceRole && verifyToken(serviceToken)) {
-                    setSession(serviceToken, serviceRole); 
+                    setSession(serviceToken, serviceRole);
 
                     const response = await axios.get('/me');
                     const isOnLine = await axios.get('/user/is_online');
@@ -112,7 +112,7 @@ export const JWTProvider = ({ children }) => {
         }
     };
 
-    const register = async (fullName, userName, telephone, email, password, profile_image) => {
+    const register = async (fullName, userName, telephone, email, password, profile_image, navigate) => {
         try {
             const formData = new FormData();
             if (profile_image && profile_image instanceof File) {
@@ -128,13 +128,24 @@ export const JWTProvider = ({ children }) => {
                 headers: { 'Content-Type': 'multipart/form-data' }
             });
 
-            let user = response.data.data;
+            const user = response.data.data;
+            const role_name = user.role_name || 'User';
 
             let storedUsers = window.localStorage.getItem('users');
             storedUsers = storedUsers ? JSON.parse(storedUsers) : [];
             storedUsers.push(user);
             window.localStorage.setItem('users', JSON.stringify(storedUsers));
 
+            // Dispatch REGISTER action to update state
+            dispatch({
+                type: REGISTER,
+                payload: {
+                    user,
+                    role_name
+                }
+            });
+
+            navigate('/login'); // Redirect to login page after registration
             return response;
         } catch (error) {
             console.error('Registration error:', error);
