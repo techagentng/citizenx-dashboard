@@ -49,17 +49,21 @@ const SubReport = () => {
             <h2>Report Data for {selectedState}</h2>
             <p><strong>Total Users:</strong> {totalUsers}</p>
             <p><strong>Total Reports:</strong> {totalReports}</p>
-
+    
             {reportData.length > 0 ? (
-                <>
-                    <BarChart data={reportData} title={`Report Types in ${selectedState}`} />
-                    <PieChart data={reportData} title={`Report Distribution in ${selectedState}`} />
-                </>
+                <div style={{ display: 'flex', justifyContent: 'space-between', gap: '20px' }}>
+                    <div style={{ flex: 1 }}>
+                        <BarChart data={reportData} title={`Report Types in ${selectedState}`} />
+                    </div>
+                    <div style={{ flex: 1 }}>
+                        <PieChart data={reportData} title={`Report Distribution in ${selectedState}`} />
+                    </div>
+                </div>
             ) : (
                 <p>No report data available for this state.</p>
             )}
         </div>
-    );
+    );    
 };
 
 export default SubReport;
