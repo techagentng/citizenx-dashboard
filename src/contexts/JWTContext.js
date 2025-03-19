@@ -170,9 +170,7 @@ export const JWTProvider = ({ children }) => {
     }
 
     return (
-        <JWTContext.Provider value={{ ...state, login, logout, register, forgotPassword, updateProfile, loginWithGoogle }}>
-            {children}
-        </JWTContext.Provider>
+        <JWTContext.Provider value={{ ...state, login, logout, register, forgotPassword, updateProfile }}>{children}</JWTContext.Provider>
     );
 };
 
