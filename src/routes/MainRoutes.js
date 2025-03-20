@@ -18,7 +18,7 @@ const Callback = Loadable(lazy(() => import('views/pages/authentication/googleCa
 const SubReportDetailsPage = Loadable(lazy(() => import('views/dashboard/subReportDetails')));
 const SubReportStatePage = Loadable(lazy(() => import('views/dashboard/subReportState')));
 // ==============================|| MAIN ROUTING ||============================== //
-
+const Simple = Loadable(lazy(() => import('views/simple')));
 const MainRoutes = {
     path: '/',
     element: (
@@ -74,7 +74,11 @@ const MainRoutes = {
         {
             path: '/dashboard/sub_report_state',
             element: <SubReportStatePage />
-        }
+        },
+        {
+            path: '/simple',
+            element: <Simple />
+        },
     ]
 };
 
