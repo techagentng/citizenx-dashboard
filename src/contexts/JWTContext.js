@@ -112,6 +112,33 @@ export const JWTProvider = ({ children }) => {
         }
     };
 
+    const googleLogin = async (idToken, navigate) => {
+        try {
+            const response = await axios.post('/auth/google-login', { idToken });
+    
+            const { access_token, role_name, ...data } = response.data.data;
+            const roleName = role_name || 'User';
+    
+            setSession(access_token, roleName);
+    
+            dispatch({
+                type: LOGIN,
+                payload: {
+                    isLoggedIn: true,
+                    user: data,
+                    role_name: roleName,
+                    isInitialized: true
+                }
+            });
+    
+            navigate('/dashboard'); // Redirect to dashboard
+            return response;
+        } catch (error) {
+            console.error('Google Login error:', error);
+            throw error;
+        }
+    };
+    
     const register = async (fullName, userName, telephone, email, password, profile_image, navigate) => {
         try {
             const formData = new FormData();
@@ -184,7 +211,7 @@ export const JWTProvider = ({ children }) => {
     }
 
     return (
-        <JWTContext.Provider value={{ ...state, login, logout, register, forgotPassword, updateProfile }}>{children}</JWTContext.Provider>
+        <JWTContext.Provider value={{ ...state, login, logout, register, forgotPassword, updateProfile, googleLogin }}>{children}</JWTContext.Provider>
     );
 };
 

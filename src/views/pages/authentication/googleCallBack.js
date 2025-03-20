@@ -40,7 +40,7 @@ const setSession = (serviceToken, role_name = '') => {
 
 const GoogleCallback = () => {
     const navigate = useNavigate();
-    const { login } = useContext(JWTContext);
+    const { googleLogin } = useContext(JWTContext);
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
@@ -96,7 +96,7 @@ const GoogleCallback = () => {
                 setSession(access_token, role_name);
                 localStorage.setItem('user', JSON.stringify(loginResponse.data.data));
 
-                await login(null, null, navigate, { token: access_token, user: loginResponse.data.data, role_name });
+                await googleLogin(null, null, navigate, { token: access_token, user: loginResponse.data.data, role_name });
 
                 let redirectTo = '/dashboard';
                 if (state) {
@@ -117,7 +117,7 @@ const GoogleCallback = () => {
         };
 
         handleGoogleCallback();
-    }, [navigate, login]);
+    }, [navigate, googleLogin]);
 
     if (isLoading) {
         return (
