@@ -22,7 +22,7 @@ const accountReducer = (state = initialState, action) => {
             const { user, role_name } = action.payload;
             return {
                 ...state,
-                isLoggedIn: true,
+                isLoggedIn: !!user,
                 isInitialized: true,
                 user,
                 role_name
