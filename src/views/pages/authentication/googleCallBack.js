@@ -75,7 +75,7 @@ const GoogleCallback = () => {
                 }
 
                 const user = jwtDecode(id_token);
-                const userEmail = user?.email;
+                const userEmail = user.email;
 
                 const loginResponse = await axios.post(`${process.env.REACT_APP_API_URL}/google/user/login`, {
                     email: userEmail
@@ -117,7 +117,7 @@ const GoogleCallback = () => {
         };
 
         handleGoogleCallback();
-    }, []);
+    }, [navigate, googleLogin]);
 
     if (isLoading) {
         return (
