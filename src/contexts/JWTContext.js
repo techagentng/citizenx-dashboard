@@ -114,7 +114,7 @@ export const JWTProvider = ({ children }) => {
 
     const googleLogin = async (idToken, navigate) => {
         try {
-            const response = await axios.post('/auth/google-login', { idToken });
+            const response = await axios.post('/google/user/login', { idToken });
     
             const { access_token, role_name, ...data } = response.data.data;
             const roleName = role_name || 'User';
