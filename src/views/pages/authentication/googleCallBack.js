@@ -4,42 +4,12 @@ import axios from 'axios';
 import { jwtDecode } from 'jwt-decode';
 import JWTContext from 'contexts/JWTContext';
 import { CircularProgress, Box, Typography } from '@mui/material';
-
-const verifyToken = (token) => {
-    if (!token) {
-        console.error('Token is null or undefined.');
-        return null;
-    }
-    try {
-        const decoded = jwtDecode(token);
-        if (decoded.exp < Date.now() / 1000) {
-            console.error('Token is expired.');
-            return null;
-        }
-        return decoded;
-    } catch (error) {
-        console.error('Invalid token:', error.message);
-        return null;
-    }
-};
-
-const setSession = (serviceToken, role_name = '') => {
-    if (serviceToken) {
-        localStorage.setItem('serviceToken', serviceToken);
-        axios.defaults.headers.common.Authorization = `Bearer ${serviceToken}`;
-    } else {
-        localStorage.removeItem('serviceToken');
-        delete axios.defaults.headers.common.Authorization;
-    }
-    if (role_name) {
-        localStorage.setItem('role_name', role_name);
-    } else {
-        localStorage.removeItem('role_name');
-    }
-};
+import { useDispatch } from 'react-redux'; // Import useDispatch
+import { LOGIN } from 'store/actions'; // Import LOGIN action
 
 const GoogleCallback = () => {
     const navigate = useNavigate();
+    const dispatch = useDispatch(); // Initialize Redux dispatch
     const { googleLogin } = useContext(JWTContext);
     const [isLoading, setIsLoading] = useState(true);
 
@@ -81,10 +51,7 @@ const GoogleCallback = () => {
                     email: userEmail
                 });
 
-                // ✅ Corrected extraction
                 const { access_token, role_name } = loginResponse.data.data;
-
-                // ✅ Use `access_token` instead of `token`
                 const verifiedBackendToken = verifyToken(access_token);
                 if (!verifiedBackendToken) {
                     console.error('Invalid or expired backend token.');
@@ -96,12 +63,20 @@ const GoogleCallback = () => {
                 setSession(access_token, role_name);
                 localStorage.setItem('user', JSON.stringify(loginResponse.data.data));
 
+                // ✅ Dispatch LOGIN action to update Redux state
+                dispatch({
+                    type: LOGIN,
+                    payload: { user: loginResponse.data.data, role_name }
+                });
+
                 await googleLogin(null, null, navigate, { token: access_token, user: loginResponse.data.data, role_name });
+
                 setTimeout(() => {
                     if (store.getState().account.isLoggedIn) {
                         navigate('/dashboard');
                     }
                 }, 500);
+
                 let redirectTo = '/dashboard';
                 if (state) {
                     try {
@@ -121,7 +96,7 @@ const GoogleCallback = () => {
         };
 
         handleGoogleCallback();
-    }, [navigate, googleLogin]);
+    }, [navigate, googleLogin, dispatch]);
 
     if (isLoading) {
         return (
