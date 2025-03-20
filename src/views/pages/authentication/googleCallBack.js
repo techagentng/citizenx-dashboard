@@ -75,7 +75,7 @@ const GoogleCallback = () => {
                 }
 
                 const user = jwtDecode(id_token);
-                const userEmail = user.email;
+                const userEmail = user?.email;
 
                 const loginResponse = await axios.post(`${process.env.REACT_APP_API_URL}/google/user/login`, {
                     email: userEmail
@@ -85,11 +85,11 @@ const GoogleCallback = () => {
                 const { access_token, role_name } = loginResponse.data.data;
 
                 // ✅ Use `access_token` instead of `token`
-                const verifiedBackendToken = verifyToken(access_token);
-                if (!verifiedBackendToken) {
-                    console.error('Invalid or expired backend token.');
+                // const verifiedBackendToken = verifyToken(access_token);
+                if (!userEmail) {
+                    console.error('User email not found in token.');
                     setIsLoading(false);
-                    navigate('/simple', { state: { error: 'Invalid backend token' } });
+                    navigate('/simple', { state: { error: 'Email not found in token' } });
                     return;
                 }
 
@@ -117,7 +117,7 @@ const GoogleCallback = () => {
         };
 
         handleGoogleCallback();
-    }, [navigate, googleLogin]);
+    }, []);
 
     if (isLoading) {
         return (
