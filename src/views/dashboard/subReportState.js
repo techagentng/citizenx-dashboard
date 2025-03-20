@@ -3,6 +3,7 @@ import { useLocation } from 'react-router-dom';
 import { getStateReportCountsState } from 'services/reportService'; 
 import BarChart from './barchartState'; 
 import PieChart from './piechartState'; 
+import { Grid, Typography, Box } from '@mui/material';
 
 const SubReport = () => {
     const location = useLocation();
@@ -26,7 +27,7 @@ const SubReport = () => {
         getStateReportCountsState(selectedState)
             .then((data) => {
                 setReportData(data.report_counts || []);
-                setTotalUsers(data.total_users ?? 'N/A'); // Ensure fallback value
+                setTotalUsers(data.total_users ?? 'N/A');
                 setTotalReports(data.total_reports ?? 'N/A');
             })
             .catch((err) => {
@@ -37,34 +38,57 @@ const SubReport = () => {
     }, [selectedState]);
 
     if (loading) {
-        return <div>Loading report data for {selectedState}...</div>;
+        return <Typography>Loading report data for {selectedState}...</Typography>;
     }
 
     if (error) {
-        return <div>Error: {error}</div>;
+        return <Typography color="error">Error: {error}</Typography>;
     }
 
     return (
-        <div>
-            <h2>Report Data for {selectedState}</h2>
-            <p><strong>Total Users:</strong> {totalUsers}</p>
-            <p><strong>Total Reports:</strong> {totalReports}</p>
-    
+        <Box sx={{ p: 2 }}>
+            <Typography variant="h4" gutterBottom>
+                Report Data for {selectedState}
+            </Typography>
+            <Typography variant="body1">
+                <strong>Total Users:</strong> {totalUsers}
+            </Typography>
+            <Typography variant="body1" gutterBottom>
+                <strong>Total Reports:</strong> {totalReports}
+            </Typography>
+
             {reportData.length > 0 ? (
-                <div className="charts-container">
-                    <div className="chart-item">
-                        <BarChart data={reportData} title={`Report Types in ${selectedState}`} />
-                    </div>
-                    <div className="chart-item">
-                        <PieChart data={reportData} title={`Report Distribution in ${selectedState}`} />
-                    </div>
-                </div>
+                <Grid container spacing={2} justifyContent="center">
+                    <Grid item xs={12} md={6}>
+                        <Box
+                            sx={{
+                                width: '100%',
+                                maxWidth: { xs: '100%', md: 500 }, // Full width on mobile, capped on desktop
+                                height: 400, // Fixed height, adjust as needed
+                                overflow: 'hidden', // Prevent overflow
+                            }}
+                        >
+                            <BarChart data={reportData} title={`Report Types in ${selectedState}`} />
+                        </Box>
+                    </Grid>
+                    <Grid item xs={12} md={6}>
+                        <Box
+                            sx={{
+                                width: '100%',
+                                maxWidth: { xs: '100%', md: 500 }, // Full width on mobile, capped on desktop
+                                height: 400, // Fixed height, adjust as needed
+                                overflow: 'hidden',
+                            }}
+                        >
+                            <PieChart data={reportData} title={`Report Distribution in ${selectedState}`} />
+                        </Box>
+                    </Grid>
+                </Grid>
             ) : (
-                <p>No report data available for this state.</p>
+                <Typography>No report data available for this state.</Typography>
             )}
-        </div>
+        </Box>
     );
-    
 };
 
 export default SubReport;
