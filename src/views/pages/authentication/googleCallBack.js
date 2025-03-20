@@ -79,11 +79,13 @@ const GoogleCallback = () => {
 
                 const loginResponse = await axios.post(`${process.env.REACT_APP_API_URL}/google/user/login`, {
                     email: userEmail
-                });                
-                const { token, authuser } = loginResponse.data;
-                const role_name = authuser.userType.name;
+                });
 
-                const verifiedBackendToken = verifyToken(token);
+                // ✅ Corrected extraction
+                const { access_token, role_name } = loginResponse.data.data;
+
+                // ✅ Use `access_token` instead of `token`
+                const verifiedBackendToken = verifyToken(access_token);
                 if (!verifiedBackendToken) {
                     console.error('Invalid or expired backend token.');
                     setIsLoading(false);
@@ -91,10 +93,10 @@ const GoogleCallback = () => {
                     return;
                 }
 
-                setSession(token, role_name);
-                localStorage.setItem('user', JSON.stringify(authuser));
+                setSession(access_token, role_name);
+                localStorage.setItem('user', JSON.stringify(loginResponse.data.data));
 
-                await login(null, null, navigate, { token, user: authuser, role_name });
+                await login(null, null, navigate, { token: access_token, user: loginResponse.data.data, role_name });
 
                 let redirectTo = '/dashboard';
                 if (state) {
