@@ -6,7 +6,7 @@ import JWTContext from 'contexts/JWTContext';
 import { CircularProgress, Box, Typography } from '@mui/material';
 import { useDispatch } from 'react-redux';
 import { LOGIN } from 'store/actions';
-import { setSession } from 'utils/session'; // Ensure setSession is correctly imported
+import { setSession } from 'contexts/JWTContext';
 
 const GoogleCallback = () => {
     const navigate = useNavigate();
