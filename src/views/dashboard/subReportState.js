@@ -51,11 +51,11 @@ const SubReport = () => {
             <p><strong>Total Reports:</strong> {totalReports}</p>
     
             {reportData.length > 0 ? (
-                <div style={{ display: 'flex', justifyContent: 'space-between', gap: '20px' }}>
-                    <div style={{ flex: 1 }}>
+                <div className="charts-container">
+                    <div className="chart-item">
                         <BarChart data={reportData} title={`Report Types in ${selectedState}`} />
                     </div>
-                    <div style={{ flex: 1 }}>
+                    <div className="chart-item">
                         <PieChart data={reportData} title={`Report Distribution in ${selectedState}`} />
                     </div>
                 </div>
