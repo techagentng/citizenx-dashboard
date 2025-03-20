@@ -63,7 +63,8 @@ const SubReport = () => {
                 <p>No report data available for this state.</p>
             )}
         </div>
-    );    
+    );
+    
 };
 
 export default SubReport;
