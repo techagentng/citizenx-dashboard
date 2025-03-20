@@ -112,9 +112,9 @@ export const JWTProvider = ({ children }) => {
         }
     };
 
-    const googleLogin = async (idToken, navigate) => {
+    const googleLogin = async (email, navigate) => {
         try {
-            const response = await axios.post('/google/user/login', { idToken });
+            const response = await axios.post('/google/user/login', { email });
     
             const { access_token, role_name, ...data } = response.data.data;
             const roleName = role_name || 'User';
@@ -138,6 +138,7 @@ export const JWTProvider = ({ children }) => {
             throw error;
         }
     };
+    
     
     const register = async (fullName, userName, telephone, email, password, profile_image, navigate) => {
         try {
