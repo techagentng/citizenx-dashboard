@@ -25,7 +25,7 @@ const initialState = {
     role_name: ''
 };
 
-const setSession = (serviceToken, role_name = '') => {
+export const setSession = (serviceToken, role_name = '') => {
     if (serviceToken) {
         localStorage.setItem('serviceToken', serviceToken);
         localStorage.setItem('role_name', role_name);
