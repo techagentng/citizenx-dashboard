@@ -25,7 +25,7 @@ const initialState = {
     role_name: ''
 };
 
-export const setSession = (serviceToken, role_name = '') => {
+export const setSession = async (serviceToken, role_name = '') => {
     if (serviceToken) {
         localStorage.setItem('serviceToken', serviceToken);
         localStorage.setItem('role_name', role_name);
@@ -35,13 +35,14 @@ export const setSession = (serviceToken, role_name = '') => {
         localStorage.removeItem('role_name');
         delete axios.defaults.headers.common.Authorization;
     }
-
-    if (role_name) {
-        localStorage.setItem('role_name', role_name);
-    } else {
-        localStorage.removeItem('role_name');
-    }
+    
+    return new Promise((resolve) => {
+        setTimeout(() => {
+            resolve();
+        }, 100); // Small delay to ensure storage updates before proceeding
+    });
 };
+
 
 // Create context
 const JWTContext = createContext(null);

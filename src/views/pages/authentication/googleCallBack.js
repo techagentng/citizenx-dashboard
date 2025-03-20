@@ -56,16 +56,11 @@ const GoogleCallback = () => {
                 }
 
                 // Store token and session
-                setSession(access_token, role_name);
-                localStorage.setItem('user', JSON.stringify(userData));
-
-                // Dispatch Redux action
+                await setSession(access_token, role_name);
                 dispatch({
                     type: LOGIN,
                     payload: { user: userData, role_name }
                 });
-
-                // Log in the user
                 await googleLogin(null, null, navigate, {
                     token: access_token,
                     user: userData,
