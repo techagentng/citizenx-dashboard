@@ -4,12 +4,13 @@ import axios from 'axios';
 import { jwtDecode } from 'jwt-decode';
 import JWTContext from 'contexts/JWTContext';
 import { CircularProgress, Box, Typography } from '@mui/material';
-import { useDispatch } from 'react-redux'; // Import useDispatch
-import { LOGIN } from 'store/actions'; // Import LOGIN action
+import { useDispatch } from 'react-redux';
+import { LOGIN } from 'store/actions';
+import { setSession } from 'utils/session'; // Ensure setSession is correctly imported
 
 const GoogleCallback = () => {
     const navigate = useNavigate();
-    const dispatch = useDispatch(); // Initialize Redux dispatch
+    const dispatch = useDispatch();
     const { googleLogin } = useContext(JWTContext);
     const [isLoading, setIsLoading] = useState(true);
 
@@ -27,6 +28,7 @@ const GoogleCallback = () => {
             }
 
             try {
+                // Exchange authorization code for access token
                 const tokenResponse = await axios.post('https://oauth2.googleapis.com/token', {
                     code,
                     client_id: process.env.REACT_APP_GOOGLE_CLIENT_ID,
@@ -36,47 +38,41 @@ const GoogleCallback = () => {
                 });
 
                 const { id_token } = tokenResponse.data;
-                const verifiedToken = verifyToken(id_token);
-                if (!verifiedToken) {
-                    console.error('Invalid or expired Google token.');
-                    setIsLoading(false);
-                    navigate('/simple', { state: { error: 'Invalid Google token' } });
-                    return;
+                if (!id_token) {
+                    throw new Error('Failed to retrieve Google ID token.');
                 }
 
                 const user = jwtDecode(id_token);
                 const userEmail = user.email;
 
+                // Send the Google ID token to backend for login
                 const loginResponse = await axios.post(`${process.env.REACT_APP_API_URL}/google/user/login`, {
                     email: userEmail
                 });
 
-                const { access_token, role_name } = loginResponse.data.data;
-                const verifiedBackendToken = verifyToken(access_token);
-                if (!verifiedBackendToken) {
-                    console.error('Invalid or expired backend token.');
-                    setIsLoading(false);
-                    navigate('/simple', { state: { error: 'Invalid backend token' } });
-                    return;
+                const { access_token, role_name, user: userData } = loginResponse.data.data;
+                if (!access_token) {
+                    throw new Error('Backend authentication failed.');
                 }
 
+                // Store token and session
                 setSession(access_token, role_name);
-                localStorage.setItem('user', JSON.stringify(loginResponse.data.data));
+                localStorage.setItem('user', JSON.stringify(userData));
 
-                // ✅ Dispatch LOGIN action to update Redux state
+                // Dispatch Redux action
                 dispatch({
                     type: LOGIN,
-                    payload: { user: loginResponse.data.data, role_name }
+                    payload: { user: userData, role_name }
                 });
 
-                await googleLogin(null, null, navigate, { token: access_token, user: loginResponse.data.data, role_name });
+                // Log in the user
+                await googleLogin(null, null, navigate, {
+                    token: access_token,
+                    user: userData,
+                    role_name
+                });
 
-                setTimeout(() => {
-                    if (store.getState().account.isLoggedIn) {
-                        navigate('/dashboard');
-                    }
-                }, 500);
-
+                // Determine redirect location
                 let redirectTo = '/dashboard';
                 if (state) {
                     try {
@@ -86,6 +82,7 @@ const GoogleCallback = () => {
                         console.error('Error parsing state:', e);
                     }
                 }
+
                 navigate(redirectTo, { replace: true });
             } catch (error) {
                 console.error('Authentication error:', error.response?.data || error.message);
