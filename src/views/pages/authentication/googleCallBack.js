@@ -97,7 +97,11 @@ const GoogleCallback = () => {
                 localStorage.setItem('user', JSON.stringify(loginResponse.data.data));
 
                 await googleLogin(null, null, navigate, { token: access_token, user: loginResponse.data.data, role_name });
-
+                setTimeout(() => {
+                    if (store.getState().account.isLoggedIn) {
+                        navigate('/dashboard');
+                    }
+                }, 500);
                 let redirectTo = '/dashboard';
                 if (state) {
                     try {
