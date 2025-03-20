@@ -85,11 +85,11 @@ const GoogleCallback = () => {
                 const { access_token, role_name } = loginResponse.data.data;
 
                 // ✅ Use `access_token` instead of `token`
-                // const verifiedBackendToken = verifyToken(access_token);
-                if (!userEmail) {
-                    console.error('User email not found in token.');
+                const verifiedBackendToken = verifyToken(access_token);
+                if (!verifiedBackendToken) {
+                    console.error('Invalid or expired backend token.');
                     setIsLoading(false);
-                    navigate('/simple', { state: { error: 'Email not found in token' } });
+                    navigate('/simple', { state: { error: 'Invalid backend token' } });
                     return;
                 }
 
