@@ -55,12 +55,14 @@ const GoogleCallback = () => {
                     throw new Error('Backend authentication failed.');
                 }
 
-                // Store token and session
-                await setSession(access_token, role_name);
+                // Store token and update session/context synchronously
+                await setSession(access_token, role_name); // Ensure this resolves before proceeding
                 dispatch({
                     type: LOGIN,
                     payload: { user: userData, role_name }
                 });
+
+                // Ensure googleLogin updates context synchronously
                 await googleLogin(null, null, navigate, {
                     token: access_token,
                     user: userData,
@@ -78,6 +80,7 @@ const GoogleCallback = () => {
                     }
                 }
 
+                // Navigate to dashboard
                 navigate(redirectTo, { replace: true });
             } catch (error) {
                 console.error('Authentication error:', error.response?.data || error.message);

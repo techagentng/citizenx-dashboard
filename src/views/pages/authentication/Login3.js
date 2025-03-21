@@ -1,15 +1,14 @@
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom'; // Add useNavigate
 // material-ui
 import { useTheme } from '@mui/material/styles';
 import { Divider, Grid, Stack, Typography, useMediaQuery, IconButton } from '@mui/material';
-// import LayersTwoToneIcon from '@mui/icons-material/LayersTwoTone';
 // project imports
 import AuthWrapper1 from '../AuthWrapper1';
 import AuthCardWrapper from '../AuthCardWrapper';
 import AuthLogin from './auth-forms/AuthLogin';
 import AuthFooter from 'ui-component/cards/AuthFooter';
 import JWTContext from 'contexts/JWTContext';
-import { useContext } from 'react';
+import { useContext, useEffect } from 'react'; // Add useEffect
 import google from 'assets/images/auth/google.png';
 // ================================|| AUTH3 - LOGIN ||================================ //
 
@@ -17,10 +16,17 @@ const Login = () => {
     const theme = useTheme();
     const matchDownSM = useMediaQuery(theme.breakpoints.down('md'));
     const { isLoggedIn } = useContext(JWTContext);
+    const navigate = useNavigate(); // Hook for navigation
+
+    // Redirect to dashboard if already logged in
+    useEffect(() => {
+        if (isLoggedIn) {
+            navigate('/dashboard', { replace: true });
+        }
+    }, [isLoggedIn, navigate]);
 
     const handleGoogleSignIn = () => {
         const clientId = process.env.REACT_APP_GOOGLE_CLIENT_ID;
-        // const clientId = '3542246689-jutm6p6ctc8he0k9ec4rg4f2eid0krmb.apps.googleusercontent.com'
         const redirectUri = process.env.REACT_APP_GOOGLE_REDIRECT_URL;
         const scope = 'openid email profile';
         const responseType = 'code';
@@ -34,6 +40,9 @@ const Login = () => {
 
         window.location.href = googleAuthUrl;
     };
+
+    // Optionally, prevent rendering the login UI if redirecting
+    if (isLoggedIn) return null;
 
     return (
         <AuthWrapper1>
@@ -58,7 +67,7 @@ const Login = () => {
                                                     sx={{
                                                         display: 'flex',
                                                         alignItems: 'center',
-                                                        justifyContent: 'center', // Center content horizontally
+                                                        justifyContent: 'center',
                                                         border: '1px solid #ddd',
                                                         borderRadius: 2,
                                                         p: '8px 16px',
@@ -76,13 +85,13 @@ const Login = () => {
                                                         alt="Google Icon"
                                                         width={20}
                                                         height={20}
-                                                        style={{ marginRight: 8, display: 'block' }} 
+                                                        style={{ marginRight: 8, display: 'block' }}
                                                     />
                                                     <Typography
                                                         variant="button"
                                                         onClick={handleGoogleSignIn}
                                                         color="textPrimary"
-                                                        sx={{ textAlign: 'center' }} 
+                                                        sx={{ textAlign: 'center' }}
                                                     >
                                                         Sign in with Google
                                                     </Typography>
@@ -116,7 +125,7 @@ const Login = () => {
                                                 variant="subtitle1"
                                                 sx={{ textDecoration: 'none' }}
                                             >
-                                                Don&apos;t have an account?
+                                                Dont have an account?
                                             </Typography>
                                         </Grid>
                                     </Grid>
