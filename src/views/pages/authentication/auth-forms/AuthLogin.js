@@ -1,8 +1,6 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import { Link } from 'react-router-dom';
-
-// material-ui
+import { Link, useNavigate } from 'react-router-dom';
 import { useTheme } from '@mui/material/styles';
 import {
     Box,
@@ -18,38 +16,22 @@ import {
     OutlinedInput,
     Typography
 } from '@mui/material';
-
-// third party
 import * as Yup from 'yup';
 import { Formik } from 'formik';
-
-// project imports
 import AnimateButton from 'ui-component/extended/AnimateButton';
 import useAuth from 'hooks/useAuth';
-import useScriptRef from 'hooks/useScriptRef';
-
-// assets
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 
-// ===============================|| JWT LOGIN ||=============================== //
-
 const JWTLogin = ({ loginProp, ...others }) => {
     const theme = useTheme();
-
+    const navigate = useNavigate();
     const { login } = useAuth();
-    const scriptedRef = useScriptRef();
-
     const [checked, setChecked] = React.useState(true);
-
     const [showPassword, setShowPassword] = React.useState(false);
-    const handleClickShowPassword = () => {
-        setShowPassword(!showPassword);
-    };
 
-    const handleMouseDownPassword = (event) => {
-        event.preventDefault();
-    };
+    const handleClickShowPassword = () => setShowPassword(!showPassword);
+    const handleMouseDownPassword = (event) => event.preventDefault();
 
     return (
         <Formik
@@ -64,19 +46,14 @@ const JWTLogin = ({ loginProp, ...others }) => {
             })}
             onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
                 try {
-                    await login(values.email, values.password);
-
-                    if (scriptedRef.current) {
-                        setStatus({ success: true });
-                        setSubmitting(false);
-                    }
+                    await login(values.email, values.password, navigate); // Pass navigate to login
+                    setStatus({ success: true });
+                    setSubmitting(false);
                 } catch (err) {
                     console.error(err);
-                    if (scriptedRef.current) {
-                        setStatus({ success: false });
-                        setErrors({ submit: err.errors });
-                        setSubmitting(false);
-                    }
+                    setStatus({ success: false });
+                    setErrors({ submit: err.message || 'Login failed' });
+                    setSubmitting(false);
                 }
             }}
         >

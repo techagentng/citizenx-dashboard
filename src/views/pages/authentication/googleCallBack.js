@@ -4,13 +4,9 @@ import axios from 'axios';
 import { jwtDecode } from 'jwt-decode';
 import JWTContext from 'contexts/JWTContext';
 import { CircularProgress, Box, Typography } from '@mui/material';
-import { useDispatch } from 'react-redux';
-import { LOGIN } from 'store/actions';
-import { setSession } from 'contexts/JWTContext';
 
 const GoogleCallback = () => {
     const navigate = useNavigate();
-    const dispatch = useDispatch();
     const { googleLogin } = useContext(JWTContext);
     const [isLoading, setIsLoading] = useState(true);
 
@@ -18,17 +14,14 @@ const GoogleCallback = () => {
         const handleGoogleCallback = async () => {
             const queryParams = new URLSearchParams(window.location.search);
             const code = queryParams.get('code');
-            const state = queryParams.get('state');
 
             if (!code) {
                 console.error('Authorization code not found.');
-                setIsLoading(false);
-                navigate('/simple', { state: { error: 'No authorization code' } });
+                navigate('/login', { state: { error: 'No authorization code' } });
                 return;
             }
 
             try {
-                // Exchange authorization code for access token
                 const tokenResponse = await axios.post('https://oauth2.googleapis.com/token', {
                     code,
                     client_id: process.env.REACT_APP_GOOGLE_CLIENT_ID,
@@ -38,60 +31,20 @@ const GoogleCallback = () => {
                 });
 
                 const { id_token } = tokenResponse.data;
-                if (!id_token) {
-                    throw new Error('Failed to retrieve Google ID token.');
-                }
-
                 const user = jwtDecode(id_token);
                 const userEmail = user.email;
 
-                // Send the Google ID token to backend for login
-                const loginResponse = await axios.post(`${process.env.REACT_APP_API_URL}/google/user/login`, {
-                    email: userEmail
-                });
-
-                const { access_token, role_name, user: userData } = loginResponse.data.data;
-                if (!access_token) {
-                    throw new Error('Backend authentication failed.');
-                }
-
-                // Store token and update session/context synchronously
-                await setSession(access_token, role_name); // Ensure this resolves before proceeding
-                dispatch({
-                    type: LOGIN,
-                    payload: { user: userData, role_name }
-                });
-
-                // Ensure googleLogin updates context synchronously
-                await googleLogin(null, null, navigate, {
-                    token: access_token,
-                    user: userData,
-                    role_name
-                });
-
-                // Determine redirect location
-                let redirectTo = '/dashboard';
-                if (state) {
-                    try {
-                        const parsedState = JSON.parse(decodeURIComponent(state));
-                        redirectTo = parsedState.redirectTo || '/dashboard';
-                    } catch (e) {
-                        console.error('Error parsing state:', e);
-                    }
-                }
-
-                // Navigate to dashboard
-                navigate(redirectTo, { replace: true });
+                await googleLogin(userEmail, navigate); // Pass navigate to googleLogin
             } catch (error) {
                 console.error('Authentication error:', error.response?.data || error.message);
-                navigate('/simple', { state: { error: 'Authentication failed', details: error.response?.data } });
+                navigate('/login', { state: { error: 'Authentication failed', details: error.response?.data } });
             } finally {
                 setIsLoading(false);
             }
         };
 
         handleGoogleCallback();
-    }, [navigate, googleLogin, dispatch]);
+    }, [navigate, googleLogin]);
 
     if (isLoading) {
         return (

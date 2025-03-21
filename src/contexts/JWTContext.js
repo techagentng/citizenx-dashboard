@@ -1,10 +1,8 @@
 import PropTypes from 'prop-types';
 import { createContext, useEffect, useReducer } from 'react';
-// Reducer - state management
 import { LOGIN, LOGOUT } from 'store/actions';
 import accountReducer from 'store/accountReducer';
 import { jwtDecode } from 'jwt-decode';
-// Project imports
 import Loader from 'ui-component/Loader';
 import axios from 'utils/axios';
 
@@ -17,15 +15,8 @@ const verifyToken = (serviceToken) => {
         return false;
     }
 };
-// Initial state
-const initialState = {
-    isLoggedIn: false,
-    isInitialized: false,
-    user: null,
-    role_name: ''
-};
 
-export const setSession = async (serviceToken, role_name = '') => {
+export const setSession = (serviceToken, role_name = '') => {
     if (serviceToken) {
         localStorage.setItem('serviceToken', serviceToken);
         localStorage.setItem('role_name', role_name);
@@ -35,17 +26,17 @@ export const setSession = async (serviceToken, role_name = '') => {
         localStorage.removeItem('role_name');
         delete axios.defaults.headers.common.Authorization;
     }
-    
-    return new Promise((resolve) => {
-        setTimeout(() => {
-            resolve();
-        }, 100); // Small delay to ensure storage updates before proceeding
-    });
+    // Removed artificial delay; localStorage is synchronous
 };
 
+const initialState = {
+    isLoggedIn: false,
+    isInitialized: false,
+    user: null,
+    role_name: ''
+};
 
-// Create context
-const JWTContext = createContext(null);
+export const JWTContext = createContext(null);
 
 export const JWTProvider = ({ children }) => {
     const [state, dispatch] = useReducer(accountReducer, initialState);
@@ -53,12 +44,11 @@ export const JWTProvider = ({ children }) => {
     useEffect(() => {
         const init = async () => {
             try {
-                const serviceToken = window.localStorage.getItem('serviceToken');
-                const serviceRole = window.localStorage.getItem('role_name');
+                const serviceToken = localStorage.getItem('serviceToken');
+                const serviceRole = localStorage.getItem('role_name');
 
                 if (serviceToken && serviceRole && verifyToken(serviceToken)) {
                     setSession(serviceToken, serviceRole);
-
                     const response = await axios.get('/me');
                     const isOnLine = await axios.get('/user/is_online');
                     const { valid } = isOnLine.data;
@@ -77,8 +67,7 @@ export const JWTProvider = ({ children }) => {
                         }
                     });
                 } else {
-                    console.warn('Token or role missing or invalid');
-                    setSession(null); // Clear invalid session
+                    setSession(null);
                     dispatch({ type: LOGOUT, payload: { isInitialized: true } });
                 }
             } catch (err) {
@@ -95,7 +84,8 @@ export const JWTProvider = ({ children }) => {
             const response = await axios.post('/auth/login', { email, password });
             const { access_token, role_name, ...data } = response.data.data;
             const roleName = role_name || 'User';
-            setSession(access_token, role_name);
+
+            setSession(access_token, roleName);
             dispatch({
                 type: LOGIN,
                 payload: {
@@ -105,7 +95,9 @@ export const JWTProvider = ({ children }) => {
                     isInitialized: true
                 }
             });
-            navigate('/dashboard'); // Redirect to dashboard
+            if (navigate) {
+                navigate('/dashboard', { replace: true }); // Ensure navigation happens after state update
+            }
             return response;
         } catch (error) {
             console.error('Login error:', error);
@@ -116,12 +108,10 @@ export const JWTProvider = ({ children }) => {
     const googleLogin = async (email, navigate) => {
         try {
             const response = await axios.post('/google/user/login', { email });
-    
             const { access_token, role_name, ...data } = response.data.data;
             const roleName = role_name || 'User';
-    
+
             setSession(access_token, roleName);
-    
             dispatch({
                 type: LOGIN,
                 payload: {
@@ -131,16 +121,16 @@ export const JWTProvider = ({ children }) => {
                     isInitialized: true
                 }
             });
-    
-            navigate('/dashboard'); // Redirect to dashboard
+            if (navigate) {
+                navigate('/dashboard', { replace: true });
+            }
             return response;
         } catch (error) {
             console.error('Google Login error:', error);
             throw error;
         }
     };
-    
-    
+
     const register = async (fullName, userName, telephone, email, password, profile_image, navigate) => {
         try {
             const formData = new FormData();
@@ -160,21 +150,24 @@ export const JWTProvider = ({ children }) => {
             const user = response.data.data;
             const role_name = user.role_name || 'User';
 
-            let storedUsers = window.localStorage.getItem('users');
+            let storedUsers = localStorage.getItem('users');
             storedUsers = storedUsers ? JSON.parse(storedUsers) : [];
             storedUsers.push(user);
-            window.localStorage.setItem('users', JSON.stringify(storedUsers));
+            localStorage.setItem('users', JSON.stringify(storedUsers));
 
-            // Dispatch REGISTER action to update state
             dispatch({
-                type: REGISTER,
+                type: LOGIN, // Changed to LOGIN for consistency (assuming registration logs in)
                 payload: {
                     user,
-                    role_name
+                    role_name,
+                    isLoggedIn: true,
+                    isInitialized: true
                 }
             });
 
-            navigate('/login'); // Redirect to login page after registration
+            if (navigate) {
+                navigate('/dashboard', { replace: true }); // Redirect to dashboard instead of login
+            }
             return response;
         } catch (error) {
             console.error('Registration error:', error);
@@ -182,7 +175,7 @@ export const JWTProvider = ({ children }) => {
         }
     };
 
-    const logout = async () => {
+    const logout = async (navigate) => {
         try {
             await axios.get('/logout');
         } catch (error) {
@@ -191,8 +184,11 @@ export const JWTProvider = ({ children }) => {
         setSession(null);
         dispatch({
             type: LOGOUT,
-            payload: { isInitialized: true } // Add payload to reset state
+            payload: { isInitialized: true }
         });
+        if (navigate) {
+            navigate('/login', { replace: true });
+        }
     };
 
     const forgotPassword = async (email) => {
@@ -213,7 +209,9 @@ export const JWTProvider = ({ children }) => {
     }
 
     return (
-        <JWTContext.Provider value={{ ...state, login, logout, register, forgotPassword, updateProfile, googleLogin }}>{children}</JWTContext.Provider>
+        <JWTContext.Provider value={{ ...state, login, logout, register, forgotPassword, updateProfile, googleLogin }}>
+            {children}
+        </JWTContext.Provider>
     );
 };
 
