@@ -105,32 +105,46 @@ export const JWTProvider = ({ children }) => {
         }
     };
 
-    const googleLogin = async (email, navigate) => {
+    const googleLogin = async (email, fullname, telephone, navigate) => {
         try {
-            const response = await axios.post('/google/user/login', { email });
+            // Send email, fullname, and telephone to the backend
+            const response = await axios.post('/google/user/login', {
+                email,
+                fullname,
+                telephone
+            });
+    
+            // Extract data from the response
             const { access_token, role_name, ...data } = response.data.data;
-            const roleName = role_name || 'User';
-
+            const roleName = role_name || 'User'; // Fallback role name
+    
+            // Update session and state
             setSession(access_token, roleName);
             dispatch({
                 type: LOGIN,
                 payload: {
                     isLoggedIn: true,
-                    user: data,
+                    user: {
+                        ...data, // Spread the user data (id, fullname, username, telephone, email, etc.)
+                        email // Ensure email is included if not in data
+                    },
                     role_name: roleName,
                     isInitialized: true
                 }
             });
+    
+            // Navigate to dashboard if provided
             if (navigate) {
                 navigate('/dashboard', { replace: true });
             }
+    
             return response;
         } catch (error) {
-            console.error('Google Login error:', error);
+            console.error('Google Login error:', error.response?.data || error.message);
             throw error;
         }
     };
-
+    
     const register = async (fullName, userName, telephone, email, password, profile_image, navigate) => {
         try {
             const formData = new FormData();

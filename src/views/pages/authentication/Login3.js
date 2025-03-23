@@ -58,7 +58,7 @@ const Login = () => {
                                     <Grid item xs={12}>
                                         <Grid
                                             container
-                                            direction={matchDownSM ? 'column-reverse' : 'column'}
+                                            direction={matchDownSM ? 'column' : 'column'}
                                             alignItems="center"
                                             justifyContent="center"
                                         >
