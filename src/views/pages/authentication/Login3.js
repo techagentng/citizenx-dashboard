@@ -1,22 +1,22 @@
-import { Link, useNavigate } from 'react-router-dom'; // Add useNavigate
-// material-ui
+import { Link, useNavigate } from 'react-router-dom';
 import { useTheme } from '@mui/material/styles';
 import { Divider, Grid, Stack, Typography, useMediaQuery, IconButton } from '@mui/material';
-// project imports
 import AuthWrapper1 from '../AuthWrapper1';
 import AuthCardWrapper from '../AuthCardWrapper';
 import AuthLogin from './auth-forms/AuthLogin';
 import AuthFooter from 'ui-component/cards/AuthFooter';
 import JWTContext from 'contexts/JWTContext';
-import { useContext, useEffect } from 'react'; // Add useEffect
+import { useContext, useEffect } from 'react';
 import google from 'assets/images/auth/google.png';
+import facebook from 'assets/images/auth/facebook.png'; // Add Facebook icon
+
 // ================================|| AUTH3 - LOGIN ||================================ //
 
 const Login = () => {
     const theme = useTheme();
     const matchDownSM = useMediaQuery(theme.breakpoints.down('md'));
     const { isLoggedIn } = useContext(JWTContext);
-    const navigate = useNavigate(); // Hook for navigation
+    const navigate = useNavigate();
 
     // Redirect to dashboard if already logged in
     useEffect(() => {
@@ -30,18 +30,27 @@ const Login = () => {
         const redirectUri = process.env.REACT_APP_GOOGLE_REDIRECT_URL;
         const scope = 'openid email profile';
         const responseType = 'code';
-
-        // Add state parameter to maintain redirect destination
         const state = encodeURIComponent(JSON.stringify({ redirectTo: '/dashboard' }));
 
         const googleAuthUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${clientId}&redirect_uri=${encodeURIComponent(
             redirectUri
         )}&response_type=${responseType}&scope=${encodeURIComponent(scope)}&state=${state}`;
-
         window.location.href = googleAuthUrl;
     };
 
-    // Optionally, prevent rendering the login UI if redirecting
+    const handleFacebookSignIn = () => {
+        const appId = process.env.REACT_APP_FACEBOOK_APP_ID;
+        const redirectUri = process.env.REACT_APP_FACEBOOK_REDIRECT_URL;
+        const scope = 'public_profile,email';
+        const responseType = 'code';
+        const state = encodeURIComponent(JSON.stringify({ redirectTo: '/dashboard' }));
+
+        const facebookAuthUrl = `https://www.facebook.com/v19.0/dialog/oauth?client_id=${appId}&redirect_uri=${encodeURIComponent(
+            redirectUri
+        )}&response_type=${responseType}&scope=${encodeURIComponent(scope)}&state=${state}`;
+        window.location.href = facebookAuthUrl;
+    };
+
     if (isLoggedIn) return null;
 
     return (
@@ -62,7 +71,8 @@ const Login = () => {
                                             alignItems="center"
                                             justifyContent="center"
                                         >
-                                            <Grid item xs={12} sx={{ textAlign: 'center', marginBottom: 3 }}>
+                                            {/* Google Button */}
+                                            <Grid item xs={12} sx={{ textAlign: 'center', marginBottom: 2 }}>
                                                 <IconButton
                                                     sx={{
                                                         display: 'flex',
@@ -70,9 +80,9 @@ const Login = () => {
                                                         justifyContent: 'center',
                                                         border: '1px solid #ddd',
                                                         borderRadius: 2,
-                                                        p: '12px 24px', // Increase padding to make the button larger
-                                                        width: '100%', // Ensure the button takes full width if needed
-                                                        maxWidth: 400, // You can set a larger maxWidth if needed
+                                                        p: '12px 24px',
+                                                        width: '100%',
+                                                        maxWidth: 400,
                                                         mx: 'auto',
                                                         backgroundColor: '#fff',
                                                         '&:hover': {
@@ -83,9 +93,9 @@ const Login = () => {
                                                     <img
                                                         src={google}
                                                         alt="Google Icon"
-                                                        width={30} // Increased size for better visibility
+                                                        width={30}
                                                         height={30}
-                                                        style={{ marginRight: 12, display: 'block' }} // Increase margin for better alignment
+                                                        style={{ marginRight: 12, display: 'block' }}
                                                     />
                                                     <Typography
                                                         variant="button"
@@ -93,11 +103,52 @@ const Login = () => {
                                                         color="textPrimary"
                                                         sx={{
                                                             textAlign: 'center',
-                                                            fontSize: '1rem', // Optional: Adjust font size to match the manual input fields
-                                                            fontWeight: 'bold' // Make the text bold to match the input field style
+                                                            fontSize: '1rem',
+                                                            fontWeight: 'bold'
                                                         }}
                                                     >
                                                         Sign in with Google
+                                                    </Typography>
+                                                </IconButton>
+                                            </Grid>
+
+                                            {/* Facebook Button */}
+                                            <Grid item xs={12} sx={{ textAlign: 'center', marginBottom: 3 }}>
+                                                <IconButton
+                                                    sx={{
+                                                        display: 'flex',
+                                                        alignItems: 'center',
+                                                        justifyContent: 'center',
+                                                        border: '1px solid #ddd',
+                                                        borderRadius: 2,
+                                                        p: '12px 24px',
+                                                        width: '100%',
+                                                        maxWidth: 400,
+                                                        mx: 'auto',
+                                                        backgroundColor: '#fff',
+                                                        '&:hover': {
+                                                            backgroundColor: '#f5f5f5'
+                                                        }
+                                                    }}
+                                                >
+                                                    <img
+                                                        src={facebook}
+                                                        alt="Facebook Icon"
+                                                        width={30}
+                                                        height={30}
+                                                        style={{ marginRight: 12, display: 'block' }}
+                                                    />
+                                                    <Typography
+                                                        variant="button"
+                                                        onClick={handleFacebookSignIn}
+                                                        color="textPrimary"
+                                                        sx={{
+                                                            textAlign: 'center',
+                                                            fontSize: '1rem',
+                                                            fontWeight: 'bold'
+                                                        }}
+                                                    >
+                                                        Sign in with Facebook
                                                     </Typography>
                                                 </IconButton>
                                             </Grid>
@@ -129,7 +180,7 @@ const Login = () => {
                                                 variant="subtitle1"
                                                 sx={{ textDecoration: 'none' }}
                                             >
-                                                Dont have an account?
+                                                Don’t have an account?
                                             </Typography>
                                         </Grid>
                                     </Grid>
@@ -138,7 +189,6 @@ const Login = () => {
                         </Grid>
                     </Grid>
                 </Grid>
-
                 <Grid item xs={12} sx={{ m: 3, mt: 1 }}>
                     <AuthFooter />
                 </Grid>
