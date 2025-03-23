@@ -70,9 +70,9 @@ const Login = () => {
                                                         justifyContent: 'center',
                                                         border: '1px solid #ddd',
                                                         borderRadius: 2,
-                                                        p: '8px 16px',
-                                                        width: '100%',
-                                                        maxWidth: 300,
+                                                        p: '12px 24px', // Increase padding to make the button larger
+                                                        width: '100%', // Ensure the button takes full width if needed
+                                                        maxWidth: 400, // You can set a larger maxWidth if needed
                                                         mx: 'auto',
                                                         backgroundColor: '#fff',
                                                         '&:hover': {
@@ -83,15 +83,19 @@ const Login = () => {
                                                     <img
                                                         src={google}
                                                         alt="Google Icon"
-                                                        width={20}
-                                                        height={20}
-                                                        style={{ marginRight: 8, display: 'block' }}
+                                                        width={30} // Increased size for better visibility
+                                                        height={30}
+                                                        style={{ marginRight: 12, display: 'block' }} // Increase margin for better alignment
                                                     />
                                                     <Typography
                                                         variant="button"
                                                         onClick={handleGoogleSignIn}
                                                         color="textPrimary"
-                                                        sx={{ textAlign: 'center' }}
+                                                        sx={{
+                                                            textAlign: 'center',
+                                                            fontSize: '1rem', // Optional: Adjust font size to match the manual input fields
+                                                            fontWeight: 'bold' // Make the text bold to match the input field style
+                                                        }}
                                                     >
                                                         Sign in with Google
                                                     </Typography>
