@@ -7,6 +7,7 @@ import MinimalLayout from 'layout/MinimalLayout';
 
 // other pages routing
 const PagesAbout = Loadable(lazy(() => import('views/pages/about')));
+const PostView = Loadable(lazy(() => import('views/pages/about')));
 const Publication = Loadable(lazy(() => import('views/pages/publication/home')));
 const Privacy = Loadable(lazy(() => import('views/pages/privacy')));
 const Disclaimer = Loadable(lazy(() => import('views/pages/disclaimer')));
@@ -31,6 +32,10 @@ const AuthenticationRoutes = {
         {
             path: '/about',
             element: <PagesAbout />
+        },
+        {
+            path: 'post/:id',
+            element: <PostView />
         },
         {
             path: '/home',
