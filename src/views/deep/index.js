@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { getPostPreviewById } from "services/userService/getPostPreviewById";
+import { getPostPreviewById } from "services/userService"; // Adjust the import path as necessary
 
 const PostPreviewPage = () => {
   const { id } = useParams();
