@@ -12,7 +12,7 @@ const StyledBadge = styled(Badge)(() => ({
 
 const FloatingCart = () => {
     const dispatch = useDispatch();
-    const totalQuantity = useSelector((state) => state.reward.totalQuantity); // Access the global balance
+    const totalQuantity = useSelector((state) => state.reward.totalQuantity); 
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
@@ -29,7 +29,7 @@ const FloatingCart = () => {
                 setError(err.message); 
                 setLoading(false);
             });
-    }, [dispatch]); // Ensure dispatch is a dependency to avoid unnecessary re-fetches
+    }, [dispatch]); 
 
     if (loading) {
         return <p>Loading...</p>;

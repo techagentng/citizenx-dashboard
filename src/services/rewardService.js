@@ -35,7 +35,7 @@ export const getRewardBalance = () => {
                 }
             })
             .then((response) => {
-                console.log('API response:', response); // Add this line to debug
+                console.log('API response:', response); 
                 if (response.status === 200) {
                     resolve(response.data.balance);
                 } else {

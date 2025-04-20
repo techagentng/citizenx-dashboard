@@ -235,3 +235,18 @@ export const getTotalUserCount = async () => {
         throw error;
     }
 };
+
+export const getPostPreviewById = async (id) => {
+    try {
+      const response = await axios.get(
+        `${process.env.REACT_APP_API_URL}/api/preview/post/${id}`,
+        {
+          responseType: "text", // because we're expecting raw HTML
+        }
+      );
+      return response.data; // HTML content
+    } catch (error) {
+      console.error("Error fetching post preview:", error);
+      throw error;
+    }
+  };
