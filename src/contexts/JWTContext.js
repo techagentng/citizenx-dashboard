@@ -248,7 +248,10 @@ export const JWTProvider = ({ children }) => {
 
     const forgotPassword = async (email) => {
         try {
-            const response = await axios.post('/password/forgot', { email });
+            const response = await axios.post('/password/forgot', {
+                email,
+                platform: 'web', // ✅ Set to 'web' for web apps
+            });
             console.log('Forgot password response:', response.data);
             return response.data;
         } catch (error) {
@@ -256,6 +259,7 @@ export const JWTProvider = ({ children }) => {
             throw new Error(error.response?.data?.message || 'Failed to send password reset email.');
         }
     };
+    
 
     const updateProfile = () => {};
 
