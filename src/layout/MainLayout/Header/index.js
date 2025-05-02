@@ -68,12 +68,18 @@ const Header = () => {
         setSelectedState(stateName);
         dispatch(setState(stateName));
     
-        getLGAs(stateName) // Fix typo: getLgas -> getLGAs
+        getLGAs(stateName)
             .then((lgas) => {
                 const lgaOptions = lgas.map((lga) => ({ value: lga, label: lga }));
                 setLgas(lgaOptions);
-                setSelectedLga('');
-                dispatch(setLga(''));
+    
+                if (lgaOptions.length > 0) {
+                    setSelectedLga(lgaOptions[0].value); // Set to top LGA
+                    dispatch(setLga(lgaOptions[0].value)); // Dispatch top LGA
+                } else {
+                    setSelectedLga('');
+                    dispatch(setLga(''));
+                }
             })
             .catch((error) => {
                 console.error(`Error fetching LGAs for ${stateName}:`, error);
