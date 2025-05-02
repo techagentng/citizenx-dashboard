@@ -55,6 +55,7 @@ const Header = () => {
                         .then((lgas) => {
                             const lgaOptions = lgas.map((lga) => ({ value: lga, label: lga }));
                             setLgas(lgaOptions);
+                            dispatch(setLgasAction(lgaOptions));
                         })
                         .catch((error) => console.error('Error fetching default LGAs:', error));
                 }

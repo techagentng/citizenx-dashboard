@@ -1,14 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import { ComposableMap, Geographies, Geography } from 'react-simple-maps';
 import { Tooltip } from 'react-tooltip';
-import { useNavigate } from 'react-router-dom'; // Import useNavigate
+import { useNavigate } from 'react-router-dom'; 
 import geoData from './nigeria_lga_boundaries.geojson';
 import './tooltip.css';
 import { getMapMarkers } from 'services/mapService';
+import { useDispatch } from 'react-redux'; 
+import { setState } from 'store/slices/graphs'; 
 
 const NigerianMap = () => {
     const [reportCountsMap, setReportCountsMap] = useState({});
-    const navigate = useNavigate(); // Hook for navigation
+    const navigate = useNavigate(); 
+    const dispatch = useDispatch();
 
     // Fetch data on component mount
     useEffect(() => {
@@ -28,20 +31,18 @@ const NigerianMap = () => {
             .catch((error) => console.error('API error:', error));
     }, []);
 
-    // Get the count for a given state directly from the map
     const getCountForState = (stateName) => {
         return reportCountsMap[stateName.trim()] || 0;
     };
 
-    // Determine the fill color based on the report count
     const getFillColor = (count) => {
         return count > 0 ? '#0e4934' : '#ffff';
     };
 
-    // Handle click on a state tile
     const handleStateClick = (stateName) => {
+        dispatch(setState(stateName)); 
         navigate('/dashboard/sub_report_state', { state: { selectedState: stateName } });
-    };    
+    };  
 
     return (
         <>
@@ -67,7 +68,7 @@ const NigerianMap = () => {
                                 <Geography
                                     key={geo.rsmKey}
                                     geography={geo}
-                                    onClick={() => handleStateClick(stateName)} // Add click handler
+                                    onClick={() => handleStateClick(stateName)} 
                                     style={{
                                         default: { fill: getFillColor(count), stroke: '#0e4934', strokeWidth: 1.5, cursor: 'pointer' }, // Add cursor pointer
                                         hover: { fill: '#0e4934', stroke: '#000', strokeWidth: 0.75, cursor: 'pointer' },
