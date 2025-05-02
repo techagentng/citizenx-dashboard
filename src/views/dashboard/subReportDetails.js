@@ -8,6 +8,16 @@ import BarChart from './barchart';
 import PieChart from './piechart';
 import tin from './tin.jpg';
 import { gridSpacing } from 'store/constant';
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableContainer,
+    TableHead,
+    TableRow,
+    Paper,
+    CircularProgress,
+  } from '@mui/material';
 
 const SubReportDetailsPage = () => {
     const [governor, setGovernor] = useState(null); // Initialize as null for better checking
@@ -236,25 +246,58 @@ const SubReportDetailsPage = () => {
                 </Grid>
             </Grid>
 
-            {/* Sub-Report Details */}
-            <h1>SubReport Details for {selectedState}</h1>
-            <p>Report Type: {state || 'N/A'}</p>
-            <p>LGA: {lga || 'N/A'}</p>
-            <p>State: {governor?.state || selectedState || 'N/A'}</p>
-            <p>Count: {count || 'N/A'}</p>
+            <div>
+      <Typography variant="h5" gutterBottom>
+        SubReport Details for <strong>{selectedState}</strong>
+      </Typography>
 
-            {loading && <p>Loading sub-reports...</p>}
-            {error && <p style={{ color: 'red' }}>Error: {error}</p>}
+      <TableContainer component={Paper} sx={{ maxWidth: 600, mb: 3 }}>
+        <Table>
+          <TableBody>
+            <TableRow>
+              <TableCell><strong>Report Type</strong></TableCell>
+              <TableCell>{state || 'N/A'}</TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell><strong>LGA</strong></TableCell>
+              <TableCell>{lga || 'N/A'}</TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell><strong>State</strong></TableCell>
+              <TableCell>{governor?.state || selectedState || 'N/A'}</TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell><strong>Count</strong></TableCell>
+              <TableCell>{count || 'N/A'}</TableCell>
+            </TableRow>
+          </TableBody>
+        </Table>
+      </TableContainer>
 
-            {!loading && !error && subReports.length > 0 && (
-                <ul>
-                    {subReports.map((subReport) => (
-                        <li key={subReport.sub_report_type}>
-                            {subReport.sub_report_type}: {subReport.count} occurrences
-                        </li>
-                    ))}
-                </ul>
-            )}
+      {loading && <CircularProgress />}
+      {error && <Typography color="error">Error: {error}</Typography>}
+
+      {!loading && !error && subReports.length > 0 && (
+        <TableContainer component={Paper} sx={{ maxWidth: 600 }}>
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell><strong>Sub Report Type</strong></TableCell>
+                <TableCell><strong>Occurrences</strong></TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {subReports.map((subReport) => (
+                <TableRow key={subReport.sub_report_type}>
+                  <TableCell>{subReport.sub_report_type}</TableCell>
+                  <TableCell>{subReport.count}</TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      )}
+    </div>n
         </div>
     );
 };

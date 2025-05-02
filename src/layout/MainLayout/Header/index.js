@@ -28,7 +28,7 @@ const Header = () => {
     const [states, setStates] = useState([]); // Full state objects
     const [lgas, setLgas] = useState([]);
     const [selectedState, setSelectedState] = useState('Anambra');
-    const [selectedLga, setSelectedLga] = useState('');
+    const [selectedLga, setSelectedLga] = useState('Aguata');
     const [dateRange, setDateRange] = useState([null, null]);
     const [, setValue] = useState('');
     const [, setReportTypes] = useState(['Select type']);
