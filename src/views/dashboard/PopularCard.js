@@ -8,7 +8,7 @@ import { gridSpacing } from 'store/constant';
 import MoreHorizOutlinedIcon from '@mui/icons-material/MoreHorizOutlined';
 import KeyboardArrowUpOutlinedIcon from '@mui/icons-material/KeyboardArrowUpOutlined';
 import KeyboardArrowDownOutlinedIcon from '@mui/icons-material/KeyboardArrowDownOutlined';
-import { getStateReportCountsAll } from 'services/reportService';
+import { getTopStateReportCounts } from 'services/reportService';
 
 const PopularCard = ({ isLoading, title, data = [], type, totalReportCount }) => {  // Default to an empty array
     const theme = useTheme();
@@ -19,7 +19,7 @@ const PopularCard = ({ isLoading, title, data = [], type, totalReportCount }) =>
     const [totalStateReports, setTotalStateReports] = useState(0);
 
     useEffect(() => {
-        getStateReportCountsAll()
+        getTopStateReportCounts()
             .then((data) => {
                 setTotalStateReports(data.total_states || 0);
             })
