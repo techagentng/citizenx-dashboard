@@ -7,7 +7,7 @@ import { DateRangePicker } from '@mui/x-date-pickers-pro/DateRangePicker';
 import { useDispatch, useSelector } from 'store';
 import { openDrawer } from 'store/slices/menu';
 import { setState, setLga, getGraph } from 'store/slices/graphs';
-import { getCategories, getStates, getLGAs } from 'services/reportService';
+import statesAndLgas from './statesAndLgas.json';
 
 import LogoSection from '../LogoSection';
 import MobileSection from './MobileSection';
@@ -35,59 +35,43 @@ const Header = () => {
     const selectedReportType = useSelector((state) => state.graphs.reportType);
 
     useEffect(() => {
-        getStates()
-            .then((response) => {
-                console.log('Raw states response:', response);
-                const stateArray = response.states || [];
-                const stateOptions = stateArray
-                    .filter((state) => state && state !== '') 
-                    .map((state) => ({
-                        value: state,
-                        label: state
-                    }));
-                setStates(stateOptions);
-    
-                const defaultState = 'Anambra';
-                if (stateOptions.some((s) => s.value === defaultState)) {
-                    setSelectedState(defaultState);
-                    dispatch(setState(defaultState));
-                    getLGAs(defaultState)
-                        .then((lgas) => {
-                            const lgaOptions = lgas.map((lga) => ({ value: lga, label: lga }));
-                            setLgas(lgaOptions);
-                            dispatch(setLgasAction(lgaOptions));
-                        })
-                        .catch((error) => console.error('Error fetching default LGAs:', error));
-                }
-            })
-            .catch((error) => console.error('Failed to fetch states:', error));
+        // Load states from local JSON
+        const stateOptions = statesAndLgas.NigeriaStates.map((state) => ({
+            value: state.value,
+            label: state.label
+        }));
+        setStates(stateOptions);
+
+        // Set default state and LGAs
+        const defaultState = 'Anambra';
+        if (stateOptions.some((s) => s.value === defaultState)) {
+            setSelectedState(defaultState);
+            dispatch(setState(defaultState));
+            const lgas = statesAndLgas.LocalGovernment[defaultState] || [];
+            const lgaOptions = lgas.map((lga) => ({ value: lga, label: lga }));
+            setLgas(lgaOptions);
+        }
     }, [dispatch]);
 
     const handleStateChange = (event) => {
         const stateName = event.target.value;
         setSelectedState(stateName);
         dispatch(setState(stateName));
-    
-        getLGAs(stateName)
-            .then((lgas) => {
-                const lgaOptions = lgas.map((lga) => ({ value: lga, label: lga }));
-                setLgas(lgaOptions);
-    
-                if (lgaOptions.length > 0) {
-                    setSelectedLga(lgaOptions[0].value); // Set to top LGA
-                    dispatch(setLga(lgaOptions[0].value)); // Dispatch top LGA
-                } else {
-                    setSelectedLga('');
-                    dispatch(setLga(''));
-                }
-            })
-            .catch((error) => {
-                console.error(`Error fetching LGAs for ${stateName}:`, error);
-                setLgas([]);
-                setSelectedLga('');
-                dispatch(setLga(''));
-            });
+
+        // Get LGAs from local JSON
+        const lgas = statesAndLgas.LocalGovernment[stateName] || [];
+        const lgaOptions = lgas.map((lga) => ({ value: lga, label: lga }));
+        setLgas(lgaOptions);
+
+        if (lgaOptions.length > 0) {
+            setSelectedLga(lgaOptions[0].value); // Set to top LGA
+            dispatch(setLga(lgaOptions[0].value)); // Dispatch top LGA
+        } else {
+            setSelectedLga('');
+            dispatch(setLga(''));
+        }
     };
+
 
     const handleLgaChange = (event) => {
         const lgaName = event.target.value;
