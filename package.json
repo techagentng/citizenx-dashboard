@@ -160,5 +160,5 @@
     "repository": "https://github.com/techagentng/citizenx-dashboard.git",
     "author": "n.nnah@yahoo.com <n.nnah@yahoo.com>",
     "license": "MIT",
-    "packageManager": "yarn@4.1.0"
+    "packageManager": "yarn@1.22.22"
 }
