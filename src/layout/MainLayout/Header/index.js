@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from 'store';
 import { openDrawer } from 'store/slices/menu';
 import { setState, setLga, getGraph } from 'store/slices/graphs';
 import statesAndLgas from './statesAndLgas.json';
+import { getCategories } from 'services/reportService';
 
 import LogoSection from '../LogoSection';
 import MobileSection from './MobileSection';
