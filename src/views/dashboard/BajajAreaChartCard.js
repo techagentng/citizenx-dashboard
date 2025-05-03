@@ -7,7 +7,7 @@ import useConfig from 'hooks/useConfig';
 import getChartData from './bajaj-area-chart';
 import { getTotalReportCount, getReportCountsByState } from 'services/reportService';
 
-const BajajAreaChartCard = ({ reportType, stateName, totalReportCount }) => {
+const BajajAreaChartCard = ({ reportType, stateName, totalReportCount, totalStates }) => {
     const theme = useTheme();
     const { navType } = useConfig();
     const [, setLoading ] = useState("")
@@ -113,7 +113,7 @@ const BajajAreaChartCard = ({ reportType, stateName, totalReportCount }) => {
                         </Grid>
                         <Grid item>
                             <Typography variant="h4" sx={{ color: theme.palette.grey[800] }}>
-                            {totalReportCount || 'No Data'}
+                            {totalReportCount || 'No Data' || totalStates}
                             </Typography>
                         </Grid>
                     </Grid>

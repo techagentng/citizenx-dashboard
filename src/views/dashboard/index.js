@@ -15,7 +15,7 @@ import { gridSpacing } from 'store/constant';
 import JWTContext from 'contexts/JWTContext';
 import { getAllUserCount, getAllReportsToday, getOnlineUsers, getTotalUserCount } from 'services/userService';
 
-import { getStateReportCountList } from 'services/reportService';
+import { getStateReportCountList, getTopStateReportCounts } from 'services/reportService';
 import { getGraph, getPercentCount, setReportType } from 'store/slices/graphs';
 import {
     getCategories,
@@ -36,15 +36,35 @@ const DashboardPage = () => {
     const [setUserCount] = useState(0);
     const [, setTodayReportCount] = useState(0);
     const [, setOnlineUsers] = useState(0);
-    const [formattedTopStates, setFormattedTopStates] = useState([]);
+    // const [formattedTopStates, setFormattedTopStates] = useState([]);
     const [reportTypeOptions, setReportTypes] = useState([]);
     const [selectedReportType, setSelectedReportType] = useState('Accidents');
-    const [totalOverallReports, setTotalOverallReports] = useState(0);
+    // const [totalOverallReports, setTotalOverallReports] = useState(0);
     const [totalStateReports, setTotalStateReports] = useState(0);
     const [, setTotalLGAReports] = useState(0);
     const [reportData, setReportData] = useState(null);
     const [reportCount, setReportCount] = useState(null);
     const [totalUsers, setTotalUsers] = useState(0);
+    const [formattedTopStates, setFormattedTopStates] = useState([]);
+    const [totalOverallReports, setTotalOverallReports] = useState(0);
+
+    useEffect(() => {
+        getTopStateReportCounts()
+            .then((data) => {
+                const total = data.find((item) => item.total_states !== undefined)?.total_states || 0;
+                const states = data
+                    .filter((item) => item.state_name)
+                    .map((item) => ({
+                        label: item.state_name,
+                        value: item.report_count
+                    }));
+                setFormattedTopStates(states);
+                setTotalOverallReports(total);
+            })
+            .catch((err) => {
+                console.error('Error fetching top states:', err.message);
+            });
+    }, []);
 
     useEffect(() => {
         // Fetch overall report count
@@ -175,7 +195,7 @@ const DashboardPage = () => {
         const fetchUserCount = async () => {
             try {
                 const data = await getTotalUserCount();
-                setTotalUsers(data.total_users); 
+                setTotalUsers(data.total_users);
             } catch (err) {
                 setError('Failed to fetch user count');
             } finally {
@@ -196,12 +216,12 @@ const DashboardPage = () => {
                 }
             >
                 <Grid container spacing={2} sx={{ mb: 3 }}>
-                <Grid item xs={12} sm={6} md={3}>
+                    <Grid item xs={12} sm={6} md={3}>
                         <EarningCard count={totalUsers} details="Registered users" icon={EarningIcon} />
                     </Grid>
                     <Grid item xs={12} sm={6} md={3}>
                         <EarningCard count={reportCount} details="Top LGA Report" icon={EarningIcon} />
-                    </Grid>                   
+                    </Grid>
                     <Grid item xs={12} sm={6} md={3}>
                         <EarningCard count={totalStateReports} details="Total state reports" icon={EarningIcon} />
                     </Grid>

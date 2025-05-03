@@ -8,6 +8,7 @@ import { gridSpacing } from 'store/constant';
 import MoreHorizOutlinedIcon from '@mui/icons-material/MoreHorizOutlined';
 import KeyboardArrowUpOutlinedIcon from '@mui/icons-material/KeyboardArrowUpOutlined';
 import KeyboardArrowDownOutlinedIcon from '@mui/icons-material/KeyboardArrowDownOutlined';
+import { getStateReportCountsAll } from '../modules/reportService';
 
 const PopularCard = ({ isLoading, title, data = [], type, totalReportCount }) => {  // Default to an empty array
     const theme = useTheme();
@@ -15,6 +16,17 @@ const PopularCard = ({ isLoading, title, data = [], type, totalReportCount }) =>
     const [, setError] = useState('');
     const [, setLoading] = useState('');
     const [showAll, setShowAll] = useState(false);  // State to toggle the visibility of the entire list
+    const [totalStateReports, setTotalStateReports] = useState(0);
+
+    useEffect(() => {
+        getStateReportCountsAll()
+            .then((data) => {
+                setTotalStateReports(data.total_states || 0);
+            })
+            .catch((error) => {
+                console.error('Failed to fetch total state reports:', error);
+            });
+    }, []);
 
     // Limit for how many items to show initially
     const ITEM_LIMIT = 7;
@@ -93,7 +105,7 @@ const PopularCard = ({ isLoading, title, data = [], type, totalReportCount }) =>
                         </Grid>
                     </Grid>
                     <Grid item xs={12} sx={{ pt: '16px !important' }}>
-                        <BajajAreaChartCard totalReportCount={totalReportCount}/>
+                        <BajajAreaChartCard totalStates={totalStateReports} totalReportCount={totalReportCount}/>
                     </Grid>
                     <Grid item xs={12}>
                         <Grid container direction="column">
