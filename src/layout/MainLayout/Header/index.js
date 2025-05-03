@@ -1,4 +1,6 @@
-import React, { useState, useEffect, useCallback } from 'react';
+// Refactored to use React Query for states and LGA fetching
+import React, { useState, useCallback, useEffect } from 'react';
+import { useQuery } from '@tanstack/react-query';
 import { useTheme } from '@mui/material/styles';
 import { Avatar, Box, useMediaQuery, MenuItem, TextField, Grid } from '@mui/material';
 import { LocalizationProvider } from '@mui/x-date-pickers-pro/LocalizationProvider';
@@ -7,7 +9,8 @@ import { DateRangePicker } from '@mui/x-date-pickers-pro/DateRangePicker';
 import { useDispatch, useSelector } from 'store';
 import { openDrawer } from 'store/slices/menu';
 import { setState, setLga, getGraph } from 'store/slices/graphs';
-import { getCategories, getStates, getLGAs } from 'services/reportService';
+import statesAndLgas from './statesAndLgas.json'; // still used for local data source
+import { getCategories } from 'services/reportService';
 
 import LogoSection from '../LogoSection';
 import MobileSection from './MobileSection';
@@ -25,62 +28,50 @@ const Header = () => {
     const { drawerOpen } = useSelector((state) => state.menu);
     const matchDownMd = useMediaQuery(theme.breakpoints.down('md'));
     const { layout } = useConfig();
-    const [states, setStates] = useState([]); // Full state objects
-    const [lgas, setLgas] = useState([]);
-    const [selectedState, setSelectedState] = useState('Anambra');
-    const [selectedLga, setSelectedLga] = useState('');
+        const [selectedState, setSelectedState] = useState('Anambra');
+    const [selectedLga, setSelectedLga] = useState('Aguata');
     const [dateRange, setDateRange] = useState([null, null]);
     const [, setValue] = useState('');
     const [, setReportTypes] = useState(['Select type']);
     const selectedReportType = useSelector((state) => state.graphs.reportType);
 
-    useEffect(() => {
-        getStates()
-            .then((response) => {
-                console.log('Raw states response:', response);
-                const stateArray = response.states || [];
-                const stateOptions = stateArray
-                    .filter((state) => state && state !== '') 
-                    .map((state) => ({
-                        value: state,
-                        label: state
-                    }));
-                setStates(stateOptions);
-    
-                const defaultState = 'Anambra';
-                if (stateOptions.some((s) => s.value === defaultState)) {
-                    setSelectedState(defaultState);
-                    dispatch(setState(defaultState));
-                    getLGAs(defaultState)
-                        .then((lgas) => {
-                            const lgaOptions = lgas.map((lga) => ({ value: lga, label: lga }));
-                            setLgas(lgaOptions);
-                        })
-                        .catch((error) => console.error('Error fetching default LGAs:', error));
-                }
-            })
-            .catch((error) => console.error('Failed to fetch states:', error));
-    }, [dispatch]);
+        // React Query: Fetch all states (local, so no async fetch needed, but for demo, wrap in a query)
+    const { data: states = [] } = useQuery({
+        queryKey: ['states'],
+        queryFn: () => statesAndLgas.NigeriaStates.map((state) => ({
+            value: state.value,
+            label: state.label
+        }))
+    });
 
-    const handleStateChange = (event) => {
+    // React Query: Fetch LGAs for selected state
+    const { data: lgas = [] } = useQuery({
+        queryKey: ['lgas', selectedState],
+        queryFn: () => {
+            const lgasArr = statesAndLgas.LocalGovernment[selectedState] || [];
+            return lgasArr.map((lga) => ({ value: lga, label: lga }));
+        },
+        enabled: !!selectedState
+    });
+
+    // Set default LGA when state or lgas change
+    React.useEffect(() => {
+        if (lgas.length > 0) {
+            setSelectedLga(lgas[0].value);
+            dispatch(setLga(lgas[0].value));
+        } else {
+            setSelectedLga('');
+            dispatch(setLga(''));
+        }
+    }, [selectedState, lgas, dispatch]);
+
+        const handleStateChange = (event) => {
         const stateName = event.target.value;
         setSelectedState(stateName);
         dispatch(setState(stateName));
-    
-        getLGAs(stateName) // Fix typo: getLgas -> getLGAs
-            .then((lgas) => {
-                const lgaOptions = lgas.map((lga) => ({ value: lga, label: lga }));
-                setLgas(lgaOptions);
-                setSelectedLga('');
-                dispatch(setLga(''));
-            })
-            .catch((error) => {
-                console.error(`Error fetching LGAs for ${stateName}:`, error);
-                setLgas([]);
-                setSelectedLga('');
-                dispatch(setLga(''));
-            });
+        // LGAs will auto-update via React Query and useEffect above
     };
+
 
     const handleLgaChange = (event) => {
         const lgaName = event.target.value;

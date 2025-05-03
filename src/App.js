@@ -1,4 +1,5 @@
 import { RouterProvider } from 'react-router-dom';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 // routing
 import router from 'routes';
@@ -20,23 +21,27 @@ import { JWTProvider as AuthProvider } from 'contexts/JWTContext';
 
 // ==============================|| APP ||============================== //
 
+const queryClient = new QueryClient();
+
 const App = () => (
-    <ThemeCustomization>
-        {/* <RTLLayout> */}
-        <Locales>
-            <NavigationScroll>
-                <AuthProvider>
-                    <>
-                        <Notistack>
-                            <RouterProvider router={router} />
-                            <Snackbar />
-                        </Notistack>
-                    </>
-                </AuthProvider>
-            </NavigationScroll>
-        </Locales>
-        {/* </RTLLayout> */}
-    </ThemeCustomization>
+    <QueryClientProvider client={queryClient}>
+        <ThemeCustomization>
+            {/* <RTLLayout> */}
+            <Locales>
+                <NavigationScroll>
+                    <AuthProvider>
+                        <>
+                            <Notistack>
+                                <RouterProvider router={router} />
+                                <Snackbar />
+                            </Notistack>
+                        </>
+                    </AuthProvider>
+                </NavigationScroll>
+            </Locales>
+            {/* </RTLLayout> */}
+        </ThemeCustomization>
+    </QueryClientProvider>
 );
 
 export default App;
