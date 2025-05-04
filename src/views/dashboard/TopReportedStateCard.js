@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import PopularCard from './PopularCard'; // Adjust path if needed
-import BajajAreaChartCard from './BajajAreaChartCard'; // Ensure correct path
+// import BajajAreaChartCard from './BajajAreaChartCard'; // Ensure correct path
 import { getStateReportCountsAllx } from 'services/reportService'; 
 
 const TopReportedStatesCard = () => {
     const [formattedTopStates, setFormattedTopStates] = useState([]);
-    const [totalStateReports, setTotalStateReports] = useState(0);
+    const [, setTotalStateReports] = useState(0);
     const [totalReportCountArray, setTotalReportCountArray] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
 
@@ -37,13 +37,7 @@ const TopReportedStatesCard = () => {
     }, []);
 
     return (
-        <>
-            {/* Chart section above the list */}
-            <BajajAreaChartCard 
-                totalStates={totalStateReports} 
-                totalReportCount={totalReportCountArray} 
-            />
-            
+        <>            
             {/* List section using PopularCard */}
             <PopularCard
                 title="Top Reported States in Nigeria"
