@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import PopularCard from './PopularCard'; // Adjust path if needed
 import BajajAreaChartCard from './BajajAreaChartCard'; // Ensure correct path
-import { getStateReportCountsAll } from '@/services/reportService'; 
+import { getStateReportCountsAll } from 'services/reportService'; 
 
 const TopReportedStatesCard = () => {
     const [formattedTopStates, setFormattedTopStates] = useState([]);
