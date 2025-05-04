@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import PopularCard from './PopularCard'; // Adjust path if needed
 import BajajAreaChartCard from './BajajAreaChartCard'; // Ensure correct path
-import { getStateReportCountsAll } from 'services/reportService'; 
+import { getStateReportCountsAllx } from 'services/reportService'; 
 
 const TopReportedStatesCard = () => {
     const [formattedTopStates, setFormattedTopStates] = useState([]);
@@ -12,7 +12,7 @@ const TopReportedStatesCard = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await getStateReportCountsAll();
+                const response = await getStateReportCountsAllx();
 
                 const validStates = response?.filter(item => item.state_name && item.report_count !== undefined);
 
