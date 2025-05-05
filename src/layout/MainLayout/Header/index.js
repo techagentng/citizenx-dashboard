@@ -7,7 +7,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers-pro/AdapterDayjs';
 import { DateRangePicker } from '@mui/x-date-pickers-pro/DateRangePicker';
 import { useDispatch, useSelector } from 'react-redux';
 import { openDrawer } from 'store/slices/menu';
-import { setLga, getGraph } from 'store/slices/graphs';
+import { setState, setLga, getGraph } from 'store/slices/graphs';
 import statesAndLgas from './statesAndLgas.json';
 import { getCategories } from 'services/reportService';
 
@@ -56,6 +56,11 @@ const Header = () => {
             dispatch(setLga(lgas[0].value));
         }
     }, [state, lgas, lga, dispatch]);
+
+    const handleStateChange = (event) => {
+        const stateName = event.target.value;
+        dispatch(setState(stateName));
+    };
 
     const handleLgaChange = (event) => {
         const lgaName = event.target.value;
@@ -141,7 +146,7 @@ const Header = () => {
                     id="state-select"
                     select
                     value={state || 'Anambra'}
-                    onChange={handleLovationChange}
+                    onChange={handleStateChange}
                     label="Select State"
                 >
                     {states.map((option) => (
