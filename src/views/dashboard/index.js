@@ -1,6 +1,6 @@
 import React, { useEffect, useContext, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Grid, TextField, MenuItem, Box, Typography } from '@mui/material';
+import { Grid, Typography } from '@mui/material';
 import MainCard from 'ui-component/cards/MainCard';
 import EarningCard from 'ui-component/cards/Skeleton/EarningCard';
 import EarningIcon from 'assets/images/icons/earning.svg';
@@ -8,7 +8,7 @@ import PopularCard from './PopularCard';
 // import TopReportedStateCard from './TopReportedStateCard';
 import BarChart from './barchart';
 import PieChart from './piechart';
-import PieChart2 from './piechart2';
+// import PieChart2 from './piechart2';
 // import LineChart from './linechart';
 import NigerianMap from './nigeria-map';
 import { gridSpacing } from 'store/constant';
@@ -32,7 +32,7 @@ const DashboardPage = () => {
     const selectedState = useSelector((state) => state.graphs.lgaState.state);
     const { isLoggedIn } = useContext(JWTContext);
     const { reportTypes, reportCounts } = useSelector((state) => state.graphs.graphs);
-    const { good_percentage, bad_percentage } = useSelector((state) => state.graphs.reportPercent);
+    // const { good_percentage, bad_percentage } = useSelector((state) => state.graphs.reportPercent);
     const [setUserCount] = useState(0);
     const [, setTodayReportCount] = useState(0);
     const [, setOnlineUsers] = useState(0);
@@ -171,14 +171,14 @@ const DashboardPage = () => {
                 console.error('Failed to fetch categories:', error);
             });
     }, [dispatch]);
-    const defaultReportType = 'Accidents';
-    const handleReportTypeChange = (event) => {
-        const reportType = event.target.value || defaultReportType;
-        setSelectedReportType(reportType);
-        console.log('Selected Report Type:', reportType);
-        dispatch(setReportType(reportType));
-        dispatch(getPercentCount(reportType, selectedState));
-    };
+    // const defaultReportType = 'Accidents';
+    // const handleReportTypeChange = (event) => {
+    //     const reportType = event.target.value || defaultReportType;
+    //     setSelectedReportType(reportType);
+    //     console.log('Selected Report Type:', reportType);
+    //     dispatch(setReportType(reportType));
+    //     dispatch(getPercentCount(reportType, selectedState));
+    // };
 
     // if (loading) return <div>Loading...</div>;
     // if (error) return <div>Error: {error.message}</div>;
@@ -326,7 +326,7 @@ const DashboardPage = () => {
                             totalReportCount={totalReportCounts}
                         />
                     </Grid>
-                    <Grid item xs={12} md={4} sx={{ backgroundColor: 'white' }}>
+                    {/* <Grid item xs={12} md={4} sx={{ backgroundColor: 'white' }}>
                         <Box display="flex" justifyContent="space-between" alignItems="center" p={2}>
                             <Typography variant="h5">Overall Ratings</Typography>
                             <TextField
@@ -345,7 +345,7 @@ const DashboardPage = () => {
                             </TextField>
                         </Box>
                         <PieChart2 reportPercent={{ good_percentage, bad_percentage }} />
-                    </Grid>
+                    </Grid> */}
                 </Grid>
             </MainCard>
         </>

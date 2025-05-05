@@ -2,12 +2,14 @@ import React from 'react';
 import { Pie } from 'react-chartjs-2';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 import { useNavigate } from 'react-router-dom';
+import { setState, setLga } from 'store/slices/graphs';
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 const PieChart = ({ reportTypes, reportCounts }) => {
     const navigate = useNavigate();
-    
+    const dispatch = useDispatch();
+
     if (!reportTypes || !reportCounts || reportTypes.length === 0 || reportCounts.length === 0) {
         return <p>No data available</p>;
     }
@@ -17,6 +19,9 @@ const PieChart = ({ reportTypes, reportCounts }) => {
             const clickedIndex = elements[0].index;
             const clickedPieData = data.datasets[0].data[clickedIndex];
             const reportType = data.labels[clickedIndex];
+
+            dispatch(setState(reportType));
+            dispatch(setLga("LGA Name")); 
 
             const selectedData = {
                 state: reportType,

@@ -22,7 +22,7 @@ const BarChart = ({ reportTypes, reportCounts }) => {
                 lga: "LGA Name",  
                 count: clickedBarData
             };
-
+            dispatch(setState(reportType)); 
             // Navigate to another page with the selected data
             navigate('/dashboard/sub_reports', { state: selectedData });
         }

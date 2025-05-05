@@ -1,5 +1,5 @@
 // Refactored to use React Query for states and LGA fetching
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { useTheme } from '@mui/material/styles';
 import { Avatar, Box, useMediaQuery, MenuItem, TextField, Grid } from '@mui/material';
@@ -28,14 +28,15 @@ const Header = () => {
     const { drawerOpen } = useSelector((state) => state.menu);
     const matchDownMd = useMediaQuery(theme.breakpoints.down('md'));
     const { layout } = useConfig();
-        const [selectedState, setSelectedState] = useState('Anambra');
-    const [selectedLga, setSelectedLga] = useState('Aguata');
+    const selectedState = useSelector((state) => state.graphs.state);
+    const selectedLga = useSelector((state) => state.graphs.lga);
+    const selectedReportType = useSelector((state) => state.graphs.reportType);
+
     const [dateRange, setDateRange] = useState([null, null]);
     const [, setValue] = useState('');
     const [, setReportTypes] = useState(['Select type']);
-    const selectedReportType = useSelector((state) => state.graphs.reportType);
 
-        // React Query: Fetch all states (local, so no async fetch needed, but for demo, wrap in a query)
+    // Fetch all states
     const { data: states = [] } = useQuery({
         queryKey: ['states'],
         queryFn: () => statesAndLgas.NigeriaStates.map((state) => ({
@@ -44,7 +45,7 @@ const Header = () => {
         }))
     });
 
-    // React Query: Fetch LGAs for selected state
+    // Fetch LGAs for selected state
     const { data: lgas = [] } = useQuery({
         queryKey: ['lgas', selectedState],
         queryFn: () => {
@@ -55,28 +56,20 @@ const Header = () => {
     });
 
     // Set default LGA when state or lgas change
-    React.useEffect(() => {
+    useEffect(() => {
         if (lgas.length > 0) {
-            setSelectedLga(lgas[0].value);
             dispatch(setLga(lgas[0].value));
         } else {
-            setSelectedLga('');
             dispatch(setLga(''));
         }
     }, [selectedState, lgas, dispatch]);
 
-        const handleStateChange = (event) => {
-        const stateName = event.target.value;
-        setSelectedState(stateName);
-        dispatch(setState(stateName));
-        // LGAs will auto-update via React Query and useEffect above
+    const handleStateChange = (event) => {
+        dispatch(setState(event.target.value));
     };
 
-
     const handleLgaChange = (event) => {
-        const lgaName = event.target.value;
-        setSelectedLga(lgaName);
-        dispatch(setLga(lgaName));
+        dispatch(setLga(event.target.value));
     };
 
     const handleDateRangeChange = (newValue) => {
@@ -85,8 +78,14 @@ const Header = () => {
 
     const handleSearch = useCallback(() => {
         const [startDate, endDate] = dateRange;
-        dispatch(getGraph(selectedState, selectedLga, startDate?.format('YYYY-MM-DD'), endDate?.format('YYYY-MM-DD'), selectedReportType));
-    }, [dispatch, selectedState, selectedReportType, selectedLga, dateRange]);
+        dispatch(getGraph(
+            selectedState,
+            selectedLga,
+            startDate?.format('YYYY-MM-DD'),
+            endDate?.format('YYYY-MM-DD'),
+            selectedReportType
+        ));
+    }, [dispatch, selectedState, selectedLga, dateRange, selectedReportType]);
 
     useEffect(() => {
         if (selectedState && selectedLga && selectedState !== 'State' && selectedLga !== 'LGA') {
@@ -127,7 +126,7 @@ const Header = () => {
                     <LogoSection />
                 </Box>
 
-                {layout === LAYOUT_CONST.VERTICAL_LAYOUT || (layout === LAYOUT_CONST.HORIZONTAL_LAYOUT && matchDownMd) ? (
+                {(layout === LAYOUT_CONST.VERTICAL_LAYOUT || (layout === LAYOUT_CONST.HORIZONTAL_LAYOUT && matchDownMd)) && (
                     <Avatar
                         variant="rounded"
                         sx={{
@@ -147,13 +146,14 @@ const Header = () => {
                     >
                         <IconMenu2 stroke={1.5} size="20px" />
                     </Avatar>
-                ) : null}
+                )}
             </Box>
 
             <Box sx={{ flexGrow: 1 }} />
             <Box sx={{ flexGrow: 1 }} />
-            <Grid item></Grid>
+            <Grid item />
             <Box sx={{ flexGrow: 1 }} />
+
             <Box sx={{ display: { xs: 'none', sm: 'flex' }, alignItems: 'center', gap: 2 }}>
                 <TextField id="state-select" select value={selectedState} onChange={handleStateChange} label="Select State">
                     {states.map((option) => (
@@ -162,6 +162,7 @@ const Header = () => {
                         </MenuItem>
                     ))}
                 </TextField>
+
                 <TextField
                     id="lga-select"
                     select
@@ -179,6 +180,7 @@ const Header = () => {
                         </MenuItem>
                     ))}
                 </TextField>
+
                 <Box sx={{ width: '300px' }}>
                     <LocalizationProvider dateAdapter={AdapterDayjs}>
                         <DateRangePicker
