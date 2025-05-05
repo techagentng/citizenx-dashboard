@@ -68,7 +68,19 @@ const Header = () => {
             dispatch(setLga(''));
         }
     }, [selectedState, lgas, dispatch]);
-
+    useEffect(() => {
+        if (states.length > 0 && !selectedState) {
+            const defaultState = states[0].value;
+            dispatch(setState(defaultState));
+        }
+    }, [states, selectedState, dispatch]);
+    
+    // Set default LGA once selectedState and lgas are available
+    useEffect(() => {
+        if (lgas.length > 0 && !selectedLga) {
+            dispatch(setLga(lgas[0].value));
+        }
+    }, [lgas, selectedLga, dispatch]);
     const handleStateChange = (event) => {
         dispatch(setState(event.target.value));
     };
