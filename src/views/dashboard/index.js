@@ -36,7 +36,7 @@ const DashboardPage = () => {
     const [setUserCount] = useState(0);
     const [, setTodayReportCount] = useState(0);
     const [, setOnlineUsers] = useState(0);
-    const [reportTypeOptions, setReportTypes] = useState([]);
+    const [, setReportTypes] = useState([]);
     const [selectedReportType, setSelectedReportType] = useState('Accidents');
     const [totalOverallReports, setTotalOverallReports] = useState(0);
     const [totalStateReports, setTotalStateReports] = useState(0);
