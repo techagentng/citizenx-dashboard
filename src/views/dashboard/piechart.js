@@ -3,6 +3,7 @@ import { Pie } from 'react-chartjs-2';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 import { useNavigate } from 'react-router-dom';
 import { setState, setLga } from 'store/slices/graphs';
+import { useDispatch } from 'react-redux';
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
