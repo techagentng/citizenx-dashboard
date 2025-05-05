@@ -7,7 +7,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers-pro/AdapterDayjs';
 import { DateRangePicker } from '@mui/x-date-pickers-pro/DateRangePicker';
 import { useDispatch, useSelector } from 'react-redux';
 import { openDrawer } from 'store/slices/menu';
-import { setState, setLga, getGraph } from 'store/slices/graphs';
+import { setLga, getGraph } from 'store/slices/graphs';
 import statesAndLgas from './statesAndLgas.json';
 import { getCategories } from 'services/reportService';
 
@@ -56,11 +56,6 @@ const Header = () => {
             dispatch(setLga(lgas[0].value));
         }
     }, [state, lgas, lga, dispatch]);
-
-    const handleStateChange = (event) => {
-        const stateName = event.target.value;
-        dispatch(setState(stateName));
-    };
 
     const handleLgaChange = (event) => {
         const lgaName = event.target.value;
