@@ -54,7 +54,12 @@ const Header = () => {
         },
         enabled: !!selectedState
     });
-
+    useEffect(() => {
+        if (states.length > 0 && !selectedState) {
+            dispatch(setState(states[0].value));
+        }
+    }, [states, selectedState, dispatch]);
+    
     // Set default LGA when state or lgas change
     useEffect(() => {
         if (lgas.length > 0) {
