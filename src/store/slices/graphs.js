@@ -10,8 +10,8 @@ const initialState = {
         total_count: 0 
     },
     lgaState: {
-        state: '',
-        lga: ''
+        state: 'Anambra', 
+        lga: 'Aguata'    
     },
     reportPercent: {
         good_percentage: 0,

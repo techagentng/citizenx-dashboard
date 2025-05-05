@@ -1,14 +1,14 @@
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { useTheme } from '@mui/material/styles';
 import { Avatar, Box, useMediaQuery, MenuItem, TextField, Grid } from '@mui/material';
 import { LocalizationProvider } from '@mui/x-date-pickers-pro/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers-pro/AdapterDayjs';
 import { DateRangePicker } from '@mui/x-date-pickers-pro/DateRangePicker';
-import { useDispatch, useSelector } from 'store';
+import { useDispatch, useSelector } from 'react-redux';
 import { openDrawer } from 'store/slices/menu';
 import { setState, setLga, getGraph } from 'store/slices/graphs';
-import statesAndLgas from './statesAndLgas.json'; // still used for local data source
+import statesAndLgas from './statesAndLgas.json';
 import { getCategories } from 'services/reportService';
 
 import LogoSection from '../LogoSection';
@@ -25,16 +25,13 @@ const Header = () => {
     const theme = useTheme();
     const dispatch = useDispatch();
     const { drawerOpen } = useSelector((state) => state.menu);
+    const { lgaState: { state, lga }, reportType: selectedReportType } = useSelector((state) => state.graphs);
     const matchDownMd = useMediaQuery(theme.breakpoints.down('md'));
     const { layout } = useConfig();
-    const [selectedState, setSelectedState] = useState('Anambra');
-    const [selectedLga, setSelectedLga] = useState('Aguata');
-    const [dateRange, setDateRange] = useState([null, null]);
-    const [, setValue] = useState('');
-    const [, setReportTypes] = useState(['Select type']);
-    const selectedReportType = useSelector((state) => state.graphs.reportType);
+    const [dateRange, setDateRange] = React.useState([null, null]);
+    const [, setReportTypes] = React.useState(['Select type']);
 
-        // React Query: Fetch all states (local, so no async fetch needed, but for demo, wrap in a query)
+    // React Query: Fetch all states
     const { data: states = [] } = useQuery({
         queryKey: ['states'],
         queryFn: () => statesAndLgas.NigeriaStates.map((state) => ({
@@ -45,36 +42,28 @@ const Header = () => {
 
     // React Query: Fetch LGAs for selected state
     const { data: lgas = [] } = useQuery({
-        queryKey: ['lgas', selectedState],
+        queryKey: ['lgas', state],
         queryFn: () => {
-            const lgasArr = statesAndLgas.LocalGovernment[selectedState] || [];
+            const lgasArr = statesAndLgas.LocalGovernment[state] || [];
             return lgasArr.map((lga) => ({ value: lga, label: lga }));
         },
-        enabled: !!selectedState
+        enabled: !!state
     });
 
     // Set default LGA when state or lgas change
-    React.useEffect(() => {
-        if (lgas.length > 0) {
-            setSelectedLga(lgas[0].value);
+    useEffect(() => {
+        if (lgas.length > 0 && !lga) {
             dispatch(setLga(lgas[0].value));
-        } else {
-            setSelectedLga('');
-            dispatch(setLga(''));
         }
-    }, [selectedState, lgas, dispatch]);
+    }, [state, lgas, lga, dispatch]);
 
-        const handleStateChange = (event) => {
+    const handleStateChange = (event) => {
         const stateName = event.target.value;
-        setSelectedState(stateName);
         dispatch(setState(stateName));
-        // LGAs will auto-update via React Query and useEffect above
     };
-
 
     const handleLgaChange = (event) => {
         const lgaName = event.target.value;
-        setSelectedLga(lgaName);
         dispatch(setLga(lgaName));
     };
 
@@ -84,28 +73,27 @@ const Header = () => {
 
     const handleSearch = useCallback(() => {
         const [startDate, endDate] = dateRange;
-        dispatch(getGraph(selectedState, selectedLga, startDate?.format('YYYY-MM-DD'), endDate?.format('YYYY-MM-DD'), selectedReportType));
-    }, [dispatch, selectedState, selectedReportType, selectedLga, dateRange]);
+        dispatch(getGraph(state, lga, startDate?.format('YYYY-MM-DD'), endDate?.format('YYYY-MM-DD'), selectedReportType));
+    }, [dispatch, state, lga, dateRange, selectedReportType]);
 
     useEffect(() => {
-        if (selectedState && selectedLga && selectedState !== 'State' && selectedLga !== 'LGA') {
+        if (state && lga && state !== 'State' && lga !== 'LGA') {
             handleSearch();
         }
-    }, [selectedState, selectedLga, dateRange, handleSearch]);
+    }, [state, lga, dateRange, handleSearch]);
 
     useEffect(() => {
         getCategories()
             .then((types) => {
                 const reportTypeOptions = ['Select Report Type', ...types];
                 setReportTypes(reportTypeOptions);
-                setValue(reportTypeOptions[0]);
             })
             .catch((error) => {
                 console.error('Failed to fetch categories:', error);
             });
     }, []);
 
-    const percentCount = useSelector((state) => state.graphs.percentCount);
+    const percentCount = useSelector((state) => state.graphs.reportPercent);
 
     useEffect(() => {
         console.log('Percent Count:', percentCount);
@@ -154,7 +142,13 @@ const Header = () => {
             <Grid item></Grid>
             <Box sx={{ flexGrow: 1 }} />
             <Box sx={{ display: { xs: 'none', sm: 'flex' }, alignItems: 'center', gap: 2 }}>
-                <TextField id="state-select" select value={selectedState} onChange={handleStateChange} label="Select State">
+                <TextField
+                    id="state-select"
+                    select
+                    value={state || 'Anambra'}
+                    onChange={handleLovationChange}
+                    label="Select State"
+                >
                     {states.map((option) => (
                         <MenuItem key={option.value} value={option.value}>
                             {option.label}
@@ -164,10 +158,10 @@ const Header = () => {
                 <TextField
                     id="lga-select"
                     select
-                    value={selectedLga || 'LGA'}
+                    value={lga || 'Aguata'}
                     onChange={handleLgaChange}
                     label="Select LGA"
-                    disabled={!selectedState}
+                    disabled={!state}
                 >
                     <MenuItem value="LGA" disabled>
                         LGA
