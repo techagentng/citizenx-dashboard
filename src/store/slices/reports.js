@@ -3,7 +3,7 @@ import { createSlice } from '@reduxjs/toolkit';
 
 // project imports
 import axios from 'utils/axios';
-import { dispatch } from '../index';
+// Removed incorrect import of dispatch. Use the dispatch argument provided by thunks.
 
 // ----------------------------------------------------------------------
 
@@ -68,7 +68,7 @@ export default slice.reducer;
 // }
 
 export function getAllReports() {
-    return async () => {
+    return async (dispatch) => {
         try {
             const response = await axios.get('/incident_reports');
             dispatch(slice.actions.getAllReportsSuccess(response.data.incident_reports));

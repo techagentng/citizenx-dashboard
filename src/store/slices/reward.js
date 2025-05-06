@@ -3,7 +3,7 @@ import { createSlice } from '@reduxjs/toolkit';
 
 // project imports
 import axios from 'utils/axios';
-import { dispatch } from '../index';
+// Removed incorrect import of dispatch. Use the dispatch argument provided by thunks.
 
 // ----------------------------------------------------------------------
 
@@ -39,7 +39,7 @@ export const { setTotalQuantity } = slice.actions;
 // ----------------------------------------------------------------------
 
 export function getAllRewards() {
-    return async () => {
+    return async (dispatch) => {
         try {
             const response = await axios.get('/count/all/rewards');
             dispatch(slice.actions.getRewardSuccess(response.data));

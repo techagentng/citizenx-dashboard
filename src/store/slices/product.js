@@ -3,7 +3,7 @@ import { createSlice } from '@reduxjs/toolkit';
 
 // project imports
 import axios from 'utils/axios';
-import { dispatch } from '../index';
+// Removed incorrect import of dispatch. Use the dispatch argument provided by thunks.
 
 // ----------------------------------------------------------------------
 
@@ -73,7 +73,7 @@ export default slice.reducer;
 // ----------------------------------------------------------------------
 
 export function getProducts() {
-    return async () => {
+    return async (dispatch) => {
         try {
             const response = await axios.get('/api/products/list');
             dispatch(slice.actions.getProductsSuccess(response.data.products));
@@ -84,7 +84,7 @@ export function getProducts() {
 }
 
 export function filterProducts(filter) {
-    return async () => {
+    return async (dispatch) => {
         try {
             const response = await axios.post('/api/products/filter', { filter });
             dispatch(slice.actions.filterProductsSuccess(response.data));
@@ -95,7 +95,7 @@ export function filterProducts(filter) {
 }
 
 export function getProduct(id) {
-    return async () => {
+    return async (dispatch) => {
         try {
             const response = await axios.post('/api/product/details', { id });
             dispatch(slice.actions.getProductSuccess(response.data));
@@ -106,7 +106,7 @@ export function getProduct(id) {
 }
 
 export function getRelatedProducts(id) {
-    return async () => {
+    return async (dispatch) => {
         try {
             const response = await axios.post('/api/product/related', { id });
             dispatch(slice.actions.getRelatedProductsSuccess(response.data));
@@ -117,7 +117,7 @@ export function getRelatedProducts(id) {
 }
 
 export function getProductReviews() {
-    return async () => {
+    return async (dispatch) => {
         try {
             const response = await axios.get('/api/review/list');
             dispatch(slice.actions.getProductReviewsSuccess(response.data.productReviews));
@@ -128,7 +128,7 @@ export function getProductReviews() {
 }
 
 export function getAddresses() {
-    return async () => {
+    return async (dispatch) => {
         try {
             const response = await axios.get('/api/address/list');
             dispatch(slice.actions.getAddressesSuccess(response.data.address));
@@ -139,7 +139,7 @@ export function getAddresses() {
 }
 
 export function addAddress(address) {
-    return async () => {
+    return async (dispatch) => {
         try {
             const response = await axios.post('/api/address/new', address);
             dispatch(slice.actions.addAddressSuccess(response.data.address));
@@ -150,7 +150,7 @@ export function addAddress(address) {
 }
 
 export function editAddress(address) {
-    return async () => {
+    return async (dispatch) => {
         try {
             const response = await axios.post('/api/address/edit', address);
             dispatch(slice.actions.editAddressSuccess(response.data.address));
