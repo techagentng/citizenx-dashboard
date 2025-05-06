@@ -4,7 +4,6 @@ import { useTheme } from '@mui/material/styles';
 import { Avatar, Box, useMediaQuery, MenuItem, TextField, Grid } from '@mui/material';
 import { LocalizationProvider, DateRangePicker } from '@mui/x-date-pickers-pro';
 import { AdapterDayjs } from '@mui/x-date-pickers-pro/AdapterDayjs';
-import { DateRangePicker } from '@mui/x-date-pickers-pro/DateRangePicker';
 import { useDispatch, useSelector } from 'react-redux';
 import { openDrawer } from 'store/slices/menu';
 import { setState, setLga, getGraph } from 'store/slices/graphs';
