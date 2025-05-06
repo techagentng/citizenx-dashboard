@@ -1,7 +1,4 @@
 import { createSlice } from '@reduxjs/toolkit';
-
-// project imports
-import { dispatch } from '../index';
 import axios from 'utils/axios';
 
 // initial state
@@ -22,21 +19,15 @@ const menu = createSlice({
         activeItem(state, action) {
             state.selectedItem = action.payload;
         },
-
         activeID(state, action) {
             state.selectedID = action.payload;
         },
-
         openDrawer(state, action) {
             state.drawerOpen = action.payload;
         },
-
-        // has error
         hasError(state, action) {
             state.error = action.payload;
         },
-
-        // get dashboard menu
         getMenuSuccess(state, action) {
             state.menu = action.payload;
         }
@@ -47,8 +38,9 @@ export default menu.reducer;
 
 export const { activeItem, openDrawer, activeID } = menu.actions;
 
+// ✅ FIXED THUNK (use passed-in dispatch)
 export function getMenu() {
-    return async () => {
+    return async (dispatch) => {
         try {
             const response = await axios.get('/api/menu/widget');
             dispatch(menu.actions.getMenuSuccess(response.data.widget));
