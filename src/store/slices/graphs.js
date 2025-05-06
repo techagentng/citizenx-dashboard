@@ -1,17 +1,18 @@
 import { createSlice } from '@reduxjs/toolkit';
 import axios from 'utils/axios';
-import { dispatch } from '../index';
 
 const initialState = {
     error: null,
     graphs: {
         reportTypes: [],
         reportCounts: [],
-        total_count: 0 
+        total_count: 0,
+        topStates: {},
+        total_users: 0
     },
     lgaState: {
-        state: 'Anambra', 
-        lga: 'Aguata'    
+        state: 'Anambra',
+        lga: 'Aguata'
     },
     reportPercent: {
         good_percentage: 0,
@@ -19,8 +20,7 @@ const initialState = {
     },
     reportCount: 0,
     loading: false,
-    topStates: {},
-    total_users: 0
+    reportType: ''
 };
 
 const slice = createSlice({
@@ -38,8 +38,9 @@ const slice = createSlice({
             state.graphs.reportTypes = action.payload.report_types;
             state.graphs.reportCounts = action.payload.report_counts;
             state.graphs.total_count = action.payload.total_count;
-            (state.graphs.topStates = action.payload.top_states), (state.loading = false);
+            state.graphs.topStates = action.payload.top_states;
             state.graphs.total_users = action.payload.total_users;
+            state.loading = false;
         },
         getPercentCountSuccess(state, action) {
             state.reportPercent = action.payload;
@@ -58,10 +59,20 @@ const slice = createSlice({
 
 export default slice.reducer;
 
-export const { getGraphStart, hasError, getGraphSuccess, getPercentCountSuccess, setState, setLga, setReportType } = slice.actions;
+export const {
+    getGraphStart,
+    hasError,
+    getGraphSuccess,
+    getPercentCountSuccess,
+    setState,
+    setLga,
+    setReportType
+} = slice.actions;
+
+// ==================== ASYNC THUNKS ====================
 
 export function getGraph(state, lga, startDate, endDate) {
-    return async () => {
+    return async (dispatch) => {
         dispatch(getGraphStart());
         try {
             let url = `/report/type/count?state=${state}&lga=${lga}`;
@@ -69,7 +80,7 @@ export function getGraph(state, lga, startDate, endDate) {
                 url += `&startDate=${startDate}&endDate=${endDate}`;
             }
             const response = await axios.get(url);
-            dispatch(getGraphSuccess(response?.data));
+            dispatch(getGraphSuccess(response.data));
         } catch (error) {
             dispatch(hasError(error));
         }
@@ -77,11 +88,10 @@ export function getGraph(state, lga, startDate, endDate) {
 }
 
 export function getReportCount() {
-    return async () => {
+    return async (dispatch) => {
         dispatch(getGraphStart());
         try {
-            let url = `/incident_reports`;
-            const response = await axios.get(url);
+            const response = await axios.get('/incident_reports');
             dispatch(getGraphSuccess(response.data));
         } catch (error) {
             dispatch(hasError(error));
@@ -92,15 +102,15 @@ export function getReportCount() {
 export function getPercentCount(reportType, state) {
     return async (dispatch) => {
         try {
-            const response = await axios.get(`/report/rating`, {
+            const response = await axios.get('/report/rating', {
                 params: {
                     reportType,
                     state
                 }
             });
-            dispatch(slice.actions.getPercentCountSuccess(response.data));
+            dispatch(getPercentCountSuccess(response.data));
         } catch (error) {
-            dispatch(slice.actions.hasError(error));
+            dispatch(hasError(error));
         }
     };
 }
