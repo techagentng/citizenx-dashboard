@@ -73,19 +73,19 @@ export const {
 
 export function getGraph(state, lga, startDate, endDate) {
     return async (dispatch) => {
-        dispatch(getGraphStart());
-        try {
-            let url = `/report/type/count?state=${state}&lga=${lga}`;
-            if (startDate && endDate) {
-                url += `&startDate=${startDate}&endDate=${endDate}`;
-            }
-            const response = await axios.get(url);
-            dispatch(getGraphSuccess(response.data));
-        } catch (error) {
-            dispatch(hasError(error));
+      dispatch(getGraphStart());
+      try {
+        let url = `/report/type/count?state=${state}&lga=${lga}`;
+        if (startDate && endDate) {
+          url += `&startDate=${startDate}&endDate=${endDate}`;
         }
+        const response = await axios.get(url);
+        dispatch(getGraphSuccess(response?.data));
+      } catch (error) {
+        dispatch(hasError(error));
+      }
     };
-}
+  }
 
 export function getReportCount() {
     return async (dispatch) => {
