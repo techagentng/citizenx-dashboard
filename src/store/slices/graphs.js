@@ -9,7 +9,9 @@ const initialState = {
         total_count: 0,
         topStates: {},
         total_users: 0,
-        total_states: 0
+        total_states: 0,
+        topStates: [],  
+        total_states: 0 
     },
     lgaState: {
         state: 'Anambra',
@@ -47,6 +49,9 @@ const slice = createSlice({
         getPercentCountSuccess(state, action) {
             state.reportPercent = action.payload;
         },
+        setTotalStates(state, action) {
+            state.graphs.total_states = action.payload;
+        },
         setState(state, action) {
             state.lgaState.state = action.payload;
         },
@@ -77,10 +82,21 @@ export function fetchTotalStates() {
     return async (dispatch) => {
         try {
             const response = await axios.get('/reports/states/top');
-            const data = response.data;
+            const data = response.data.top_states; // Note the .top_states here
+            
             // Extract total_states from the last item in the array
             const totalData = data.pop();
-            dispatch(setTotalStates(totalData.total_states));
+            
+            // Dispatch two actions:
+            // 1. Set the total states count
+            dispatch(slice.actions.setTotalStates(totalData.total_states));
+            
+            // 2. Set the top states data
+            dispatch(slice.actions.getGraphSuccess({
+                top_states: data,
+                total_states: totalData.total_states
+            }));
+            
             return totalData.total_states;
         } catch (error) {
             dispatch(hasError(error));

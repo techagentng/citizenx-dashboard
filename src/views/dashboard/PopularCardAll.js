@@ -1,56 +1,38 @@
 import PropTypes from 'prop-types';
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 
 // material-ui
 import { useTheme } from '@mui/material/styles';
 import { Avatar, CardContent, Divider, Grid, Menu, MenuItem, Typography } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
+
 // project imports
 import BajajAreaChartCard from './BajajAreaChartCardAll';
 import MainCard from 'ui-component/cards/MainCard';
 import SkeletonPopularCard from 'ui-component/cards/Skeleton/PopularCard';
 import { gridSpacing } from 'store/constant';
+import { fetchTotalStates } from 'store/reducers/graphs';
 
 // assets
-// import ChevronRightOutlinedIcon from '@mui/icons-material/ChevronRightOutlined';
 import MoreHorizOutlinedIcon from '@mui/icons-material/MoreHorizOutlined';
 import KeyboardArrowUpOutlinedIcon from '@mui/icons-material/KeyboardArrowUpOutlined';
-// import KeyboardArrowDownOutlinedIcon from '@mui/icons-material/KeyboardArrowDownOutlined';
 
 const PopularCard = ({ isLoading }) => {
     const dispatch = useDispatch();
-    const { total_states } = useSelector((state) => state.graphs.graphs);
+    const { 
+        graphs: { 
+            total_states, 
+            topStates = [] 
+        }, 
+        loading: reduxLoading 
+    } = useSelector((state) => state.graphs);
+    
     const theme = useTheme();
     const [anchorEl, setAnchorEl] = React.useState(null);
-    const [stateNames, setStateNames] = useState([]);
-    const [reportCounts, setReportCounts] = useState([]);
-    const [totalStates, setTotalStates] = useState(0);
-    const [loading, setLoading] = useState(true);
 
-    useEffect(() => {
-        const fetchReportData = async () => {
-            try {
-                const response = await fetch('https://citizenx-9hk2.onrender.com/api/v1/reports/states/top');
-                const data = await response.json();
-                
-                // The last item is the total count
-                const totalData = data.pop();
-                dispatch(setTotalStates(totalData.total_states));
-                
-                // Sort data by report_count descending (just in case)
-                const sortedData = data.sort((a, b) => b.report_count - a.report_count);
-                
-                setStateNames(sortedData.map(item => item.state_name));
-                setReportCounts(sortedData.map(item => item.report_count));
-                setLoading(false);
-            } catch (error) {
-                console.error('Error fetching report data:', error);
-                setLoading(false);
-            }
-        };
-
-        fetchReportData();
-    }, []);
+    React.useEffect(() => {
+        dispatch(fetchTotalStates());
+    }, [dispatch]);
 
     const handleClick = (event) => {
         setAnchorEl(event.currentTarget);
@@ -60,9 +42,14 @@ const PopularCard = ({ isLoading }) => {
         setAnchorEl(null);
     };
 
+    // Calculate percentage for each state
+    const getPercentage = (count) => {
+        return total_states > 0 ? ((count / total_states) * 100).toFixed(1) : 0;
+    };
+
     return (
         <>
-            {isLoading || loading ? (
+            {isLoading || reduxLoading ? (
                 <SkeletonPopularCard />
             ) : (
                 <MainCard content={false}>
@@ -111,21 +98,21 @@ const PopularCard = ({ isLoading }) => {
                                 <BajajAreaChartCard total={total_states} />
                             </Grid>
                             <Grid item xs={12}>
-                                {stateNames.map((state, index) => (
-                                    <React.Fragment key={state}>
+                                {topStates.map((state, index) => (
+                                    <React.Fragment key={state.state_name}>
                                         <Grid container direction="column">
                                             <Grid item>
                                                 <Grid container alignItems="center" justifyContent="space-between">
                                                     <Grid item>
                                                         <Typography variant="subtitle1" color="inherit">
-                                                            {state}
+                                                            {state.state_name}
                                                         </Typography>
                                                     </Grid>
                                                     <Grid item>
                                                         <Grid container alignItems="center" justifyContent="space-between">
                                                             <Grid item>
                                                                 <Typography variant="subtitle1" color="inherit">
-                                                                    {reportCounts[index].toLocaleString()}
+                                                                    {state.report_count.toLocaleString()}
                                                                 </Typography>
                                                             </Grid>
                                                             <Grid item>
@@ -149,11 +136,11 @@ const PopularCard = ({ isLoading }) => {
                                             </Grid>
                                             <Grid item>
                                                 <Typography variant="subtitle2" sx={{ color: 'success.dark' }}>
-                                                    {((reportCounts[index] / totalStates) * 100).toFixed(1)}% of total
+                                                    {getPercentage(state.report_count)}% of total
                                                 </Typography>
                                             </Grid>
                                         </Grid>
-                                        {index < stateNames.length - 1 && <Divider sx={{ my: 1.5 }} />}
+                                        {index < topStates.length - 1 && <Divider sx={{ my: 1.5 }} />}
                                     </React.Fragment>
                                 ))}
                             </Grid>
