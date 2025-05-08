@@ -1,19 +1,13 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-
-// material-ui
 import { useTheme } from '@mui/material/styles';
 import { Avatar, CardContent, Divider, Grid, Menu, MenuItem, Typography } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
-
-// project imports
 import BajajAreaChartCard from './BajajAreaChartCardAll';
 import MainCard from 'ui-component/cards/MainCard';
 import SkeletonPopularCard from 'ui-component/cards/Skeleton/PopularCard';
 import { gridSpacing } from 'store/constant';
 import { fetchTotalStates } from 'store/slices/graphs';
-
-// assets
 import MoreHorizOutlinedIcon from '@mui/icons-material/MoreHorizOutlined';
 import KeyboardArrowUpOutlinedIcon from '@mui/icons-material/KeyboardArrowUpOutlined';
 
@@ -21,10 +15,11 @@ const PopularCard = ({ isLoading }) => {
     const dispatch = useDispatch();
     const { 
         graphs: { 
-            total_states, 
-            topStates = [] 
+            total_states = 0, 
+            topStates 
         }, 
-        loading: reduxLoading 
+        loading: reduxLoading,
+        error
     } = useSelector((state) => state.graphs);
     
     const theme = useTheme();
@@ -42,10 +37,94 @@ const PopularCard = ({ isLoading }) => {
         setAnchorEl(null);
     };
 
-    // Calculate percentage for each state
+    // Safely calculate percentage
     const getPercentage = (count) => {
         return total_states > 0 ? ((count / total_states) * 100).toFixed(1) : 0;
     };
+
+    // Safely handle topStates data
+    const renderStates = () => {
+        if (!Array.isArray(topStates)) {
+            return (
+                <Typography variant="body2" color="error">
+                    Error: States data is not in expected format
+                </Typography>
+            );
+        }
+
+        if (topStates.length === 0) {
+            return (
+                <Typography variant="body2">
+                    No state data available
+                </Typography>
+            );
+        }
+
+        return topStates.map((state, index) => {
+            // Additional safety check for state object
+            if (!state || !state.state_name || typeof state.report_count !== 'number') {
+                return null;
+            }
+
+            return (
+                <React.Fragment key={state.state_name}>
+                    <Grid container direction="column">
+                        <Grid item>
+                            <Grid container alignItems="center" justifyContent="space-between">
+                                <Grid item>
+                                    <Typography variant="subtitle1" color="inherit">
+                                        {state.state_name}
+                                    </Typography>
+                                </Grid>
+                                <Grid item>
+                                    <Grid container alignItems="center" justifyContent="space-between">
+                                        <Grid item>
+                                            <Typography variant="subtitle1" color="inherit">
+                                                {state.report_count.toLocaleString()}
+                                            </Typography>
+                                        </Grid>
+                                        <Grid item>
+                                            <Avatar
+                                                variant="rounded"
+                                                sx={{
+                                                    width: 16,
+                                                    height: 16,
+                                                    borderRadius: '5px',
+                                                    backgroundColor: theme.palette.success.light,
+                                                    color: theme.palette.success.dark,
+                                                    ml: 2
+                                                }}
+                                            >
+                                                <KeyboardArrowUpOutlinedIcon fontSize="small" color="inherit" />
+                                            </Avatar>
+                                        </Grid>
+                                    </Grid>
+                                </Grid>
+                            </Grid>
+                        </Grid>
+                        <Grid item>
+                            <Typography variant="subtitle2" sx={{ color: 'success.dark' }}>
+                                {getPercentage(state.report_count)}% of total
+                            </Typography>
+                        </Grid>
+                    </Grid>
+                    {index < topStates.length - 1 && <Divider sx={{ my: 1.5 }} />}
+                </React.Fragment>
+            );
+        });
+    };
+
+    if (error) {
+        return (
+            <MainCard content={false}>
+                <CardContent>
+                    <Typography color="error">
+                        Error loading data: {error.message || 'Unknown error'}
+                    </Typography>
+                </CardContent>
+            </MainCard>
+        );
+    }
 
     return (
         <>
@@ -98,51 +177,7 @@ const PopularCard = ({ isLoading }) => {
                                 <BajajAreaChartCard total={total_states} />
                             </Grid>
                             <Grid item xs={12}>
-                                {topStates.map((state, index) => (
-                                    <React.Fragment key={state.state_name}>
-                                        <Grid container direction="column">
-                                            <Grid item>
-                                                <Grid container alignItems="center" justifyContent="space-between">
-                                                    <Grid item>
-                                                        <Typography variant="subtitle1" color="inherit">
-                                                            {state.state_name}
-                                                        </Typography>
-                                                    </Grid>
-                                                    <Grid item>
-                                                        <Grid container alignItems="center" justifyContent="space-between">
-                                                            <Grid item>
-                                                                <Typography variant="subtitle1" color="inherit">
-                                                                    {state.report_count.toLocaleString()}
-                                                                </Typography>
-                                                            </Grid>
-                                                            <Grid item>
-                                                                <Avatar
-                                                                    variant="rounded"
-                                                                    sx={{
-                                                                        width: 16,
-                                                                        height: 16,
-                                                                        borderRadius: '5px',
-                                                                        backgroundColor: theme.palette.success.light,
-                                                                        color: theme.palette.success.dark,
-                                                                        ml: 2
-                                                                    }}
-                                                                >
-                                                                    <KeyboardArrowUpOutlinedIcon fontSize="small" color="inherit" />
-                                                                </Avatar>
-                                                            </Grid>
-                                                        </Grid>
-                                                    </Grid>
-                                                </Grid>
-                                            </Grid>
-                                            <Grid item>
-                                                <Typography variant="subtitle2" sx={{ color: 'success.dark' }}>
-                                                    {getPercentage(state.report_count)}% of total
-                                                </Typography>
-                                            </Grid>
-                                        </Grid>
-                                        {index < topStates.length - 1 && <Divider sx={{ my: 1.5 }} />}
-                                    </React.Fragment>
-                                ))}
+                                {renderStates()}
                             </Grid>
                         </Grid>
                     </CardContent>
