@@ -30,7 +30,7 @@ const PopularCard = ({ isLoading }) => {
     useEffect(() => {
         const fetchReportData = async () => {
             try {
-                const response = await fetch('https://citizenx.ng/reports/states/top');
+                const response = await fetch('https://citizenx-9hk2.onrender.com/api/v1/reports/states/top');
                 const data = await response.json();
                 
                 // The last item is the total count
