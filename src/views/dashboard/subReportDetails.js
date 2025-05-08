@@ -246,41 +246,53 @@ const SubReportDetailsPage = () => {
       </Typography>
 
       <TableContainer component={Paper} sx={{ maxWidth: 600, mb: 3 }}>
-    <Table>
-        <TableBody>
+        <Table>
+          <TableBody>
             <TableRow>
-                <TableCell><strong>Report Type</strong></TableCell>
-                <TableCell>{reportType || 'N/A'}</TableCell>  {/* Changed */}
+              <TableCell><strong>Report Type</strong></TableCell>
+              <TableCell>{state || 'N/A'}</TableCell>
             </TableRow>
             <TableRow>
-                <TableCell><strong>State</strong></TableCell>
-                <TableCell>{geographicalState || selectedState || 'N/A'}</TableCell>  {/* Changed */}
+              <TableCell><strong>LGA</strong></TableCell>
+              <TableCell>{lga || 'N/A'}</TableCell>
             </TableRow>
-        </TableBody>
-    </Table>
-</TableContainer>
+            <TableRow>
+              <TableCell><strong>State</strong></TableCell>
+              <TableCell>{governor?.state || selectedState || 'N/A'}</TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell><strong>Count</strong></TableCell>
+              <TableCell>{count || 'N/A'}</TableCell>
+            </TableRow>
+          </TableBody>
+        </Table>
+      </TableContainer>
 
       {loading && <CircularProgress />}
       {error && <Typography color="error">Error: {error}</Typography>}
 
       {!loading && !error && subReports.length > 0 && (
-        <TableContainer component={Paper} sx={{ maxWidth: 600 }}>
-          <Table>
-            <TableHead>
-              <TableRow>
-                <TableCell><strong>Sub Report Type</strong></TableCell>
-                <TableCell><strong>Occurrences</strong></TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {subReports.map((subReport) => (
-                <TableRow key={subReport.sub_report_type}>
-                  <TableCell>{subReport.sub_report_type}</TableCell>
-                  <TableCell>{subReport.count}</TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
+            <TableContainer component={Paper} sx={{ maxWidth: 600, mb: 3 }}>
+            <Table>
+                <TableBody>
+                    <TableRow>
+                        <TableCell><strong>Report Type</strong></TableCell>
+                        <TableCell>{reportType || 'N/A'}</TableCell>
+                    </TableRow>
+                    <TableRow>
+                        <TableCell><strong>LGA</strong></TableCell>
+                        <TableCell>{activeLga || 'N/A'}</TableCell>
+                    </TableRow>
+                    <TableRow>
+                        <TableCell><strong>State</strong></TableCell>
+                        <TableCell>{activeState || 'N/A'}</TableCell>
+                    </TableRow>
+                    <TableRow>
+                        <TableCell><strong>Count</strong></TableCell>
+                        <TableCell>{count || 'N/A'}</TableCell>
+                    </TableRow>
+                </TableBody>
+            </Table>
         </TableContainer>
       )}
     </div>n
