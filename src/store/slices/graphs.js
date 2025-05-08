@@ -36,11 +36,11 @@ const slice = createSlice({
             state.loading = false;
         },
         getGraphSuccess(state, action) {
-            state.graphs.reportTypes = action.payload.report_types;
-            state.graphs.reportCounts = action.payload.report_counts;
-            state.graphs.total_count = action.payload.total_count;
-            state.graphs.topStates = action.payload.top_states;
-            state.graphs.total_users = action.payload.total_users;
+            state.graphs.reportTypes = action.payload.report_types || [];
+            state.graphs.reportCounts = action.payload.report_counts || [];
+            state.graphs.total_count = action.payload.total_count || 0;
+            state.graphs.topStates = action.payload.top_states || [];
+            state.graphs.total_users = action.payload.total_users || 0;
             state.graphs.total_states = action.payload.total_states || 0;
             state.loading = false;
         },
@@ -76,25 +76,28 @@ export const {
 } = slice.actions;
 
 // ==================== ASYNC THUNKS ====================
+
 export function fetchTotalStates() {
     return async (dispatch) => {
         try {
             const response = await axios.get('/reports/states/top');
-            const data = response.data.top_states; // Note the .top_states here
-            
-            // Extract total_states from the last item in the array
-            const totalData = data.pop();
-            
-            // Dispatch two actions:
-            // 1. Set the total states count
-            dispatch(slice.actions.setTotalStates(totalData.total_states));
-            
-            // 2. Set the top states data
-            dispatch(slice.actions.getGraphSuccess({
-                top_states: data,
+            const originalData = response.data.top_states;
+
+            if (!Array.isArray(originalData) || originalData.length === 0) {
+                throw new Error("Invalid top_states data from API");
+            }
+
+            // Clone array to avoid mutation
+            const data = [...originalData];
+            const totalData = data[data.length - 1]; // last element
+            const statesData = data.slice(0, -1); // all but last
+
+            dispatch(setTotalStates(totalData.total_states));
+            dispatch(getGraphSuccess({
+                top_states: statesData,
                 total_states: totalData.total_states
             }));
-            
+
             return totalData.total_states;
         } catch (error) {
             dispatch(hasError(error));
@@ -105,19 +108,19 @@ export function fetchTotalStates() {
 
 export function getGraph(state, lga, startDate, endDate) {
     return async (dispatch) => {
-      dispatch(getGraphStart());
-      try {
-        let url = `/report/type/count?state=${state}&lga=${lga}`;
-        if (startDate && endDate) {
-          url += `&startDate=${startDate}&endDate=${endDate}`;
+        dispatch(getGraphStart());
+        try {
+            let url = `/report/type/count?state=${state}&lga=${lga}`;
+            if (startDate && endDate) {
+                url += `&startDate=${startDate}&endDate=${endDate}`;
+            }
+            const response = await axios.get(url);
+            dispatch(getGraphSuccess(response?.data));
+        } catch (error) {
+            dispatch(hasError(error));
         }
-        const response = await axios.get(url);
-        dispatch(getGraphSuccess(response?.data));
-      } catch (error) {
-        dispatch(hasError(error));
-      }
     };
-  }
+}
 
 export function getReportCount() {
     return async (dispatch) => {
@@ -135,10 +138,7 @@ export function getPercentCount(reportType, state) {
     return async (dispatch) => {
         try {
             const response = await axios.get('/report/rating', {
-                params: {
-                    reportType,
-                    state
-                }
+                params: { reportType, state }
             });
             dispatch(getPercentCountSuccess(response.data));
         } catch (error) {

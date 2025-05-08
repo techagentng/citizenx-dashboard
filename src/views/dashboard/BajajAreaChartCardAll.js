@@ -1,35 +1,9 @@
 import React from 'react';
-
-// material-ui
 import { useTheme } from '@mui/material/styles';
 import { Card, Grid, Typography } from '@mui/material';
 
-// third-party
-// import ApexCharts from 'apexcharts';
-// import Chart from 'react-apexcharts';
-
-// project imports
-// import useConfig from 'hooks/useConfig';
-// import chartData from './chart-data/bajaj-area-chart';
-
-// ===========================|| DASHBOARD DEFAULT - BAJAJ AREA CHART CARD ||=========================== //
-
-const BajajAreaChartCard = ({total}) => {
+const BajajAreaChartCard = ({ total }) => {
     const theme = useTheme();
-    // const { navType } = useConfig();
-
-    // const orangeDark = theme.palette.secondary[800];
-
-    // React.useEffect(() => {
-    //     const newSupportChart = {
-    //         ...chartData.options,
-    //         colors: [orangeDark],
-    //         tooltip: {
-    //             theme: navType === 'dark' ? 'dark' : 'light'
-    //         }
-    //     };
-    //     ApexCharts.exec(`support-chart`, 'updateOptions', newSupportChart);
-    // }, [navType, orangeDark]);
 
     return (
         <Card sx={{ bgcolor: 'secondary.light' }}>
@@ -38,18 +12,17 @@ const BajajAreaChartCard = ({total}) => {
                     <Grid container alignItems="center" justifyContent="space-between">
                         <Grid item>
                             <Typography variant="subtitle1" sx={{ color: theme.palette.secondary.dark }}>
-                                Total States
+                                Total Reports
                             </Typography>
                         </Grid>
                         <Grid item>
                             <Typography variant="h4" sx={{ color: theme.palette.grey[800] }}>
-                                {total}
+                                {total?.toLocaleString() || '0'}
                             </Typography>
                         </Grid>
                     </Grid>
                 </Grid>
             </Grid>
-            {/* <Chart {...chartData} /> */}
         </Card>
     );
 };
