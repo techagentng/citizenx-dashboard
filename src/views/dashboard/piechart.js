@@ -15,22 +15,24 @@ const PieChart = ({ reportTypes, reportCounts }) => {
         return <p>No data available</p>;
     }
 
-    const handleClick = (event, elements) => {
+    const handleClick = (event, elements, chart) => {
         if (elements.length > 0) {
             const clickedIndex = elements[0].index;
-            const clickedPieData = data.datasets[0].data[clickedIndex];
-            const reportType = data.labels[clickedIndex];
+            const reportType = chart.data.labels[clickedIndex];
+            const reportCount = chart.data.datasets[0].data[clickedIndex];
 
+            // Update Redux store
             dispatch(setState(reportType));
-            dispatch(setLga("LGA Name")); 
+            dispatch(setLga("All LGAs")); // Or fetch actual LGA if available
 
-            const selectedData = {
-                state: reportType,
-                lga: "LGA Name",
-                count: clickedPieData
-            };
-
-            navigate('/dashboard/sub_reports', { state: selectedData });
+            // Navigate with state
+            navigate('/dashboard/sub_reports', { 
+                state: { 
+                    state: reportType,
+                    lga: "All LGAs",
+                    count: reportCount
+                } 
+            });
         }
     };
 
@@ -39,21 +41,21 @@ const PieChart = ({ reportTypes, reportCounts }) => {
         datasets: [{
             data: reportCounts,
             backgroundColor: [
-                'rgb(255, 99, 132)',    // Red-pink
-                'rgb(54, 162, 235)',    // Blue
-                'rgb(255, 205, 86)',    // Yellow
-                'rgb(75, 192, 192)',    // Teal
-                'rgb(153, 102, 255)',   // Purple
-                'rgb(255, 159, 64)',    // Orange
-                'rgb(199, 199, 199)',   // Grey
-                'rgb(83, 102, 44)',     // Olive
+                'rgb(255, 99, 132)',
+                'rgb(54, 162, 235)',
+                'rgb(255, 205, 86)',
+                'rgb(75, 192, 192)',
+                'rgb(153, 102, 255)',
+                'rgb(255, 159, 64)',
+                'rgb(199, 199, 199)',
+                'rgb(83, 102, 44)',
             ],
-            hoverOffset: 4          // Adds a nice hover effect
+            hoverOffset: 4
         }]
     };
 
     const options = {
-        onClick: handleClick,
+        onClick: (event, elements, chart) => handleClick(event, elements, chart),
     };
 
     return (
