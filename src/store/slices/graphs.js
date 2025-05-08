@@ -7,11 +7,9 @@ const initialState = {
         reportTypes: [],
         reportCounts: [],
         total_count: 0,
-        topStates: {},
         total_users: 0,
         total_states: 0,
-        topStates: [],  
-        total_states: 0 
+        topStates: []
     },
     lgaState: {
         state: 'Anambra',
