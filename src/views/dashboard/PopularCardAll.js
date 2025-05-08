@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useTheme } from '@mui/material/styles';
 import { Avatar, CardContent, Divider, Grid, Menu, MenuItem, Typography } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
@@ -15,7 +15,6 @@ const PopularCard = ({ isLoading }) => {
     const dispatch = useDispatch();
     const { 
         graphs: { 
-            total_states = 0, 
             topStates = []
         }, 
         loading: reduxLoading,
