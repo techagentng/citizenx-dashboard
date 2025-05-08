@@ -249,7 +249,7 @@ const SubReportDetailsPage = () => {
           <TableBody>
             <TableRow>
               <TableCell><strong>Report Type</strong></TableCell>
-              <TableCell>{selectedState || 'N/A'}</TableCell>
+              <TableCell>{state || 'N/A'}</TableCell>
             </TableRow>
             <TableRow>
               <TableCell><strong>LGA</strong></TableCell>
@@ -257,7 +257,7 @@ const SubReportDetailsPage = () => {
             </TableRow>
             <TableRow>
               <TableCell><strong>State</strong></TableCell>
-              <TableCell>{governor?.state || selectedState || 'N/A'}</TableCell>
+              <TableCell>{governor?.state || state || 'N/A'}</TableCell>
             </TableRow>
             <TableRow>
               <TableCell><strong>Count</strong></TableCell>
@@ -280,11 +280,11 @@ const SubReportDetailsPage = () => {
                     </TableRow>
                     <TableRow>
                         <TableCell><strong>LGA</strong></TableCell>
-                        <TableCell>{activeLga || 'N/A'}</TableCell>
+                        <TableCell>{lga || 'N/A'}</TableCell>
                     </TableRow>
                     <TableRow>
                         <TableCell><strong>State</strong></TableCell>
-                        <TableCell>{activeState || 'N/A'}</TableCell>
+                        <TableCell>{state || 'N/A'}</TableCell>
                     </TableRow>
                     <TableRow>
                         <TableCell><strong>Count</strong></TableCell>
