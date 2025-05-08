@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import React, { useEffect, useMemo } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useTheme } from '@mui/material/styles';
 import { Avatar, CardContent, Divider, Grid, Menu, MenuItem, Typography } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
@@ -23,52 +23,31 @@ const PopularCard = ({ isLoading }) => {
     } = useSelector((state) => state.graphs);
     
     const theme = useTheme();
-    const [anchorEl, setAnchorEl] = React.useState(null);
-    const [isInitialLoad, setIsInitialLoad] = React.useState(true);
+    const [anchorEl, setAnchorEl] = useState(null);
+    const [processedStates, setProcessedStates] = useState([]);
+    const [processedTotal, setProcessedTotal] = useState(0);
 
-    // Fetch data only once on component mount
+    // Process the data when topStates changes
     useEffect(() => {
-        const fetchData = async () => {
-            try {
-                await dispatch(fetchTotalStates());
-            } catch (err) {
-                console.error('Failed to fetch states:', err);
-            } finally {
-                setIsInitialLoad(false);
-            }
-        };
+        if (!topStates || !Array.isArray(topStates)) return;
         
-        fetchData();
+        // The last item is the total count
+        const statesData = [...topStates]; // Create a copy
+        const totalData = statesData.pop(); // Remove and get the last item
         
-        // Cleanup function
-        return () => {
-            // Cancel any pending requests if needed
-        };
-    }, [dispatch]);
-
-    // Memoize normalized data to prevent unnecessary recalculations
-    const normalizedStates = useMemo(() => {
-        if (!topStates) return [];
+        // Filter out any invalid entries
+        const validStates = statesData.filter(state => 
+            state && state.state_name && typeof state.report_count === 'number'
+        );
         
-        // Handle array format
-        if (Array.isArray(topStates)) {
-            return topStates.filter(item => 
-                item && item.state_name && typeof item.report_count === 'number'
-            );
-        }
-        
-        // Handle object format
-        if (typeof topStates === 'object' && topStates !== null) {
-            return Object.entries(topStates)
-                .map(([state_name, report_count]) => ({
-                    state_name,
-                    report_count: Number(report_count) || 0
-                }))
-                .filter(item => item.state_name);
-        }
-        
-        return [];
+        setProcessedStates(validStates);
+        setProcessedTotal(totalData?.total_states || 0);
     }, [topStates]);
+
+    // Fetch data on mount
+    useEffect(() => {
+        dispatch(fetchTotalStates());
+    }, [dispatch]);
 
     const handleClick = (event) => {
         setAnchorEl(event.currentTarget);
@@ -79,7 +58,7 @@ const PopularCard = ({ isLoading }) => {
     };
 
     const getPercentage = (count) => {
-        return total_states > 0 ? ((count / total_states) * 100).toFixed(1) : 0;
+        return processedTotal > 0 ? ((count / processedTotal) * 100).toFixed(1) : 0;
     };
 
     if (error) {
@@ -94,8 +73,7 @@ const PopularCard = ({ isLoading }) => {
         );
     }
 
-    // Show loading state for both initial load and Redux loading
-    if (isLoading || reduxLoading || isInitialLoad) {
+    if (isLoading || reduxLoading) {
         return <SkeletonPopularCard />;
     }
 
@@ -143,11 +121,11 @@ const PopularCard = ({ isLoading }) => {
                         </Grid>
                     </Grid>
                     <Grid item xs={12} sx={{ pt: '16px !important' }}>
-                        <BajajAreaChartCard total={total_states} />
+                        <BajajAreaChartCard total={processedTotal} />
                     </Grid>
                     <Grid item xs={12}>
-                        {normalizedStates.length > 0 ? (
-                            normalizedStates.map((state, index) => (
+                        {processedStates.length > 0 ? (
+                            processedStates.map((state, index) => (
                                 <React.Fragment key={`${state.state_name}-${index}`}>
                                     <Grid container direction="column">
                                         <Grid item>
@@ -189,7 +167,7 @@ const PopularCard = ({ isLoading }) => {
                                             </Typography>
                                         </Grid>
                                     </Grid>
-                                    {index < normalizedStates.length - 1 && <Divider sx={{ my: 1.5 }} />}
+                                    {index < processedStates.length - 1 && <Divider sx={{ my: 1.5 }} />}
                                 </React.Fragment>
                             ))
                         ) : (
