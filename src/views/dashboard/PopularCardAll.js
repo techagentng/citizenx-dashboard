@@ -11,7 +11,7 @@ import BajajAreaChartCard from './BajajAreaChartCardAll';
 import MainCard from 'ui-component/cards/MainCard';
 import SkeletonPopularCard from 'ui-component/cards/Skeleton/PopularCard';
 import { gridSpacing } from 'store/constant';
-import { fetchTotalStates } from 'store/reducers/graphs';
+import { fetchTotalStates } from 'store/slices/graphs';
 
 // assets
 import MoreHorizOutlinedIcon from '@mui/icons-material/MoreHorizOutlined';
