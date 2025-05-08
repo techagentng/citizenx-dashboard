@@ -257,7 +257,7 @@ const SubReportDetailsPage = () => {
             </TableRow>
             <TableRow>
               <TableCell><strong>State</strong></TableCell>
-              <TableCell>{governor?.state || state || 'N/A'}</TableCell>
+              <TableCell>{governor?.state || selectedState || 'N/A'}</TableCell>
             </TableRow>
             <TableRow>
               <TableCell><strong>Count</strong></TableCell>
