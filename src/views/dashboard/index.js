@@ -5,6 +5,7 @@ import MainCard from 'ui-component/cards/MainCard';
 import EarningCard from 'ui-component/cards/Skeleton/EarningCard';
 import EarningIcon from 'assets/images/icons/earning.svg';
 import PopularCard from './PopularCard';
+import PopularCardAll from './PopularCardAll';
 // import TopReportedStateCard from './TopReportedStateCard';
 import BarChart from './barchart';
 import PieChart from './piechart';
@@ -40,8 +41,8 @@ const DashboardPage = () => {
     const [selectedReportType, setSelectedReportType] = useState('Accidents');
     const [totalOverallReports, setTotalOverallReports] = useState(0);
     const [totalStateReports, setTotalStateReports] = useState(0);
-    const [formattedTopStates, setFormattedTopStates] = useState([]);
-    const [totalReportCounts, setTotalReportCounts] = useState([]);
+    const [, setFormattedTopStates] = useState([]);
+    const [, setTotalReportCounts] = useState([]);
     const [, setTotalLGAReports] = useState(0);
     const [reportData, setReportData] = useState(null);
     const [reportCount, setReportCount] = useState(null);
@@ -319,12 +320,7 @@ const DashboardPage = () => {
                     </Grid>
 
                     <Grid item xs={12} md={4}>
-                        <PopularCard
-                            title="Top Reported States in Nigeria"
-                            data={formattedTopStates}
-                            type="states"
-                            totalReportCount={totalReportCounts}
-                        />
+                        <PopularCardAll />
                     </Grid>
                     {/* <Grid item xs={12} md={4} sx={{ backgroundColor: 'white' }}>
                         <Box display="flex" justifyContent="space-between" alignItems="center" p={2}>
