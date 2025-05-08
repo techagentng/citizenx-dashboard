@@ -29,6 +29,11 @@ const PopularCard = ({ isLoading }) => {
         dispatch(fetchTotalStates());
     }, [dispatch]);
 
+    // Debug the topStates structure
+    React.useEffect(() => {
+        console.log('topStates data structure:', topStates);
+    }, [topStates]);
+
     const handleClick = (event) => {
         setAnchorEl(event.currentTarget);
     };
@@ -37,22 +42,40 @@ const PopularCard = ({ isLoading }) => {
         setAnchorEl(null);
     };
 
-    // Safely calculate percentage
     const getPercentage = (count) => {
         return total_states > 0 ? ((count / total_states) * 100).toFixed(1) : 0;
     };
 
-    // Safely handle topStates data
-    const renderStates = () => {
-        if (!Array.isArray(topStates)) {
-            return (
-                <Typography variant="body2" color="error">
-                    Error: States data is not in expected format
-                </Typography>
-            );
+    const transformTopStates = (data) => {
+        try {
+            // If data is already an array, return it
+            if (Array.isArray(data)) return data;
+            
+            // If data is an object with top_states property
+            if (data && data.top_states && Array.isArray(data.top_states)) {
+                return data.top_states;
+            }
+            
+            // If data is an object that can be converted to array
+            if (data && typeof data === 'object') {
+                return Object.entries(data).map(([state_name, report_count]) => ({
+                    state_name,
+                    report_count
+                }));
+            }
+            
+            // Default fallback
+            return [];
+        } catch (error) {
+            console.error('Error transforming topStates:', error);
+            return [];
         }
+    };
 
-        if (topStates.length === 0) {
+    const renderStates = () => {
+        const statesArray = transformTopStates(topStates);
+        
+        if (statesArray.length === 0) {
             return (
                 <Typography variant="body2">
                     No state data available
@@ -60,14 +83,14 @@ const PopularCard = ({ isLoading }) => {
             );
         }
 
-        return topStates.map((state, index) => {
-            // Additional safety check for state object
+        return statesArray.map((state, index) => {
             if (!state || !state.state_name || typeof state.report_count !== 'number') {
+                console.warn('Invalid state data:', state);
                 return null;
             }
 
             return (
-                <React.Fragment key={state.state_name}>
+                <React.Fragment key={`${state.state_name}-${index}`}>
                     <Grid container direction="column">
                         <Grid item>
                             <Grid container alignItems="center" justifyContent="space-between">
@@ -108,7 +131,7 @@ const PopularCard = ({ isLoading }) => {
                             </Typography>
                         </Grid>
                     </Grid>
-                    {index < topStates.length - 1 && <Divider sx={{ my: 1.5 }} />}
+                    {index < statesArray.length - 1 && <Divider sx={{ my: 1.5 }} />}
                 </React.Fragment>
             );
         });
