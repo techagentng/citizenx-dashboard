@@ -16,7 +16,7 @@ const PopularCard = ({ isLoading }) => {
     const { 
         graphs: { 
             total_states = 0, 
-            topStates 
+            topStates = [] // Ensure default is empty array
         }, 
         loading: reduxLoading,
         error
@@ -29,9 +29,10 @@ const PopularCard = ({ isLoading }) => {
         dispatch(fetchTotalStates());
     }, [dispatch]);
 
-    // Debug the topStates structure
+    // Debug the data structure
     React.useEffect(() => {
-        console.log('topStates data structure:', topStates);
+        console.log('Current topStates:', topStates);
+        console.log('Type of topStates:', typeof topStates);
     }, [topStates]);
 
     const handleClick = (event) => {
@@ -46,36 +47,33 @@ const PopularCard = ({ isLoading }) => {
         return total_states > 0 ? ((count / total_states) * 100).toFixed(1) : 0;
     };
 
-    const transformTopStates = (data) => {
-        try {
-            // If data is already an array, return it
-            if (Array.isArray(data)) return data;
-            
-            // If data is an object with top_states property
-            if (data && data.top_states && Array.isArray(data.top_states)) {
-                return data.top_states;
-            }
-            
-            // If data is an object that can be converted to array
-            if (data && typeof data === 'object') {
-                return Object.entries(data).map(([state_name, report_count]) => ({
-                    state_name,
-                    report_count
-                }));
-            }
-            
-            // Default fallback
-            return [];
-        } catch (error) {
-            console.error('Error transforming topStates:', error);
-            return [];
+    const normalizeStatesData = (data) => {
+        // If data is already in correct format
+        if (Array.isArray(data) && data.every(item => item.state_name && item.report_count)) {
+            return data;
         }
+        
+        // If data is an object with top_states array
+        if (data?.top_states && Array.isArray(data.top_states)) {
+            return data.top_states;
+        }
+        
+        // If data is an object with state names as keys
+        if (data && typeof data === 'object' && !Array.isArray(data)) {
+            return Object.entries(data).map(([state_name, report_count]) => ({
+                state_name,
+                report_count: Number(report_count) || 0
+            }));
+        }
+        
+        // Default fallback
+        return [];
     };
 
     const renderStates = () => {
-        const statesArray = transformTopStates(topStates);
+        const normalizedStates = normalizeStatesData(topStates);
         
-        if (statesArray.length === 0) {
+        if (!normalizedStates.length) {
             return (
                 <Typography variant="body2">
                     No state data available
@@ -83,58 +81,51 @@ const PopularCard = ({ isLoading }) => {
             );
         }
 
-        return statesArray.map((state, index) => {
-            if (!state || !state.state_name || typeof state.report_count !== 'number') {
-                console.warn('Invalid state data:', state);
-                return null;
-            }
-
-            return (
-                <React.Fragment key={`${state.state_name}-${index}`}>
-                    <Grid container direction="column">
-                        <Grid item>
-                            <Grid container alignItems="center" justifyContent="space-between">
-                                <Grid item>
-                                    <Typography variant="subtitle1" color="inherit">
-                                        {state.state_name}
-                                    </Typography>
-                                </Grid>
-                                <Grid item>
-                                    <Grid container alignItems="center" justifyContent="space-between">
-                                        <Grid item>
-                                            <Typography variant="subtitle1" color="inherit">
-                                                {state.report_count.toLocaleString()}
-                                            </Typography>
-                                        </Grid>
-                                        <Grid item>
-                                            <Avatar
-                                                variant="rounded"
-                                                sx={{
-                                                    width: 16,
-                                                    height: 16,
-                                                    borderRadius: '5px',
-                                                    backgroundColor: theme.palette.success.light,
-                                                    color: theme.palette.success.dark,
-                                                    ml: 2
-                                                }}
-                                            >
-                                                <KeyboardArrowUpOutlinedIcon fontSize="small" color="inherit" />
-                                            </Avatar>
-                                        </Grid>
+        return normalizedStates.map((state, index) => (
+            <React.Fragment key={`${state.state_name}-${index}`}>
+                <Grid container direction="column">
+                    <Grid item>
+                        <Grid container alignItems="center" justifyContent="space-between">
+                            <Grid item>
+                                <Typography variant="subtitle1" color="inherit">
+                                    {state.state_name}
+                                </Typography>
+                            </Grid>
+                            <Grid item>
+                                <Grid container alignItems="center" justifyContent="space-between">
+                                    <Grid item>
+                                        <Typography variant="subtitle1" color="inherit">
+                                            {state.report_count.toLocaleString()}
+                                        </Typography>
+                                    </Grid>
+                                    <Grid item>
+                                        <Avatar
+                                            variant="rounded"
+                                            sx={{
+                                                width: 16,
+                                                height: 16,
+                                                borderRadius: '5px',
+                                                backgroundColor: theme.palette.success.light,
+                                                color: theme.palette.success.dark,
+                                                ml: 2
+                                            }}
+                                        >
+                                            <KeyboardArrowUpOutlinedIcon fontSize="small" color="inherit" />
+                                        </Avatar>
                                     </Grid>
                                 </Grid>
                             </Grid>
                         </Grid>
-                        <Grid item>
-                            <Typography variant="subtitle2" sx={{ color: 'success.dark' }}>
-                                {getPercentage(state.report_count)}% of total
-                            </Typography>
-                        </Grid>
                     </Grid>
-                    {index < statesArray.length - 1 && <Divider sx={{ my: 1.5 }} />}
-                </React.Fragment>
-            );
-        });
+                    <Grid item>
+                        <Typography variant="subtitle2" sx={{ color: 'success.dark' }}>
+                            {getPercentage(state.report_count)}% of total
+                        </Typography>
+                    </Grid>
+                </Grid>
+                {index < normalizedStates.length - 1 && <Divider sx={{ my: 1.5 }} />}
+            </React.Fragment>
+        ));
     };
 
     if (error) {
