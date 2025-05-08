@@ -18,7 +18,7 @@ const BajajAreaChartCard = () => {
     const theme = useTheme();
     // const { navType } = useConfig();
 
-    const orangeDark = theme.palette.secondary[800];
+    // const orangeDark = theme.palette.secondary[800];
 
     // React.useEffect(() => {
     //     const newSupportChart = {
