@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react';
 // material-ui
 import { useTheme } from '@mui/material/styles';
 import { Avatar, CardContent, Divider, Grid, Menu, MenuItem, Typography } from '@mui/material';
-
+import { useDispatch, useSelector } from 'react-redux';
 // project imports
 import BajajAreaChartCard from './BajajAreaChartCardAll';
 import MainCard from 'ui-component/cards/MainCard';
@@ -18,6 +18,8 @@ import KeyboardArrowUpOutlinedIcon from '@mui/icons-material/KeyboardArrowUpOutl
 // import KeyboardArrowDownOutlinedIcon from '@mui/icons-material/KeyboardArrowDownOutlined';
 
 const PopularCard = ({ isLoading }) => {
+    const dispatch = useDispatch();
+    const { total_states } = useSelector((state) => state.graphs.graphs);
     const theme = useTheme();
     const [anchorEl, setAnchorEl] = React.useState(null);
     const [stateNames, setStateNames] = useState([]);
@@ -33,7 +35,7 @@ const PopularCard = ({ isLoading }) => {
                 
                 // The last item is the total count
                 const totalData = data.pop();
-                setTotalStates(totalData.total_states);
+                dispatch(setTotalStates(totalData.total_states));
                 
                 // Sort data by report_count descending (just in case)
                 const sortedData = data.sort((a, b) => b.report_count - a.report_count);
@@ -106,7 +108,7 @@ const PopularCard = ({ isLoading }) => {
                                 </Grid>
                             </Grid>
                             <Grid item xs={12} sx={{ pt: '16px !important' }}>
-                                <BajajAreaChartCard total={totalStates} />
+                                <BajajAreaChartCard total={total_states} />
                             </Grid>
                             <Grid item xs={12}>
                                 {stateNames.map((state, index) => (

@@ -14,7 +14,7 @@ import { Card, Grid, Typography } from '@mui/material';
 
 // ===========================|| DASHBOARD DEFAULT - BAJAJ AREA CHART CARD ||=========================== //
 
-const BajajAreaChartCard = ({totalStates}) => {
+const BajajAreaChartCard = ({total}) => {
     const theme = useTheme();
     // const { navType } = useConfig();
 
@@ -43,7 +43,7 @@ const BajajAreaChartCard = ({totalStates}) => {
                         </Grid>
                         <Grid item>
                             <Typography variant="h4" sx={{ color: theme.palette.grey[800] }}>
-                                {totalStates.toLocaleString()}
+                                {total}
                             </Typography>
                         </Grid>
                     </Grid>

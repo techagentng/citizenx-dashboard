@@ -29,6 +29,7 @@ import {
 
 const DashboardPage = () => {
     const dispatch = useDispatch();
+    const { total_states } = useSelector((state) => state.graphs.graphs);
     const { lga: selectedLga } = useSelector((state) => state.graphs.lgaState);
     const selectedState = useSelector((state) => state.graphs.lgaState.state);
     const { isLoggedIn } = useContext(JWTContext);
@@ -39,7 +40,7 @@ const DashboardPage = () => {
     const [, setOnlineUsers] = useState(0);
     const [, setReportTypes] = useState([]);
     const [selectedReportType, setSelectedReportType] = useState('Accidents');
-    const [totalOverallReports, setTotalOverallReports] = useState(0);
+    const [, setTotalOverallReports] = useState(0);
     const [totalStateReports, setTotalStateReports] = useState(0);
     const [, setFormattedTopStates] = useState([]);
     const [, setTotalReportCounts] = useState([]);
@@ -234,7 +235,7 @@ const DashboardPage = () => {
                         <EarningCard count={totalStateReports} details="Total state reports" icon={EarningIcon} />
                     </Grid>
                     <Grid item xs={12} sm={6} md={3}>
-                        <EarningCard count={totalOverallReports} details="Overall report in Nigeria" icon={EarningIcon} />
+                        <EarningCard count={total_states} details="Overall report in Nigeria" icon={EarningIcon} />
                     </Grid>
                 </Grid>
 
