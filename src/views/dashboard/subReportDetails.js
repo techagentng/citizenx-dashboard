@@ -78,7 +78,11 @@ const SubReportDetailsPage = () => {
                 });
         }
     }, [state]);
-
+    useEffect(() => {
+        console.log('Navigation state:', reportTypeState);
+        console.log('Redux state:', selectedState);
+        console.log('Active state being used:', activeState);
+    }, [reportTypeState, selectedState, activeState]);
     return (
         <div>
             {/* Cards Section */}
