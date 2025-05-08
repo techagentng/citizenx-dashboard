@@ -25,24 +25,18 @@ const SubReportDetailsPage = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const location = useLocation();
-    const { state, count } = location.state || {};
     const { state: selectedState, lga } = useSelector((state) => state.graphs.lgaState);
-
+    const { 
+        reportType,  // The category ("Crime")
+        state: geographicalState,
+        count 
+    } = location.state || {};
     // Fetch governor details
     useEffect(() => {
         if (selectedState) {
             setLoading(true); // Reset loading state
             getGovernorDetails(selectedState)
                 .then((data) => {
-                    // Handle Google Drive URLs if needed (uncomment if applicable)
-                    /*
-                    if (data.governor_image?.includes('drive.google.com')) {
-                        const match = data.governor_image.match(/d\/([a-zA-Z0-9_-]+)/);
-                        if (match && match[1]) {
-                            data.governor_image = `https://drive.google.com/uc?export=view&id=${match[1]}`;
-                        }
-                    }
-                    */
                     setGovernor(data);
                     setLoading(false);
                 })
@@ -51,24 +45,24 @@ const SubReportDetailsPage = () => {
                     setLoading(false);
                 });
         }
-    }, [selectedState]);
+    }, [geographicalState, selectedState]);
 
     // Fetch sub-reports
     useEffect(() => {
-        if (state) {
-            setLoading(true); // Reset loading state
-            getSubReportsByCategory(state)
+        if (reportType) {  
+            setLoading(true);
+            getSubReportsByCategory(reportType)  
                 .then((data) => {
                     const subReportsCount = data.reduce((acc, report) => {
                         acc[report.sub_report_type] = (acc[report.sub_report_type] || 0) + 1;
                         return acc;
                     }, {});
-
+    
                     const structuredSubReports = Object.keys(subReportsCount).map((key) => ({
                         sub_report_type: key,
                         count: subReportsCount[key],
                     }));
-
+    
                     setSubReports(structuredSubReports);
                     setLoading(false);
                 })
@@ -77,12 +71,8 @@ const SubReportDetailsPage = () => {
                     setLoading(false);
                 });
         }
-    }, [state]);
-    useEffect(() => {
-        console.log('Navigation state:', reportTypeState);
-        console.log('Redux state:', selectedState);
-        console.log('Active state being used:', activeState);
-    }, [reportTypeState, selectedState, activeState]);
+    }, [reportType]);  
+
     return (
         <div>
             {/* Cards Section */}
@@ -195,7 +185,7 @@ const SubReportDetailsPage = () => {
                                                 Report Type
                                             </Typography>
                                             <Typography variant="subtitle1" color="textSecondary">
-                                                {state || 'N/A'}
+                                                 {reportType || 'N/A'} 
                                             </Typography>
                                         </Grid>
                                         <Grid item container justifyContent="space-between" alignItems="center">
@@ -211,7 +201,7 @@ const SubReportDetailsPage = () => {
                                                 State
                                             </Typography>
                                             <Typography variant="subtitle1" color="textSecondary">
-                                                {governor?.state || selectedState || 'N/A'}
+                                                {geographicalState || selectedState || 'N/A'}
                                             </Typography>
                                         </Grid>
                                     </Grid>
@@ -256,27 +246,19 @@ const SubReportDetailsPage = () => {
       </Typography>
 
       <TableContainer component={Paper} sx={{ maxWidth: 600, mb: 3 }}>
-        <Table>
-          <TableBody>
+    <Table>
+        <TableBody>
             <TableRow>
-              <TableCell><strong>Report Type</strong></TableCell>
-              <TableCell>{state || 'N/A'}</TableCell>
+                <TableCell><strong>Report Type</strong></TableCell>
+                <TableCell>{reportType || 'N/A'}</TableCell>  {/* Changed */}
             </TableRow>
             <TableRow>
-              <TableCell><strong>LGA</strong></TableCell>
-              <TableCell>{lga || 'N/A'}</TableCell>
+                <TableCell><strong>State</strong></TableCell>
+                <TableCell>{geographicalState || selectedState || 'N/A'}</TableCell>  {/* Changed */}
             </TableRow>
-            <TableRow>
-              <TableCell><strong>State</strong></TableCell>
-              <TableCell>{governor?.state || selectedState || 'N/A'}</TableCell>
-            </TableRow>
-            <TableRow>
-              <TableCell><strong>Count</strong></TableCell>
-              <TableCell>{count || 'N/A'}</TableCell>
-            </TableRow>
-          </TableBody>
-        </Table>
-      </TableContainer>
+        </TableBody>
+    </Table>
+</TableContainer>
 
       {loading && <CircularProgress />}
       {error && <Typography color="error">Error: {error}</Typography>}

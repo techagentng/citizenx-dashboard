@@ -28,7 +28,8 @@ const PieChart = ({ reportTypes, reportCounts }) => {
             // Navigate with state
             navigate('/dashboard/sub_reports', { 
                 state: { 
-                    state: reportType,
+                    reportType,  
+                    state: currentState,  
                     lga: "All LGAs",
                     count: reportCount
                 } 

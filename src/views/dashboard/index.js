@@ -262,7 +262,7 @@ const DashboardPage = () => {
                                             <BarChart reportTypes={reportTypes} reportCounts={reportCounts} />
                                         </Grid> */}
                                     <Grid item xs={12}>
-                                        <PieChart reportTypes={reportTypes} reportCounts={reportCounts} />
+                                        <PieChart reportTypes={reportTypes} reportCounts={reportCounts} currentState={selectedState}  />
                                     </Grid>
                                 </Grid>
                             )}
