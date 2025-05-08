@@ -78,30 +78,20 @@ export const {
 // ==================== ASYNC THUNKS ====================
 
 export function fetchTotalStates() {
-    return async (dispatch) => {
+    return async (dispatch, getState) => {
+        const { lastFetch } = getState().graphs;
+        
+        // Don't fetch if data is fresh (e.g., less than 30 seconds old)
+        if (lastFetch && Date.now() - lastFetch < 30000) {
+            return;
+        }
+        
+        dispatch(getGraphStart());
         try {
             const response = await axios.get('/reports/states/top');
-            const originalData = response.data.top_states;
-
-            if (!Array.isArray(originalData) || originalData.length === 0) {
-                throw new Error("Invalid top_states data from API");
-            }
-
-            // Clone array to avoid mutation
-            const data = [...originalData];
-            const totalData = data[data.length - 1]; // last element
-            const statesData = data.slice(0, -1); // all but last
-
-            dispatch(setTotalStates(totalData.total_states));
-            dispatch(getGraphSuccess({
-                top_states: statesData,
-                total_states: totalData.total_states
-            }));
-
-            return totalData.total_states;
+            dispatch(getGraphSuccess(response.data));
         } catch (error) {
             dispatch(hasError(error));
-            return 0;
         }
     };
 }
