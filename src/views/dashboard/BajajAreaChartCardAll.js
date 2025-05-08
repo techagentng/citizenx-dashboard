@@ -5,18 +5,18 @@ import { useTheme } from '@mui/material/styles';
 import { Card, Grid, Typography } from '@mui/material';
 
 // third-party
-import ApexCharts from 'apexcharts';
-import Chart from 'react-apexcharts';
+// import ApexCharts from 'apexcharts';
+// import Chart from 'react-apexcharts';
 
 // project imports
-import useConfig from 'hooks/useConfig';
+// import useConfig from 'hooks/useConfig';
 // import chartData from './chart-data/bajaj-area-chart';
 
 // ===========================|| DASHBOARD DEFAULT - BAJAJ AREA CHART CARD ||=========================== //
 
 const BajajAreaChartCard = () => {
     const theme = useTheme();
-    const { navType } = useConfig();
+    // const { navType } = useConfig();
 
     const orangeDark = theme.palette.secondary[800];
 
