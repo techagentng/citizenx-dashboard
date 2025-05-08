@@ -249,7 +249,7 @@ const SubReportDetailsPage = () => {
           <TableBody>
             <TableRow>
               <TableCell><strong>Report Type</strong></TableCell>
-              <TableCell>{activeState || 'N/A'}</TableCell>
+              <TableCell>{selectedState || 'N/A'}</TableCell>
             </TableRow>
             <TableRow>
               <TableCell><strong>LGA</strong></TableCell>
