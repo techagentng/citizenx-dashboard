@@ -3,13 +3,14 @@ import { Pie } from 'react-chartjs-2';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 import { useNavigate } from 'react-router-dom';
 import { setState, setLga } from 'store/slices/graphs';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 const PieChart = ({ reportTypes, reportCounts, currentState }) => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
+    const { lgaState: { lga }, reportType: selectedReportType } = useSelector((state) => state.graphs);
 
     if (!reportTypes || !reportCounts || reportTypes.length === 0 || reportCounts.length === 0) {
         return <p>No data available</p>;
@@ -30,7 +31,7 @@ const PieChart = ({ reportTypes, reportCounts, currentState }) => {
                 state: { 
                     reportType,       // The report category ("Crime")
                     state: currentState, // The geographical state ("Lagos")
-                    lga: "All LGAs",  // The LGA
+                    lga: lga,  // The LGA
                     count: reportCount // The count
                 } 
             });

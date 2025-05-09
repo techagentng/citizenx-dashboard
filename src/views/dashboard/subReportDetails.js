@@ -192,7 +192,7 @@ const SubReportDetailsPage = () => {
                                                 LGA
                                             </Typography>
                                             <Typography variant="subtitle1" color="textSecondary">
-                                                {lga || 'N/A'}
+                                                {governor?.lgac || 'N/A'}
                                             </Typography>
                                         </Grid>
                                         <Grid item container justifyContent="space-between" alignItems="center">
