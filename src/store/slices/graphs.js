@@ -6,9 +6,9 @@ const initialState = {
     graphs: {
         reportTypes: [],
         reportCounts: [],
-        total_count: 0,
+        total_count: 0,        // Total reports
         total_users: 0,
-        total_states: 0,
+        total_states: 0,       // Total states
         topStates: []
     },
     lgaState: {
@@ -39,8 +39,8 @@ const slice = createSlice({
             state.graphs.reportTypes = action.payload.report_types || [];
             state.graphs.reportCounts = action.payload.report_counts || [];
             state.graphs.total_count = action.payload.total_count || 0;
-            state.graphs.topStates = action.payload.top_states || [];
             state.graphs.total_users = action.payload.total_users || 0;
+            state.graphs.topStates = action.payload.top_states || [];
             state.graphs.total_states = action.payload.total_states || 0;
             state.loading = false;
         },
@@ -78,14 +78,7 @@ export const {
 // ==================== ASYNC THUNKS ====================
 
 export function fetchTotalStates() {
-    return async (dispatch, getState) => {
-        const { lastFetch } = getState().graphs;
-        
-        // Don't fetch if data is fresh (e.g., less than 30 seconds old)
-        if (lastFetch && Date.now() - lastFetch < 30000) {
-            return;
-        }
-        
+    return async (dispatch) => {
         dispatch(getGraphStart());
         try {
             const response = await axios.get('/reports/states/top');

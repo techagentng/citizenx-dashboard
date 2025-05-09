@@ -13,60 +13,54 @@ import KeyboardArrowUpOutlinedIcon from '@mui/icons-material/KeyboardArrowUpOutl
 
 const PopularCard = ({ isLoading }) => {
     const dispatch = useDispatch();
-    const { 
-        graphs: { 
-            topStates = []
-        }, 
-        loading: reduxLoading,
-        error
-    } = useSelector((state) => state.graphs);
-    
     const theme = useTheme();
+
+    const { 
+        graphs: { topStates = [], total_states = 0 }, 
+        loading: reduxLoading,
+        error 
+    } = useSelector((state) => state.graphs);
+
     const [anchorEl, setAnchorEl] = useState(null);
     const [processedStates, setProcessedStates] = useState([]);
     const [processedTotal, setProcessedTotal] = useState(0);
 
-    // Process the data when topStates changes
+    // Process topStates
     useEffect(() => {
-        if (!topStates || !Array.isArray(topStates)) return;
-        
-        // The last item is the total count
-        const statesData = [...topStates]; // Create a copy
-        const totalData = statesData.pop(); // Remove and get the last item
-        
-        // Filter out any invalid entries
-        const validStates = statesData.filter(state => 
-            state && state.state_name && typeof state.report_count === 'number'
-        );
-        
-        setProcessedStates(validStates);
-        setProcessedTotal(totalData?.total_states || 0);
-    }, [topStates]);
+        if (!Array.isArray(topStates)) return;
 
-    // Fetch data on mount
+        const statesData = topStates.slice(); // clone safely
+        const maybeTotal = statesData[statesData.length - 1];
+
+        let total = total_states;
+        if (maybeTotal?.total_states !== undefined) {
+            total = maybeTotal.total_states;
+            statesData.pop(); // remove the total object
+        }
+
+        const validStates = statesData.filter(
+            (s) => s && s.state_name && typeof s.report_count === 'number'
+        );
+
+        setProcessedStates(validStates);
+        setProcessedTotal(total);
+    }, [topStates, total_states]);
+
+    // Fetch on mount
     useEffect(() => {
         dispatch(fetchTotalStates());
     }, [dispatch]);
 
-    const handleClick = (event) => {
-        setAnchorEl(event.currentTarget);
-    };
+    const handleClick = (event) => setAnchorEl(event.currentTarget);
+    const handleClose = () => setAnchorEl(null);
 
-    const handleClose = () => {
-        setAnchorEl(null);
-    };
-
-    const getPercentage = (count) => {
-        return processedTotal > 0 ? ((count / processedTotal) * 100).toFixed(1) : 0;
-    };
+    const getPercentage = (count) => processedTotal > 0 ? ((count / processedTotal) * 100).toFixed(1) : 0;
 
     if (error) {
         return (
             <MainCard content={false}>
                 <CardContent>
-                    <Typography color="error">
-                        Error loading data: {error.message || 'Unknown error'}
-                    </Typography>
+                    <Typography color="error">Error loading data: {error.message || 'Unknown error'}</Typography>
                 </CardContent>
             </MainCard>
         );
@@ -81,17 +75,14 @@ const PopularCard = ({ isLoading }) => {
             <CardContent>
                 <Grid container spacing={gridSpacing}>
                     <Grid item xs={12}>
-                        <Grid container alignContent="center" justifyContent="space-between">
+                        <Grid container justifyContent="space-between">
                             <Grid item>
                                 <Typography variant="h4">Overall report in Nigeria</Typography>
                             </Grid>
                             <Grid item>
                                 <MoreHorizOutlinedIcon
                                     fontSize="small"
-                                    sx={{
-                                        color: theme.palette.primary[200],
-                                        cursor: 'pointer'
-                                    }}
+                                    sx={{ color: theme.palette.primary[200], cursor: 'pointer' }}
                                     aria-controls="menu-popular-card"
                                     aria-haspopup="true"
                                     onClick={handleClick}
@@ -102,26 +93,21 @@ const PopularCard = ({ isLoading }) => {
                                     keepMounted
                                     open={Boolean(anchorEl)}
                                     onClose={handleClose}
-                                    variant="selectedMenu"
-                                    anchorOrigin={{
-                                        vertical: 'bottom',
-                                        horizontal: 'right'
-                                    }}
-                                    transformOrigin={{
-                                        vertical: 'top',
-                                        horizontal: 'right'
-                                    }}
+                                    anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+                                    transformOrigin={{ vertical: 'top', horizontal: 'right' }}
                                 >
-                                    <MenuItem onClick={handleClose}> Today</MenuItem>
-                                    <MenuItem onClick={handleClose}> This Month</MenuItem>
-                                    <MenuItem onClick={handleClose}> This Year </MenuItem>
+                                    <MenuItem onClick={handleClose}>Today</MenuItem>
+                                    <MenuItem onClick={handleClose}>This Month</MenuItem>
+                                    <MenuItem onClick={handleClose}>This Year</MenuItem>
                                 </Menu>
                             </Grid>
                         </Grid>
                     </Grid>
+
                     <Grid item xs={12} sx={{ pt: '16px !important' }}>
                         <BajajAreaChartCard total={processedTotal} />
                     </Grid>
+
                     <Grid item xs={12}>
                         {processedStates.length > 0 ? (
                             processedStates.map((state, index) => (
@@ -130,14 +116,12 @@ const PopularCard = ({ isLoading }) => {
                                         <Grid item>
                                             <Grid container alignItems="center" justifyContent="space-between">
                                                 <Grid item>
-                                                    <Typography variant="subtitle1" color="inherit">
-                                                        {state.state_name}
-                                                    </Typography>
+                                                    <Typography variant="subtitle1">{state.state_name}</Typography>
                                                 </Grid>
                                                 <Grid item>
-                                                    <Grid container alignItems="center" justifyContent="space-between">
+                                                    <Grid container alignItems="center" spacing={1}>
                                                         <Grid item>
-                                                            <Typography variant="subtitle1" color="inherit">
+                                                            <Typography variant="subtitle1">
                                                                 {state.report_count.toLocaleString()}
                                                             </Typography>
                                                         </Grid>
@@ -149,11 +133,10 @@ const PopularCard = ({ isLoading }) => {
                                                                     height: 16,
                                                                     borderRadius: '5px',
                                                                     backgroundColor: theme.palette.success.light,
-                                                                    color: theme.palette.success.dark,
-                                                                    ml: 2
+                                                                    color: theme.palette.success.dark
                                                                 }}
                                                             >
-                                                                <KeyboardArrowUpOutlinedIcon fontSize="small" color="inherit" />
+                                                                <KeyboardArrowUpOutlinedIcon fontSize="small" />
                                                             </Avatar>
                                                         </Grid>
                                                     </Grid>
@@ -170,9 +153,7 @@ const PopularCard = ({ isLoading }) => {
                                 </React.Fragment>
                             ))
                         ) : (
-                            <Typography variant="body2">
-                                No state data available
-                            </Typography>
+                            <Typography variant="body2">No state data available</Typography>
                         )}
                     </Grid>
                 </Grid>
