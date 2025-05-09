@@ -24,7 +24,7 @@ const SubReportDetailsPage = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const location = useLocation();
-    const { state: selectedState, lga } = useSelector((state) => state.graphs.lgaState);
+    const { state: selectedState } = useSelector((state) => state.graphs.lgaState);
     const { 
         reportType,  // The category ("Crime")
         state: geographicalState,
