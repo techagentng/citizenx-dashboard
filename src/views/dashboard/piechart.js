@@ -10,7 +10,7 @@ ChartJS.register(ArcElement, Tooltip, Legend);
 const PieChart = ({ reportTypes, reportCounts, currentState }) => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
-    const { lgaState: { lga }, reportType: selectedReportType } = useSelector((state) => state.graphs);
+    const { lgaState: { lga } } = useSelector((state) => state.graphs);
 
     if (!reportTypes || !reportCounts || reportTypes.length === 0 || reportCounts.length === 0) {
         return <p>No data available</p>;
