@@ -253,7 +253,7 @@ const SubReportDetailsPage = () => {
             </TableRow>
             <TableRow>
               <TableCell><strong>LGA</strong></TableCell>
-              <TableCell>{lga || 'N/A'}</TableCell>
+              <TableCell>{governor?.lgac || 'N/A'}</TableCell>
             </TableRow>
             <TableRow>
               <TableCell><strong>State</strong></TableCell>
@@ -280,7 +280,7 @@ const SubReportDetailsPage = () => {
                     </TableRow>
                     <TableRow>
                         <TableCell><strong>LGA</strong></TableCell>
-                        <TableCell>{lga || 'N/A'}</TableCell>
+                        <TableCell>{governor?.lgac || 'N/A'}</TableCell>
                     </TableRow>
                     <TableRow>
                         <TableCell><strong>State</strong></TableCell>
