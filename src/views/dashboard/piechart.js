@@ -23,16 +23,16 @@ const PieChart = ({ reportTypes, reportCounts, currentState }) => {
             const reportCount = chart.data.datasets[0].data[clickedIndex];
 
             // Update Redux store
-            dispatch(setState(currentState));  // Set geographical state
-            dispatch(setLga("All LGAs"));     // Set default LGA
+            dispatch(setState(currentState));  
+            dispatch(setLga(lga));     
 
             // Navigate to details page with state
             navigate('/dashboard/sub_reports', { 
                 state: { 
-                    reportType,       // The report category ("Crime")
-                    state: currentState, // The geographical state ("Lagos")
-                    lga: lga,  // The LGA
-                    count: reportCount // The count
+                    reportType,       
+                    state: currentState, 
+                    lga: lga,  
+                    count: reportCount 
                 } 
             });
         }
