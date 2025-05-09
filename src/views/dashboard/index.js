@@ -48,7 +48,7 @@ const DashboardPage = () => {
     const [reportData, setReportData] = useState(null);
     const [reportCount, setReportCount] = useState(null);
     const [totalUsers, setTotalUsers] = useState(0);
-    const storedTotal = parseInt(localStorage.getItem('processedTotal') || '0', 10);
+    const totalStates = useSelector(state => state.graphs.graphs.total_states);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -236,7 +236,7 @@ const DashboardPage = () => {
                         <EarningCard count={totalStateReports} details="Total state reports" icon={EarningIcon} />
                     </Grid>
                     <Grid item xs={12} sm={6} md={3}>
-                        <EarningCard count={storedTotal} details="Overall report in Nigeria" icon={EarningIcon} />
+                        <EarningCard count={totalStates} details="Overall report in Nigeria" icon={EarningIcon} />
                     </Grid>
                 </Grid>
 
