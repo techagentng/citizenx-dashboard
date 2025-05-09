@@ -41,6 +41,7 @@ const PopularCard = ({ isLoading }) => {
         
         setProcessedStates(validStates);
         setProcessedTotal(totalData?.total_states || 0);
+        localStorage.setItem('processedTotal', total.toString());
     }, [topStates]);
 
     // Fetch data on mount

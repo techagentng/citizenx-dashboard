@@ -29,7 +29,7 @@ import {
 
 const DashboardPage = () => {
     const dispatch = useDispatch();
-    const { total_states } = useSelector((state) => state.graphs.graphs);
+    // const { total_states } = useSelector((state) => state.graphs.graphs);
     const { lga: selectedLga } = useSelector((state) => state.graphs.lgaState);
     const selectedState = useSelector((state) => state.graphs.lgaState.state);
     const { isLoggedIn } = useContext(JWTContext);
@@ -48,6 +48,7 @@ const DashboardPage = () => {
     const [reportData, setReportData] = useState(null);
     const [reportCount, setReportCount] = useState(null);
     const [totalUsers, setTotalUsers] = useState(0);
+    const storedTotal = parseInt(localStorage.getItem('processedTotal') || '0', 10);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -235,7 +236,7 @@ const DashboardPage = () => {
                         <EarningCard count={totalStateReports} details="Total state reports" icon={EarningIcon} />
                     </Grid>
                     <Grid item xs={12} sm={6} md={3}>
-                        <EarningCard count={total_states} details="Overall report in Nigeria" icon={EarningIcon} />
+                        <EarningCard count={storedTotal} details="Overall report in Nigeria" icon={EarningIcon} />
                     </Grid>
                 </Grid>
 
