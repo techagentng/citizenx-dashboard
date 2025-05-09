@@ -1,14 +1,11 @@
 import React, { useCallback, useEffect } from 'react';
-import { useQuery } from '@tanstack/react-query';
 import { useTheme } from '@mui/material/styles';
 import { Avatar, Box, useMediaQuery, MenuItem, TextField, Grid } from '@mui/material';
-// import { LocalizationProvider, DateRangePicker } from '@mui/x-date-pickers-pro';
-// import { AdapterDayjs } from '@mui/x-date-pickers-pro/AdapterDayjs';
 import { useDispatch, useSelector } from 'react-redux';
 import { openDrawer } from 'store/slices/menu';
 import { setState, setLga, getGraph } from 'store/slices/graphs';
-import statesAndLgas from './statesAndLgas.json';
 import { getCategories } from 'services/reportService';
+import { useStatesAndLgas } from 'hooks/useStatesAndLgas';
 
 import LogoSection from '../LogoSection';
 import MobileSection from './MobileSection';
@@ -30,39 +27,29 @@ const Header = () => {
     const [dateRange] = React.useState([null, null]);
     const [, setReportTypes] = React.useState(['Select type']);
 
-    // React Query: Fetch all states
-    const { data: states = [] } = useQuery({
-        queryKey: ['states'],
-        queryFn: () => statesAndLgas.NigeriaStates.map((state) => ({
-            value: state.value,
-            label: state.label
-        }))
-    });
-
-    // React Query: Fetch LGAs for selected state
-    const { data: lgas = [] } = useQuery({
-        queryKey: ['lgas', state],
-        queryFn: () => {
-            const lgasArr = statesAndLgas.LocalGovernment[state] || [];
-            return lgasArr.map((lga) => ({ value: lga, label: lga }));
-        },
-        enabled: !!state
-    });
+    // Use shared hook for states and LGAs
+    const [selectedState, setSelectedState] = React.useState(state || '');
+    const [selectedLga, setSelectedLga] = React.useState(lga || '');
+    const { states, lgas } = useStatesAndLgas(selectedState);
 
     // Set default LGA when state or lgas change
     useEffect(() => {
-        if (lgas.length > 0 && !lga) {
+        if (lgas.length > 0 && !selectedLga) {
+            setSelectedLga(lgas[0].value);
             dispatch(setLga(lgas[0].value));
         }
-    }, [state, lgas, lga, dispatch]);
+    }, [selectedState, lgas, selectedLga, dispatch]);
 
     const handleStateChange = (event) => {
         const stateName = event.target.value;
+        setSelectedState(stateName);
         dispatch(setState(stateName));
+        setSelectedLga(''); // Reset LGA when state changes
     };
 
     const handleLgaChange = (event) => {
         const lgaName = event.target.value;
+        setSelectedLga(lgaName);
         dispatch(setLga(lgaName));
     };
 
@@ -144,10 +131,11 @@ const Header = () => {
                 <TextField
                     id="state-select"
                     select
-                    value={state || 'Anambra'}
+                    value={selectedState}
                     onChange={handleStateChange}
                     label="Select State"
                 >
+                    <MenuItem value="" disabled>Select State</MenuItem>
                     {states.map((option) => (
                         <MenuItem key={option.value} value={option.value}>
                             {option.label}
@@ -157,14 +145,12 @@ const Header = () => {
                 <TextField
                     id="lga-select"
                     select
-                    value={lga || 'Aguata'}
+                    value={selectedLga}
                     onChange={handleLgaChange}
                     label="Select LGA"
-                    disabled={!state}
+                    disabled={!selectedState}
                 >
-                    <MenuItem value="LGA" disabled>
-                        LGA
-                    </MenuItem>
+                    <MenuItem value="" disabled>Select LGA</MenuItem>
                     {lgas.map((option) => (
                         <MenuItem key={option.value} value={option.value}>
                             {option.label}
