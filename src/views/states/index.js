@@ -63,9 +63,9 @@ const StateForm = () => {
         lgac_image: null
     });
     const [errors, setErrors] = useState({});
-    const [states, setStates] = useState([]); 
-    const [lgas, setLgas] = useState([]); 
-    const [selectedLgas, setSelectedLgas] = useState([]); 
+    const [states, setStates] = useState([]); // Dynamic state options
+    const [lgas, setLgas] = useState([]); // Dynamic LGA options
+    const [selectedLgas, setSelectedLgas] = useState([]); // Multi-select LGAs
 
     // File input refs to avoid undefined errors
     const governorFileInput = useRef(null);
