@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Box, Button, Card, CardContent, CircularProgress, Grid, TextField, Typography, styled, MenuItem } from '@mui/material';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import { createState } from 'services/stateservice';
-import { getStates, getLGAs } from 'services/reportService'; // Import getLgas
+import statesAndLgas from '../../layout/MainLayout/Header/statesAndLgas.json';
 
 // Styled components (unchanged)
 const StyledCard = styled(Card)(({ theme }) => ({
@@ -72,50 +72,20 @@ const StateForm = () => {
     const deputyFileInput = useRef(null);
     const lgacFileInput = useRef(null);
 
-    // Fetch states on mount
+    // Fetch states from local JSON on mount
     useEffect(() => {
-        getStates()
-            .then((response) => {
-                console.log('StateForm - Raw response:', response);
-                // Normalize the response
-                let stateArray = response;
-                if (response.states)
-                    stateArray = response.states; // Handle {states: [...]}
-                else if (!Array.isArray(response)) stateArray = []; // Fallback for non-array
-
-                const stateOptions = stateArray
-                    .filter((state) => state && state !== '') // Filter falsy values
-                    .map((state) => {
-                        // Handle both string and object cases
-                        const stateValue = typeof state === 'string' ? state : state.state;
-                        return {
-                            value: stateValue,
-                            label: stateValue
-                        };
-                    });
-                setStates(stateOptions);
-            })
-            .catch((error) => {
-                console.error('Failed to fetch states:', error);
-                setStates([]);
-            });
+        const stateOptions = (statesAndLgas.NigeriaStates || [])
+            .filter((state) => state && state.value)
+            .map((state) => ({ value: state.value, label: state.label }));
+        setStates(stateOptions);
     }, []);
-    // Fetch LGAs when state changes
+    // Fetch LGAs from local JSON when state changes
     useEffect(() => {
         if (formValues.state) {
-            getLGAs(formValues.state)
-                .then((lgaData) => {
-                    console.log(`LGA Data for ${formValues.state}:`, lgaData);
-                    const lgaOptions = lgaData.map((lga) => ({ value: lga, label: lga }));
-                    console.log('LGA Options:', lgaOptions);
-                    setLgas(lgaOptions);
-                    setSelectedLgas([]); // Reset selections when LGAs change
-                })
-                .catch((error) => {
-                    console.error(`Failed to fetch LGAs for ${formValues.state}:`, error.message);
-                    setLgas([]);
-                    setSelectedLgas([]);
-                });
+            const lgaArr = statesAndLgas.LocalGovernment[formValues.state] || [];
+            const lgaOptions = lgaArr.map((lga) => ({ value: lga, label: lga }));
+            setLgas(lgaOptions);
+            setSelectedLgas([]); // Reset selections when LGAs change
         } else {
             setLgas([]);
             setSelectedLgas([]);
