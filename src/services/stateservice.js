@@ -8,19 +8,22 @@ export const createState = (payload) => {
             return reject(new Error('No authentication token found'));
         }
 
-        // Create FormData object for multipart/form-data
         const formData = new FormData();
 
-        // Add text fields from payload
+        // Add basic text fields
         if (payload.state) formData.append('state', payload.state);
         if (payload.governor) formData.append('governor', payload.governor);
         if (payload.deputyName) formData.append('deputy_name', payload.deputyName);
         if (payload.lgac) formData.append('lgac', payload.lgac);
-        if (payload.lgas) {
-            formData.append('lgas', JSON.stringify(payload.lgas)); // Backend expects JSON string
+
+        // ✅ Correct way to send multiple lgas for backend to parse []string
+        if (payload.lgas && Array.isArray(payload.lgas)) {
+            payload.lgas.forEach((lga) => {
+                formData.append('lgas', lga);
+            });
         }
 
-        // Add file fields from payload (File objects from StateForm)
+        // Add image files
         if (payload.governorImage) formData.append('governor_image', payload.governorImage);
         if (payload.deputyImage) formData.append('deputy_image', payload.deputyImage);
         if (payload.lgacImage) formData.append('lgac_image', payload.lgacImage);
@@ -29,8 +32,8 @@ export const createState = (payload) => {
             .post(`${process.env.REACT_APP_API_URL}/create/governor`, formData, {
                 headers: {
                     Authorization: `Bearer ${serviceToken}`,
-                    'Content-Type': 'multipart/form-data' // Explicitly set
-                }
+                    'Content-Type': 'multipart/form-data',
+                },
             })
             .then((response) => {
                 resolve(response.data);

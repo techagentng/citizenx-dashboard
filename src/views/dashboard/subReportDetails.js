@@ -86,7 +86,7 @@ const SubReportDetailsPage = () => {
                                         <Grid item sx={{ width: '100%' }}>
                                             <img
                                                 alt="Governor"
-                                                src={governor?.governor_image || tin}
+                                                src={governor?.governor_image?.trim() ? governor.governor_image : tin}
                                                 style={{
                                                     width: '100%',
                                                     aspectRatio: '1 / 1',
@@ -118,7 +118,7 @@ const SubReportDetailsPage = () => {
                                         <Grid item sx={{ width: '100%' }}>
                                             <img
                                                 alt="Deputy"
-                                                src={governor?.deputy_image || tin}
+                                                src={governor?.deputy_image?.trim() ? governor.deputy_image : tin}
                                                 style={{
                                                     width: '100%',
                                                     aspectRatio: '1 / 1',
@@ -150,7 +150,7 @@ const SubReportDetailsPage = () => {
                                         <Grid item sx={{ width: '100%' }}>
                                             <img
                                                 alt="LGAC"
-                                                src={governor?.lgac_image || tin}
+                                                src={governor?.lgac_image?.trim() ? governor.lgac_image : tin}
                                                 style={{
                                                     width: '100%',
                                                     aspectRatio: '1 / 1',
