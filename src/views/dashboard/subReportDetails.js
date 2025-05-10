@@ -30,11 +30,12 @@ const SubReportDetailsPage = () => {
         state: geographicalState,
         count 
     } = location.state || {};
-    // Fetch governor details
+    
     useEffect(() => {
-        if (selectedState) {
-            setLoading(true); // Reset loading state
-            getGovernorDetails(selectedState)
+        const queryState = geographicalState || selectedState;
+        if (queryState) {
+            setLoading(true);
+            getGovernorDetails(queryState)
                 .then((data) => {
                     setGovernor(data);
                     setLoading(false);
@@ -45,8 +46,7 @@ const SubReportDetailsPage = () => {
                 });
         }
     }, [geographicalState, selectedState]);
-
-    // Fetch sub-reports
+    
     useEffect(() => {
         if (reportType) {  
             setLoading(true);
