@@ -1,7 +1,17 @@
 import PropTypes from 'prop-types';
 import React, { useEffect, useState } from 'react';
 import { useTheme } from '@mui/material/styles';
-import { Avatar, CardContent, Divider, Grid, Menu, MenuItem, Typography } from '@mui/material';
+import {
+    Avatar,
+    CardContent,
+    Divider,
+    Grid,
+    Menu,
+    MenuItem,
+    Typography,
+    CardActions,
+    Button
+} from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import BajajAreaChartCard from './BajajAreaChartCardAll';
 import MainCard from 'ui-component/cards/MainCard';
@@ -10,20 +20,22 @@ import { gridSpacing } from 'store/constant';
 import { fetchTotalStates } from 'store/slices/graphs';
 import MoreHorizOutlinedIcon from '@mui/icons-material/MoreHorizOutlined';
 import KeyboardArrowUpOutlinedIcon from '@mui/icons-material/KeyboardArrowUpOutlined';
+import ChevronRightOutlinedIcon from '@mui/icons-material/ChevronRightOutlined';
 
 const PopularCard = ({ isLoading }) => {
     const dispatch = useDispatch();
     const theme = useTheme();
 
-    const { 
-        graphs: { topStates = [], total_states = 0 }, 
+    const {
+        graphs: { topStates = [], total_states = 0 },
         loading: reduxLoading,
-        error 
+        error
     } = useSelector((state) => state.graphs);
 
     const [anchorEl, setAnchorEl] = useState(null);
     const [processedStates, setProcessedStates] = useState([]);
     const [processedTotal, setProcessedTotal] = useState(0);
+    const [showAll, setShowAll] = useState(false);
 
     // Process topStates
     useEffect(() => {
@@ -54,13 +66,16 @@ const PopularCard = ({ isLoading }) => {
     const handleClick = (event) => setAnchorEl(event.currentTarget);
     const handleClose = () => setAnchorEl(null);
 
-    const getPercentage = (count) => processedTotal > 0 ? ((count / processedTotal) * 100).toFixed(1) : 0;
+    const getPercentage = (count) =>
+        processedTotal > 0 ? ((count / processedTotal) * 100).toFixed(1) : 0;
 
     if (error) {
         return (
             <MainCard content={false}>
                 <CardContent>
-                    <Typography color="error">Error loading data: {error.message || 'Unknown error'}</Typography>
+                    <Typography color="error">
+                        Error loading data: {error.message || 'Unknown error'}
+                    </Typography>
                 </CardContent>
             </MainCard>
         );
@@ -110,7 +125,7 @@ const PopularCard = ({ isLoading }) => {
 
                     <Grid item xs={12}>
                         {processedStates.length > 0 ? (
-                            processedStates.map((state, index) => (
+                            (processedStates.slice(0, showAll ? processedStates.length : 7)).map((state, index) => (
                                 <React.Fragment key={`${state.state_name}-${index}`}>
                                     <Grid container direction="column">
                                         <Grid item>
@@ -156,6 +171,17 @@ const PopularCard = ({ isLoading }) => {
                             <Typography variant="body2">No state data available</Typography>
                         )}
                     </Grid>
+
+                    {!showAll && processedStates.length > 7 && (
+                        <Grid item xs={12}>
+                            <CardActions sx={{ p: 1.25, pt: 0, justifyContent: 'center' }}>
+                                <Button size="small" disableElevation onClick={() => setShowAll(true)}>
+                                    View All
+                                    <ChevronRightOutlinedIcon />
+                                </Button>
+                            </CardActions>
+                        </Grid>
+                    )}
                 </Grid>
             </CardContent>
         </MainCard>
