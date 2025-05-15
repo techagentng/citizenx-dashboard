@@ -66,7 +66,7 @@ const StateForm = () => {
                 setOverallReportCount(count);
                 setOverallError(null);
             })
-            .catch((err) => {
+            .catch(() => {
                 setOverallError('Failed to fetch overall report count');
                 setOverallReportCount(null);
             })
