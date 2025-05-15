@@ -3,6 +3,7 @@ import { Box, Button, Card, CardContent, CircularProgress, Grid, TextField, Typo
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import { createState } from 'services/stateservice';
 import statesAndLgas from '../../layout/MainLayout/Header/statesAndLgas.json';
+import { getReportCount } from 'services/reportService';
 
 // Styled components (unchanged)
 const StyledCard = styled(Card)(({ theme }) => ({
@@ -50,6 +51,27 @@ const FileInputLabel = styled('label')(({ theme }) => ({
 }));
 
 const StateForm = () => {
+    // State for overall report count
+    const [overallReportCount, setOverallReportCount] = useState(null);
+    const [overallLoading, setOverallLoading] = useState(true);
+    const [overallError, setOverallError] = useState(null);
+
+    // Fetch overall report count for Nigeria on mount
+    useEffect(() => {
+        setOverallLoading(true);
+        getReportCount()
+            .then((data) => {
+                // Support both { total_reports } and { total_reports: number } API responses
+                const count = data?.total_reports ?? data?.total_report_count ?? 0;
+                setOverallReportCount(count);
+                setOverallError(null);
+            })
+            .catch((err) => {
+                setOverallError('Failed to fetch overall report count');
+                setOverallReportCount(null);
+            })
+            .finally(() => setOverallLoading(false));
+    }, []);
     const [loading, setLoading] = useState(false);
     const [formValues, setFormValues] = useState({
         state: '',
@@ -176,6 +198,31 @@ const StateForm = () => {
 
     return (
         <Box sx={{ minHeight: '100vh', bgcolor: '#f4f6f8', py: 4 }}>
+            {/* Top dashboard card for overall report count in Nigeria */}
+            <Grid container justifyContent="center" sx={{ mb: 3 }}>
+                <Grid item xs={12} sm={8} md={6}>
+                    <Card sx={{ background: 'linear-gradient(45deg, #1976d2, #42a5f5)', color: 'white', borderRadius: 3, boxShadow: 3 }}>
+                        <CardContent>
+                            <Typography variant="h6" align="center" gutterBottom sx={{ fontWeight: 'bold', letterSpacing: 1 }}>
+                                Overall Report in Nigeria
+                            </Typography>
+                            {overallLoading ? (
+                                <Box display="flex" justifyContent="center" alignItems="center" height={40}>
+                                    <CircularProgress size={28} color="inherit" />
+                                </Box>
+                            ) : overallError ? (
+                                <Typography variant="body2" align="center" color="error.main">
+                                    {overallError}
+                                </Typography>
+                            ) : (
+                                <Typography variant="h3" align="center" sx={{ fontWeight: 'bold', mt: 1 }}>
+                                    {overallReportCount?.toLocaleString() ?? 0}
+                                </Typography>
+                            )}
+                        </CardContent>
+                    </Card>
+                </Grid>
+            </Grid>
             <StyledCard>
                 <CardContent>
                     <Typography variant="h4" align="center" gutterBottom sx={{ fontWeight: 'bold', color: '#1976d2' }}>
