@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { styled } from '@mui/material/styles';
 import { Badge, Box } from '@mui/material';
 import coinimg from './coin.png';
-import { getRewardBalance } from 'services/rewardService'; 
+import { getAllRewardCount } from 'services/rewardService'; 
 import { useDispatch, useSelector } from 'react-redux'; 
 import { setTotalQuantity } from 'store/slices/reward'; 
 
@@ -18,7 +18,7 @@ const FloatingCart = () => {
 
     useEffect(() => {
         // Fetch the reward count on component mount
-        getRewardBalance()
+        getAllRewardCount()
             .then((count) => {
                 console.log('Reward count:', count); 
                 dispatch(setTotalQuantity(count)); 
