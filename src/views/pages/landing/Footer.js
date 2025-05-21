@@ -157,13 +157,15 @@ const Footer = () => {
                 </FooterContent>
             </FooterContainer>
             <FooterFeet>
-                <Stack direction="row" spacing={2}>
-                    {['Privacy Policy', 'Terms & Conditions'].map((text, idx) => (
-                        <FooterLink key={idx} href="#">
-                            {text}
-                        </FooterLink>
-                    ))}
-                </Stack>
+            <Stack direction="row" spacing={2}>
+                <FooterLink href="/privacy">
+                    Privacy Policy
+                </FooterLink>
+                <FooterLink href="/terms">
+                    Terms & Conditions
+                </FooterLink>
+            </Stack>
+
                 <Typography sx={{ color: 'white' }}>&copy; 2024 CitizenX - All rights reserved</Typography>
             </FooterFeet>
         </>
