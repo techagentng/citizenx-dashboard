@@ -203,6 +203,7 @@ const DashboardPage = () => {
 
     useEffect(() => {
         const fetchUserCount = async () => {
+            setLoading(true);
             try {
                 const data = await getTotalUserCount();
                 setTotalUsers(data.total_users); 

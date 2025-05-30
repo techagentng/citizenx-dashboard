@@ -263,7 +263,7 @@ const StateForm = () => {
                             <Grid item xs={12} sm={6}>
                                 <TextField
                                     fullWidth
-                                    label="Governor"
+                                    label="Governor name"
                                     name="governor"
                                     value={formValues.governor}
                                     onChange={handleTextChange}
@@ -278,7 +278,7 @@ const StateForm = () => {
                             <Grid item xs={12} sm={6}>
                                 <TextField
                                     fullWidth
-                                    label="Deputy Name"
+                                    label="Deputy Governor Name"
                                     name="deputy_name"
                                     value={formValues.deputy_name}
                                     onChange={handleTextChange}
@@ -293,7 +293,7 @@ const StateForm = () => {
                             <Grid item xs={12} sm={6}>
                                 <TextField
                                     fullWidth
-                                    label="LGA Chair Name"
+                                    label="LGA Chairman Name"
                                     name="lgac"
                                     value={formValues.lgac}
                                     onChange={handleTextChange}

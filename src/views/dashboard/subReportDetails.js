@@ -24,7 +24,7 @@ const SubReportDetailsPage = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const location = useLocation();
-    const { state: selectedState } = useSelector((state) => state.graphs.lgaState);
+    const { state: selectedState, lga: selectedLga } = useSelector((state) => state.graphs.lgaState);
     const { 
         reportType,  // The category ("Crime")
         state: geographicalState,
@@ -192,7 +192,7 @@ const SubReportDetailsPage = () => {
                                                 LGA
                                             </Typography>
                                             <Typography variant="subtitle1" color="textSecondary">
-                                                {governor?.lgac || 'N/A'}
+                                                {selectedLga || 'N/A'}
                                             </Typography>
                                         </Grid>
                                         <Grid item container justifyContent="space-between" alignItems="center">
@@ -253,7 +253,7 @@ const SubReportDetailsPage = () => {
             </TableRow>
             <TableRow>
               <TableCell><strong>LGA</strong></TableCell>
-              <TableCell>{governor?.lgac || 'N/A'}</TableCell>
+              <TableCell>{selectedLga || 'N/A'}</TableCell>
             </TableRow>
             <TableRow>
               <TableCell><strong>State</strong></TableCell>
@@ -280,7 +280,7 @@ const SubReportDetailsPage = () => {
                     </TableRow>
                     <TableRow>
                         <TableCell><strong>LGA</strong></TableCell>
-                        <TableCell>{governor?.lgac || 'N/A'}</TableCell>
+                        <TableCell>{selectedLga || 'N/A'}</TableCell>
                     </TableRow>
                     <TableRow>
                         <TableCell><strong>State</strong></TableCell>
