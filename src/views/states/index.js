@@ -50,6 +50,8 @@ const FileInputLabel = styled('label')(({ theme }) => ({
     }
 }));
 
+
+
 const StateForm = () => {
     // State for overall report count
     const [overallReportCount, setOverallReportCount] = useState(null);
@@ -226,7 +228,7 @@ const StateForm = () => {
             <StyledCard>
                 <CardContent>
                     <Typography variant="h4" align="center" gutterBottom sx={{ fontWeight: 'bold', color: '#1976d2' }}>
-                        Add New State Data
+                        State Management
                     </Typography>
                     <Typography variant="body1" align="center" color="textSecondary" sx={{ mb: 4 }}>
                         Fill in the details below to create a new state record.
