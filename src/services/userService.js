@@ -228,7 +228,7 @@ export const resetPassword = (token, newPassword) => {
 
 export const getTotalUserCount = async () => {
     try {
-        const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/users/total`);
+        const response = await axios.get(`${process.env.REACT_APP_API_URL}/all/user`);
         return response.data; // Assuming response contains { totalCount: number }
     } catch (error) {
         console.error('Error fetching total user count:', error);
