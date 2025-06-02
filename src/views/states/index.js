@@ -571,7 +571,7 @@ const StateForm = () => {
                                 )}
                             </Grid> */}
 
-                            {/* <Grid item xs={12} sm={4}>
+                            <Grid item xs={12} sm={4}>
                                 <FileInputLabel>
                                     <CloudUploadIcon sx={{ mr: 1, color: '#1976d2' }} />
                                     Upload LGAC Image
@@ -593,7 +593,7 @@ const StateForm = () => {
                                         {errors.lgac_image}
                                     </Typography>
                                 )}
-                            </Grid> */}
+                            </Grid>
                             
 
 
