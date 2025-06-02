@@ -148,14 +148,23 @@ const StateForm = () => {
     // Validation
     const validate = () => {
         const newErrors = {};
+        const updateType = formValues.updateType;
         if (!formValues.state) newErrors.state = 'State name is required';
-        if (!formValues.governor) newErrors.governor = 'Governor name is required';
-        if (!formValues.deputy_name) newErrors.deputy_name = 'Deputy name is required';
-        if (!formValues.lgac) newErrors.lgac = 'LGA Chair name is required';
-        if (selectedLgas.length === 0) newErrors.lgas = 'At least one LGA is required';
-        if (!files.governor_image) newErrors.governor_image = 'Governor image is required';
-        if (!files.deputy_image) newErrors.deputy_image = 'Deputy image is required';
-        if (!files.lgac_image) newErrors.lgac_image = 'LGAC image is required';
+
+        if (updateType === 'updateState') {
+            if (!formValues.governor) newErrors.governor = 'Governor name is required';
+            if (!formValues.deputy_name) newErrors.deputy_name = 'Deputy governor name is required';
+            if (!formValues.lgac) newErrors.lgac = 'LGA Chairman name is required';
+            if (!files.governor_image) newErrors.governor_image = 'Governor image is required';
+            if (!files.deputy_image) newErrors.deputy_image = 'Deputy governor image is required';
+            if (!files.lgac_image) newErrors.lgac_image = 'LGA Chairman image is required';
+        } else if (updateType === 'updateDeputyGovernor') {
+            if (!formValues.deputy_name) newErrors.deputy_name = 'Deputy governor name is required';
+            if (!files.deputy_image) newErrors.deputy_image = 'Deputy governor image is required';
+        } else if (updateType === 'updateLgaChairman') {
+            if (!formValues.lgac) newErrors.lgac = 'LGA Chairman name is required';
+            if (!files.lgac_image) newErrors.lgac_image = 'LGA Chairman image is required';
+        }
         setErrors(newErrors);
         return Object.keys(newErrors).length === 0;
     };
