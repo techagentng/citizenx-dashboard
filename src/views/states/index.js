@@ -233,8 +233,204 @@ const StateForm = () => {
                         Fill in the details below to create a new state record.
                     </Typography>
 
+                    {/* Update Type Dropdown */}
+                    <Box mb={3}>
+                        <TextField
+                            select
+                            fullWidth
+                            label="Update State Information"
+                            value={formValues.updateType || ''}
+                            onChange={e => setFormValues(prev => ({ ...prev, updateType: e.target.value }))}
+                        >
+                            <MenuItem value="updateState">Update State</MenuItem>
+                            <MenuItem value="updateDeputyGovernor">Update Deputy Governor</MenuItem>
+                            <MenuItem value="updateLgaChairman">Update LGA Chairman</MenuItem>
+                        </TextField>
+                    </Box>
+
                     <form onSubmit={handleSubmit}>
                         <Grid container spacing={3}>
+                            {/* State Dropdown (always shown) */}
+                            <Grid item xs={12} sm={6}>
+                                <TextField
+                                    select
+                                    fullWidth
+                                    label="State Name"
+                                    name="state"
+                                    value={formValues.state}
+                                    onChange={handleTextChange}
+                                    error={!!errors.state}
+                                    helperText={errors.state}
+                                    variant="outlined"
+                                    sx={{ bgcolor: '#fff' }}
+                                >
+                                    <MenuItem value="" disabled>
+                                        Select State
+                                    </MenuItem>
+                                    {states.map((option) => (
+                                        <MenuItem key={option.value} value={option.value}>
+                                            {option.label}
+                                        </MenuItem>
+                                    ))}
+                                </TextField>
+                            </Grid>
+
+                            {/* Governor Name (Update State only) */}
+                            {formValues.updateType === 'updateState' && (
+                                <Grid item xs={12} sm={6}>
+                                    <TextField
+                                        fullWidth
+                                        label="Governor Name"
+                                        name="governor"
+                                        value={formValues.governor}
+                                        onChange={handleTextChange}
+                                        error={!!errors.governor}
+                                        helperText={errors.governor}
+                                        variant="outlined"
+                                        sx={{ bgcolor: '#fff' }}
+                                    />
+                                </Grid>
+                            )}
+
+                            {/* LGA Chairman Name (Update State only) */}
+                            {formValues.updateType === 'updateState' && (
+                                <Grid item xs={12} sm={6}>
+                                    <TextField
+                                        fullWidth
+                                        label="LGA Chairman Name"
+                                        name="lgac"
+                                        value={formValues.lgac}
+                                        onChange={handleTextChange}
+                                        error={!!errors.lgac}
+                                        helperText={errors.lgac}
+                                        variant="outlined"
+                                        sx={{ bgcolor: '#fff' }}
+                                    />
+                                </Grid>
+                            )}
+
+                            {/* Deputy Governor Name (Update State or Update Deputy Governor) */}
+                            {(formValues.updateType === 'updateState' || formValues.updateType === 'updateDeputyGovernor') && (
+                                <Grid item xs={12} sm={6}>
+                                    <TextField
+                                        fullWidth
+                                        label="Deputy Governor Name"
+                                        name="deputy_name"
+                                        value={formValues.deputy_name}
+                                        onChange={handleTextChange}
+                                        error={!!errors.deputy_name}
+                                        helperText={errors.deputy_name}
+                                        variant="outlined"
+                                        sx={{ bgcolor: '#fff' }}
+                                    />
+                                </Grid>
+                            )}
+
+                            {/* LGA Dropdown (Update LGA Chairman only) */}
+                            {formValues.updateType === 'updateLgaChairman' && (
+                                <Grid item xs={12} sm={6}>
+                                    <TextField
+                                        select
+                                        fullWidth
+                                        label="LGA"
+                                        name="lga"
+                                        value={formValues.lga || ''}
+                                        onChange={handleTextChange}
+                                        error={!!errors.lga}
+                                        helperText={errors.lga}
+                                        variant="outlined"
+                                        sx={{ bgcolor: '#fff' }}
+                                        disabled={!formValues.state}
+                                    >
+                                        <MenuItem value="" disabled>Select LGA</MenuItem>
+                                        {lgas.map((option) => (
+                                            <MenuItem key={option.value} value={option.value}>{option.label}</MenuItem>
+                                        ))}
+                                    </TextField>
+                                </Grid>
+                            )}
+
+                            {/* Governor Image (Update State only) */}
+                            {formValues.updateType === 'updateState' && (
+                                <Grid item xs={12} sm={6}>
+                                    <FileInputLabel>
+                                        <CloudUploadIcon sx={{ mr: 1, color: '#1976d2' }} />
+                                        Upload Governor Image
+                                        <input
+                                            type="file"
+                                            hidden
+                                            accept="image/*"
+                                            ref={governorFileInput}
+                                            onChange={e => handleFileChange(e, 'governor_image')}
+                                        />
+                                    </FileInputLabel>
+                                    {files.governor_image && (
+                                        <Typography variant="body2" sx={{ mt: 1 }}>
+                                            {files.governor_image.name}
+                                        </Typography>
+                                    )}
+                                    {errors.governor_image && (
+                                        <Typography variant="body2" color="error" sx={{ mt: 1 }}>
+                                            {errors.governor_image}
+                                        </Typography>
+                                    )}
+                                </Grid>
+                            )}
+
+                            {/* LGA Chairman Image (Update State or Update LGA Chairman) */}
+                            {(formValues.updateType === 'updateState' || formValues.updateType === 'updateLgaChairman') && (
+                                <Grid item xs={12} sm={6}>
+                                    <FileInputLabel>
+                                        <CloudUploadIcon sx={{ mr: 1, color: '#1976d2' }} />
+                                        Upload LGA Chairman Image
+                                        <input
+                                            type="file"
+                                            hidden
+                                            accept="image/*"
+                                            ref={lgacFileInput}
+                                            onChange={e => handleFileChange(e, 'lgac_image')}
+                                        />
+                                    </FileInputLabel>
+                                    {files.lgac_image && (
+                                        <Typography variant="body2" sx={{ mt: 1 }}>
+                                            {files.lgac_image.name}
+                                        </Typography>
+                                    )}
+                                    {errors.lgac_image && (
+                                        <Typography variant="body2" color="error" sx={{ mt: 1 }}>
+                                            {errors.lgac_image}
+                                        </Typography>
+                                    )}
+                                </Grid>
+                            )}
+
+                            {/* Deputy Governor Image (Update Deputy Governor only) */}
+                            {formValues.updateType === 'updateDeputyGovernor' && (
+                                <Grid item xs={12} sm={6}>
+                                    <FileInputLabel>
+                                        <CloudUploadIcon sx={{ mr: 1, color: '#1976d2' }} />
+                                        Upload Deputy Governor Image
+                                        <input
+                                            type="file"
+                                            hidden
+                                            accept="image/*"
+                                            ref={deputyFileInput}
+                                            onChange={e => handleFileChange(e, 'deputy_image')}
+                                        />
+                                    </FileInputLabel>
+                                    {files.deputy_image && (
+                                        <Typography variant="body2" sx={{ mt: 1 }}>
+                                            {files.deputy_image.name}
+                                        </Typography>
+                                    )}
+                                    {errors.deputy_image && (
+                                        <Typography variant="body2" color="error" sx={{ mt: 1 }}>
+                                            {errors.deputy_image}
+                                        </Typography>
+                                    )}
+                                </Grid>
+                            )}
+                        
                             {/* State Dropdown */}
                             <Grid item xs={12} sm={6}>
                                 <TextField
