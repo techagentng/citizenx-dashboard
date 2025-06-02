@@ -431,7 +431,7 @@ const StateForm = () => {
                                 </Grid>
                             )}
 
-                            <Grid item xs={12} sm={6}>
+                            {/* <Grid item xs={12} sm={6}>
                                 <TextField
                                     select
                                     fullWidth
@@ -453,9 +453,9 @@ const StateForm = () => {
                                         </MenuItem>
                                     ))}
                                 </TextField>
-                            </Grid>
+                            </Grid> */}
 
-                            <Grid item xs={12} sm={6}>
+                            {/* <Grid item xs={12} sm={6}>
                                 <TextField
                                     fullWidth
                                     label="Governor name"
@@ -467,9 +467,9 @@ const StateForm = () => {
                                     variant="outlined"
                                     sx={{ bgcolor: '#fff' }}
                                 />
-                            </Grid>
+                            </Grid> */}
 
-                            <Grid item xs={12} sm={6}>
+                            {/* <Grid item xs={12} sm={6}>
                                 <TextField
                                     fullWidth
                                     label="Deputy Governor Name"
@@ -481,9 +481,9 @@ const StateForm = () => {
                                     variant="outlined"
                                     sx={{ bgcolor: '#fff' }}
                                 />
-                            </Grid>
+                            </Grid> */}
 
-                            <Grid item xs={12} sm={6}>
+                            {/* <Grid item xs={12} sm={6}>
                                 <TextField
                                     fullWidth
                                     label="LGA Chairman Name"
@@ -495,7 +495,7 @@ const StateForm = () => {
                                     variant="outlined"
                                     sx={{ bgcolor: '#fff' }}
                                 />
-                            </Grid>
+                            </Grid> */}
 
                             <Grid item xs={12}>
                                 <TextField
