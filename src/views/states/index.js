@@ -497,7 +497,7 @@ const StateForm = () => {
                                 />
                             </Grid>
 
-                            <Grid item xs={12}>
+                            {/* <Grid item xs={12}>
                                 <TextField
                                     select
                                     fullWidth
@@ -521,9 +521,9 @@ const StateForm = () => {
                                         ))
                                     )}
                                 </TextField>
-                            </Grid>
+                            </Grid> */}
 
-                            <Grid item xs={12} sm={4}>
+                            {/* <Grid item xs={12} sm={4}>
                                 <FileInputLabel>
                                     <CloudUploadIcon sx={{ mr: 1, color: '#1976d2' }} />
                                     Upload Governor Image
@@ -545,9 +545,9 @@ const StateForm = () => {
                                         {errors.governor_image}
                                     </Typography>
                                 )}
-                            </Grid>
+                            </Grid> */}
 
-                            <Grid item xs={12} sm={4}>
+                            {/* <Grid item xs={12} sm={4}>
                                 <FileInputLabel>
                                     <CloudUploadIcon sx={{ mr: 1, color: '#1976d2' }} />
                                     Upload Deputy Image
@@ -569,9 +569,9 @@ const StateForm = () => {
                                         {errors.deputy_image}
                                     </Typography>
                                 )}
-                            </Grid>
+                            </Grid> */}
 
-                            <Grid item xs={12} sm={4}>
+                            {/* <Grid item xs={12} sm={4}>
                                 <FileInputLabel>
                                     <CloudUploadIcon sx={{ mr: 1, color: '#1976d2' }} />
                                     Upload LGAC Image
@@ -593,8 +593,8 @@ const StateForm = () => {
                                         {errors.lgac_image}
                                     </Typography>
                                 )}
-                            </Grid>
-                            */
+                            </Grid> */}
+                            
 
 
                             {/* Submit Button */}
