@@ -430,8 +430,10 @@ const StateForm = () => {
                                     )}
                                 </Grid>
                             )}
+
                         
-                            {/* State Dropdown */}
+                            /*
+                            // OLD INPUTS COMMENTED OUT -- now replaced by conditional UI above
                             <Grid item xs={12} sm={6}>
                                 <TextField
                                     select
@@ -456,7 +458,6 @@ const StateForm = () => {
                                 </TextField>
                             </Grid>
 
-                            {/* Governor */}
                             <Grid item xs={12} sm={6}>
                                 <TextField
                                     fullWidth
@@ -471,7 +472,6 @@ const StateForm = () => {
                                 />
                             </Grid>
 
-                            {/* Deputy Name */}
                             <Grid item xs={12} sm={6}>
                                 <TextField
                                     fullWidth
@@ -486,7 +486,6 @@ const StateForm = () => {
                                 />
                             </Grid>
 
-                            {/* LGAC */}
                             <Grid item xs={12} sm={6}>
                                 <TextField
                                     fullWidth
@@ -501,7 +500,6 @@ const StateForm = () => {
                                 />
                             </Grid>
 
-                            {/* LGA Dropdown (Multi-Select) */}
                             <Grid item xs={12}>
                                 <TextField
                                     select
@@ -528,7 +526,6 @@ const StateForm = () => {
                                 </TextField>
                             </Grid>
 
-                            {/* Governor Image */}
                             <Grid item xs={12} sm={4}>
                                 <FileInputLabel>
                                     <CloudUploadIcon sx={{ mr: 1, color: '#1976d2' }} />
@@ -553,7 +550,6 @@ const StateForm = () => {
                                 )}
                             </Grid>
 
-                            {/* Deputy Image */}
                             <Grid item xs={12} sm={4}>
                                 <FileInputLabel>
                                     <CloudUploadIcon sx={{ mr: 1, color: '#1976d2' }} />
@@ -578,7 +574,6 @@ const StateForm = () => {
                                 )}
                             </Grid>
 
-                            {/* LGAC Image */}
                             <Grid item xs={12} sm={4}>
                                 <FileInputLabel>
                                     <CloudUploadIcon sx={{ mr: 1, color: '#1976d2' }} />
@@ -602,6 +597,8 @@ const StateForm = () => {
                                     </Typography>
                                 )}
                             </Grid>
+                            */
+
 
                             {/* Submit Button */}
                             <Grid item xs={12}>
