@@ -86,7 +86,7 @@ const StateForm = () => {
         lgac_image: null
     });
     const [errors, setErrors] = useState({});
-    const [, setStates] = useState([]); // Dynamic state options
+    const [states, setStates] = useState([]); // Dynamic state options
     const [lgas, setLgas] = useState([]); // Dynamic LGA options
     const [selectedLgas, setSelectedLgas] = useState([]); // Multi-select LGAs
 
@@ -250,30 +250,32 @@ const StateForm = () => {
 
                     <form onSubmit={handleSubmit}>
                         <Grid container spacing={3}>
-                            {/* State Dropdown (always shown) */}
-                            {/* <Grid item xs={12} sm={6}>
-                                <TextField
-                                    select
-                                    fullWidth
-                                    label="State Name"
-                                    name="state"
-                                    value={formValues.state}
-                                    onChange={handleTextChange}
-                                    error={!!errors.state}
-                                    helperText={errors.state}
-                                    variant="outlined"
-                                    sx={{ bgcolor: '#fff' }}
-                                >
-                                    <MenuItem value="" disabled>
-                                        Select State
-                                    </MenuItem>
-                                    {states.map((option) => (
-                                        <MenuItem key={option.value} value={option.value}>
-                                            {option.label}
+                            {/* State Dropdown (show for all update types) */}
+                            {(formValues.updateType === 'updateState' || formValues.updateType === 'updateDeputyGovernor' || formValues.updateType === 'updateLgaChairman') && (
+                                <Grid item xs={12} sm={6}>
+                                    <TextField
+                                        select
+                                        fullWidth
+                                        label="State Name"
+                                        name="state"
+                                        value={formValues.state}
+                                        onChange={handleTextChange}
+                                        error={!!errors.state}
+                                        helperText={errors.state}
+                                        variant="outlined"
+                                        sx={{ bgcolor: '#fff' }}
+                                    >
+                                        <MenuItem value="" disabled>
+                                            Select State
                                         </MenuItem>
-                                    ))}
-                                </TextField>
-                            </Grid> */}
+                                        {states && states.map((option) => (
+                                            <MenuItem key={option.value} value={option.value}>
+                                                {option.label}
+                                            </MenuItem>
+                                        ))}
+                                    </TextField>
+                                </Grid>
+                            )}
 
                             {/* Governor Name (Update State only) */}
                             {formValues.updateType === 'updateState' && (
@@ -405,7 +407,7 @@ const StateForm = () => {
                             )}
 
                             {/* Deputy Governor Image (Update Deputy Governor only) */}
-                            {formValues.updateType === 'updateDeputyGovernor' && (
+                            {(formValues.updateType === 'updateState' || formValues.updateType === 'updateDeputyGovernor') && (
                                 <Grid item xs={12} sm={6}>
                                     <FileInputLabel>
                                         <CloudUploadIcon sx={{ mr: 1, color: '#1976d2' }} />
