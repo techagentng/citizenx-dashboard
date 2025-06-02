@@ -251,7 +251,7 @@ const StateForm = () => {
                     <form onSubmit={handleSubmit}>
                         <Grid container spacing={3}>
                             {/* State Dropdown (always shown) */}
-                            <Grid item xs={12} sm={6}>
+                            {/* <Grid item xs={12} sm={6}>
                                 <TextField
                                     select
                                     fullWidth
@@ -273,7 +273,7 @@ const StateForm = () => {
                                         </MenuItem>
                                     ))}
                                 </TextField>
-                            </Grid>
+                            </Grid> */}
 
                             {/* Governor Name (Update State only) */}
                             {formValues.updateType === 'updateState' && (
