@@ -53,7 +53,6 @@ const FileInputLabel = styled('label')(({ theme }) => ({
 
 
 const StateForm = () => {
-    // State for overall report count
     const [overallReportCount, setOverallReportCount] = useState(null);
     const [overallLoading, setOverallLoading] = useState(true);
     const [overallError, setOverallError] = useState(null);
