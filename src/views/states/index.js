@@ -125,14 +125,14 @@ const StateForm = () => {
     };
 
     // Handle LGA multi-select
-    const handleLgaChange = (e) => {
-        const value = e.target.value;
-        console.log('Selected LGAs:', value);
-        setSelectedLgas(value);
-        if (errors.lgas) {
-            setErrors((prev) => ({ ...prev, lgas: '' }));
-        }
-    };
+    // const handleLgaChange = (e) => {
+    //     const value = e.target.value;
+    //     console.log('Selected LGAs:', value);
+    //     setSelectedLgas(value);
+    //     if (errors.lgas) {
+    //         setErrors((prev) => ({ ...prev, lgas: '' }));
+    //     }
+    // };
 
     // Handle file changes with refs
     const handleFileChange = (e, fieldName) => {
@@ -497,7 +497,7 @@ const StateForm = () => {
                                 />
                             </Grid> */}
 
-                            <Grid item xs={12}>
+                            {/* <Grid item xs={12}>
                                 <TextField
                                     select
                                     fullWidth
@@ -521,7 +521,7 @@ const StateForm = () => {
                                         ))
                                     )}
                                 </TextField>
-                            </Grid>
+                            </Grid> */}
 
                             {/* <Grid item xs={12} sm={4}>
                                 <FileInputLabel>
@@ -571,7 +571,7 @@ const StateForm = () => {
                                 )}
                             </Grid> */}
 
-                            <Grid item xs={12} sm={4}>
+                            {/* <Grid item xs={12} sm={4}>
                                 <FileInputLabel>
                                     <CloudUploadIcon sx={{ mr: 1, color: '#1976d2' }} />
                                     Upload LGAC Image
@@ -593,7 +593,7 @@ const StateForm = () => {
                                         {errors.lgac_image}
                                     </Typography>
                                 )}
-                            </Grid>
+                            </Grid> */}
                             
 
 
