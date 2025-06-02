@@ -431,9 +431,6 @@ const StateForm = () => {
                                 </Grid>
                             )}
 
-                        
-                            /*
-                            // OLD INPUTS COMMENTED OUT -- now replaced by conditional UI above
                             <Grid item xs={12} sm={6}>
                                 <TextField
                                     select
