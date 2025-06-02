@@ -497,7 +497,7 @@ const StateForm = () => {
                                 />
                             </Grid>
 
-                            {/* <Grid item xs={12}>
+                            <Grid item xs={12}>
                                 <TextField
                                     select
                                     fullWidth
@@ -521,7 +521,7 @@ const StateForm = () => {
                                         ))
                                     )}
                                 </TextField>
-                            </Grid> */}
+                            </Grid>
 
                             {/* <Grid item xs={12} sm={4}>
                                 <FileInputLabel>
