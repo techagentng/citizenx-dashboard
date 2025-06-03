@@ -35,7 +35,8 @@ const DashboardPage = () => {
     const { isLoggedIn } = useContext(JWTContext);
     const { reportTypes, reportCounts } = useSelector((state) => state.graphs.graphs);
     // const { good_percentage, bad_percentage } = useSelector((state) => state.graphs.reportPercent);
-    const [setUserCount] = useState(0);
+    const [loading, setLoading] = useState(false);
+const [setUserCount] = useState(0);
     const [, setTodayReportCount] = useState(0);
     const [, setOnlineUsers] = useState(0);
     const [, setReportTypes] = useState([]);
@@ -202,22 +203,24 @@ const DashboardPage = () => {
     }, [selectedLga]);
 
     useEffect(() => {
-        const fetchUserCount = async () => {
-            setLoading(true);
-            try {
-                const count = await getTotalUserCount();
+        setLoading(true);
+        getTotalUserCount()
+            .then((count) => {
                 console.log('User count from API:', count);
-                setTotalUsers(count); 
-            } catch (err) {
-                setError('Failed to fetch user count');
-            } finally {
+                setTotalUsers(count);
+            })
+            .catch((err) => {
+                console.error('Failed to fetch user count:', err);
+            })
+            .finally(() => {
                 setLoading(false);
-            }
-        };
-
-        fetchUserCount();
+            });
     }, []);
+    
 
+    if (loading) {
+        return <div>Loading...</div>;
+    }
     return (
         <>
             <MainCard

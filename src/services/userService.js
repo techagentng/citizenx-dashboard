@@ -228,14 +228,22 @@ export const resetPassword = (token, newPassword) => {
 
 export const getTotalUserCount = async () => {
     try {
-        const response = await axios.get(`${process.env.REACT_APP_API_URL}/all/user`);
-        console.log('User count from API:', count); // <-- Add this
+        const serviceToken = localStorage.getItem('serviceToken');
+
+        const response = await axios.get(`${process.env.REACT_APP_API_URL}/all/user`, {
+            headers: {
+                Authorization: `Bearer ${serviceToken}`
+            }
+        });
+
+        console.log('User count from API:', response.data.total_users); 
         return response.data.total_users;
     } catch (error) {
         console.error('Error fetching total user count:', error);
         throw error;
     }
 };
+
 
 export const getPostPreviewById = async (id) => {
     try {
