@@ -48,7 +48,7 @@ const DashboardPage = () => {
     const [reportData, setReportData] = useState(null);
     const [reportCount, setReportCount] = useState(null);
     const [totalUsers, setTotalUsers] = useState(0);
-    const totalStates = useSelector(state => state.graphs.graphs.total_states);
+    // const totalStates = useSelector(state => state.graphs.graphs.total_states);
 
     useEffect(() => {
         const fetchData = async () => {
