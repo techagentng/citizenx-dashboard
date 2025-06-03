@@ -206,6 +206,7 @@ const DashboardPage = () => {
             setLoading(true);
             try {
                 const count = await getTotalUserCount();
+                console.log('User count from API:', count);
                 setTotalUsers(count); 
             } catch (err) {
                 setError('Failed to fetch user count');
