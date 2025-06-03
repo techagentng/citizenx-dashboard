@@ -14,7 +14,7 @@ export const getMapMarkers = () => {
                 resolve(response.data.data);
             })
             .catch((error) => {
-                console.log('API error:', error);
+                // console.log('API error:', error);
                 reject(new Error('An error occurred while fetching markers'));
             });
     });
