@@ -237,7 +237,7 @@ const DashboardPage = () => {
                         <EarningCard count={totalStateReports} details="Total state reports" icon={EarningIcon} />
                     </Grid>
                     <Grid item xs={12} sm={6} md={3}>
-                        <EarningCard count={overallReportCount} details="Overall report in Nigeria" icon={EarningIcon} />
+                        <EarningCard count={totalOverallReports} details="Overall report in Nigeria" icon={EarningIcon} />
                     </Grid>
                 </Grid>
 
