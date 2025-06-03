@@ -61,8 +61,8 @@ const NigerianMap = () => {
                             const stateName = geo.properties.admin1Name.trim();
                             const count = getCountForState(stateName);
 
-                            console.log('State Name from GeoJSON:', stateName);
-                            console.log('Report Count for State:', count);
+                            // console.log('State Name from GeoJSON:', stateName);
+                            // console.log('Report Count for State:', count);
 
                             return (
                                 <Geography
