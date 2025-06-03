@@ -15,7 +15,7 @@ const userRole = authService.getRole();
 
 // Define menu items based on the user role
 const menuItems =
-    userRole === 'User'
+    userRole === 'Admin'
         ? {
               items: [dashboard, reports, rewards, users, stateEdit, settings]
           }
