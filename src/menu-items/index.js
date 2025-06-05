@@ -17,7 +17,7 @@ const userRole = authService.getRole();
 const menuItems =
     userRole === 'user'
         ? {
-              items: [dashboard, reports, rewards, users, stateEdit, settings]
+              items: [dashboard, reports, rewards, users, stateEdit, settings, compare]
           }
         : { items: [dashboard, rewards, compare, settings] };
 

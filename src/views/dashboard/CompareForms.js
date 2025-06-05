@@ -265,24 +265,25 @@ const CompareForms = () => {
                                     </Typography>
                                     <LocalizationProvider dateAdapter={AdapterDateFns}>
                                         <DateTimePicker
-                                            slotProps={{
-                                                textField: {
-                                                    fullWidth: true,
-                                                    variant: 'outlined',
-                                                    sx: {
-                                                        '& .MuiOutlinedInput-root': {
-                                                            bgcolor: 'white',
-                                                            borderRadius: 1,
-                                                            '& fieldset': { borderColor: 'grey.300' },
-                                                            '&:hover fieldset': { borderColor: 'primary.main' }
-                                                        }
-                                                    }
-                                                }
-                                            }}
-                                            label="Select Date & Time"
-                                            value={valueBasic}
-                                            onChange={(newValue) => setValueBasic(newValue)}
-                                        />
+  label="Select Date & Time"
+  value={valueBasic}
+  onChange={(newValue) => setValueBasic(newValue)}
+  renderInput={(params) => (
+    <TextField
+      {...params}
+      fullWidth
+      variant="outlined"
+      sx={{
+        '& .MuiOutlinedInput-root': {
+          bgcolor: 'white',
+          borderRadius: 1,
+          '& fieldset': { borderColor: 'grey.300' },
+          '&:hover fieldset': { borderColor: 'primary.main' }
+        }
+      }}
+    />
+  )}
+/>
                                     </LocalizationProvider>
                                 </Grid>
                                 <Grid item xs={12} sm={6}>
@@ -291,24 +292,25 @@ const CompareForms = () => {
                                     </Typography>
                                     <LocalizationProvider dateAdapter={AdapterDateFns}>
                                         <DateTimePicker
-                                            slotProps={{
-                                                textField: {
-                                                    fullWidth: true,
-                                                    variant: 'outlined',
-                                                    sx: {
-                                                        '& .MuiOutlinedInput-root': {
-                                                            bgcolor: 'white',
-                                                            borderRadius: 1,
-                                                            '& fieldset': { borderColor: 'grey.300' },
-                                                            '&:hover fieldset': { borderColor: 'primary.main' }
-                                                        }
-                                                    }
-                                                }
-                                            }}
-                                            label="Select Date & Time"
-                                            value={valueSecond}
-                                            onChange={(newValue) => setValueSecond(newValue)}
-                                        />
+  label="Select Date & Time"
+  value={valueSecond}
+  onChange={(newValue) => setValueSecond(newValue)}
+  renderInput={(params) => (
+    <TextField
+      {...params}
+      fullWidth
+      variant="outlined"
+      sx={{
+        '& .MuiOutlinedInput-root': {
+          bgcolor: 'white',
+          borderRadius: 1,
+          '& fieldset': { borderColor: 'grey.300' },
+          '&:hover fieldset': { borderColor: 'primary.main' }
+        }
+      }}
+    />
+  )}
+/>
                                     </LocalizationProvider>
                                 </Grid>
                             </Grid>
