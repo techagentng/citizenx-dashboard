@@ -6,8 +6,8 @@ import CompareForms from '../dashboard/CompareForms';
 const CompareReportsPage = () => {
     return (
         <MainCard title="Compare reports">
-            <Grid container spacing={2}>
-                <Grid item xs={12} md={6}>
+            <Grid container spacing={2} style={{ width: '100%' }}>
+                <Grid item xs={12}>
                     <CompareForms />
                 </Grid>
             </Grid>

@@ -2,6 +2,7 @@ import React, { useCallback, useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { useTheme } from '@mui/material/styles';
 import { Avatar, Box, useMediaQuery, MenuItem, TextField, Grid } from '@mui/material';
+import KDateFilter from './KDateFilter';
 // import { LocalizationProvider, DateRangePicker } from '@mui/x-date-pickers-pro';
 // import { AdapterDayjs } from '@mui/x-date-pickers-pro/AdapterDayjs';
 import { useDispatch, useSelector } from 'react-redux';
@@ -171,15 +172,7 @@ const Header = () => {
                         </MenuItem>
                     ))}
                 </TextField>
-                {/* <Box sx={{ width: '300px' }}>
-                    <LocalizationProvider dateAdapter={AdapterDayjs}>
-                        <DateRangePicker
-                            localeText={{ start: 'Start Date', end: 'End Date' }}
-                            value={dateRange}
-                            onChange={handleDateRangeChange}
-                        />
-                    </LocalizationProvider>
-                </Box> */}
+                <KDateFilter />
             </Box>
 
             <NotificationSection />

@@ -39,7 +39,7 @@ const CompareForms = () => {
 
     useEffect(() => {
         getStates()
-            .then((states) => setStates(states))
+            .then((res) => setStates((res.states || []).filter(Boolean)))
             .catch((error) => console.error('Failed to fetch states:', error));
     }, []);
 
@@ -192,7 +192,7 @@ const CompareForms = () => {
                                         disableClearable
                                         onChange={(event, newValue) => handleStateChange(input.id, newValue)}
                                         filterOptions={createFilterOptions()}
-                                        options={states}
+                                        options={Array.isArray(states) ? states : []}
                                         getOptionLabel={(option) => (typeof option === 'string' ? option : option?.label || '')}
                                         renderOption={(props, option) => (
                                             <Box component="li" {...props} sx={{ py: 1 }}>
