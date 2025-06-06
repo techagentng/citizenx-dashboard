@@ -141,13 +141,27 @@ const Header = () => {
             <Box sx={{ flexGrow: 1 }} />
             <Grid item></Grid>
             <Box sx={{ flexGrow: 1 }} />
-            <Box sx={{ display: { xs: 'none', sm: 'flex' }, alignItems: 'center', gap: 2 }}>
+            {/* Responsive controls for state, LGA, and date filter */}
+            <Box
+                sx={{
+                    display: 'flex',
+                    flexDirection: { xs: 'column', sm: 'row' },
+                    alignItems: { xs: 'stretch', sm: 'center' },
+                    gap: 2,
+                    width: { xs: '100%', sm: 'auto' },
+                    mt: { xs: 2, sm: 0 },
+                    mb: { xs: 2, sm: 0 }
+                }}
+            >
                 <TextField
                     id="state-select"
                     select
+                    fullWidth
+                    size="small"
                     value={state || 'Anambra'}
                     onChange={handleStateChange}
                     label="Select State"
+                    sx={{ minWidth: 120 }}
                 >
                     {states.map((option) => (
                         <MenuItem key={option.value} value={option.value}>
@@ -158,10 +172,13 @@ const Header = () => {
                 <TextField
                     id="lga-select"
                     select
+                    fullWidth
+                    size="small"
                     value={lga || 'Aguata'}
                     onChange={handleLgaChange}
                     label="Select LGA"
                     disabled={!state}
+                    sx={{ minWidth: 120 }}
                 >
                     <MenuItem value="LGA" disabled>
                         LGA
@@ -172,11 +189,13 @@ const Header = () => {
                         </MenuItem>
                     ))}
                 </TextField>
-                <KDateFilter onFilter={(startDate, endDate) => {
-    if (state && lga && state !== 'State' && lga !== 'LGA') {
-        dispatch(getGraph(state, lga, startDate, endDate));
-    }
-}} />
+                <KDateFilter
+                    onFilter={(startDate, endDate) => {
+                        if (state && lga && state !== 'State' && lga !== 'LGA') {
+                            dispatch(getGraph(state, lga, startDate, endDate));
+                        }
+                    }}
+                />
             </Box>
 
             <NotificationSection />
