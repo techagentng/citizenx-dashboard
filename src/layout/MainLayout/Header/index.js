@@ -172,7 +172,11 @@ const Header = () => {
                         </MenuItem>
                     ))}
                 </TextField>
-                <KDateFilter />
+                <KDateFilter onFilter={(startDate, endDate) => {
+    if (state && lga && state !== 'State' && lga !== 'LGA') {
+        dispatch(getGraph(state, lga, startDate, endDate));
+    }
+}} />
             </Box>
 
             <NotificationSection />

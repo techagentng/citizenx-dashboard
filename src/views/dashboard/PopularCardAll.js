@@ -32,6 +32,12 @@ const PopularCard = ({ isLoading }) => {
         error
     } = useSelector((state) => state.graphs);
 
+    // Debug logs for API/Redux shape
+    console.log('topStates:', topStates);
+    console.log('total_states:', total_states);
+    console.log('error:', error);
+
+
     const [anchorEl, setAnchorEl] = useState(null);
     const [processedStates, setProcessedStates] = useState([]);
     const [processedTotal, setProcessedTotal] = useState(0);
@@ -70,11 +76,12 @@ const PopularCard = ({ isLoading }) => {
         processedTotal > 0 ? ((count / processedTotal) * 100).toFixed(1) : 0;
 
     if (error) {
+        console.log('PopularCardAll error:', error);
         return (
             <MainCard content={false}>
                 <CardContent>
                     <Typography color="error">
-                        Error loading data: {error.message || 'Unknown error'}
+                        Error loading data: {error.message || JSON.stringify(error) || 'Unknown error'}
                     </Typography>
                 </CardContent>
             </MainCard>

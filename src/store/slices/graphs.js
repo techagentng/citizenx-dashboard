@@ -95,7 +95,13 @@ export function getGraph(state, lga, startDate, endDate) {
         try {
             let url = `/report/type/count?state=${state}&lga=${lga}`;
             if (startDate && endDate) {
-                url += `&startDate=${startDate}&endDate=${endDate}`;
+                // Ensure dates are formatted as YYYY-MM-DD
+                const formatDate = (date) => {
+                    if (!date) return '';
+                    if (typeof date === 'string') return date.slice(0, 10); // fallback if already string
+                    return date.toISOString().slice(0, 10);
+                };
+                url += `&start_date=${formatDate(startDate)}&end_date=${formatDate(endDate)}`;
             }
             const response = await axios.get(url);
             dispatch(getGraphSuccess(response?.data));

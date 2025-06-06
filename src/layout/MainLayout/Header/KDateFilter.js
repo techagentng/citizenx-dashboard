@@ -4,7 +4,7 @@ import 'react-date-range/dist/styles.css';
 import 'react-date-range/dist/theme/default.css';
 import { enGB } from 'date-fns/locale';
 
-const KDateFilter = () => {
+const KDateFilter = ({ onFilter }) => {
     const initialRange = {
         startDate: new Date(),
         endDate: new Date(),
@@ -20,7 +20,15 @@ const KDateFilter = () => {
 
     const handleCustomFilter = () => {
         setShowFilterDropdown(false);
-        // No-op for static version
+        if (onFilter) {
+            // Ensure dates are formatted as YYYY-MM-DD
+            const formatDate = (date) => {
+                if (!date) return '';
+                if (typeof date === 'string') return date.slice(0, 10);
+                return date.toISOString().slice(0, 10);
+            };
+            onFilter(formatDate(selectionRange.startDate), formatDate(selectionRange.endDate));
+        }
     };
 
     const handleReset = () => {
