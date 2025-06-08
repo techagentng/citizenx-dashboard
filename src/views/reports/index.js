@@ -91,12 +91,14 @@ function stableSort(array, comparator) {
 
 // table header options
 const headCells = [
-    { id: 'id', numeric: false, label: 'Report ID', align: 'left' },
-    { id: 'fullname', numeric: false, label: 'Full Name', align: 'left' },
-    { id: 'date_of_incidence', numeric: false, label: 'Date of Incidence', align: 'left' },
-    { id: 'report_type', numeric: false, label: 'Report Type', align: 'left' },
-    { id: 'description', numeric: false, label: 'Description', align: 'left' },
-    { id: 'created_at', numeric: false, label: 'Created At', align: 'left' }
+    { id: 'description', numeric: false, label: 'Report', align: 'left' },
+    { id: 'category', numeric: false, label: 'Report Type', align: 'left' },
+    { id: 'state_name', numeric: false, label: 'State', align: 'left' },
+    { id: 'lga_name', numeric: false, label: 'LGA', align: 'left' },
+    { id: 'state_name', numeric: false, label: 'Date', align: 'left' },
+    { id: 'state_name', numeric: false, label: 'Review Media', align: 'left' },
+    // { id: 'lga_name', numeric: false, label: 'Date', align: 'left' },
+    // { id: 'road_name', numeric: false, label: 'Road', align: 'left' }
 ];
 
 // table header component
@@ -147,7 +149,7 @@ function EnhancedTableHead({ onSelectAllClick, order, orderBy, numSelected, rowC
                 {numSelected <= 0 && (
                     <TableCell sortDirection={false} align="center" sx={{ pr: 3 }}>
                         <Typography variant="subtitle1" sx={{ color: theme.palette.mode === 'dark' ? 'grey.600' : 'grey.900' }}>
-                            Action
+                            
                         </Typography>
                     </TableCell>
                 )}
@@ -241,7 +243,7 @@ const IncidentReportList = () => {
         if (newString) {
             const newRows = rows.filter((row) => {
                 let matches = true;
-                const properties = ['id', 'fullname', 'date_of_incidence', 'report_type', 'description', 'created_at'];
+                const properties = ['description', 'category', 'state_name', 'lga_name', 'road_name'];
                 let containsQuery = false;
 
                 properties.forEach((property) => {
@@ -439,18 +441,25 @@ const IncidentReportList = () => {
                                             onClick={(event) => handleClick(event, row.id)}
                                             sx={{ cursor: 'pointer', whiteSpace: 'nowrap' }}
                                         >
-                                            <Typography
-                                                variant="body2"
-                                                sx={{ color: theme.palette.mode === 'dark' ? 'grey.600' : 'grey.900' }}
-                                            >
-                                                {row.id}
-                                            </Typography>
+                                            <Tooltip title={row.description} placement="top" arrow>
+                                                <Typography
+                                                    variant="body2"
+                                                    sx={{
+                                                        color: theme.palette.mode === 'dark' ? 'grey.600' : 'grey.900',
+                                                        maxWidth: 200,
+                                                        overflow: 'hidden',
+                                                        textOverflow: 'ellipsis',
+                                                        whiteSpace: 'nowrap',
+                                                        display: 'block'
+                                                    }}
+                                                >
+                                                    {row.description && row.description.length > 50 ? row.description.slice(0, 50) + '…' : row.description}
+                                                </Typography>
+                                            </Tooltip>
                                         </TableCell>
-                                        <TableCell sx={{ whiteSpace: 'nowrap' }}>{row.fullname}</TableCell>
-                                        <TableCell sx={{ whiteSpace: 'nowrap' }}>{row.date_of_incidence}</TableCell>
                                         <TableCell sx={{ whiteSpace: 'nowrap' }}>{row.report_type_id}</TableCell>
-                                        <TableCell sx={{ whiteSpace: 'nowrap' }}>{row.description}</TableCell>
-                                        {/* <TableCell>{row.created_at}</TableCell> */}
+                                        <TableCell sx={{ whiteSpace: 'nowrap' }}>{row.state_name}</TableCell>
+                                        <TableCell>{row.lga_name}</TableCell>
                                         <RelativeTimeCell timestamp={row.created_at} />
                                         <TableCell align="center" sx={{ pr: 3, whiteSpace: 'nowrap' }}>
                                         <IconButton color="primary" size="large" aria-label="view" onClick={handleClickOpenDialog}>

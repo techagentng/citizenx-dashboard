@@ -6,7 +6,7 @@ import { Box, Divider, List, Typography, useMediaQuery } from '@mui/material';
 
 // project imports
 import NavItem from './NavItem';
-import menuItem from 'menu-items';
+import { getMenuItems } from 'menu-items';
 import NavGroup from './NavGroup';
 import useConfig from 'hooks/useConfig';
 
@@ -25,6 +25,7 @@ const MenuList = () => {
     // last menu-item to show in horizontal menu bar
     const lastItem = layout === LAYOUT_CONST.HORIZONTAL_LAYOUT && !matchDownMd ? HORIZONTAL_MAX_ITEM : null;
 
+    const menuItem = getMenuItems();
     let lastItemIndex = menuItem.items?.length - 1;
     let remItems = [];
     let lastItemId;
