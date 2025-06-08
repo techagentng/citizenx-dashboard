@@ -11,9 +11,9 @@ export function getMenuItems() {
     const authService = new AuthService();
     const userRole = (authService.getRole() || '').toLowerCase();
 
-    if (userRole === 'admin') {
+    if (userRole === 'user') {
         return { items: [dashboard, compare, settings] };
-    } else if (userRole === 'user') {
+    } else if (userRole === 'admin') {
         return { items: [dashboard, reports, rewards, users, stateEdit, settings, compare] };
     } else {
         return { items: [dashboard, settings] };
