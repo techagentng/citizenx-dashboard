@@ -41,7 +41,7 @@ export const { setTotalQuantity } = slice.actions;
 export function getAllRewards() {
     return async (dispatch) => {
         try {
-            const response = await axios.get('/count/all/rewards');
+            const response = await axios.get('/rewards/list');
             dispatch(slice.actions.getRewardSuccess(response.data));
         } catch (error) {
             dispatch(slice.actions.hasError(error));

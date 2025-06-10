@@ -244,29 +244,6 @@ const SubReportDetailsPage = () => {
         SubReport Details for <strong>{selectedState}</strong>
       </Typography>
 
-      <TableContainer component={Paper} sx={{ maxWidth: 600, mb: 3 }}>
-        <Table>
-          <TableBody>
-            <TableRow>
-              <TableCell><strong>Report Type</strong></TableCell>
-              <TableCell>{selectedState || 'N/A'}</TableCell>
-            </TableRow>
-            <TableRow>
-              <TableCell><strong>LGA</strong></TableCell>
-              <TableCell>{selectedLga || 'N/A'}</TableCell>
-            </TableRow>
-            <TableRow>
-              <TableCell><strong>State</strong></TableCell>
-              <TableCell>{governor?.state || selectedState || 'N/A'}</TableCell>
-            </TableRow>
-            <TableRow>
-              <TableCell><strong>Count</strong></TableCell>
-              <TableCell>{count || 'N/A'}</TableCell>
-            </TableRow>
-          </TableBody>
-        </Table>
-      </TableContainer>
-
       {loading && <CircularProgress />}
       {error && <Typography color="error">Error: {error}</Typography>}
 
@@ -294,7 +271,7 @@ const SubReportDetailsPage = () => {
             </Table>
         </TableContainer>
       )}
-    </div>n
+    </div>
         </div>
     );
 };
