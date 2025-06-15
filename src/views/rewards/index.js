@@ -70,9 +70,11 @@ function stableSort(array, comparator) {
 
 // table header options
 const headCells = [
-    { id: 'id', numeric: false, label: 'Report ID', align: 'left' },
-    { id: 'points', numeric: false, label: 'Reward Points', align: 'left' },
-    { id: 'account_balance', numeric: false, label: 'Account Balance', align: 'left' },
+    { id: 'ID', numeric: false, label: 'Reward ID', align: 'left' },
+    { id: 'user_fullname', numeric: false, label: 'Full Name', align: 'left' },
+    { id: 'username', numeric: false, label: 'Username', align: 'left' },
+    { id: 'point', numeric: false, label: 'Reward Points', align: 'left' },
+    { id: 'balance', numeric: false, label: 'Account Balance', align: 'left' },
     { id: 'reward_type', numeric: false, label: 'Reward Type', align: 'left' },
     { id: 'incident_id', numeric: false, label: 'Report ID', align: 'left' },
     { id: 'created_at', numeric: false, label: 'Created At', align: 'left' }
@@ -213,7 +215,7 @@ const RewardList = () => {
         if (newString) {
             const newRows = rows.filter((row) => {
                 let matches = true;
-                const properties = ['id', 'fullname', 'date_of_incidence', 'report_type', 'description', 'created_at'];
+                const properties = ['ID', 'user_fullname', 'username', 'reward_type', 'incident_id', 'created_at', 'point', 'balance', 'account_number'];
                 let containsQuery = false;
 
                 properties.forEach((property) => {
@@ -355,13 +357,15 @@ const RewardList = () => {
                                                 />
                                             </TableCell>
                                             <TableCell component="th" id={labelId} scope="row" padding="none">
-                                                {row.user_id}
-                                            </TableCell>
-                                            <TableCell align="left">{row.point}</TableCell>
-                                            <TableCell align="left">{row.balance}</TableCell>
-                                            <TableCell align="left">{row.reward_type}</TableCell>
-                                            <TableCell align="left">{row.incident_id}</TableCell>
-                                            <TableCell align="left">{row.created_at}</TableCell>
+    {row.ID}
+</TableCell>
+<TableCell align="left">{row.user_fullname}</TableCell>
+<TableCell align="left">{row.username}</TableCell>
+<TableCell align="left">{row.point}</TableCell>
+<TableCell align="left">{row.balance}</TableCell>
+<TableCell align="left">{row.reward_type}</TableCell>
+<TableCell align="left">{row.incident_id}</TableCell>
+<TableCell align="left">{row.created_at}</TableCell>
                                             <TableCell align="center" sx={{ pr: 3 }}>
                                                 <Tooltip title="View">
                                                     <IconButton color="primary" size="large">
