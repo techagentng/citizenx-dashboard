@@ -4,6 +4,10 @@ import { lazy } from 'react';
 import AuthGuard from 'utils/route-guard/AuthGuard';
 import MainLayout from 'layout/MainLayout';
 import Loadable from 'ui-component/Loadable';
+import MinimalLayout from 'layout/MinimalLayout';
+
+// authentication components
+const AuthForgotPassword = Loadable(lazy(() => import('views/pages/authentication/ForgotPassword3')));
 
 // sample page routing
 const Dashboard = Loadable(lazy(() => import('views/dashboard')));
@@ -14,6 +18,7 @@ const Rewards = Loadable(lazy(() => import('views/rewards')));
 const Users = Loadable(lazy(() => import('views/users')));
 const State = Loadable(lazy(() => import('views/states')));
 const CreateState = Loadable(lazy(() => import('views/states')));
+const PostDetail = Loadable(lazy(() => import('views/simple/PostDetail')));
 const Callback = Loadable(lazy(() => import('views/pages/authentication/googleCallBack.js')));
 const SubReportDetailsPage = Loadable(lazy(() => import('views/dashboard/subReportDetails')));
 const SubReportStatePage = Loadable(lazy(() => import('views/dashboard/subReportState')));
@@ -78,6 +83,18 @@ const MainRoutes = {
         {
             path: '/simple',
             element: <Simple />
+        },
+        {
+            path: '/simple/post/:id',
+            element: <PostDetail />
+        },
+        {
+            path: '/forgot',
+            element: (
+                <MinimalLayout>
+                    <AuthForgotPassword />
+                </MinimalLayout>
+            )
         },
     ]
 };
