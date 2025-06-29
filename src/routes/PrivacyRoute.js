@@ -11,6 +11,7 @@ const Disclaimer = Loadable(lazy(() => import('views/pages/disclaimer')));
 const Cookies = Loadable(lazy(() => import('views/pages/cookies')));
 const Terms = Loadable(lazy(() => import('views/pages/terms')));
 const AuthForgotPassword = Loadable(lazy(() => import('views/pages/authentication/ForgotPassword3')));
+const PostDetail = Loadable(lazy(() => import('views/simple/PostDetail')));
 // const DeepLink = Loadable(lazy(() => import('views/deep')));
 // ==============================|| PUBLICATION ROUTING ||============================== //
 
@@ -37,6 +38,10 @@ const PrivacyRoutes = {
         {
             path: '/terms',
             element: <Terms />
+        },
+        {
+            path: '/preview/post/:id',
+            element: <PostDetail />
         },
         {
             path: '/cookies',

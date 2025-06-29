@@ -85,7 +85,7 @@ const MainRoutes = {
             element: <Simple />
         },
         {
-            path: '/simple/post/:id',
+            path: '/preview/post/:id',
             element: <PostDetail />
         },
         {
