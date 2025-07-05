@@ -135,7 +135,7 @@ const AppInfo = () => {
                             {/* Buttons */}
                             <Stack direction="column" spacing={2} pt={2} pb={5} sx={{ width: '60%' }}>
                                 <StoreButton href="" icon={<AppleIcon />} label="Coming soon on Apple Store " />
-                                <StoreButton href="" icon={<GooglePlayIcon src={GooglePlay} />} label="Coming soon to the Google Play." />
+                                <StoreButton href="" icon={<GooglePlayIcon src={GooglePlay} />} label="Available on Google Playstore." />
                             </Stack>
                         </Grid>
                     </Grid>

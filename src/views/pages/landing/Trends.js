@@ -99,7 +99,7 @@ const Trends = () => {
                                             target="_blank"
                                             size="large"
                                         >
-                                            Coming soon to the Google Play Store.
+                                            Available on Google Play Store.
                                         </Button>
                                     </Stack>
                                     <BarcodeImg src={BarcodeI} />
