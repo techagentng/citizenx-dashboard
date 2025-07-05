@@ -52,7 +52,7 @@ const Subscribe = () => {
         setSuccess('Subscription successful! Thank you for subscribing.');
         setForm({ name: '', email: '' });
       },
-      (err) => {
+      () => {
         setError('Failed to subscribe. Please try again later.');
       }
     ).finally(() => setLoading(false));
