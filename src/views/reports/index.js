@@ -457,7 +457,7 @@ const IncidentReportList = () => {
                                                 </Typography>
                                             </Tooltip>
                                         </TableCell>
-                                        <TableCell sx={{ whiteSpace: 'nowrap' }}>{row.report_type_id}</TableCell>
+                                        <TableCell sx={{ whiteSpace: 'nowrap' }}>{row.category}</TableCell>
                                         <TableCell sx={{ whiteSpace: 'nowrap' }}>{row.state_name}</TableCell>
                                         <TableCell>{row.lga_name}</TableCell>
                                         <RelativeTimeCell timestamp={row.created_at} />
