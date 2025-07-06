@@ -23,7 +23,7 @@ import useAuth from 'hooks/useAuth';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 
-const JWTLogin = ({ loginProp, ...others }) => {
+const JWTLogin = ({ ...others }) => {
     const theme = useTheme();
     const navigate = useNavigate();
     const { login } = useAuth();
@@ -125,13 +125,13 @@ const JWTLogin = ({ loginProp, ...others }) => {
                         </Grid>
                         <Grid item>
                             <Typography
-                                variant="subtitle1"
-                                component={Link}
-                                to={loginProp ? `/pages/forgot-password/forgot-password${loginProp}` : '/forgot'}
-                                color="secondary"
-                                sx={{ textDecoration: 'none' }}
-                            >
-                                Forgot Password?
+    variant="subtitle1"
+    component={Link}
+    to="/forgot"
+    color="secondary"
+    sx={{ textDecoration: 'none' }}
+>
+    Forgot Password?
                             </Typography>
                         </Grid>
                     </Grid>
