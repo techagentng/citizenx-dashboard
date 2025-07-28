@@ -268,7 +268,7 @@ const [setUserCount] = useState(0);
                                     {/* <Grid item xs={12}>
                                             <BarChart reportTypes={reportTypes} reportCounts={reportCounts} />
                                         </Grid> */}
-                                    <Grid item xs={12}>
+                                    <Grid item xs={12} style={{ background: '#000',}}>
                                         <PieChart reportTypes={reportTypes} reportCounts={reportCounts} currentState={selectedState}  />
                                     </Grid>
                                 </Grid>
