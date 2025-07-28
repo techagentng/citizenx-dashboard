@@ -45,7 +45,7 @@ const NigerianMap = () => {
     };  
 
     return (
-        <>
+        <div style={{ background: '#000', padding: '24px', borderRadius: '16px' }}>
             <ComposableMap
                 projection="geoMercator"
                 projectionConfig={{
@@ -86,7 +86,7 @@ const NigerianMap = () => {
                 </Geographies>
             </ComposableMap>
             <Tooltip id="state-tooltip" className="custom-tooltip" />
-        </>
+        </div>
     );
 };
 
