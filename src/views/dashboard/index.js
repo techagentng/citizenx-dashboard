@@ -224,6 +224,7 @@ const [setUserCount] = useState(0);
     return (
         <div style={{ background: '#000', minHeight: '100vh' }}>
             <MainCard
+                sx={{ background: 'transparent', boxShadow: 'none' }}
                 title={
                     <Typography variant="h4" align="left">
                         State and LGA Dashboard
