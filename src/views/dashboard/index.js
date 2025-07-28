@@ -222,7 +222,7 @@ const [setUserCount] = useState(0);
         return <div>Loading...</div>;
     }
     return (
-        <>
+        <div style={{ background: '#000', minHeight: '100vh' }}>
             <MainCard
                 title={
                     <Typography variant="h4" align="left">
@@ -351,7 +351,7 @@ const [setUserCount] = useState(0);
                     </Grid> */}
                 </Grid>
             </MainCard>
-        </>
+        </div>
     );
 };
 
