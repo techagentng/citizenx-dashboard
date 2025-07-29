@@ -61,7 +61,7 @@ const PieChart = ({ reportTypes, reportCounts, currentState }) => {
     };
 
     return (
-        <div style={{ width: '100%', background: '#000', padding: '24px', borderRadius: '16px', color: '#fff', fontWeight: 'bold' }}>
+        <div style={{ width: '60%' }}>
             <Pie data={data} options={options} />
         </div>
     );

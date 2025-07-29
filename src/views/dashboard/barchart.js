@@ -69,7 +69,7 @@ const BarChart = ({ reportTypes, reportCounts }) => {
     };
 
     return (
-        <div style={{ width: '100%', background: '#000', padding: '24px', borderRadius: '16px', color: '#fff', fontWeight: 'bold' }}>
+        <div style={{ width: '100%' }}>
             <Bar data={data} options={options} />
         </div>
     );

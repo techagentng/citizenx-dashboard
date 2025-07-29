@@ -222,9 +222,8 @@ const [setUserCount] = useState(0);
         return <div>Loading...</div>;
     }
     return (
-        <div style={{ background: '#000', minHeight: '100vh' }}>
+        <>
             <MainCard
-                sx={{ background: 'transparent', boxShadow: 'none' }}
                 title={
                     <Typography variant="h4" align="left">
                         State and LGA Dashboard
@@ -268,7 +267,7 @@ const [setUserCount] = useState(0);
                                     {/* <Grid item xs={12}>
                                             <BarChart reportTypes={reportTypes} reportCounts={reportCounts} />
                                         </Grid> */}
-                                    <Grid item xs={12} style={{ background: '#000',}}>
+                                    <Grid item xs={12}>
                                         <PieChart reportTypes={reportTypes} reportCounts={reportCounts} currentState={selectedState}  />
                                     </Grid>
                                 </Grid>
@@ -352,7 +351,7 @@ const [setUserCount] = useState(0);
                     </Grid> */}
                 </Grid>
             </MainCard>
-        </div>
+        </>
     );
 };
 
