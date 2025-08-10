@@ -77,27 +77,7 @@ const DashboardPage = () => {
     const isLoading = isOverallReportLoading || isStateReportLoading || 
                      isLGALoading || isUserDataLoading;
 
-    // Report types are now handled by Redux state
-    useEffect(() => {
-        getReportCountByLGA(selectedLga)
-            .then((data) => {
-                setReportCount(data.total_reports);
-            })
-            .catch((err) => {
-                setError(err.message);
-            });
-    }, [selectedLga]);
-
-    useEffect(() => {
-        getTotalUserCount()
-            .then((count) => {
-                console.log('User count from API:', count);
-                setTotalUsers(count);
-            })
-            .catch((err) => {
-                console.error('Failed to fetch user count:', err);
-            });
-    }, []);
+    // Data fetching is now handled by React Query hooks above
     
     if (isLoading) {
         return <div>Loading dashboard data...</div>;
