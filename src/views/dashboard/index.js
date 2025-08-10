@@ -29,12 +29,6 @@ const DashboardPage = () => {
     const { reportTypes, reportCounts } = useSelector((state) => state.graphs.graphs);
     const [selectedReportType, setSelectedReportType] = React.useState('Accidents');
 
-    // State reports data
-    const { 
-        data: stateReportsData, 
-        isLoading: isStateReportsLoading 
-    } = useStateReportCounts();
-
     // Overall report count
     const { 
         data: overallReportData, 
@@ -81,8 +75,8 @@ const DashboardPage = () => {
     }, [dispatch, selectedReportType, selectedState, reportTypes]);
 
     // Set loading state based on all queries
-    const isLoading = isStateReportsLoading || isOverallReportLoading || 
-                     isStateReportLoading || isLGALoading || isUserDataLoading;
+    const isLoading = isOverallReportLoading || isStateReportLoading || 
+                     isLGALoading || isUserDataLoading;
 
     useEffect(() => {
         getStateReportCountList()
