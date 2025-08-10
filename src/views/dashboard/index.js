@@ -1,4 +1,4 @@
-import React, { useEffect, useContext, useMemo } from 'react';
+import React, { useEffect, useContext } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Grid, Typography } from '@mui/material';
 import MainCard from 'ui-component/cards/MainCard';
@@ -58,9 +58,6 @@ const DashboardPage = () => {
         data: userData, 
         isLoading: isUserDataLoading 
     } = useUserData(isLoggedIn);
-
-    // State reports data is processed by the NigerianMap component directly
-    // No need to process it here unless used elsewhere in the component
 
     // Report type count for selected state and LGA
     const { data: reportTypeCountData } = useReportTypeCount(selectedState, selectedLga);
