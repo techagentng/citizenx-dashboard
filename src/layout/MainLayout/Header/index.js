@@ -7,7 +7,7 @@ import KDateFilter from './KDateFilter';
 // import { AdapterDayjs } from '@mui/x-date-pickers-pro/AdapterDayjs';
 import { useDispatch, useSelector } from 'react-redux';
 import { openDrawer } from 'store/slices/menu';
-import { setState, setLga, getGraph } from 'store/slices/graphs';
+import { setState, setLga } from 'store/slices/graphs';
 import statesAndLgas from './statesAndLgas.json';
 import { getCategories } from 'services/reportService';
 
@@ -58,8 +58,9 @@ const Header = () => {
     }, [state, lgas, lga, dispatch]);
 
     const handleStateChange = (event) => {
-        const stateName = event.target.value;
-        dispatch(setState(stateName));
+        const newState = event.target.value;
+        dispatch(setState(newState));
+        dispatch(setLga('')); // Reset LGA when state changes
     };
 
     const handleLgaChange = (event) => {
@@ -73,7 +74,7 @@ const Header = () => {
 
     const handleSearch = useCallback(() => {
         const [startDate, endDate] = dateRange;
-        dispatch(getGraph(state, lga, startDate?.format('YYYY-MM-DD'), endDate?.format('YYYY-MM-DD'), selectedReportType));
+        // Removed dispatch(getGraph(state, lga, startDate?.format('YYYY-MM-DD'), endDate?.format('YYYY-MM-DD'), selectedReportType));
     }, [dispatch, state, lga, dateRange, selectedReportType]);
 
     useEffect(() => {
