@@ -1,4 +1,4 @@
-import React, { useEffect, useContext, useState } from 'react';
+import React, { useEffect, useContext, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Grid, Typography } from '@mui/material';
 import MainCard from 'ui-component/cards/MainCard';
@@ -6,122 +6,85 @@ import EarningCard from 'ui-component/cards/Skeleton/EarningCard';
 import EarningIcon from 'assets/images/icons/earning.svg';
 import PopularCard from './PopularCard';
 import PopularCardAll from './PopularCardAll';
-// import TopReportedStateCard from './TopReportedStateCard';
 import BarChart from './barchart';
 import PieChart from './piechart';
-// import PieChart2 from './piechart2';
-// import LineChart from './linechart';
 import NigerianMap from './nigeria-map';
 import { gridSpacing } from 'store/constant';
 import JWTContext from 'contexts/JWTContext';
-import { getAllUserCount, getAllReportsToday, getOnlineUsers, getTotalUserCount } from 'services/userService';
-
-import { getStateReportCountList, getStateReportCountsAllx } from 'services/reportService';
-import { getGraph, getPercentCount, setReportType } from 'store/slices/graphs';
-import {
-    getCategories,
-    getReportCountsByState,
-    getReportCountByState,
-    getReportCount,
-    getReportCountsByLGA,
-    getReportCountByLGA
-} from 'services/reportService';
+import { getGraph, getPercentCount } from 'store/slices/graphs';
+import { 
+    useStateReportCounts,
+    useReportCount,
+    useStateReportCount,
+    useLGAReportCount,
+    useUserData,
+    useReportTypeCount
+} from 'services/dashboardApi';
 
 const DashboardPage = () => {
     const dispatch = useDispatch();
-    // const { total_states } = useSelector((state) => state.graphs.graphs);
     const { lga: selectedLga } = useSelector((state) => state.graphs.lgaState);
     const selectedState = useSelector((state) => state.graphs.lgaState.state);
     const { isLoggedIn } = useContext(JWTContext);
     const { reportTypes, reportCounts } = useSelector((state) => state.graphs.graphs);
-    // const { good_percentage, bad_percentage } = useSelector((state) => state.graphs.reportPercent);
-    const [loading, setLoading] = useState(false);
-const [setUserCount] = useState(0);
-    const [, setTodayReportCount] = useState(0);
-    const [, setOnlineUsers] = useState(0);
-    const [, setReportTypes] = useState([]);
-    const [selectedReportType, setSelectedReportType] = useState('Accidents');
-    const [totalOverallReports, setTotalOverallReports] = useState(0);
-    const [totalStateReports, setTotalStateReports] = useState(0);
-    const [, setFormattedTopStates] = useState([]);
-    const [, setTotalReportCounts] = useState([]);
-    const [, setTotalLGAReports] = useState(0);
-    const [reportData, setReportData] = useState(null);
-    const [reportCount, setReportCount] = useState(null);
-    const [totalUsers, setTotalUsers] = useState(0);
-    // const totalStates = useSelector(state => state.graphs.graphs.total_states);
+    const [selectedReportType, setSelectedReportType] = React.useState('Accidents');
 
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const data = await getStateReportCountsAllx();
+    // State reports data
+    const { 
+        data: stateReportsData, 
+        isLoading: isStateReportsLoading 
+    } = useStateReportCounts();
 
-                if (!Array.isArray(data)) {
-                    console.error('Expected data to be an array:', data);
-                    return;
-                }
+    // Overall report count
+    const { 
+        data: overallReportData, 
+        isLoading: isOverallReportLoading 
+    } = useReportCount();
 
-                // Filter out valid state report entries
-                const topStates = data.filter(item => item.state_name && item.report_count !== undefined);
+    // State-specific report count
+    const { 
+        data: stateReportData, 
+        isLoading: isStateReportLoading 
+    } = useStateReportCount(selectedState);
 
-                // Extract only the report counts
-                const reportCountsArray = topStates.map(item => item.report_count);
+    // LGA report count
+    const { 
+        data: lgaReportData, 
+        isLoading: isLGALoading 
+    } = useLGAReportCount(selectedLga);
 
-                setFormattedTopStates(topStates);
-                setTotalReportCounts(reportCountsArray);
-            } catch (error) {
-                console.error('Failed to fetch top state reports:', error.message);
-            }
+    // User data
+    const { 
+        data: userData, 
+        isLoading: isUserDataLoading 
+    } = useUserData(isLoggedIn);
+
+    // Process state reports data
+    const { formattedTopStates, reportCountsArray } = useMemo(() => {
+        if (!stateReportsData) return { formattedTopStates: [], reportCountsArray: [] };
+        
+        const topStates = Array.isArray(stateReportsData)
+            ? stateReportsData.filter(item => item.state_name && item.report_count !== undefined)
+            : [];
+            
+        return {
+            formattedTopStates: topStates,
+            reportCountsArray: topStates.map(item => item.report_count)
         };
+    }, [stateReportsData]);
 
-        fetchData();
-    }, []);
+    // Report type count for selected state and LGA
+    const { data: reportTypeCountData } = useReportTypeCount(selectedState, selectedLga);
 
-    useEffect(() => {
-        // Fetch overall report count
-        getReportCount()
-            .then((data) => setTotalOverallReports(data.total_reports || 0))
-            .catch((error) => console.error('Error fetching overall reports:', error));
+    // Process report counts
+    const totalOverallReports = overallReportData?.total_reports || 0;
+    const totalStateReports = stateReportData?.total_reports || 0;
+    const totalLGAReports = reportTypeCountData?.total_reports || lgaReportData?.total_reports || 0;
+    const userCount = userData?.userCount || 0;
+    const todayReportCount = userData?.todayReportCount || 0;
+    const onlineUsers = userData?.onlineUsers || 0;
 
-        // Fetch state report count
-        if (selectedState) {
-            getReportCountByState(selectedState)
-                .then((data) => setTotalStateReports(data.total_reports || 0))
-                .catch((error) => console.error('Error fetching state reports:', error));
-        }
-
-        // Fetch LGA report count
-        if (selectedLga) {
-            getReportCountsByLGA(selectedLga)
-                .then((data) => {
-                    console.log('LGA Report Data:', data);
-                    setTotalLGAReports(data?.total_reports || 0);
-                })
-                .catch((error) => console.error('Error fetching LGA reports:', error));
-        }
-    }, [selectedState, selectedLga]);
-
-    useEffect(() => {
-        if (selectedState) {
-            // setLoading(true);
-            getReportCountsByState(selectedState)
-                .then((data) => {
-                    setReportData(
-                        data.lgas.map((lga, index) => ({
-                            lgaName: lga,
-                            reportCount: data.report_counts[index]
-                        }))
-                    );
-                    // setLoading(false);
-                })
-                .catch((err) => {
-                    // setError(err);
-                    // setLoading(false);
-                    console.log(err);
-                });
-        }
-    }, [selectedState]);
-
+    // Other effects
     useEffect(() => {
         if (selectedState && selectedLga) {
             dispatch(getGraph(selectedState, selectedLga));
@@ -134,19 +97,9 @@ const [setUserCount] = useState(0);
         }
     }, [dispatch, selectedReportType, selectedState, reportTypes]);
 
-    useEffect(() => {
-        if (isLoggedIn) {
-            Promise.all([getAllUserCount(), getAllReportsToday(), getOnlineUsers()])
-                .then(([userCountData, todayReportCountData, onlineUserData]) => {
-                    setUserCount(userCountData);
-                    setTodayReportCount(todayReportCountData);
-                    setOnlineUsers(onlineUserData);
-                })
-                .catch((error) => {
-                    console.log(error.message);
-                });
-        }
-    }, [isLoggedIn]);
+    // Loading state
+    const isLoading = isStateReportsLoading || isOverallReportLoading || 
+                     isStateReportLoading || isLGALoading || isUserDataLoading;
 
     useEffect(() => {
         getStateReportCountList()
