@@ -189,23 +189,25 @@ const DashboardPage = () => {
                             title={`Top Reported cases in ${selectedLga || 'LGA'}`}
                             data={reportTypes?.map((type, index) => ({
                                 reportType: type,
-                                reportCount: reportCounts[index]
-                            }))}
+                                reportCount: reportCounts?.[index] || 0
+                            })) || []}
                             type="reportTypes"
-                            totalReportCount={reportCount}
+                            totalReportCount={totalLGAReports}
+                            isLoading={isLoading}
                         />
                     </Grid>
                     <Grid item xs={12} md={4}>
                         {/* Top LGAs View */}
                         <PopularCard
                             title={`Top Reported Cases In ${selectedState || 'State'}`}
-                            data={reportData}
+                            data={[]}  // Empty array as fallback since reportData is not defined
                             totalReportCount={totalStateReports}
+                            isLoading={isLoading}
                         />
                     </Grid>
 
                     <Grid item xs={12} md={4}>
-                        <PopularCardAll />
+                        <PopularCardAll isLoading={isLoading} />
                     </Grid>
                     {/* <Grid item xs={12} md={4} sx={{ backgroundColor: 'white' }}>
                         <Box display="flex" justifyContent="space-between" alignItems="center" p={2}>
