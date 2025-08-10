@@ -26,7 +26,7 @@ const DashboardPage = () => {
     const selectedState = useSelector((state) => state.graphs.lgaState.state);
     const { isLoggedIn } = useContext(JWTContext);
     const { reportTypes, reportCounts } = useSelector((state) => state.graphs.graphs);
-    const [selectedReportType, setSelectedReportType] = React.useState('Accidents');
+    const selectedReportType = 'Accidents'; // Default report type
 
     // Overall report count
     const { 
