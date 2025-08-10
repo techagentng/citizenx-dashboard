@@ -77,35 +77,7 @@ const DashboardPage = () => {
     const isLoading = isOverallReportLoading || isStateReportLoading || 
                      isLGALoading || isUserDataLoading;
 
-    useEffect(() => {
-        getCategories()
-            .then((types) => {
-                const reportTypeOptions = ['Select Report Type', ...types];
-                setReportTypes(reportTypeOptions);
-                setSelectedReportType(reportTypeOptions[0]);
-                dispatch(setReportType(reportTypeOptions[0]));
-            })
-            .catch((error) => {
-                console.error('Failed to fetch categories:', error);
-            });
-    }, [dispatch]);
-    // const defaultReportType = 'Accidents';
-    // const handleReportTypeChange = (event) => {
-    //     const reportType = event.target.value || defaultReportType;
-    //     setSelectedReportType(reportType);
-    //     console.log('Selected Report Type:', reportType);
-    //     dispatch(setReportType(reportType));
-    //     dispatch(getPercentCount(reportType, selectedState));
-    // };
-
-    // if (loading) return <div>Loading...</div>;
-    // if (error) return <div>Error: {error.message}</div>;
-
-    // const todayReportCountSteroid = selectedState && topStates ? topStates[selectedState] || todayReportCount : todayReportCount;
-
-    // const detailsText = selectedState ? `${selectedState} overall Report` : 'Total Report count';
-    // const detailUsers = selectedState ? `${''} User post count` : "Today's Report";
-    // const totalUsersCountSteroid = total_users || userCount;
+    // Report types are now handled by Redux state
     useEffect(() => {
         getReportCountByLGA(selectedLga)
             .then((data) => {
