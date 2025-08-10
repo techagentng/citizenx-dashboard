@@ -25,8 +25,7 @@ import {
   selectLoading, 
   selectError,
   selectSelectedState, 
-  selectSelectedLga,
-  selectLgaState
+  selectSelectedLga
 } from 'store/slices/graphs';
 
 const DashboardPage = () => {
@@ -66,8 +65,7 @@ const DashboardPage = () => {
         report_counts: reportCounts = [],
         total_reports: totalOverallReports = 0,
         total_users: totalUsers = 0,
-        top_states: topStates = {},
-        timeframe = null
+        top_states: _topStates = {}
     } = dashboardData || {};
 
     // All data is now managed by Redux

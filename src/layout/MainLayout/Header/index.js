@@ -28,7 +28,6 @@ const Header = () => {
     const { lgaState: { state, lga }, reportType: selectedReportType } = useSelector((state) => state.graphs);
     const matchDownMd = useMediaQuery(theme.breakpoints.down('md'));
     const { layout } = useConfig();
-    const [dateRange] = React.useState([null, null]);
     const [, setReportTypes] = React.useState(['Select type']);
 
     // React Query: Fetch all states

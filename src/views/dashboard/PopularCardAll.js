@@ -26,7 +26,7 @@ const PopularCard = ({ isLoading }) => {
     const dispatch = useDispatch();
     const theme = useTheme();
 
-    const { top_states: topStates = {}, total_reports: totalStates = 0, loading, error } = useSelector(
+    const { top_states: topStates = {}, total_reports: totalStates = 0 } = useSelector(
         (state) => state.graphs.dashboardData || {}
     );
 
