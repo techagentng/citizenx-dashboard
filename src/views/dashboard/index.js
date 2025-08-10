@@ -78,21 +78,6 @@ const DashboardPage = () => {
                      isLGALoading || isUserDataLoading;
 
     useEffect(() => {
-        getStateReportCountList()
-            .then((data) => {
-                setFormattedTopStates(
-                    data.map((state) => ({
-                        stateName: state.state_name,
-                        reportCount: state.report_count
-                    }))
-                );
-            })
-            .catch((error) => {
-                console.error('Failed to fetch top states:', error);
-            });
-    }, []);
-
-    useEffect(() => {
         getCategories()
             .then((types) => {
                 const reportTypeOptions = ['Select Report Type', ...types];
