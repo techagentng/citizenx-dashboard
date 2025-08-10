@@ -1,238 +1,128 @@
-import React, { useEffect, useContext, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Grid, Typography } from '@mui/material';
+import { Grid, Typography, Box, CircularProgress } from '@mui/material';
+import { DateRangePicker } from '@mui/x-date-pickers-pro/DateRangePicker';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+
+// Components
 import MainCard from 'ui-component/cards/MainCard';
 import EarningCard from 'ui-component/cards/Skeleton/EarningCard';
 import EarningIcon from 'assets/images/icons/earning.svg';
 import PopularCard from './PopularCard';
 import PopularCardAll from './PopularCardAll';
-// import TopReportedStateCard from './TopReportedStateCard';
 import BarChart from './barchart';
 import PieChart from './piechart';
-// import PieChart2 from './piechart2';
-// import LineChart from './linechart';
 import NigerianMap from './nigeria-map';
-import { gridSpacing } from 'store/constant';
-import JWTContext from 'contexts/JWTContext';
-import { getAllUserCount, getAllReportsToday, getOnlineUsers, getTotalUserCount } from 'services/userService';
 
-import { getStateReportCountList, getStateReportCountsAllx } from 'services/reportService';
-import { getGraph, getPercentCount, setReportType } from 'store/slices/graphs';
-import {
-    getCategories,
-    getReportCountsByState,
-    getReportCountByState,
-    getReportCount,
-    getReportCountsByLGA,
-    getReportCountByLGA
-} from 'services/reportService';
+// Utils & Styles
+import { gridSpacing } from 'store/constant';
+
+// Redux
+import { fetchDashboardData } from 'store/slices/graphs';
+import { 
+  selectDashboardData, 
+  selectLoading, 
+  selectError,
+  selectSelectedState, 
+  selectSelectedLga,
+  selectLgaState
+} from 'store/slices/graphs';
 
 const DashboardPage = () => {
     const dispatch = useDispatch();
-    // const { total_states } = useSelector((state) => state.graphs.graphs);
-    const { lga: selectedLga } = useSelector((state) => state.graphs.lgaState);
-    const selectedState = useSelector((state) => state.graphs.lgaState.state);
-    const { isLoggedIn } = useContext(JWTContext);
-    const { reportTypes, reportCounts } = useSelector((state) => state.graphs.graphs);
-    // const { good_percentage, bad_percentage } = useSelector((state) => state.graphs.reportPercent);
-    const [loading, setLoading] = useState(false);
-const [setUserCount] = useState(0);
-    const [, setTodayReportCount] = useState(0);
-    const [, setOnlineUsers] = useState(0);
-    const [, setReportTypes] = useState([]);
-    const [selectedReportType, setSelectedReportType] = useState('Accidents');
-    const [totalOverallReports, setTotalOverallReports] = useState(0);
-    const [totalStateReports, setTotalStateReports] = useState(0);
-    const [, setFormattedTopStates] = useState([]);
-    const [, setTotalReportCounts] = useState([]);
-    const [, setTotalLGAReports] = useState(0);
-    const [reportData, setReportData] = useState(null);
-    const [reportCount, setReportCount] = useState(null);
-    const [totalUsers, setTotalUsers] = useState(0);
-    // const totalStates = useSelector(state => state.graphs.graphs.total_states);
+    
+    // Redux state
+    const dashboardData = useSelector(selectDashboardData);
+    const loading = useSelector(selectLoading);
+    const error = useSelector(selectError);
+    const selectedState = useSelector(selectSelectedState);
+    const selectedLga = useSelector(selectSelectedLga);
+    
+    // Local state for date range filter
+    const [dateRange, setDateRange] = useState([null, null]);
+    const [startDate, endDate] = dateRange;
 
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const data = await getStateReportCountsAllx();
-
-                if (!Array.isArray(data)) {
-                    console.error('Expected data to be an array:', data);
-                    return;
-                }
-
-                // Filter out valid state report entries
-                const topStates = data.filter(item => item.state_name && item.report_count !== undefined);
-
-                // Extract only the report counts
-                const reportCountsArray = topStates.map(item => item.report_count);
-
-                setFormattedTopStates(topStates);
-                setTotalReportCounts(reportCountsArray);
-            } catch (error) {
-                console.error('Failed to fetch top state reports:', error.message);
-            }
-        };
-
-        fetchData();
-    }, []);
-
-    useEffect(() => {
-        // Fetch overall report count
-        getReportCount()
-            .then((data) => setTotalOverallReports(data.total_reports || 0))
-            .catch((error) => console.error('Error fetching overall reports:', error));
-
-        // Fetch state report count
-        if (selectedState) {
-            getReportCountByState(selectedState)
-                .then((data) => setTotalStateReports(data.total_reports || 0))
-                .catch((error) => console.error('Error fetching state reports:', error));
-        }
-
-        // Fetch LGA report count
-        if (selectedLga) {
-            getReportCountsByLGA(selectedLga)
-                .then((data) => {
-                    console.log('LGA Report Data:', data);
-                    setTotalLGAReports(data?.total_reports || 0);
-                })
-                .catch((error) => console.error('Error fetching LGA reports:', error));
-        }
-    }, [selectedState, selectedLga]);
-
-    useEffect(() => {
-        if (selectedState) {
-            // setLoading(true);
-            getReportCountsByState(selectedState)
-                .then((data) => {
-                    setReportData(
-                        data.lgas.map((lga, index) => ({
-                            lgaName: lga,
-                            reportCount: data.report_counts[index]
-                        }))
-                    );
-                    // setLoading(false);
-                })
-                .catch((err) => {
-                    // setError(err);
-                    // setLoading(false);
-                    console.log(err);
-                });
-        }
-    }, [selectedState]);
-
+    // Fetch data when component mounts or filters change
     useEffect(() => {
         if (selectedState && selectedLga) {
-            dispatch(getGraph(selectedState, selectedLga));
+            dispatch(fetchDashboardData({
+                state: selectedState,
+                lga: selectedLga,
+                startDate: startDate,
+                endDate: endDate
+            }));
         }
-    }, [dispatch, selectedState, selectedLga]);
+    }, [dispatch, selectedState, selectedLga, startDate, endDate]);
 
-    useEffect(() => {
-        if (reportTypes?.length > 0 && selectedState) {
-            dispatch(getPercentCount(selectedReportType, selectedState));
-        }
-    }, [dispatch, selectedReportType, selectedState, reportTypes]);
-
-    useEffect(() => {
-        if (isLoggedIn) {
-            Promise.all([getAllUserCount(), getAllReportsToday(), getOnlineUsers()])
-                .then(([userCountData, todayReportCountData, onlineUserData]) => {
-                    setUserCount(userCountData);
-                    setTodayReportCount(todayReportCountData);
-                    setOnlineUsers(onlineUserData);
-                })
-                .catch((error) => {
-                    console.log(error.message);
-                });
-        }
-    }, [isLoggedIn]);
-
-    useEffect(() => {
-        getStateReportCountList()
-            .then((data) => {
-                setFormattedTopStates(
-                    data.map((state) => ({
-                        stateName: state.state_name,
-                        reportCount: state.report_count
-                    }))
-                );
-            })
-            .catch((error) => {
-                console.error('Failed to fetch top states:', error);
-            });
+    // Handle date range change
+    const handleDateChange = useCallback((newValue) => {
+        setDateRange(newValue);
     }, []);
 
-    useEffect(() => {
-        getCategories()
-            .then((types) => {
-                const reportTypeOptions = ['Select Report Type', ...types];
-                setReportTypes(reportTypeOptions);
-                setSelectedReportType(reportTypeOptions[0]);
-                dispatch(setReportType(reportTypeOptions[0]));
-            })
-            .catch((error) => {
-                console.error('Failed to fetch categories:', error);
-            });
-    }, [dispatch]);
-    // const defaultReportType = 'Accidents';
-    // const handleReportTypeChange = (event) => {
-    //     const reportType = event.target.value || defaultReportType;
-    //     setSelectedReportType(reportType);
-    //     console.log('Selected Report Type:', reportType);
-    //     dispatch(setReportType(reportType));
-    //     dispatch(getPercentCount(reportType, selectedState));
-    // };
+    // Destructure dashboard data with default values
+    const {
+        report_types: reportTypes = [],
+        report_counts: reportCounts = [],
+        total_reports: totalOverallReports = 0,
+        total_users: totalUsers = 0,
+        top_states: topStates = {},
+        timeframe = null
+    } = dashboardData || {};
 
-    // if (loading) return <div>Loading...</div>;
-    // if (error) return <div>Error: {error.message}</div>;
-
-    // const todayReportCountSteroid = selectedState && topStates ? topStates[selectedState] || todayReportCount : todayReportCount;
-
-    // const detailsText = selectedState ? `${selectedState} overall Report` : 'Total Report count';
-    // const detailUsers = selectedState ? `${''} User post count` : "Today's Report";
-    // const totalUsersCountSteroid = total_users || userCount;
-    useEffect(() => {
-        getReportCountByLGA(selectedLga)
-            .then((data) => {
-                setReportCount(data.total_reports);
-            })
-            .catch((err) => {
-                setError(err.message);
-            });
-    }, [selectedLga]);
-
-    useEffect(() => {
-        setLoading(true);
-        getTotalUserCount()
-            .then((count) => {
-                console.log('User count from API:', count);
-                setTotalUsers(count);
-            })
-            .catch((err) => {
-                console.error('Failed to fetch user count:', err);
-            })
-            .finally(() => {
-                setLoading(false);
-            });
-    }, []);
+    // All data is now managed by Redux
     
-
+    // Show loading state
     if (loading) {
-        return <div>Loading...</div>;
+        return (
+            <Box display="flex" justifyContent="center" alignItems="center" minHeight="60vh">
+                <CircularProgress />
+                <Box ml={2}>Loading dashboard data...</Box>
+            </Box>
+        );
     }
+    
+    // Show error state
+    if (error) {
+        return (
+            <MainCard>
+                <Typography color="error" variant="h5">
+                    Error loading dashboard: {error}
+                </Typography>
+            </MainCard>
+        );
+    }
+
     return (
-        <>
+        <LocalizationProvider dateAdapter={AdapterDateFns}>
             <MainCard
                 title={
-                    <Typography variant="h4" align="left">
-                        State and LGA Dashboard
-                    </Typography>
+                    <Box display="flex" justifyContent="space-between" alignItems="center">
+                        <Typography variant="h4">State and LGA Dashboard</Typography>
+                        <DateRangePicker
+                            startText="Start Date"
+                            endText="End Date"
+                            value={dateRange}
+                            onChange={handleDateChange}
+                            renderInput={(startProps, endProps) => (
+                                <Box display="flex" alignItems="center">
+                                    <input {...startProps.inputProps} placeholder="Start Date" />
+                                    <Box sx={{ mx: 1 }}> to </Box>
+                                    <input {...endProps.inputProps} placeholder="End Date" />
+                                </Box>
+                            )}
+                        />
+                    </Box>
                 }
             >
                 <Grid container spacing={2} sx={{ mb: 3 }}>
-                <Grid item xs={12} sm={6} md={3}>
-                        <EarningCard count={totalUsers} details="Registered users" icon={EarningIcon} />
+                    <Grid item xs={12} sm={6} md={3}>
+                        <EarningCard 
+                            count={totalUsers} 
+                            details="Registered users" 
+                            icon={EarningIcon} 
+                            isLoading={loading}
+                        />
                     </Grid>
                     <Grid item xs={12} sm={6} md={3}>
                         <EarningCard count={reportCount} details="Top LGA Report" icon={EarningIcon} />
@@ -351,7 +241,7 @@ const [setUserCount] = useState(0);
                     </Grid> */}
                 </Grid>
             </MainCard>
-        </>
+        </LocalizationProvider>
     );
 };
 

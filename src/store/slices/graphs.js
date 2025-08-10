@@ -1,137 +1,162 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'utils/axios';
 
+// Initial state
 const initialState = {
-    error: null,
-    graphs: {
-        reportTypes: [],
-        reportCounts: [],
-        total_count: 0,        // Total reports
-        total_users: 0,
-        total_states: 0,       // Total states
-        topStates: []
+  // UI state
+  loading: false,
+  error: null,
+  
+  // Selection state
+  lgaState: {
+    state: 'Anambra',
+    lga: 'Aguata'
+  },
+  
+  // Data state
+  data: {
+    // Report type data
+    report_types: [],
+    report_counts: [],
+    
+    // Summary data
+    total_reports: 0,
+    total_users: 0,
+    
+    // Top states data
+    top_states: {},
+    
+    // Timeframe (when filtered)
+    timeframe: null,
+    
+    // Report ratings (if available)
+    report_ratings: {
+      good_percentage: 0,
+      bad_percentage: 0
     },
-    lgaState: {
-        state: 'Anambra',
-        lga: 'Aguata'
-    },
-    reportPercent: {
-        good_percentage: 0,
-        bad_percentage: 0
-    },
-    reportCount: 0,
-    loading: false,
-    reportType: ''
+    
+    // Additional metadata
+    metadata: {
+      total_states: 0,
+      last_updated: null
+    }
+  },
+  
+  // UI state
+  reportType: ''
 };
 
-const slice = createSlice({
-    name: 'graphs',
-    initialState,
-    reducers: {
-        getGraphStart(state) {
-            state.loading = true;
-        },
-        hasError(state, action) {
-            state.error = action.payload;
-            state.loading = false;
-        },
-        getGraphSuccess(state, action) {
-            state.graphs.reportTypes = action.payload.report_types || [];
-            state.graphs.reportCounts = action.payload.report_counts || [];
-            state.graphs.total_count = action.payload.total_count || 0;
-            state.graphs.total_users = action.payload.total_users || 0;
-            state.graphs.topStates = action.payload.top_states || [];
-            state.graphs.total_states = action.payload.total_states || 0;
-            state.loading = false;
-        },
-        getPercentCountSuccess(state, action) {
-            state.reportPercent = action.payload;
-        },
-        setTotalStates(state, action) {
-            state.graphs.total_states = action.payload;
-        },
-        setState(state, action) {
-            state.lgaState.state = action.payload;
-        },
-        setLga(state, action) {
-            state.lgaState.lga = action.payload;
-        },
-        setReportType(state, action) {
-            state.reportType = action.payload;
-        }
+// Async thunks
+export const fetchDashboardData = createAsyncThunk(
+  'graphs/fetchDashboardData',
+  async ({ state, lga, startDate, endDate }, { rejectWithValue }) => {
+    try {
+      const params = new URLSearchParams({ state, lga });
+      
+      if (startDate && endDate) {
+        params.append('start_date', typeof startDate === 'string' ? startDate : startDate.toISOString().split('T')[0]);
+        params.append('end_date', typeof endDate === 'string' ? endDate : endDate.toISOString().split('T')[0]);
+      }
+      
+      const response = await axios.get(`/report/type/count?${params}`);
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data?.message || error.message);
     }
+  }
+);
+
+export const fetchReportRatings = createAsyncThunk(
+  'graphs/fetchReportRatings',
+  async ({ reportType, state }, { rejectWithValue }) => {
+    try {
+      const response = await axios.get('/report/rating', {
+        params: { reportType, state }
+      });
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data?.message || error.message);
+    }
+  }
+);
+
+// Slice
+const graphsSlice = createSlice({
+  name: 'graphs',
+  initialState,
+  reducers: {
+    setState: (state, action) => {
+      state.lgaState.state = action.payload;
+      // Reset LGA when state changes
+      state.lgaState.lga = '';
+    },
+    setLga: (state, action) => {
+      state.lgaState.lga = action.payload;
+    },
+    setReportType: (state, action) => {
+      state.reportType = action.payload;
+    },
+    resetError: (state) => {
+      state.error = null;
+    },
+    resetDashboard: () => initialState
+  },
+  extraReducers: (builder) => {
+    // Fetch Dashboard Data
+    builder
+      .addCase(fetchDashboardData.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchDashboardData.fulfilled, (state, action) => {
+        state.loading = false;
+        // Map the API response to our state
+        state.data = {
+          ...state.data,
+          ...action.payload,
+          metadata: {
+            ...state.data.metadata,
+            last_updated: new Date().toISOString()
+          }
+        };
+      })
+      .addCase(fetchDashboardData.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload || 'Failed to fetch dashboard data';
+      });
+      
+    // Fetch Report Ratings
+    builder
+      .addCase(fetchReportRatings.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchReportRatings.fulfilled, (state, action) => {
+        state.loading = false;
+        state.data.report_ratings = action.payload;
+      })
+      .addCase(fetchReportRatings.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload || 'Failed to fetch report ratings';
+      });
+  }
 });
 
-export default slice.reducer;
+// Export actions
+export const { 
+  setState, 
+  setLga, 
+  setReportType, 
+  resetError, 
+  resetDashboard 
+} = graphsSlice.actions;
 
-export const {
-    getGraphStart,
-    hasError,
-    getGraphSuccess,
-    getPercentCountSuccess,
-    setState,
-    setLga,
-    setReportType,
-    setTotalStates
-} = slice.actions;
+// Export selectors
+export const selectDashboardData = (state) => state.graphs.data;
+export const selectLoading = (state) => state.graphs.loading;
+export const selectError = (state) => state.graphs.error;
+export const selectLgaState = (state) => state.graphs.lgaState;
+export const selectSelectedState = (state) => state.graphs.lgaState.state;
+export const selectSelectedLga = (state) => state.graphs.lgaState.lga;
 
-// ==================== ASYNC THUNKS ====================
-
-export function fetchTotalStates() {
-    return async (dispatch) => {
-        dispatch(getGraphStart());
-        try {
-            const response = await axios.get('/reports/states/top');
-            dispatch(getGraphSuccess(response.data));
-        } catch (error) {
-            dispatch(hasError(error));
-        }
-    };
-}
-
-export function getGraph(state, lga, startDate, endDate) {
-    return async (dispatch) => {
-        dispatch(getGraphStart());
-        try {
-            let url = `/report/type/count?state=${state}&lga=${lga}`;
-            if (startDate && endDate) {
-                // Ensure dates are formatted as YYYY-MM-DD
-                const formatDate = (date) => {
-                    if (!date) return '';
-                    if (typeof date === 'string') return date.slice(0, 10); // fallback if already string
-                    return date.toISOString().slice(0, 10);
-                };
-                url += `&start_date=${formatDate(startDate)}&end_date=${formatDate(endDate)}`;
-            }
-            const response = await axios.get(url);
-            dispatch(getGraphSuccess(response?.data));
-        } catch (error) {
-            dispatch(hasError(error));
-        }
-    };
-}
-
-export function getReportCount() {
-    return async (dispatch) => {
-        dispatch(getGraphStart());
-        try {
-            const response = await axios.get('/incident_reports');
-            dispatch(getGraphSuccess(response.data));
-        } catch (error) {
-            dispatch(hasError(error));
-        }
-    };
-}
-
-export function getPercentCount(reportType, state) {
-    return async (dispatch) => {
-        try {
-            const response = await axios.get('/report/rating', {
-                params: { reportType, state }
-            });
-            dispatch(getPercentCountSuccess(response.data));
-        } catch (error) {
-            dispatch(hasError(error));
-        }
-    };
-}
+export default graphsSlice.reducer;
