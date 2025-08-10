@@ -12,18 +12,17 @@ import {
     CardActions,
     Button
 } from '@mui/material';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import BajajAreaChartCard from './BajajAreaChartCardAll';
 import MainCard from 'ui-component/cards/MainCard';
 import SkeletonPopularCard from 'ui-component/cards/Skeleton/PopularCard';
 import { gridSpacing } from 'store/constant';
-import { fetchDashboardData } from 'store/slices/graphs';
+
 import MoreHorizOutlinedIcon from '@mui/icons-material/MoreHorizOutlined';
 import KeyboardArrowUpOutlinedIcon from '@mui/icons-material/KeyboardArrowUpOutlined';
 import ChevronRightOutlinedIcon from '@mui/icons-material/ChevronRightOutlined';
 
 const PopularCard = ({ isLoading }) => {
-    const dispatch = useDispatch();
     const theme = useTheme();
 
     const { top_states: topStates = {}, total_reports: totalStates = 0 } = useSelector(

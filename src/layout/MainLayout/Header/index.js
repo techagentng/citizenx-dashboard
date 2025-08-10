@@ -25,7 +25,7 @@ const Header = () => {
     const theme = useTheme();
     const dispatch = useDispatch();
     const { drawerOpen } = useSelector((state) => state.menu);
-    const { lgaState: { state, lga }, reportType: selectedReportType } = useSelector((state) => state.graphs);
+    const { lgaState: { state, lga } } = useSelector((state) => state.graphs);
     const matchDownMd = useMediaQuery(theme.breakpoints.down('md'));
     const { layout } = useConfig();
     const [, setReportTypes] = React.useState(['Select type']);
@@ -72,9 +72,9 @@ const Header = () => {
     // };
 
     const handleSearch = useCallback(() => {
-        const [startDate, endDate] = dateRange;
-        // Removed dispatch(getGraph(state, lga, startDate?.format('YYYY-MM-DD'), endDate?.format('YYYY-MM-DD'), selectedReportType));
-    }, [dispatch, state, lga, dateRange, selectedReportType]);
+        // Search functionality is now handled by the dashboard component
+        // through Redux state updates
+    }, []);
 
     useEffect(() => {
         if (state && lga && state !== 'State' && lga !== 'LGA') {

@@ -64,8 +64,7 @@ const DashboardPage = () => {
         report_types: reportTypes = [],
         report_counts: reportCounts = [],
         total_reports: totalOverallReports = 0,
-        total_users: totalUsers = 0,
-        top_states: _topStates = {}
+        total_users: totalUsers = 0
     } = dashboardData || {};
 
     // All data is now managed by Redux
