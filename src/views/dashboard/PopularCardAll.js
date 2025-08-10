@@ -26,33 +26,28 @@ const PopularCard = ({ isLoading }) => {
     const dispatch = useDispatch();
     const theme = useTheme();
 
-    // Get data from Redux store
-    const { graphs, loading: reduxLoading, error } = useSelector((state) => state.graphs);
-    const { topStates = [], total_states = 0 } = graphs || {};
+    const {
+        graphs: { topStates = [], total_states = 0 },
+        loading: reduxLoading,
+        error
+    } = useSelector((state) => state.graphs);
 
     // Debug logs for API/Redux shape
-    console.log('Redux graphs state:', graphs);
     console.log('topStates:', topStates);
     console.log('total_states:', total_states);
+    console.log('error:', error);
+
 
     const [anchorEl, setAnchorEl] = useState(null);
     const [processedStates, setProcessedStates] = useState([]);
     const [processedTotal, setProcessedTotal] = useState(0);
     const [showAll, setShowAll] = useState(false);
 
-    // Fetch data on component mount
+    // Process topStates
     useEffect(() => {
-        dispatch(fetchTotalStates());
-    }, [dispatch]);
+        if (!Array.isArray(topStates)) return;
 
-    // Process topStates when data changes
-    useEffect(() => {
-        if (!Array.isArray(topStates)) {
-            setProcessedStates([]);
-            return;
-        }
-
-        const statesData = [...topStates]; // Create a new array
+        const statesData = topStates.slice(); // clone safely
         const maybeTotal = statesData[statesData.length - 1];
 
         let total = total_states;
