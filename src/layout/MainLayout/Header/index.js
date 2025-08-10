@@ -80,7 +80,7 @@ const Header = () => {
         if (state && lga && state !== 'State' && lga !== 'LGA') {
             handleSearch();
         }
-    }, [state, lga, dateRange, handleSearch]);
+    }, [state, lga, handleSearch]);
 
     useEffect(() => {
         getCategories()
