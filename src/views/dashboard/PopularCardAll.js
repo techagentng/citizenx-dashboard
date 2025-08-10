@@ -114,18 +114,18 @@ const PopularCard = ({ isLoading }) => {
                     <Grid item xs={12}>
                         {processedStates.length > 0 ? (
                             (processedStates.slice(0, showAll ? processedStates.length : 7)).map((state, index) => (
-                                <React.Fragment key={`${state.state_name}-${index}`}>
+                                <React.Fragment key={`${state.stateName}-${index}`}>
                                     <Grid container direction="column">
                                         <Grid item>
                                             <Grid container alignItems="center" justifyContent="space-between">
                                                 <Grid item>
-                                                    <Typography variant="subtitle1">{state.state_name}</Typography>
+                                                    <Typography variant="subtitle1">{state.stateName}</Typography>
                                                 </Grid>
                                                 <Grid item>
                                                     <Grid container alignItems="center" spacing={1}>
                                                         <Grid item>
                                                             <Typography variant="subtitle1">
-                                                                {state.report_count.toLocaleString()}
+                                                                {state.reportCount.toLocaleString()}
                                                             </Typography>
                                                         </Grid>
                                                         <Grid item>
@@ -148,7 +148,7 @@ const PopularCard = ({ isLoading }) => {
                                         </Grid>
                                         <Grid item>
                                             <Typography variant="subtitle2" sx={{ color: 'success.dark' }}>
-                                                {getPercentage(state.report_count)}% of total
+                                                {getPercentage(state.reportCount)}% of total
                                             </Typography>
                                         </Grid>
                                     </Grid>

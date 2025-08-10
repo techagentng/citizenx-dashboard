@@ -122,13 +122,28 @@ const DashboardPage = () => {
                         />
                     </Grid>
                     <Grid item xs={12} sm={6} md={3}>
-                        <EarningCard count={reportCount} details="Top LGA Report" icon={EarningIcon} />
+                        <EarningCard 
+                            count={reportCounts?.reduce((a, b) => a + b, 0) || 0} 
+                            details="Total Reports in LGA" 
+                            icon={EarningIcon} 
+                            isLoading={loading}
+                        />
                     </Grid>                   
                     <Grid item xs={12} sm={6} md={3}>
-                        <EarningCard count={totalStateReports} details="Total state reports" icon={EarningIcon} />
+                        <EarningCard 
+                            count={totalOverallReports} 
+                            details="Total state reports" 
+                            icon={EarningIcon} 
+                            isLoading={loading}
+                        />
                     </Grid>
                     <Grid item xs={12} sm={6} md={3}>
-                        <EarningCard count={totalOverallReports} details="Overall report in Nigeria" icon={EarningIcon} />
+                        <EarningCard 
+                            count={totalOverallReports} 
+                            details="Overall report in Nigeria" 
+                            icon={EarningIcon} 
+                            isLoading={loading}
+                        />
                     </Grid>
                 </Grid>
 
@@ -198,18 +213,21 @@ const DashboardPage = () => {
                             title={`Top Reported cases in ${selectedLga || 'LGA'}`}
                             data={reportTypes?.map((type, index) => ({
                                 reportType: type,
-                                reportCount: reportCounts[index]
+                                reportCount: reportCounts?.[index] || 0
                             }))}
                             type="reportTypes"
-                            totalReportCount={reportCount}
+                            totalReportCount={reportCounts?.reduce((a, b) => a + b, 0) || 0}
                         />
                     </Grid>
                     <Grid item xs={12} md={4}>
                         {/* Top LGAs View */}
                         <PopularCard
                             title={`Top Reported Cases In ${selectedState || 'State'}`}
-                            data={reportData}
-                            totalReportCount={totalStateReports}
+                            data={reportTypes?.map((type, index) => ({
+                                reportType: type,
+                                reportCount: reportCounts?.[index] || 0
+                            }))}
+                            totalReportCount={reportCounts?.reduce((a, b) => a + b, 0) || 0}
                         />
                     </Grid>
 
