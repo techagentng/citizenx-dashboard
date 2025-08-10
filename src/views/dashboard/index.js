@@ -59,16 +59,8 @@ const DashboardPage = () => {
         isLoading: isUserDataLoading 
     } = useUserData(isLoggedIn);
 
-    // Process state reports data
-    const topStates = useMemo(() => {
-        if (!stateReportsData || !Array.isArray(stateReportsData)) return [];
-        return stateReportsData
-            .filter(item => item.state_name && item.report_count !== undefined)
-            .map(item => ({
-                stateName: item.state_name,
-                reportCount: item.report_count
-            }));
-    }, [stateReportsData]);
+    // State reports data is processed by the NigerianMap component directly
+    // No need to process it here unless used elsewhere in the component
 
     // Report type count for selected state and LGA
     const { data: reportTypeCountData } = useReportTypeCount(selectedState, selectedLga);
