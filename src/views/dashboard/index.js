@@ -60,29 +60,23 @@ const DashboardPage = () => {
     } = useUserData(isLoggedIn);
 
     // Process state reports data
-    const { formattedTopStates, reportCountsArray } = useMemo(() => {
-        if (!stateReportsData) return { formattedTopStates: [], reportCountsArray: [] };
-        
-        const topStates = Array.isArray(stateReportsData)
-            ? stateReportsData.filter(item => item.state_name && item.report_count !== undefined)
-            : [];
-            
-        return {
-            formattedTopStates: topStates,
-            reportCountsArray: topStates.map(item => item.report_count)
-        };
+    const topStates = useMemo(() => {
+        if (!stateReportsData || !Array.isArray(stateReportsData)) return [];
+        return stateReportsData
+            .filter(item => item.state_name && item.report_count !== undefined)
+            .map(item => ({
+                stateName: item.state_name,
+                reportCount: item.report_count
+            }));
     }, [stateReportsData]);
 
     // Report type count for selected state and LGA
     const { data: reportTypeCountData } = useReportTypeCount(selectedState, selectedLga);
-
+    const totalLGAReports = reportTypeCountData?.total_reports || lgaReportData?.total_reports || 0;
+    
     // Process report counts
     const totalOverallReports = overallReportData?.total_reports || 0;
     const totalStateReports = stateReportData?.total_reports || 0;
-    const totalLGAReports = reportTypeCountData?.total_reports || lgaReportData?.total_reports || 0;
-    const userCount = userData?.userCount || 0;
-    const todayReportCount = userData?.todayReportCount || 0;
-    const onlineUsers = userData?.onlineUsers || 0;
 
     // Other effects
     useEffect(() => {
@@ -97,7 +91,7 @@ const DashboardPage = () => {
         }
     }, [dispatch, selectedReportType, selectedState, reportTypes]);
 
-    // Loading state
+    // Set loading state based on all queries
     const isLoading = isStateReportsLoading || isOverallReportLoading || 
                      isStateReportLoading || isLGALoading || isUserDataLoading;
 
@@ -174,6 +168,10 @@ const DashboardPage = () => {
     if (loading) {
         return <div>Loading...</div>;
     }
+    if (isLoading) {
+        return <div>Loading dashboard data...</div>;
+    }
+
     return (
         <>
             <MainCard
@@ -184,17 +182,33 @@ const DashboardPage = () => {
                 }
             >
                 <Grid container spacing={2} sx={{ mb: 3 }}>
-                <Grid item xs={12} sm={6} md={3}>
-                        <EarningCard count={totalUsers} details="Registered users" icon={EarningIcon} />
+                    <Grid item xs={12} sm={6} md={3}>
+                        <EarningCard 
+                            count={userData?.userCount || 0} 
+                            details="Registered users" 
+                            icon={EarningIcon} 
+                        />
                     </Grid>
                     <Grid item xs={12} sm={6} md={3}>
-                        <EarningCard count={reportCount} details="Top LGA Report" icon={EarningIcon} />
+                        <EarningCard 
+                            count={totalLGAReports} 
+                            details={`${selectedLga || 'Selected LGA'} Reports`} 
+                            icon={EarningIcon} 
+                        />
                     </Grid>                   
                     <Grid item xs={12} sm={6} md={3}>
-                        <EarningCard count={totalStateReports} details="Total state reports" icon={EarningIcon} />
+                        <EarningCard 
+                            count={totalStateReports} 
+                            details={selectedState ? `${selectedState} Reports` : 'State Reports'} 
+                            icon={EarningIcon} 
+                        />
                     </Grid>
                     <Grid item xs={12} sm={6} md={3}>
-                        <EarningCard count={totalOverallReports} details="Overall report in Nigeria" icon={EarningIcon} />
+                        <EarningCard 
+                            count={totalOverallReports} 
+                            details="Total Reports in Nigeria" 
+                            icon={EarningIcon} 
+                        />
                     </Grid>
                 </Grid>
 
