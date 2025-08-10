@@ -13,7 +13,6 @@ import { gridSpacing } from 'store/constant';
 import JWTContext from 'contexts/JWTContext';
 import { getGraph, getPercentCount } from 'store/slices/graphs';
 import { 
-    useStateReportCounts,
     useReportCount,
     useStateReportCount,
     useLGAReportCount,
