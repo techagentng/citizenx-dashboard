@@ -132,7 +132,6 @@ const DashboardPage = () => {
     }, [selectedLga]);
 
     useEffect(() => {
-        setLoading(true);
         getTotalUserCount()
             .then((count) => {
                 console.log('User count from API:', count);
@@ -140,16 +139,9 @@ const DashboardPage = () => {
             })
             .catch((err) => {
                 console.error('Failed to fetch user count:', err);
-            })
-            .finally(() => {
-                setLoading(false);
             });
     }, []);
     
-
-    if (loading) {
-        return <div>Loading...</div>;
-    }
     if (isLoading) {
         return <div>Loading dashboard data...</div>;
     }
