@@ -51,17 +51,54 @@ export const fetchDashboardData = createAsyncThunk(
   'graphs/fetchDashboardData',
   async ({ state, lga, startDate, endDate }, { rejectWithValue }) => {
     try {
-      const params = new URLSearchParams({ state, lga });
-      
-      if (startDate && endDate) {
-        params.append('start_date', typeof startDate === 'string' ? startDate : startDate.toISOString().split('T')[0]);
-        params.append('end_date', typeof endDate === 'string' ? endDate : endDate.toISOString().split('T')[0]);
+      // Validate that state and LGA are provided
+      if (!state || !lga) {
+        throw new Error('State and LGA are required');
       }
       
+      const params = new URLSearchParams({ 
+        state: state.trim(), 
+        lga: lga.trim() 
+      });
+      
+      // Format dates to YYYY-MM-DD if provided
+      const formatDate = (date) => {
+        if (!date) return null;
+        if (typeof date === 'string') {
+          // Validate string format is YYYY-MM-DD
+          if (/^\d{4}-\d{2}-\d{2}$/.test(date)) {
+            return date;
+          }
+          throw new Error('Date must be in YYYY-MM-DD format');
+        }
+        // If it's a Date object, format to YYYY-MM-DD (UTC)
+        return date.toISOString().split('T')[0];
+      };
+      
+      // Add dates to params if both are provided
+      if (startDate || endDate) {
+        if (!startDate || !endDate) {
+          throw new Error('Both start date and end date must be provided together');
+        }
+        
+        const formattedStartDate = formatDate(startDate);
+        const formattedEndDate = formatDate(endDate);
+        
+        // Ensure start date is before or equal to end date
+        if (new Date(formattedStartDate) > new Date(formattedEndDate)) {
+          throw new Error('Start date cannot be after end date');
+        }
+        
+        params.append('start_date', formattedStartDate);
+        params.append('end_date', formattedEndDate);
+      }
+      
+      console.log('Fetching dashboard data with params:', Object.fromEntries(params));
       const response = await axios.get(`/report/type/count?${params}`);
       return response.data;
     } catch (error) {
-      return rejectWithValue(error.response?.data?.message || error.message);
+      console.error('Error fetching dashboard data:', error);
+      return rejectWithValue(error.message || 'Failed to fetch dashboard data');
     }
   }
 );

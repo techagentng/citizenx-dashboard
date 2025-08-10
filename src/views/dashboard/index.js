@@ -54,9 +54,24 @@ const DashboardPage = () => {
         }
     }, [dispatch, selectedState, selectedLga, startDate, endDate]);
 
+    // Format date to YYYY-MM-DD format (UTC)
+    const formatDate = useCallback((date) => {
+        if (!date) return null;
+        // If it's a string, assume it's already in the correct format
+        if (typeof date === 'string') return date;
+        // If it's a Date object, format it to YYYY-MM-DD
+        return date.toISOString().split('T')[0];
+    }, []);
+
     // Handle date range change
     const handleDateChange = useCallback((newValue) => {
-        setDateRange(newValue);
+        // Only update if both dates are provided or both are null
+        if ((newValue[0] && newValue[1]) || (!newValue[0] && !newValue[1])) {
+            setDateRange(newValue);
+        } else if (newValue[0] && !newValue[1]) {
+            // If only one date is selected, don't update yet
+            return;
+        }
     }, []);
 
     // Destructure dashboard data with default values
@@ -97,15 +112,29 @@ const DashboardPage = () => {
                     <Box display="flex" justifyContent="space-between" alignItems="center">
                         <Typography variant="h4">State and LGA Dashboard</Typography>
                         <DateRangePicker
-                            startText="Start Date"
-                            endText="End Date"
+                            startText="Start Date (YYYY-MM-DD)"
+                            endText="End Date (YYYY-MM-DD)"
                             value={dateRange}
                             onChange={handleDateChange}
+                            inputFormat="yyyy-MM-dd"
+                            mask="____-__-__"
                             renderInput={(startProps, endProps) => (
                                 <Box display="flex" alignItems="center">
-                                    <input {...startProps.inputProps} placeholder="Start Date" />
+                                    <input 
+                                        {...startProps.inputProps} 
+                                        placeholder="Start Date" 
+                                        onBlur={() => {
+                                            // Ensure end date is set when start date is set
+                                            if (dateRange[0] && !dateRange[1]) {
+                                                setDateRange([dateRange[0], dateRange[0]]);
+                                            }
+                                        }}
+                                    />
                                     <Box sx={{ mx: 1 }}> to </Box>
-                                    <input {...endProps.inputProps} placeholder="End Date" />
+                                    <input 
+                                        {...endProps.inputProps} 
+                                        placeholder="End Date"
+                                    />
                                 </Box>
                             )}
                         />
