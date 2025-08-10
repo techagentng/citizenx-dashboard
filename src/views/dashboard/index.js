@@ -54,15 +54,6 @@ const DashboardPage = () => {
         }
     }, [dispatch, selectedState, selectedLga, startDate, endDate]);
 
-    // Format date to YYYY-MM-DD format (UTC)
-    const formatDate = useCallback((date) => {
-        if (!date) return null;
-        // If it's a string, assume it's already in the correct format
-        if (typeof date === 'string') return date;
-        // If it's a Date object, format it to YYYY-MM-DD
-        return date.toISOString().split('T')[0];
-    }, []);
-
     // Handle date range change
     const handleDateChange = useCallback((newValue) => {
         // Only update if both dates are provided or both are null
