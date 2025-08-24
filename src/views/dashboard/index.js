@@ -54,16 +54,6 @@ const DashboardPage = () => {
         }
     }, [dispatch, selectedState, selectedLga, startDate, endDate]);
 
-    // Handle date range change
-    const handleDateChange = useCallback((newValue) => {
-        // Only update if both dates are provided or both are null
-        if ((newValue[0] && newValue[1]) || (!newValue[0] && !newValue[1])) {
-            setDateRange(newValue);
-        } else if (newValue[0] && !newValue[1]) {
-            // If only one date is selected, don't update yet
-            return;
-        }
-    }, []);
 
     // Destructure dashboard data with default values
     const {
