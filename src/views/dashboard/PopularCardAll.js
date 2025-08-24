@@ -129,7 +129,7 @@ const PopularCard = ({ isLoading }) => {
             </Typography>
         </Grid>
         <Grid item xs={6} style={{ textAlign: 'right' }}>
-            <Typography variant="h6" color="primary">
+            <Typography variant="h6" color="secondary">
                 {state.reportCount || state.report_count}
             </Typography>
             <Typography variant="caption" sx={{ color: 'success.dark' }}>
