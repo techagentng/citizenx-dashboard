@@ -2,7 +2,7 @@ import React, { useCallback, useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { useTheme } from '@mui/material/styles';
 import { Avatar, Box, useMediaQuery, MenuItem, TextField, Grid } from '@mui/material';
-import KDateFilter from './KDateFilter';
+// import KDateFilter from './KDateFilter';
 // import { LocalizationProvider, DateRangePicker } from '@mui/x-date-pickers-pro';
 // import { AdapterDayjs } from '@mui/x-date-pickers-pro/AdapterDayjs';
 import { useDispatch, useSelector } from 'react-redux';
@@ -189,13 +189,6 @@ const Header = () => {
                         </MenuItem>
                     ))}
                 </TextField>
-                <KDateFilter
-                    onFilter={(startDate, endDate) => {
-                        if (state && lga && state !== 'State' && lga !== 'LGA') {
-                            dispatch(getGraph(state, lga, startDate, endDate));
-                        }
-                    }}
-                />
             </Box>
 
             <NotificationSection />
