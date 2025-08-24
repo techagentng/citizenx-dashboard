@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Grid, Typography, Box, CircularProgress } from '@mui/material';
-import { DateRangePicker } from '@mui/x-date-pickers-pro/DateRangePicker';
+import KDateFilter from 'layout/MainLayout/Header/KDateFilter';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 
@@ -102,33 +102,14 @@ const DashboardPage = () => {
                 title={
                     <Box display="flex" justifyContent="space-between" alignItems="center">
                         <Typography variant="h4">State and LGA Dashboard</Typography>
-                        <DateRangePicker
-                            startText="Start Date (YYYY-MM-DD)"
-                            endText="End Date (YYYY-MM-DD)"
-                            value={dateRange}
-                            onChange={handleDateChange}
-                            inputFormat="yyyy-MM-dd"
-                            mask="____-__-__"
-                            renderInput={(startProps, endProps) => (
-                                <Box display="flex" alignItems="center">
-                                    <input 
-                                        {...startProps.inputProps} 
-                                        placeholder="Start Date" 
-                                        onBlur={() => {
-                                            // Ensure end date is set when start date is set
-                                            if (dateRange[0] && !dateRange[1]) {
-                                                setDateRange([dateRange[0], dateRange[0]]);
-                                            }
-                                        }}
-                                    />
-                                    <Box sx={{ mx: 1 }}> to </Box>
-                                    <input 
-                                        {...endProps.inputProps} 
-                                        placeholder="End Date"
-                                    />
-                                </Box>
-                            )}
-                        />
+                        <KDateFilter
+    onFilter={(start, end) => {
+        // Convert to Date objects for consistency with previous logic
+        const startDate = start ? new Date(start) : null;
+        const endDate = end ? new Date(end) : null;
+        setDateRange([startDate, endDate]);
+    }}
+/>
                     </Box>
                 }
             >
