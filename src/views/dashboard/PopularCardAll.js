@@ -12,7 +12,7 @@ import {
     CardActions,
     Button
 } from '@mui/material';
-import { useSelector } from 'react-redux';
+import { getStateReportCountsAllx } from '../../services/reportService';
 import BajajAreaChartCard from './BajajAreaChartCardAll';
 import MainCard from 'ui-component/cards/MainCard';
 import SkeletonPopularCard from 'ui-component/cards/Skeleton/PopularCard';
@@ -25,13 +25,21 @@ import ChevronRightOutlinedIcon from '@mui/icons-material/ChevronRightOutlined';
 const PopularCard = ({ isLoading }) => {
     const theme = useTheme();
 
-    const { top_states: topStates = {}, total_reports: totalStates = 0 } = useSelector(
-        (state) => state.graphs.dashboardData || {}
-    );
+    const [topStates, setTopStates] = useState({});
+    const [totalStates, setTotalStates] = useState(0);
 
-    // Debug logs for API/Redux shape
-    console.log('topStates:', topStates);
-    console.log('totalStates:', totalStates);
+    // Fetch all-time state report data on mount
+    useEffect(() => {
+        getStateReportCountsAllx()
+            .then((data) => {
+                setTopStates(data.top_states || {});
+                setTotalStates(data.total_reports || 0);
+            })
+            .catch(() => {
+                setTopStates({});
+                setTotalStates(0);
+            });
+    }, []);
 
     const [anchorEl, setAnchorEl] = useState(null);
     const [processedStates, setProcessedStates] = useState([]);
