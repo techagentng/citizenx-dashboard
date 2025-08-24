@@ -33,11 +33,11 @@ const PopularCard = ({ isLoading }) => {
         getStateReportCountsAllx()
             .then((data) => {
                 console.log('PopularCardAll getStateReportCountsAllx response:', data);
-                setTopStates(data.top_states || {});
-                setTotalStates(data.total_reports || 0);
+                setTopStates(Array.isArray(data.top_states) ? data.top_states : []);
+                setTotalStates(typeof data.total_states === 'number' ? data.total_states : 0);
             })
             .catch(() => {
-                setTopStates({});
+                setTopStates([]);
                 setTotalStates(0);
             });
     }, []);
