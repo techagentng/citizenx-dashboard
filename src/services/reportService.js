@@ -488,7 +488,7 @@ export const getTopStateReportCounts = () => {
                 }
             })
             .then((response) => {
-                console.log('getTopStateReportCounts response:', response.data);
+                console.log('getTopStateReportCounts response:xxxxx', response.data);
                 resolve(response.data); // Expecting [{ state_name, report_count }, ..., { total_states: X }]
             })
             .catch((error) => {
