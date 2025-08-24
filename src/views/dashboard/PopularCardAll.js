@@ -124,45 +124,23 @@ const PopularCard = ({ isLoading }) => {
                         {processedStates.length > 0 ? (
                             (processedStates.slice(0, showAll ? processedStates.length : 7)).map((state, index) => (
                                 <React.Fragment key={`${state.stateName}-${index}`}>
-                                    <Grid container direction="column">
-                                        <Grid item>
-                                            <Grid container alignItems="center" justifyContent="space-between">
-                                                <Grid item>
-                                                    <Typography variant="subtitle1">{state.stateName}</Typography>
-                                                </Grid>
-                                                <Grid item>
-                                                    <Grid container alignItems="center" spacing={1}>
-                                                        <Grid item>
-                                                            <Typography variant="subtitle1">
-                                                                {state.reportCount.toLocaleString()}
-                                                            </Typography>
-                                                        </Grid>
-                                                        <Grid item>
-                                                            <Avatar
-                                                                variant="rounded"
-                                                                sx={{
-                                                                    width: 16,
-                                                                    height: 16,
-                                                                    borderRadius: '5px',
-                                                                    backgroundColor: theme.palette.success.light,
-                                                                    color: theme.palette.success.dark
-                                                                }}
-                                                            >
-                                                                <KeyboardArrowUpOutlinedIcon fontSize="small" />
-                                                            </Avatar>
-                                                        </Grid>
-                                                    </Grid>
-                                                </Grid>
-                                            </Grid>
-                                        </Grid>
-                                        <Grid item>
-                                            <Typography variant="subtitle2" sx={{ color: 'success.dark' }}>
-                                                {getPercentage(state.reportCount)}% of total
-                                            </Typography>
-                                        </Grid>
-                                    </Grid>
-                                    {index < processedStates.length - 1 && <Divider sx={{ my: 1.5 }} />}
-                                </React.Fragment>
+    <Grid container alignItems="center" justifyContent="space-between">
+        <Grid item xs={6}>
+            <Typography variant="subtitle1" color="textPrimary">
+                {state.stateName || state.state_name}
+            </Typography>
+        </Grid>
+        <Grid item xs={6} style={{ textAlign: 'right' }}>
+            <Typography variant="h6" color="primary">
+                {state.reportCount || state.report_count}
+            </Typography>
+            <Typography variant="caption" sx={{ color: 'success.dark' }}>
+                {getPercentage(state.reportCount || state.report_count)}% of total
+            </Typography>
+        </Grid>
+    </Grid>
+    {index < processedStates.length - 1 && <Divider sx={{ my: 1.5 }} />}
+</React.Fragment>
                             ))
                         ) : (
                             <Typography variant="body2">No state data available</Typography>
