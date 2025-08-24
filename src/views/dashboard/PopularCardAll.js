@@ -32,6 +32,7 @@ const PopularCard = ({ isLoading }) => {
     useEffect(() => {
         getStateReportCountsAllx()
             .then((data) => {
+                console.log('PopularCardAll getStateReportCountsAllx response:', data);
                 setTopStates(data.top_states || {});
                 setTotalStates(data.total_reports || 0);
             })
