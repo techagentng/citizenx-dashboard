@@ -47,19 +47,31 @@ const PopularCard = ({ isLoading }) => {
 
     // Process topStates
     useEffect(() => {
-        if (!topStates || typeof topStates !== 'object') return;
+        if (!topStates) return;
 
-        // Convert topStates object to array of {stateName, reportCount} objects
-        const statesData = Object.entries(topStates).map(([stateName, reportCount]) => ({
-            stateName,
-            reportCount
-        }));
-        const maybeTotal = statesData[statesData.length - 1];
-
+        // If API returns array of objects [{ state_name, report_count }, ...]
+        let statesData = [];
         let total = totalStates;
-        if (maybeTotal?.total_states !== undefined) {
-            total = maybeTotal.total_states;
-            statesData.pop(); // remove the total object
+
+        if (Array.isArray(topStates)) {
+            // Remove any trailing total_states object if present
+            const last = topStates[topStates.length - 1];
+            if (last && last.total_states !== undefined) {
+                total = last.total_states;
+                statesData = topStates.slice(0, -1);
+            } else {
+                statesData = topStates;
+            }
+            statesData = statesData.map(s => ({
+                stateName: s.state_name || s.stateName,
+                reportCount: s.report_count || s.reportCount
+            }));
+        } else if (typeof topStates === 'object') {
+            // fallback for object shape
+            statesData = Object.entries(topStates).map(([stateName, reportCount]) => ({
+                stateName,
+                reportCount
+            }));
         }
 
         const validStates = statesData.filter(
@@ -129,7 +141,7 @@ const PopularCard = ({ isLoading }) => {
             </Typography>
         </Grid>
         <Grid item xs={6} style={{ textAlign: 'right' }}>
-            <Typography variant="h6" color="secondary">
+            <Typography variant="h6" color="primary">
                 {state.reportCount || state.report_count}
             </Typography>
             <Typography variant="caption" sx={{ color: 'success.dark' }}>
