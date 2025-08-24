@@ -2,7 +2,6 @@ import PropTypes from 'prop-types';
 import React, { useEffect, useState } from 'react';
 import { useTheme } from '@mui/material/styles';
 import {
-    Avatar,
     CardContent,
     Divider,
     Grid,
