@@ -213,9 +213,9 @@ const DashboardPage = () => {
                     <Grid item xs={12} md={4}>
                         {/* Top LGAs View */}
                         <PopularCard
-                            title={`Top Reported Cases In ${selectedState || 'State'}`}
+                            title={`Top Reported Casesxxx In ${selectedState || 'State'}`}
                             data={reportTypes?.map((type, index) => ({
-                                reportType: type,
+                                reportType: selectedLga,
                                 reportCount: reportCounts?.[index] || 0
                             }))}
                             totalReportCount={reportCounts?.reduce((a, b) => a + b, 0) || 0}
