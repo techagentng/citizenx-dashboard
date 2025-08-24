@@ -520,7 +520,7 @@ export const getStateReportCountsAllx = () => {
                 },
             })
             .then((response) => {
-                console.log('getStateReportCountsAll response:', response.data);
+                console.log('getStateReportCountsAll responsexxx:', response.data);
                 resolve(response.data); // Expected shape: [..., { total_states: number }]
             })
             .catch((error) => {
