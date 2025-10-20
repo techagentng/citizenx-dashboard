@@ -91,8 +91,8 @@ function stableSort(array, comparator) {
 
 // table header options
 const headCells = [
-    { id: 'description', numeric: false, label: 'Report', align: 'left' },
-    { id: 'category', numeric: false, label: 'Report Type', align: 'left' },
+        { id: 'category', numeric: false, label: 'Incident Type', align: 'left' },
+    { id: 'description', numeric: false, label: 'Incidence', align: 'left' },
     { id: 'state_name', numeric: false, label: 'State', align: 'left' },
     { id: 'lga_name', numeric: false, label: 'LGA', align: 'left' },
     { id: 'state_name', numeric: false, label: 'Date', align: 'left' },
@@ -223,6 +223,15 @@ const IncidentReportList = () => {
     const [open, setOpen] = React.useState(false);
     const [openVideo, setOpenVideo] = React.useState(false);
     const [openImage, setOpenImage] = React.useState(false);
+    const [expandedDescriptions, setExpandedDescriptions] = React.useState({});
+
+    const toggleDescription = (id) => {
+        setExpandedDescriptions(prev => ({
+            ...prev,
+            [id]: !prev[id]
+        }));
+    };
+
     
     const handleClickOpenDialog = () => {
         setOpen(true);
@@ -442,23 +451,47 @@ const IncidentReportList = () => {
                                             id={labelId}
                                             scope="row"
                                             onClick={(event) => handleClick(event, row.id)}
-                                            sx={{ cursor: 'pointer', whiteSpace: 'nowrap' }}
+                                            sx={{ cursor: 'pointer', minWidth: 250, maxWidth: 400 }}
                                         >
-                                            <Tooltip title={row.description} placement="top" arrow>
+                                            <Box>
                                                 <Typography
                                                     variant="body2"
                                                     sx={{
                                                         color: theme.palette.mode === 'dark' ? 'grey.600' : 'grey.900',
-                                                        maxWidth: 200,
+                                                        display: '-webkit-box',
+                                                        WebkitLineClamp: expandedDescriptions[row.id] ? 'unset' : 2,
+                                                        WebkitBoxOrient: 'vertical',
                                                         overflow: 'hidden',
                                                         textOverflow: 'ellipsis',
-                                                        whiteSpace: 'nowrap',
-                                                        display: 'block'
+                                                        wordBreak: 'break-word',
+                                                        lineHeight: '1.2',
+                                                        maxHeight: expandedDescriptions[row.id] ? 'none' : '2.4em',
+                                                        '&:hover': {
+                                                            color: theme.palette.primary.main
+                                                        }
                                                     }}
                                                 >
-                                                    {row.description && row.description.length > 50 ? row.description.slice(0, 50) + '…' : row.description}
+                                                    {row.description}
                                                 </Typography>
-                                            </Tooltip>
+                                                {row.description && row.description.length > 100 && (
+                                                    <Typography
+                                                        variant="caption"
+                                                        onClick={(e) => {
+                                                            e.stopPropagation();
+                                                            toggleDescription(row.id);
+                                                        }}
+                                                        sx={{
+                                                            color: theme.palette.primary.main,
+                                                            cursor: 'pointer',
+                                                            '&:hover': {
+                                                                textDecoration: 'underline'
+                                                            }
+                                                        }}
+                                                    >
+                                                        {expandedDescriptions[row.id] ? 'Show Less' : 'View More'}
+                                                    </Typography>
+                                                )}
+                                            </Box>
                                         </TableCell>
                                         <TableCell sx={{ whiteSpace: 'nowrap' }}>{row.category}</TableCell>
                                         <TableCell sx={{ whiteSpace: 'nowrap' }}>{row.state_name}</TableCell>
