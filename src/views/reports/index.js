@@ -211,56 +211,59 @@ const IncidentReportList = () => {
     const dispatch = useDispatch();
     const [userCount, setUserCount] = useState(0);
     const [todayReportCount, setTodayReportCount] = useState(0);
-    const [order, setOrder] = React.useState('asc');
-    const [orderBy, setOrderBy] = React.useState('created_at');
+    const [order, setOrder] = React.useState('desc');
+    const [orderBy, setOrderBy] = React.useState('created_at'); // Sort by newest first by default
     const [selected, setSelected] = React.useState([]);
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(5);
     const [search, setSearch] = React.useState('');
     const [rows, setRows] = React.useState([]);
     const { report } = useSelector((state) => state.report);
+    const { state: selectedState, lga: selectedLga } = useSelector((state) => state.graphs.lgaState || {});
     const [open, setOpen] = React.useState(false);
     const [openVideo, setOpenVideo] = React.useState(false);
     const [openImage, setOpenImage] = React.useState(false);
+    
     const handleClickOpenDialog = () => {
         setOpen(true);
     };
+    
     const handleClickOpenVideoDialog = () => {
         setOpenVideo(true);
     };
-    React.useEffect(() => {
-        dispatch(getAllReports());
-    }, [dispatch]);
 
+    // Fetch reports when state, LGA, or search term changes
     React.useEffect(() => {
-        setRows(report);
+        let filter = search || '';
+        
+        // Add state and LGA to filter if they exist
+        const filters = [];
+        if (selectedState && selectedState !== 'Anambra') { // Skip default state
+            filters.push(`state:${selectedState}`);
+        }
+        if (selectedLga && selectedLga !== 'Aguata') { // Skip default LGA
+            filters.push(`lga:${selectedLga}`);
+        }
+        
+        if (filter) {
+            filters.push(filter);
+        }
+        
+        const combinedFilter = filters.join(' ');
+        dispatch(getAllReports(combinedFilter));
+    }, [dispatch, selectedState, selectedLga, search]);
+
+    // Update rows when report data changes
+    React.useEffect(() => {
+        setRows(report || []);
     }, [report]);
 
     const handleSearch = (event) => {
-        const newString = event?.target.value;
-        setSearch(newString || '');
-
-        if (newString) {
-            const newRows = rows.filter((row) => {
-                let matches = true;
-                const properties = ['description', 'category', 'state_name', 'lga_name', 'road_name'];
-                let containsQuery = false;
-
-                properties.forEach((property) => {
-                    if (row[property].toString().toLowerCase().includes(newString.toString().toLowerCase())) {
-                        containsQuery = true;
-                    }
-                });
-
-                if (!containsQuery) {
-                    matches = false;
-                }
-                return matches;
-            });
-            setRows(newRows);
-        } else {
-            setRows(productreviews);
-        }
+        const searchTerm = event?.target.value || '';
+        setSearch(searchTerm);
+        
+        // The useEffect hook will handle the API call with the updated search term
+        // along with the current state and LGA filters
     };
 
     const handleRequestSort = (event, property) => {

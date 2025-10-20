@@ -67,10 +67,10 @@ export default slice.reducer;
 //     };
 // }
 
-export function getAllReports() {
+export function getAllReports(filter = '') {
     return async (dispatch) => {
         try {
-            const response = await axios.get('/incident_reports');
+            const response = await axios.get(`/incident_reports?filter=${encodeURIComponent(filter)}`);
             dispatch(slice.actions.getAllReportsSuccess(response.data.incident_reports));
         } catch (error) {
             dispatch(slice.actions.hasError(error));
