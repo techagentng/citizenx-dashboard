@@ -25,7 +25,7 @@ const Header = () => {
     const theme = useTheme();
     const dispatch = useDispatch();
     const { drawerOpen } = useSelector((state) => state.menu);
-    const { lgaState: { state, lga } } = useSelector((state) => state.graphs);
+    const { state, lga } = useSelector((state) => state.graphs.lgaState);
     const matchDownMd = useMediaQuery(theme.breakpoints.down('md'));
     const { layout } = useConfig();
     const [, setReportTypes] = React.useState(['Select type']);
