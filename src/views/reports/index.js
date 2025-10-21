@@ -28,7 +28,6 @@ import { visuallyHidden } from '@mui/utils';
 // project imports
 import MainCard from 'ui-component/cards/MainCard';
 // import Chip from 'ui-component/extended/Chip';
-import { useDispatch, useSelector } from 'store';
 
 // assets
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -36,17 +35,12 @@ import FilterListIcon from '@mui/icons-material/FilterListTwoTone';
 import PrintIcon from '@mui/icons-material/PrintTwoTone';
 import FileCopyIcon from '@mui/icons-material/FileCopyTwoTone';
 import SearchIcon from '@mui/icons-material/Search';
-// import VisibilityTwoToneIcon from '@mui/icons-material/VisibilityTwoTone';
 import CheckIcon from '@mui/icons-material/Check';
 import CancelIcon from '@mui/icons-material/Cancel';
 import KeyboardVoiceIcon from '@mui/icons-material/KeyboardVoice';
 import SlideshowIcon from '@mui/icons-material/Slideshow';
 import InsertPhotoIcon from '@mui/icons-material/InsertPhoto';
-// import EditTwoToneIcon from '@mui/icons-material/EditTwoTone';
-import EarningCard from './EarningCard';
-import EarningIcon from 'assets/images/icons/earning.svg';
 import { getFeed } from 'services/feedService';
-import { useState, useEffect } from 'react';
 import { formatDistanceToNow } from 'date-fns';
 import ReviewEdit from './ReviewEdit';
 import ReviewVideo from './ReviewVideo.js';
@@ -207,7 +201,6 @@ EnhancedTableToolbar.propTypes = {
 // main component
 const IncidentReportList = () => {
     const theme = useTheme();
-    const dispatch = useDispatch();
     const [order, setOrder] = React.useState('desc');
     const [orderBy, setOrderBy] = React.useState('created_at'); // Sort by newest first by default
     const [selected, setSelected] = React.useState([]);
