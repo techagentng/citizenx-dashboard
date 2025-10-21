@@ -49,14 +49,14 @@ import ReviewImage from './ReviewImage.js';
 import { deleteReport } from 'services/reportService';
 
 const RelativeTimeCell = ({ timestamp }) => {
-    const date = new Date(timestamp * 1000); // Convert the timestamp to milliseconds
+    const date = new Date(timestamp); // timestamp is already in ISO format
     const relativeTime = formatDistanceToNow(date, { addSuffix: true });
 
     return <TableCell>{relativeTime}</TableCell>;
 };
 
 RelativeTimeCell.propTypes = {
-    timestamp: PropTypes.number.isRequired
+    timestamp: PropTypes.string.isRequired
 };
 
 // table sort
