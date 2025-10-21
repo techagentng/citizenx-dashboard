@@ -29,7 +29,6 @@ import { visuallyHidden } from '@mui/utils';
 import MainCard from 'ui-component/cards/MainCard';
 // import Chip from 'ui-component/extended/Chip';
 import { useDispatch, useSelector } from 'store';
-import { getAllReports } from 'store/slices/reports';
 
 // assets
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -46,7 +45,7 @@ import InsertPhotoIcon from '@mui/icons-material/InsertPhoto';
 // import EditTwoToneIcon from '@mui/icons-material/EditTwoTone';
 import EarningCard from './EarningCard';
 import EarningIcon from 'assets/images/icons/earning.svg';
-import { getAllUserCount, getAllReportsToday } from 'services/userService';
+import { getFeed } from 'services/feedService';
 import { useState, useEffect } from 'react';
 import { formatDistanceToNow } from 'date-fns';
 import ReviewEdit from './ReviewEdit';
@@ -209,8 +208,6 @@ EnhancedTableToolbar.propTypes = {
 const IncidentReportList = () => {
     const theme = useTheme();
     const dispatch = useDispatch();
-    const [userCount, setUserCount] = useState(0);
-    const [todayReportCount, setTodayReportCount] = useState(0);
     const [order, setOrder] = React.useState('desc');
     const [orderBy, setOrderBy] = React.useState('created_at'); // Sort by newest first by default
     const [selected, setSelected] = React.useState([]);
@@ -218,7 +215,6 @@ const IncidentReportList = () => {
     const [rowsPerPage, setRowsPerPage] = React.useState(5);
     const [search, setSearch] = React.useState('');
     const [rows, setRows] = React.useState([]);
-    const { report } = useSelector((state) => state.report);
     const { state: selectedState, lga: selectedLga } = useSelector((state) => state.graphs.lgaState || {});
     const [open, setOpen] = React.useState(false);
     const [openVideo, setOpenVideo] = React.useState(false);
@@ -243,29 +239,18 @@ const IncidentReportList = () => {
 
     // Fetch reports when state, LGA, or search term changes
     React.useEffect(() => {
-        let filter = search || '';
-        
-        // Add state and LGA to filter if they exist
-        const filters = [];
-        if (selectedState && selectedState !== 'Anambra') { // Skip default state
-            filters.push(`state:${selectedState}`);
-        }
-        if (selectedLga && selectedLga !== 'Aguata') { // Skip default LGA
-            filters.push(`lga:${selectedLga}`);
-        }
-        
-        if (filter) {
-            filters.push(filter);
-        }
-        
-        const combinedFilter = filters.join(' ');
-        dispatch(getAllReports(combinedFilter));
-    }, [dispatch, selectedState, selectedLga, search]);
+        const fetchReports = async () => {
+            try {
+                const reports = await getFeed();
+                setRows(reports || []);
+            } catch (error) {
+                console.error('Failed to fetch reports:', error);
+                setRows([]);
+            }
+        };
 
-    // Update rows when report data changes
-    React.useEffect(() => {
-        setRows(report || []);
-    }, [report]);
+        fetchReports();
+    }, [selectedState, selectedLga, search]);
 
     const handleSearch = (event) => {
         const searchTerm = event?.target.value || '';
@@ -323,20 +308,6 @@ const IncidentReportList = () => {
     const isSelected = (id) => selected.indexOf(id) !== -1;
 
     const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
-    useEffect(() => {
-        console.log('Fetching user data, report data, and online users');
-        Promise.all([getAllUserCount(), getAllReportsToday()])
-            .then(([userCountData, todayReportCountData]) => {
-                console.log('User count:', userCountData);
-                console.log('Today report count:', todayReportCountData);
-
-                setUserCount(userCountData);
-                setTodayReportCount(todayReportCountData);
-            })
-            .catch((error) => {
-                console.log(error.message);
-            });
-    }, [setTodayReportCount]);
 
     const handleCloseDialog = () => {
         setOpen(false);
@@ -368,14 +339,6 @@ const IncidentReportList = () => {
         <MainCard title="Manage Reports" content={false}>
             <CardContent>
                 <Grid container justifyContent="space-between" alignItems="center" spacing={2}>
-                    <Grid container spacing={2} sx={{ mt: 4 }}>
-                        <Grid item xs={3}>
-                            <EarningCard count={todayReportCount} detail="Today's Report" icon={EarningIcon} />
-                        </Grid>
-                        <Grid item xs={3}>
-                            <EarningCard count={userCount} detail="Total Users" icon={EarningIcon} />
-                        </Grid>
-                    </Grid>
                     <Grid item xs={12} sm={6} sx={{ textAlign: 'left' }}>
                         <TextField
                             InputProps={{
