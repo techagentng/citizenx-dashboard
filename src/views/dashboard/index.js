@@ -213,11 +213,20 @@ const DashboardPage = () => {
                     <Grid item xs={12} md={4}>
                         {/* Top LGAs View */}
                         <PopularCard
-                            title={`Top Reported Casesxxx In ${selectedState || 'State'}`}
-                            data={reportTypes?.map((type, index) => ({
-                                reportType: selectedLga,
-                                reportCount: reportCounts?.[index] || 0
-                            }))}
+                            title={`Top Reported Cases In ${selectedState || 'State'}`}
+                            data={reportTypes?.map((type, index) => {
+                                const dataItem = {
+                                    reportType: type, // Fixed: should be the actual report type, not selectedLga
+                                    reportCount: reportCounts?.[index] || 0
+                                };
+                                console.log('Dashboard - PopularCard data item:', dataItem);
+                                console.log('Dashboard - reportTypes:', reportTypes);
+                                console.log('Dashboard - reportCounts:', reportCounts);
+                                console.log('Dashboard - selectedLga:', selectedLga);
+                                console.log('Dashboard - selectedState:', selectedState);
+                                return dataItem;
+                            })}
+                            type="reportTypes"
                             totalReportCount={reportCounts?.reduce((a, b) => a + b, 0) || 0}
                         />
                     </Grid>

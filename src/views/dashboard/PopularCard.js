@@ -18,6 +18,10 @@ const PopularCard = ({ isLoading, title, data = [], type, totalReportCount }) =>
     const [showAll, setShowAll] = useState(false);  // State to toggle the visibility of the entire list
     const [totalStateReports, setTotalStateReports] = useState(0);
 
+    // Debug logging
+    console.log('PopularCard - Props:', { isLoading, title, data, type, totalReportCount });
+    console.log('PopularCard - Data items:', data);
+
     useEffect(() => {
         getTopStateReportCounts()
             .then((data) => {
@@ -145,48 +149,51 @@ const PopularCard = ({ isLoading, title, data = [], type, totalReportCount }) =>
                         </Grid>
                         <Divider sx={{ my: 1.5 }} />
                         {itemsToDisplay && itemsToDisplay.length > 0 ? (
-                            itemsToDisplay.map((item, index) => (
-                                <Grid container direction="column" key={index}>
-                                    <Grid item>
-                                        <Grid container alignItems="center" justifyContent="space-between">
-                                            <Grid item>
-                                                <Typography variant="subtitle1" color="inherit">
-                                                    {type === 'reportTypes'
-                                                        ? item.reportType
-                                                        : type === 'states'
-                                                          ? item.stateName
-                                                          : item.lgaName}
-                                                </Typography>
-                                            </Grid>
-                                            <Grid item>
-                                                <Grid container alignItems="center" justifyContent="space-between">
-                                                    <Grid item>
-                                                        <Typography variant="subtitle1" color="inherit">
-                                                            {type === 'reportTypes' ? item.reportCount : item.reportCount}
-                                                        </Typography>
-                                                    </Grid>
-                                                    <Grid item>
-                                                        <Avatar
-                                                            variant="rounded"
-                                                            sx={{
-                                                                width: 16,
-                                                                height: 16,
-                                                                borderRadius: '5px',
-                                                                backgroundColor: theme.palette.orange.light,
-                                                                color: theme.palette.orange.dark,
-                                                                ml: 2
-                                                            }}
-                                                        >
-                                                            <KeyboardArrowDownOutlinedIcon fontSize="small" color="inherit" />
-                                                        </Avatar>
+                            itemsToDisplay.map((item, index) => {
+                                console.log('PopularCard - Rendering item:', item, 'with type:', type);
+                                return (
+                                    <Grid container direction="column" key={index}>
+                                        <Grid item>
+                                            <Grid container alignItems="center" justifyContent="space-between">
+                                                <Grid item>
+                                                    <Typography variant="subtitle1" color="inherit">
+                                                        {type === 'reportTypes'
+                                                            ? item.reportType
+                                                            : type === 'states'
+                                                              ? item.stateName
+                                                              : item.lgaName}
+                                                    </Typography>
+                                                </Grid>
+                                                <Grid item>
+                                                    <Grid container alignItems="center" justifyContent="space-between">
+                                                        <Grid item>
+                                                            <Typography variant="subtitle1" color="inherit">
+                                                                {type === 'reportTypes' ? item.reportCount : item.reportCount}
+                                                            </Typography>
+                                                        </Grid>
+                                                        <Grid item>
+                                                            <Avatar
+                                                                variant="rounded"
+                                                                sx={{
+                                                                    width: 16,
+                                                                    height: 16,
+                                                                    borderRadius: '5px',
+                                                                    backgroundColor: theme.palette.orange.light,
+                                                                    color: theme.palette.orange.dark,
+                                                                    ml: 2
+                                                                }}
+                                                            >
+                                                                <KeyboardArrowDownOutlinedIcon fontSize="small" color="inherit" />
+                                                            </Avatar>
+                                                        </Grid>
                                                     </Grid>
                                                 </Grid>
                                             </Grid>
                                         </Grid>
+                                        <Divider sx={{ my: 1.5 }} />
                                     </Grid>
-                                    <Divider sx={{ my: 1.5 }} />
-                                </Grid>
-                            ))
+                                );
+                            })
                         ) : (
                             <Grid container spacing={2} justifyContent="center" alignItems="flex-end">
                                 <Grid item xs={12}>
