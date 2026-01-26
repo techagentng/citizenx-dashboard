@@ -7,7 +7,7 @@ import SkeletonEarningCard from 'ui-component/cards/Skeleton/EarningCard';
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 
 const CardWrapper = styled(MainCard)(({ theme }) => ({
-    backgroundColor: theme.palette.mode === 'dark' ? theme.palette.dark.dark : theme.palette.secondary.dark,
+    backgroundColor: theme.palette.mode === 'dark' ? theme.palette.dark.dark : theme.palette.primary.main,
     color: '#fff',
     overflow: 'hidden',
     position: 'relative',
@@ -16,7 +16,7 @@ const CardWrapper = styled(MainCard)(({ theme }) => ({
         position: 'absolute',
         width: 210,
         height: 210,
-        background: '#104833',
+        background: '#1976d2',
         borderRadius: '50%',
         top: -85,
         right: -95,
@@ -40,8 +40,8 @@ const CardWrapper = styled(MainCard)(({ theme }) => ({
         height: 210,
         background:
             theme.palette.mode === 'dark'
-                ? `linear-gradient(140.9deg, ${theme.palette.secondary.dark} -14.02%, rgba(144, 202, 249, 0) 85.50%)`
-                : theme.palette.secondary[800] || '#1976d2', // Fallback color
+                ? `linear-gradient(140.9deg, ${theme.palette.primary.dark} -14.02%, rgba(144, 202, 249, 0) 85.50%)`
+                : theme.palette.primary[800] || '#1565c0', // Fallback color
         borderRadius: '50%',
         top: -125,
         right: -15,
@@ -115,8 +115,8 @@ const EarningCard = ({ count, details, isLoading }) => {
                                                 cursor: 'pointer',
                                                 width: isMobile ? 24 : 32,
                                                 height: isMobile ? 24 : 32,
-                                                backgroundColor: theme.palette.secondary[200] || '#e0e0e0', // Fallback color
-                                                color: theme.palette.secondary.dark || '#000' // Fallback color
+                                                backgroundColor: theme.palette.primary[200] || '#90caf9', // Fallback color
+                                                color: theme.palette.primary.dark || '#1565c0' // Fallback color
                                             }}
                                         >
                                             <ArrowUpwardIcon
@@ -135,7 +135,7 @@ const EarningCard = ({ count, details, isLoading }) => {
                                         color:
                                             theme.palette.mode === 'dark'
                                                 ? theme.palette.text.secondary
-                                                : theme.palette.secondary[200] || '#e0e0e0', // Fallback color
+                                                : theme.palette.primary[200] || '#90caf9', // Fallback color
                                         lineHeight: 1.3
                                     }}
                                 >
