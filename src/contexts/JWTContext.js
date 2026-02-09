@@ -256,7 +256,7 @@ export const JWTProvider = ({ children }) => {
             return response.data;
         } catch (error) {
             console.error('Error while resetting password:', error.response?.data || error.message);
-            throw new Error(error.response?.data?.message || 'Failed to send password reset email.');
+            throw new Error(error.response?.data?.errors || error.response?.data?.message || 'Failed to send password reset email.');
         }
     };
     
