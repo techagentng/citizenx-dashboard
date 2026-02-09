@@ -256,7 +256,14 @@ export const JWTProvider = ({ children }) => {
             return response.data;
         } catch (error) {
             console.error('Error while resetting password:', error.response?.data || error.message);
-            throw new Error(error.response?.data?.errors || error.response?.data?.message || 'Failed to send password reset email.');
+            console.error('Full error object:', JSON.stringify(error, null, 2));
+            console.error('Error response data:', JSON.stringify(error.response?.data, null, 2));
+            console.error('Error response data.errors:', error.response?.data?.errors);
+            console.error('Error response data.message:', error.response?.data?.message);
+            
+            const errorMessage = error.response?.data?.errors || error.response?.data?.message || 'Failed to send password reset email.';
+            console.error('Final error message to display:', errorMessage);
+            throw new Error(errorMessage);
         }
     };
     
