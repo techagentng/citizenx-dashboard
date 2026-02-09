@@ -255,13 +255,11 @@ export const JWTProvider = ({ children }) => {
             console.log('Forgot password response:', response.data);
             return response.data;
         } catch (error) {
-            console.error('Error while resetting password:', error.response?.data || error.message);
-            console.error('Full error object:', JSON.stringify(error, null, 2));
-            console.error('Error response data:', JSON.stringify(error.response?.data, null, 2));
-            console.error('Error response data.errors:', error.response?.data?.errors);
-            console.error('Error response data.message:', error.response?.data?.message);
+            console.error('Error while resetting password:', error);
             
-            const errorMessage = error.response?.data?.errors || error.response?.data?.message || 'Failed to send password reset email.';
+            // The error response is directly in the error object, not in error.response.data
+            const errorData = error.data || error;
+            const errorMessage = errorData?.errors || errorData?.message || 'Failed to send password reset email.';
             console.error('Final error message to display:', errorMessage);
             throw new Error(errorMessage);
         }
