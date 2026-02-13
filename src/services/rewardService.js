@@ -19,7 +19,13 @@ export const getAllRewardCount = () => {
             })
             .catch((error) => {
                 console.log('API error:', error); // Log any errors
-                reject(new Error(error.response?.data?.message || 'An error occurred while fetching rewards count'));
+                
+                // Handle authentication errors specifically
+                if (error.response?.status === 401 || error.response?.status === 403) {
+                    reject(new Error('Authentication required to fetch rewards'));
+                } else {
+                    reject(new Error(error.response?.data?.message || error.message || 'An error occurred while fetching rewards count'));
+                }
             });
     });
 };

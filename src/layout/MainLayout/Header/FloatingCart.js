@@ -18,17 +18,26 @@ const FloatingCart = () => {
 
     useEffect(() => {
         // Fetch the reward count on component mount
-        getAllRewardCount()
-            .then((count) => {
-                console.log('Reward count:', count); 
-                dispatch(setTotalQuantity(count)); 
-                setLoading(false);
-            })
-            .catch((err) => {
-                console.error('Error fetching reward count:', err);
-                setError(err.message); 
-                setLoading(false);
-            });
+        const serviceToken = localStorage.getItem('serviceToken');
+        
+        // Only fetch if user has a token (is authenticated)
+        if (serviceToken) {
+            getAllRewardCount()
+                .then((count) => {
+                    console.log('Reward count:', count); 
+                    dispatch(setTotalQuantity(count)); 
+                    setLoading(false);
+                })
+                .catch((err) => {
+                    console.error('Error fetching reward count:', err);
+                    setError(err.message); 
+                    setLoading(false);
+                });
+        } else {
+            // No token found, user is not authenticated
+            setLoading(false);
+            dispatch(setTotalQuantity(0)); // Set to 0 for unauthenticated users
+        }
     }, [dispatch]); 
 
     if (loading) {
