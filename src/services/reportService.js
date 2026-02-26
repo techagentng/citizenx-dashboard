@@ -348,7 +348,18 @@ export const getGovernorDetails = (state) => {
                 }
             })
             .catch((error) => {
-                reject(error);
+                console.error('Error fetching governor details:', error);
+                
+                // Handle different types of errors
+                if (error.response?.status === 500) {
+                    reject(new Error('The data for this state is currently unavailable. Please try again later.'));
+                } else if (error.response?.status === 404) {
+                    reject(new Error('No data found for this state.'));
+                } else if (error.response?.status === 401 || error.response?.status === 403) {
+                    reject(new Error('Authentication required to access this data.'));
+                } else {
+                    reject(new Error(error.response?.data?.message || error.message || 'Failed to fetch governor details.'));
+                }
             });
     });
 };

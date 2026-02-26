@@ -36,7 +36,7 @@ const FloatingCart = () => {
         } else {
             // No token found, user is not authenticated
             setLoading(false);
-            dispatch(setTotalQuantity(0)); // Set to 0 for unauthenticated users
+            dispatch(setTotalQuantity(0)); 
         }
     }, [dispatch]); 
 

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { getSubReportsByCategory, getGovernorDetails } from 'services/reportService';
-import { Card, CardContent, Grid, Typography } from '@mui/material';
+import { Card, CardContent, Grid, Typography, Box, Button, Alert } from '@mui/material';
 import MainCard from 'ui-component/cards/MainCard';
 import BarChart from './barchart';
 import PieChart from './piechart';
@@ -13,14 +13,16 @@ import {
     TableBody,
     TableCell,
     TableContainer,
+    TableHead,
     TableRow,
     Paper,
     CircularProgress,
-  } from '@mui/material';
+} from '@mui/material';
 
 const SubReportDetailsPage = () => {
     const [governor, setGovernor] = useState(null); // Initialize as null for better checking
     const [subReports, setSubReports] = useState([]);
+    const [rawSubReports, setRawSubReports] = useState([]); // Store raw data with descriptions
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const location = useLocation();
@@ -52,6 +54,9 @@ const SubReportDetailsPage = () => {
             setLoading(true);
             getSubReportsByCategory(reportType)  
                 .then((data) => {
+                    // Store raw data with descriptions
+                    setRawSubReports(data);
+                    
                     const subReportsCount = data.reduce((acc, report) => {
                         acc[report.sub_report_type] = (acc[report.sub_report_type] || 0) + 1;
                         return acc;
@@ -71,6 +76,49 @@ const SubReportDetailsPage = () => {
                 });
         }
     }, [reportType]);  
+
+    if (loading) {
+        return (
+            <Box display="flex" justifyContent="center" alignItems="center" minHeight="400px">
+                <CircularProgress />
+                <Typography variant="h6" sx={{ ml: 2 }}>
+                    Loading report details...
+                </Typography>
+            </Box>
+        );
+    }
+
+    if (error) {
+        return (
+            <Box display="flex" flexDirection="column" alignItems="center" justifyContent="center" minHeight="400px" p={3}>
+                <Alert severity="error" sx={{ mb: 3, maxWidth: 600 }}>
+                    <Typography variant="h6" gutterBottom>
+                        Data Not Available
+                    </Typography>
+                    <Typography variant="body1">
+                        The data for this report has been removed or is no longer available. 
+                        This could be due to maintenance, data updates, or temporary unavailability.
+                    </Typography>
+                    <Typography variant="body2" sx={{ mt: 1 }}>
+                        Error details: {error}
+                    </Typography>
+                </Alert>
+                <Button 
+                    variant="contained" 
+                    onClick={() => window.history.back()}
+                    sx={{ mr: 2 }}
+                >
+                    Go Back
+                </Button>
+                <Button 
+                    variant="outlined" 
+                    onClick={() => window.location.reload()}
+                >
+                    Try Again
+                </Button>
+            </Box>
+        );
+    }
 
     return (
         <div>
@@ -270,6 +318,42 @@ const SubReportDetailsPage = () => {
                 </TableBody>
             </Table>
         </TableContainer>
+      )}
+
+      {/* Detailed Sub-Reports Table with Descriptions */}
+      {!loading && !error && rawSubReports.length > 0 && (
+        <Box sx={{ mt: 4 }}>
+          <Typography variant="h5" gutterBottom>
+            Detailed Sub-Reports for <strong>{reportType}</strong>
+          </Typography>
+          <TableContainer component={Paper} sx={{ maxWidth: '100%' }}>
+            <Table>
+              <TableHead>
+                <TableRow>
+                  <TableCell><strong>Sub-Report Type</strong></TableCell>
+                  <TableCell><strong>Description</strong></TableCell>
+                  <TableCell><strong>Report ID</strong></TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {rawSubReports.map((report, index) => (
+                  <TableRow key={report.id || index}>
+                    <TableCell>{report.sub_report_type || 'N/A'}</TableCell>
+                    <TableCell>{report.description || 'No description available'}</TableCell>
+                    <TableCell>
+                      <Typography variant="body2" sx={{ fontFamily: 'monospace' }}>
+                        {report.incident_report_id ? report.incident_report_id.substring(0, 8) + '...' : 'N/A'}
+                      </Typography>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+          <Typography variant="caption" sx={{ mt: 1, display: 'block' }}>
+            Showing {rawSubReports.length} sub-report(s) for {reportType}
+          </Typography>
+        </Box>
       )}
     </div>
         </div>
