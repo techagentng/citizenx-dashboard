@@ -34,7 +34,7 @@ const PieChart = ({ reportTypes, reportCounts, currentState }) => {
     const checkDataAvailability = async (reportType, reportCount) => {
         setCheckingData(true);
         try {
-            const data = await getGovernorDetails(currentState);
+            await getGovernorDetails(currentState);
             setDataAvailable(true);
             setCheckingData(false);
             
