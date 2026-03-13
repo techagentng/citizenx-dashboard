@@ -196,16 +196,21 @@ export const getTotalReportCount = () => {
     });
 };
 
-export const getSubReportsByCategory = (category) => {
+export const getSubReportsByCategory = (category, state) => {
     return new Promise((resolve, reject) => {
         const serviceToken = localStorage.getItem('serviceToken');
         if (!serviceToken) {
             return reject(new Error('No token found'));
         }
 
+        const params = { category };
+        if (state) {
+            params.state_name = state;
+        }
+
         axios
             .get(`${process.env.REACT_APP_API_URL}/report/sub_reports`, {
-                params: { category },
+                params,
                 headers: {
                     Authorization: `Bearer ${serviceToken}`
                 }

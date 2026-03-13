@@ -54,7 +54,8 @@ const SubReportDetailsPage = () => {
     useEffect(() => {
         if (reportType) {  
             setLoading(true);
-            getSubReportsByCategory(reportType)  
+            const queryState = geographicalState || selectedState;
+            getSubReportsByCategory(reportType, queryState)  
                 .then((data) => {
                     // Store raw data with descriptions
                     setRawSubReports(data);
@@ -78,7 +79,7 @@ const SubReportDetailsPage = () => {
                     setLoading(false);
                 });
         }
-    }, [reportType]);  
+    }, [reportType, geographicalState, selectedState]);  
 
     // Pagination logic
     const totalPages = Math.ceil(rawSubReports.length / itemsPerPage);
