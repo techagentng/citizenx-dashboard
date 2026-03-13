@@ -278,6 +278,7 @@ const SubReportDetailsPage = () => {
                                 <PieChart
                                     reportTypes={subReports.map((report) => report.sub_report_type)}
                                     reportCounts={subReports.map((report) => report.count)}
+                                    currentState={geographicalState || selectedState}
                                 />
                             </Grid>
                         </Grid>
