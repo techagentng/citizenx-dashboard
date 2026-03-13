@@ -343,7 +343,7 @@ const SubReportDetailsPage = () => {
                   <TableCell><strong>Description</strong></TableCell>
                   <TableCell><strong>State</strong></TableCell>
                   <TableCell><strong>LGA</strong></TableCell>
-                  <TableCell><strong>Report ID</strong></TableCell>
+                  <TableCell><strong>Date of Incidence</strong></TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -354,8 +354,10 @@ const SubReportDetailsPage = () => {
                     <TableCell>{report.ReportType?.state_name || 'N/A'}</TableCell>
                     <TableCell>{report.ReportType?.lga_name || 'N/A'}</TableCell>
                     <TableCell>
-                      <Typography variant="body2" sx={{ fontFamily: 'monospace' }}>
-                        {report.incident_report_id ? report.incident_report_id.substring(0, 8) + '...' : 'N/A'}
+                      <Typography variant="body2">
+                        {report.ReportType?.date_of_incidence 
+                          ? new Date(report.ReportType.date_of_incidence).toLocaleDateString() 
+                          : 'N/A'}
                       </Typography>
                     </TableCell>
                   </TableRow>
