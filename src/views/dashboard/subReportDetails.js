@@ -25,6 +25,8 @@ const SubReportDetailsPage = () => {
     const [rawSubReports, setRawSubReports] = useState([]); // Store raw data with descriptions
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [itemsPerPage] = useState(10); // Items per page
     const location = useLocation();
     const { state: selectedState, lga: selectedLga } = useSelector((state) => state.graphs.lgaState);
     const { 
@@ -56,6 +58,7 @@ const SubReportDetailsPage = () => {
                 .then((data) => {
                     // Store raw data with descriptions
                     setRawSubReports(data);
+                    setCurrentPage(1); // Reset to first page when new data loads
                     
                     const subReportsCount = data.reduce((acc, report) => {
                         acc[report.sub_report_type] = (acc[report.sub_report_type] || 0) + 1;
@@ -76,6 +79,12 @@ const SubReportDetailsPage = () => {
                 });
         }
     }, [reportType]);  
+
+    // Pagination logic
+    const totalPages = Math.ceil(rawSubReports.length / itemsPerPage);
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const endIndex = startIndex + itemsPerPage;
+    const currentItems = rawSubReports.slice(startIndex, endIndex);  
 
     if (loading) {
         return (
@@ -332,14 +341,18 @@ const SubReportDetailsPage = () => {
                 <TableRow>
                   <TableCell><strong>Sub-Report Type</strong></TableCell>
                   <TableCell><strong>Description</strong></TableCell>
+                  <TableCell><strong>State</strong></TableCell>
+                  <TableCell><strong>LGA</strong></TableCell>
                   <TableCell><strong>Report ID</strong></TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
-                {rawSubReports.map((report, index) => (
+                {currentItems.map((report, index) => (
                   <TableRow key={report.id || index}>
                     <TableCell>{report.sub_report_type || 'N/A'}</TableCell>
                     <TableCell>{report.description || 'No description available'}</TableCell>
+                    <TableCell>{report.ReportType?.state_name || 'N/A'}</TableCell>
+                    <TableCell>{report.ReportType?.lga_name || 'N/A'}</TableCell>
                     <TableCell>
                       <Typography variant="body2" sx={{ fontFamily: 'monospace' }}>
                         {report.incident_report_id ? report.incident_report_id.substring(0, 8) + '...' : 'N/A'}
@@ -350,9 +363,72 @@ const SubReportDetailsPage = () => {
               </TableBody>
             </Table>
           </TableContainer>
-          <Typography variant="caption" sx={{ mt: 1, display: 'block' }}>
-            Showing {rawSubReports.length} sub-report(s) for {reportType}
-          </Typography>
+
+          {/* Pagination Controls */}
+          {totalPages > 1 && (
+            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mt: 2, flexWrap: 'wrap', gap: 1 }}>
+              <Typography variant="body2" color="text.secondary">
+                Showing {startIndex + 1}-{Math.min(endIndex, rawSubReports.length)} of {rawSubReports.length} items
+              </Typography>
+              
+              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                {/* Previous Button */}
+                <Button
+                  onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+                  disabled={currentPage === 1}
+                  variant="outlined"
+                  size="small"
+                  sx={{ minWidth: '40px', height: '40px', p: 0 }}
+                >
+                  &lt;
+                </Button>
+
+                {/* Page Numbers */}
+                {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
+                  let pageNum;
+                  if (totalPages <= 5) {
+                    pageNum = i + 1;
+                  } else if (currentPage <= 3) {
+                    pageNum = i + 1;
+                  } else if (currentPage >= totalPages - 2) {
+                    pageNum = totalPages - 4 + i;
+                  } else {
+                    pageNum = currentPage - 2 + i;
+                  }
+                  
+                  if (pageNum >= 1 && pageNum <= totalPages) {
+                    return (
+                      <Button
+                        key={pageNum}
+                        onClick={() => setCurrentPage(pageNum)}
+                        variant={currentPage === pageNum ? "contained" : "outlined"}
+                        size="small"
+                        sx={{ minWidth: '40px', height: '40px', p: 0 }}
+                      >
+                        {pageNum}
+                      </Button>
+                    );
+                  }
+                  return null;
+                })}
+
+                {/* Next Button */}
+                <Button
+                  onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+                  disabled={currentPage === totalPages}
+                  variant="outlined"
+                  size="small"
+                  sx={{ minWidth: '40px', height: '40px', p: 0 }}
+                >
+                  &gt;
+                </Button>
+              </Box>
+
+              <Typography variant="body2" color="text.secondary">
+                Page {currentPage} of {totalPages}
+              </Typography>
+            </Box>
+          )}
         </Box>
       )}
     </div>
