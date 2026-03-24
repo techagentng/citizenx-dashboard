@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { getSubReportsByCategory, getGovernorDetails } from 'services/reportService';
+import { getIncidentReportsByCategory } from 'services/getIncidentReports';
 import { Card, CardContent, Grid, Typography, Box, Button, Alert } from '@mui/material';
 import MainCard from 'ui-component/cards/MainCard';
 import BarChart from './barchart';
@@ -55,7 +56,7 @@ const SubReportDetailsPage = () => {
         if (reportType) {  
             setLoading(true);
             const queryState = geographicalState || selectedState;
-            getSubReportsByCategory(reportType, queryState)  
+            getIncidentReportsByCategory(reportType, queryState)  
                 .then((data) => {
                     // Store raw data with descriptions
                     setRawSubReports(data);
@@ -353,12 +354,12 @@ const SubReportDetailsPage = () => {
                   <TableRow key={report.id || index}>
                     <TableCell>{report.sub_report_type || 'N/A'}</TableCell>
                     <TableCell>{report.description || 'No description available'}</TableCell>
-                    <TableCell>{report.ReportType?.state_name || 'N/A'}</TableCell>
-                    <TableCell>{report.ReportType?.lga_name || 'N/A'}</TableCell>
+                    <TableCell>{report.state_name || 'N/A'}</TableCell>
+                    <TableCell>{report.lga_name || 'N/A'}</TableCell>
                     <TableCell>
                       <Typography variant="body2">
-                        {report.ReportType?.date_of_incidence 
-                          ? new Date(report.ReportType.date_of_incidence).toLocaleDateString() 
+                        {report.date_of_incidence 
+                          ? new Date(report.date_of_incidence).toLocaleDateString() 
                           : 'N/A'}
                       </Typography>
                     </TableCell>
