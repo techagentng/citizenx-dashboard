@@ -193,6 +193,37 @@ const SubReportDetailsPage = () => {
                 </Grid>
             </Grid>
 
+            {/* ================= SUMMARY ================= */}
+            {rawSubReports.length > 0 && (
+                <Card sx={{ p: 2, mb: 3 }}>
+                    <Typography variant="h6" gutterBottom>
+                        Report Summary
+                    </Typography>
+                    <TableContainer>
+                        <Table>
+                            <TableBody>
+                                <TableRow>
+                                    <TableCell><strong>Sub-Report Type</strong></TableCell>
+                                    <TableCell>{rawSubReports[0]?.sub_report_type || 'N/A'}</TableCell>
+                                </TableRow>
+                                <TableRow>
+                                    <TableCell><strong>State</strong></TableCell>
+                                    <TableCell>{rawSubReports[0]?.state_name || 'N/A'}</TableCell>
+                                </TableRow>
+                                <TableRow>
+                                    <TableCell><strong>LGA</strong></TableCell>
+                                    <TableCell>{rawSubReports[0]?.lga_name || 'N/A'}</TableCell>
+                                </TableRow>
+                                <TableRow>
+                                    <TableCell><strong>Total Reports</strong></TableCell>
+                                    <TableCell>{rawSubReports.length}</TableCell>
+                                </TableRow>
+                            </TableBody>
+                        </Table>
+                    </TableContainer>
+                </Card>
+            )}
+
             {/* ================= TABLE ================= */}
             <Box mt={4}>
                 <Typography variant="h5" gutterBottom>
@@ -203,23 +234,47 @@ const SubReportDetailsPage = () => {
                     <Table>
                         <TableHead>
                             <TableRow>
-                                <TableCell>#</TableCell>
-                                <TableCell>Sub Report Type</TableCell>
-                                <TableCell>Description</TableCell>
+                                <TableCell width="50">#</TableCell>
+                                <TableCell width="150">Sub Report Type</TableCell>
+                                <TableCell width="300">Description</TableCell>
+                                <TableCell width="120">State</TableCell>
+                                <TableCell width="120">LGA</TableCell>
+                                <TableCell width="120">Date of Incidence</TableCell>
                             </TableRow>
                         </TableHead>
 
                         <TableBody>
                             {currentItems.map((item, index) => (
-                                <TableRow key={index}>
+                                <TableRow key={index} hover>
                                     <TableCell>
                                         {startIndex + index + 1}
                                     </TableCell>
                                     <TableCell>
-                                        {item.sub_report_type}
+                                        <Typography variant="body2" fontWeight="medium">
+                                            {item.sub_report_type || 'N/A'}
+                                        </Typography>
                                     </TableCell>
                                     <TableCell>
-                                        {item.description || 'N/A'}
+                                        <Typography variant="body2" sx={{ maxWidth: 300, wordBreak: 'break-word' }}>
+                                            {item.description || 'No description available'}
+                                        </Typography>
+                                    </TableCell>
+                                    <TableCell>
+                                        <Typography variant="body2">
+                                            {item.state_name || 'N/A'}
+                                        </Typography>
+                                    </TableCell>
+                                    <TableCell>
+                                        <Typography variant="body2">
+                                            {item.lga_name || 'N/A'}
+                                        </Typography>
+                                    </TableCell>
+                                    <TableCell>
+                                        <Typography variant="body2">
+                                            {item.date_of_incidence 
+                                                ? new Date(item.date_of_incidence).toLocaleDateString() 
+                                                : 'N/A'}
+                                        </Typography>
                                     </TableCell>
                                 </TableRow>
                             ))}
