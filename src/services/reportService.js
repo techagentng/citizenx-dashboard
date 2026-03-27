@@ -118,6 +118,136 @@ export const getBarChartData = (requestBody) => {
     });
 };
 
+export const getComparisonData = (requestBody) => {
+    return new Promise((resolve, reject) => {
+        const serviceToken = localStorage.getItem('serviceToken');
+        if (!serviceToken) {
+            return reject(new Error('No token found'));
+        }
+
+        axios
+            .post(`${process.env.REACT_APP_API_URL}/comparison/reports`, requestBody, {
+                headers: {
+                    Authorization: `Bearer ${serviceToken}`,
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then((response) => {
+                if (response && response.data) {
+                    if (response.data.success) {
+                        resolve(response.data);
+                    } else {
+                        // Handle backend error responses
+                        const errorMsg = response.data.error?.message || 'Comparison failed';
+                        reject(new Error(errorMsg));
+                    }
+                } else {
+                    reject(new Error('No comparison data found'));
+                }
+            })
+            .catch((error) => {
+                if (error.response && error.response.status === 404) {
+                    // Fallback to old endpoint if new one doesn't exist yet
+                    console.log('New comparison endpoint not found, falling back to legacy endpoint...');
+                    
+                    axios
+                        .post(`${process.env.REACT_APP_API_URL}/report-type/states`, {
+                            report_types: [requestBody.report_type],
+                            states: requestBody.locations
+                                .filter(loc => loc.type === 'state')
+                                .map(loc => loc.name)
+                        }, {
+                            headers: {
+                                Authorization: `Bearer ${serviceToken}`,
+                                'Content-Type': 'application/json'
+                            }
+                        })
+                        .then((fallbackResponse) => {
+                            if (fallbackResponse && fallbackResponse.data) {
+                                // Transform old data format to new format
+                                const transformedData = transformLegacyData(fallbackResponse.data, requestBody);
+                                resolve({ success: true, data: transformedData });
+                            } else {
+                                reject(new Error('No comparison data found'));
+                            }
+                        })
+                        .catch((fallbackError) => {
+                            reject(fallbackError);
+                        });
+                } else if (error.response && error.response.data) {
+                    // Handle backend validation errors
+                    const backendError = error.response.data;
+                    const errorMsg = backendError.error?.message || backendError.message || 'Comparison request failed';
+                    reject(new Error(errorMsg));
+                } else {
+                    reject(error);
+                }
+            });
+    });
+};
+
+// Helper function to transform legacy data format
+const transformLegacyData = (legacyData, requestBody) => {
+    const locations = requestBody.locations.map(location => {
+        const locationData = legacyData.find(item => item.state_name === location.name);
+        return {
+            name: location.name,
+            type: location.type,
+            total_reports: locationData ? locationData.report_count : 0,
+            daily_average: locationData ? (locationData.report_count / 30).toFixed(1) : 0,
+            trend: 'stable', // Default trend for legacy data
+            trend_percentage: 0,
+            time_series: [], // Legacy data doesn't have time series
+            sub_report_breakdown: [] // Legacy data doesn't have sub-report breakdown
+        };
+    });
+
+    return {
+        comparison_id: `legacy_${Date.now()}`,
+        report_type: requestBody.report_type,
+        locations,
+        insights: generateBasicInsights(locations),
+        metadata: {
+            total_locations: locations.length,
+            date_range: requestBody.date_range,
+            generated_at: new Date().toISOString()
+        }
+    };
+};
+
+// Helper function to generate basic insights
+const generateBasicInsights = (locations) => {
+    const insights = [];
+    
+    if (locations.length > 0) {
+        // Find highest incidence
+        const highest = locations.reduce((prev, current) => 
+            (prev.total_reports > current.total_reports) ? prev : current
+        );
+        insights.push({
+            type: 'highest_incidence',
+            location: highest.name,
+            value: highest.total_reports,
+            description: `${highest.name} has the highest number of reports`
+        });
+
+        // Find lowest incidence
+        const lowest = locations.reduce((prev, current) => 
+            (prev.total_reports < current.total_reports) ? prev : current
+        );
+        if (highest.name !== lowest.name) {
+            insights.push({
+                type: 'lowest_incidence',
+                location: lowest.name,
+                value: lowest.total_reports,
+                description: `${lowest.name} has the lowest number of reports`
+            });
+        }
+    }
+    
+    return insights;
+};
+
 export const getCategories = () => {
     return new Promise((resolve, reject) => {
         const serviceToken = localStorage.getItem('serviceToken');

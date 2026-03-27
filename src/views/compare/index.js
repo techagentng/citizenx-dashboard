@@ -1,14 +1,14 @@
 import React from 'react';
 import { Grid } from '@mui/material';
 import MainCard from 'ui-component/cards/MainCard';
-import CompareForms from '../dashboard/CompareForms';
+import EnhancedComparison from './EnhancedComparison';
 
 const CompareReportsPage = () => {
     return (
-        <MainCard title="Compare reports">
+        <MainCard title="Compare Reports">
             <Grid container spacing={2} style={{ width: '100%' }}>
                 <Grid item xs={12}>
-                    <CompareForms />
+                    <EnhancedComparison />
                 </Grid>
             </Grid>
         </MainCard>
