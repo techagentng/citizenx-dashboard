@@ -6,7 +6,6 @@ import {
     Typography,
     Button,
     Box,
-    Paper,
     Chip,
     IconButton,
     Select,
@@ -244,7 +243,7 @@ const EnhancedComparison = () => {
                                             </IconButton>
                                         </Box>
 
-                                        {locations.map((location, index) => (
+                                        {locations.map((location) => (
                                             <Box key={location.id} sx={{ mb: 2, p: 2, border: '1px solid #e0e0e0', borderRadius: 1 }}>
                                                 <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1 }}>
                                                     <Typography variant="subtitle2">{location.label}</Typography>
