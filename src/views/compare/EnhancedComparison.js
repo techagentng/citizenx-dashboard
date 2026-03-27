@@ -48,17 +48,49 @@ const EnhancedComparison = () => {
     const [states, setStates] = useState([]);
     const [comparisonData, setComparisonData] = useState(null);
     const [loading, setLoading] = useState(false);
+    const [dataLoading, setDataLoading] = useState(true);
     const [error, setError] = useState('');
 
     useEffect(() => {
+        setDataLoading(true);
+        
         // Fetch categories and states on component mount
-        getCategories()
-            .then(data => setCategories(data))
-            .catch(err => setError('Failed to fetch categories'));
-
-        getStates()
-            .then(data => setStates(data.states || []))
-            .catch(err => setError('Failed to fetch states'));
+        Promise.all([
+            getCategories().catch(err => {
+                console.error('Failed to fetch categories:', err);
+                return [];
+            }),
+            getStates().catch(err => {
+                console.error('Failed to fetch states:', err);
+                return [];
+            })
+        ])
+        .then(([categoriesData, statesData]) => {
+            console.log('Categories response:', categoriesData);
+            console.log('States response:', statesData);
+            
+            // Set categories
+            setCategories(categoriesData || []);
+            
+            // Handle different states response formats
+            if (statesData && statesData.states) {
+                setStates(statesData.states);
+            } else if (statesData && Array.isArray(statesData)) {
+                setStates(statesData);
+            } else if (statesData && statesData.data && Array.isArray(statesData.data)) {
+                setStates(statesData.data);
+            } else {
+                console.warn('Unexpected states format:', statesData);
+                setStates([]);
+            }
+        })
+        .catch(err => {
+            console.error('Data loading error:', err);
+            setError('Failed to load comparison data');
+        })
+        .finally(() => {
+            setDataLoading(false);
+        });
     }, []);
 
     const addLocation = () => {
@@ -144,260 +176,285 @@ const EnhancedComparison = () => {
                 </Box>
 
                 {/* Configuration Section */}
-                <Grid container spacing={3} sx={{ mb: 4 }}>
-                    {/* Report Type Selection */}
-                    <Grid item xs={12} md={3}>
-                        <Card sx={{ height: '100%' }}>
-                            <CardContent>
-                                <Typography variant="h6" gutterBottom>
-                                    <Assessment sx={{ verticalAlign: 'middle', mr: 1 }} />
-                                    Report Type
-                                </Typography>
-                                <FormControl fullWidth>
-                                    <InputLabel>Select Report Type</InputLabel>
-                                    <Select
-                                        value={reportType}
-                                        onChange={(e) => setReportType(e.target.value)}
-                                        label="Select Report Type"
-                                    >
-                                        {categories.map(category => (
-                                            <MenuItem key={category} value={category}>
-                                                {category}
-                                            </MenuItem>
-                                        ))}
-                                    </Select>
-                                </FormControl>
-                            </CardContent>
-                        </Card>
-                    </Grid>
+                {dataLoading ? (
+                    <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '400px' }}>
+                        <CircularProgress />
+                        <Typography sx={{ ml: 2 }}>Loading comparison data...</Typography>
+                    </Box>
+                ) : (
+                    <>
+                        <Grid container spacing={3} sx={{ mb: 4 }}>
+                            {/* Debug Info */}
+                            {process.env.NODE_ENV === 'development' && (
+                                <Grid item xs={12}>
+                                    <Alert severity="info" sx={{ mb: 2 }}>
+                                        <Typography variant="body2">
+                                            Debug Info: Found {states.length} states, {categories.length} categories
+                                        </Typography>
+                                        {states.length > 0 && (
+                                            <Typography variant="caption">
+                                                First 3 states: {states.slice(0, 3).join(', ')}
+                                            </Typography>
+                                        )}
+                                    </Alert>
+                                </Grid>
+                            )}
 
-                    {/* Locations Configuration */}
-                    <Grid item xs={12} md={6}>
-                        <Card sx={{ height: '100%' }}>
-                            <CardContent>
-                                <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
-                                    <Typography variant="h6">
-                                        <CompareArrows sx={{ verticalAlign: 'middle', mr: 1 }} />
-                                        Locations to Compare
-                                    </Typography>
-                                    <IconButton 
-                                        onClick={addLocation}
-                                        disabled={locations.length >= 4}
-                                        color="primary"
-                                    >
-                                        <AddIcon />
-                                    </IconButton>
-                                </Box>
-
-                                {locations.map((location, index) => (
-                                    <Box key={location.id} sx={{ mb: 2, p: 2, border: '1px solid #e0e0e0', borderRadius: 1 }}>
-                                        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1 }}>
-                                            <Typography variant="subtitle2">{location.label}</Typography>
-                                            {locations.length > 2 && (
-                                                <IconButton 
-                                                    size="small"
-                                                    onClick={() => removeLocation(location.id)}
-                                                    color="error"
-                                                >
-                                                    <RemoveIcon fontSize="small" />
-                                                </IconButton>
-                                            )}
-                                        </Box>
-
-                                        <Grid container spacing={1}>
-                                            <Grid item xs={6}>
-                                                <FormControl fullWidth size="small">
-                                                    <InputLabel>Type</InputLabel>
-                                                    <Select
-                                                        value={location.type}
-                                                        onChange={(e) => updateLocation(location.id, 'type', e.target.value)}
-                                                        label="Type"
-                                                    >
-                                                        <MenuItem value="state">State</MenuItem>
-                                                        <MenuItem value="lga">LGA</MenuItem>
-                                                    </Select>
-                                                </FormControl>
-                                            </Grid>
-                                            <Grid item xs={6}>
-                                                {location.type === 'state' ? (
-                                                    <FormControl fullWidth size="small">
-                                                        <InputLabel>State</InputLabel>
-                                                        <Select
-                                                            value={location.name}
-                                                            onChange={(e) => updateLocation(location.id, 'name', e.target.value)}
-                                                            label="State"
-                                                        >
-                                                            {states.map(state => (
-                                                                <MenuItem key={state} value={state}>
-                                                                    {state}
-                                                                </MenuItem>
-                                                            ))}
-                                                        </Select>
-                                                    </FormControl>
-                                                ) : (
-                                                    <TextField
-                                                        fullWidth
-                                                        size="small"
-                                                        label="LGA Name"
-                                                        value={location.name}
-                                                        onChange={(e) => updateLocation(location.id, 'name', e.target.value)}
-                                                    />
-                                                )}
-                                            </Grid>
-                                        </Grid>
-                                    </Box>
-                                ))}
-
-                                <Typography variant="caption" color="text.secondary">
-                                    Add up to 4 locations for comparison
-                                </Typography>
-                            </CardContent>
-                        </Card>
-                    </Grid>
-
-                    {/* Date and Granularity */}
-                    <Grid item xs={12} md={3}>
-                        <Card sx={{ height: '100%' }}>
-                            <CardContent>
-                                <Typography variant="h6" gutterBottom>
-                                    Time Period
-                                </Typography>
-                                
-                                <Box sx={{ mb: 2 }}>
-                                    <DatePicker
-                                        label="Start Date"
-                                        value={dateRange.start}
-                                        onChange={(newValue) => setDateRange(prev => ({ ...prev, start: newValue }))}
-                                        renderInput={(params) => <TextField {...params} fullWidth size="small" sx={{ mb: 1 }} />}
-                                    />
-                                    <DatePicker
-                                        label="End Date"
-                                        value={dateRange.end}
-                                        onChange={(newValue) => setDateRange(prev => ({ ...prev, end: newValue }))}
-                                        renderInput={(params) => <TextField {...params} fullWidth size="small" />}
-                                    />
-                                </Box>
-
-                                <FormControl fullWidth size="small">
-                                    <InputLabel>Granularity</InputLabel>
-                                    <Select
-                                        value={granularity}
-                                        onChange={(e) => setGranularity(e.target.value)}
-                                        label="Granularity"
-                                    >
-                                        <MenuItem value="daily">Daily</MenuItem>
-                                        <MenuItem value="weekly">Weekly</MenuItem>
-                                        <MenuItem value="monthly">Monthly</MenuItem>
-                                    </Select>
-                                </FormControl>
-                            </CardContent>
-                        </Card>
-                    </Grid>
-                </Grid>
-
-                {/* Run Comparison Button */}
-                <Box sx={{ textAlign: 'center', mb: 4 }}>
-                    <Button
-                        variant="contained"
-                        size="large"
-                        onClick={runComparison}
-                        disabled={loading || !reportType || locations.some(loc => !loc.name)}
-                        sx={{ px: 4, py: 1.5 }}
-                    >
-                        {loading ? (
-                            <>
-                                <CircularProgress size={20} sx={{ mr: 1 }} />
-                                Running Comparison...
-                            </>
-                        ) : (
-                            <>
-                                <CompareArrows sx={{ mr: 1 }} />
-                                Run Comparison
-                            </>
-                        )}
-                    </Button>
-                </Box>
-
-                {/* Error Display */}
-                {error && (
-                    <Alert severity="error" sx={{ mb: 3 }}>
-                        {error}
-                    </Alert>
-                )}
-
-                {/* Results Section */}
-                {comparisonData && !loading && (
-                    <Grid container spacing={3}>
-                        {/* Summary Cards */}
-                        {comparisonData.data.locations.map((location, index) => (
-                            <Grid item xs={12} md={3} key={location.name}>
-                                <Card sx={{ 
-                                    height: '100%',
-                                    border: '2px solid',
-                                    borderColor: index === 0 ? 'primary.main' : 'grey.200'
-                                }}>
+                            {/* Report Type Selection */}
+                            <Grid item xs={12} md={3}>
+                                <Card sx={{ height: '100%' }}>
                                     <CardContent>
-                                        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'start', mb: 2 }}>
-                                            <Typography variant="h6" sx={{ fontWeight: 'bold' }}>
-                                                {location.name}
-                                            </Typography>
-                                            {getTrendIcon(location.trend)}
-                                        </Box>
-                                        
-                                        <Typography variant="h4" color="primary.main" sx={{ mb: 1 }}>
-                                            {location.total_reports.toLocaleString()}
+                                        <Typography variant="h6" gutterBottom>
+                                            <Assessment sx={{ verticalAlign: 'middle', mr: 1 }} />
+                                            Report Type
                                         </Typography>
-                                        
-                                        <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
-                                            Total Reports
-                                        </Typography>
+                                        <FormControl fullWidth>
+                                            <InputLabel>Select Report Type</InputLabel>
+                                            <Select
+                                                value={reportType}
+                                                onChange={(e) => setReportType(e.target.value)}
+                                                label="Select Report Type"
+                                            >
+                                                {categories.map(category => (
+                                                    <MenuItem key={category} value={category}>
+                                                        {category}
+                                                    </MenuItem>
+                                                ))}
+                                            </Select>
+                                        </FormControl>
+                                    </CardContent>
+                                </Card>
+                            </Grid>
 
-                                        <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
-                                            <Typography variant="body2">
-                                                Daily Avg: {location.daily_average?.toFixed(1)}
+                            {/* Locations Configuration */}
+                            <Grid item xs={12} md={6}>
+                                <Card sx={{ height: '100%' }}>
+                                    <CardContent>
+                                        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
+                                            <Typography variant="h6">
+                                                <CompareArrows sx={{ verticalAlign: 'middle', mr: 1 }} />
+                                                Locations to Compare
                                             </Typography>
-                                            {location.trend_percentage && (
-                                                <Chip
-                                                    size="small"
-                                                    label={`${location.trend_percentage > 0 ? '+' : ''}${location.trend_percentage.toFixed(1)}%`}
-                                                    color={location.trend_percentage > 0 ? 'success' : location.trend_percentage < 0 ? 'error' : 'default'}
-                                                    sx={{ ml: 1 }}
-                                                />
-                                            )}
+                                            <IconButton 
+                                                onClick={addLocation}
+                                                disabled={locations.length >= 4}
+                                                color="primary"
+                                            >
+                                                <AddIcon />
+                                            </IconButton>
                                         </Box>
+
+                                        {locations.map((location, index) => (
+                                            <Box key={location.id} sx={{ mb: 2, p: 2, border: '1px solid #e0e0e0', borderRadius: 1 }}>
+                                                <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1 }}>
+                                                    <Typography variant="subtitle2">{location.label}</Typography>
+                                                    {locations.length > 2 && (
+                                                        <IconButton 
+                                                            size="small"
+                                                            onClick={() => removeLocation(location.id)}
+                                                            color="error"
+                                                        >
+                                                            <RemoveIcon fontSize="small" />
+                                                        </IconButton>
+                                                    )}
+                                                </Box>
+
+                                                <Grid container spacing={1}>
+                                                    <Grid item xs={6}>
+                                                        <FormControl fullWidth size="small">
+                                                            <InputLabel>Type</InputLabel>
+                                                            <Select
+                                                                value={location.type}
+                                                                onChange={(e) => updateLocation(location.id, 'type', e.target.value)}
+                                                                label="Type"
+                                                            >
+                                                                <MenuItem value="state">State</MenuItem>
+                                                                <MenuItem value="lga">LGA</MenuItem>
+                                                            </Select>
+                                                        </FormControl>
+                                                    </Grid>
+                                                    <Grid item xs={6}>
+                                                        {location.type === 'state' ? (
+                                                            <FormControl fullWidth size="small">
+                                                                <InputLabel>State</InputLabel>
+                                                                <Select
+                                                                    value={location.name}
+                                                                    onChange={(e) => updateLocation(location.id, 'name', e.target.value)}
+                                                                    label="State"
+                                                                >
+                                                                    {states.map(state => (
+                                                                        <MenuItem key={state} value={state}>
+                                                                            {state}
+                                                                        </MenuItem>
+                                                                    ))}
+                                                                </Select>
+                                                            </FormControl>
+                                                        ) : (
+                                                            <TextField
+                                                                fullWidth
+                                                                size="small"
+                                                                label="LGA Name"
+                                                                value={location.name}
+                                                                onChange={(e) => updateLocation(location.id, 'name', e.target.value)}
+                                                            />
+                                                        )}
+                                                    </Grid>
+                                                </Grid>
+                                            </Box>
+                                        ))}
 
                                         <Typography variant="caption" color="text.secondary">
-                                            {location.type === 'state' ? 'State' : 'LGA'} Comparison
+                                            Add up to 4 locations for comparison
                                         </Typography>
                                     </CardContent>
                                 </Card>
                             </Grid>
-                        ))}
 
-                        {/* Chart */}
-                        <Grid item xs={12}>
-                            <Card>
-                                <CardContent>
-                                    <Typography variant="h6" gutterBottom>
-                                        Comparison Chart
-                                    </Typography>
-                                    <ComparisonChart data={comparisonData.data} />
-                                </CardContent>
-                            </Card>
+                            {/* Date and Granularity */}
+                            <Grid item xs={12} md={3}>
+                                <Card sx={{ height: '100%' }}>
+                                    <CardContent>
+                                        <Typography variant="h6" gutterBottom>
+                                            Time Period
+                                        </Typography>
+                                        
+                                        <Box sx={{ mb: 2 }}>
+                                            <DatePicker
+                                                label="Start Date"
+                                                value={dateRange.start}
+                                                onChange={(newValue) => setDateRange(prev => ({ ...prev, start: newValue }))}
+                                                renderInput={(params) => <TextField {...params} fullWidth size="small" sx={{ mb: 1 }} />}
+                                            />
+                                            <DatePicker
+                                                label="End Date"
+                                                value={dateRange.end}
+                                                onChange={(newValue) => setDateRange(prev => ({ ...prev, end: newValue }))}
+                                                renderInput={(params) => <TextField {...params} fullWidth size="small" />}
+                                            />
+                                        </Box>
+
+                                        <FormControl fullWidth size="small">
+                                            <InputLabel>Granularity</InputLabel>
+                                            <Select
+                                                value={granularity}
+                                                onChange={(e) => setGranularity(e.target.value)}
+                                                label="Granularity"
+                                            >
+                                                <MenuItem value="daily">Daily</MenuItem>
+                                                <MenuItem value="weekly">Weekly</MenuItem>
+                                                <MenuItem value="monthly">Monthly</MenuItem>
+                                            </Select>
+                                        </FormControl>
+                                    </CardContent>
+                                </Card>
+                            </Grid>
                         </Grid>
 
-                        {/* Insights */}
-                        <Grid item xs={12}>
-                            <Card>
-                                <CardContent>
-                                    <Typography variant="h6" gutterBottom>
-                                        Key Insights
-                                    </Typography>
-                                    <ComparisonInsights insights={comparisonData.data.insights} />
-                                </CardContent>
-                            </Card>
-                        </Grid>
-                    </Grid>
+                        {/* Run Comparison Button */}
+                        <Box sx={{ textAlign: 'center', mb: 4 }}>
+                            <Button
+                                variant="contained"
+                                size="large"
+                                onClick={runComparison}
+                                disabled={loading || !reportType || locations.some(loc => !loc.name)}
+                                sx={{ px: 4, py: 1.5 }}
+                            >
+                                {loading ? (
+                                    <>
+                                        <CircularProgress size={20} sx={{ mr: 1 }} />
+                                        Running Comparison...
+                                    </>
+                                ) : (
+                                    <>
+                                        <CompareArrows sx={{ mr: 1 }} />
+                                        Run Comparison
+                                    </>
+                                )}
+                            </Button>
+                        </Box>
+
+                        {/* Error Display */}
+                        {error && (
+                            <Alert severity="error" sx={{ mb: 3 }}>
+                                {error}
+                            </Alert>
+                        )}
+
+                        {/* Results Section */}
+                        {comparisonData && !loading && (
+                            <Grid container spacing={3}>
+                                {/* Summary Cards */}
+                                {comparisonData.data.locations.map((location, index) => (
+                                    <Grid item xs={12} md={3} key={location.name}>
+                                        <Card sx={{ 
+                                            height: '100%',
+                                            border: '2px solid',
+                                            borderColor: index === 0 ? 'primary.main' : 'grey.200'
+                                        }}>
+                                            <CardContent>
+                                                <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'start', mb: 2 }}>
+                                                    <Typography variant="h6" sx={{ fontWeight: 'bold' }}>
+                                                        {location.name}
+                                                    </Typography>
+                                                    {getTrendIcon(location.trend)}
+                                                </Box>
+                                                
+                                                <Typography variant="h4" color="primary.main" sx={{ mb: 1 }}>
+                                                    {location.total_reports.toLocaleString()}
+                                                </Typography>
+                                                
+                                                <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
+                                                    Total Reports
+                                                </Typography>
+
+                                                <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
+                                                    <Typography variant="body2">
+                                                        Daily Avg: {location.daily_average?.toFixed(1)}
+                                                    </Typography>
+                                                    {location.trend_percentage && (
+                                                        <Chip
+                                                            size="small"
+                                                            label={`${location.trend_percentage > 0 ? '+' : ''}${location.trend_percentage.toFixed(1)}%`}
+                                                            color={location.trend_percentage > 0 ? 'success' : location.trend_percentage < 0 ? 'error' : 'default'}
+                                                            sx={{ ml: 1 }}
+                                                        />
+                                                    )}
+                                                </Box>
+
+                                                <Typography variant="caption" color="text.secondary">
+                                                    {location.type === 'state' ? 'State' : 'LGA'} Comparison
+                                                </Typography>
+                                            </CardContent>
+                                        </Card>
+                                    </Grid>
+                                ))}
+
+                                {/* Chart */}
+                                <Grid item xs={12}>
+                                    <Card>
+                                        <CardContent>
+                                            <Typography variant="h6" gutterBottom>
+                                                Comparison Chart
+                                            </Typography>
+                                            <ComparisonChart data={comparisonData.data} />
+                                        </CardContent>
+                                    </Card>
+                                </Grid>
+
+                                {/* Insights */}
+                                <Grid item xs={12}>
+                                    <Card>
+                                        <CardContent>
+                                            <Typography variant="h6" gutterBottom>
+                                                Key Insights
+                                            </Typography>
+                                            <ComparisonInsights insights={comparisonData.data.insights} />
+                                        </CardContent>
+                                    </Card>
+                                </Grid>
+                            </Grid>
+                        )}
+                    </>
                 )}
             </Box>
         </LocalizationProvider>
