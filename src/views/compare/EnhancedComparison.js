@@ -28,7 +28,7 @@ import {
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
-import { getCategories, getStates, getComparisonData } from 'services/reportService';
+import { getCategories, getStates, getComparisonData, getLGAs } from 'services/reportService';
 import ComparisonChart from './ComparisonChart';
 import ComparisonInsights from './ComparisonInsights';
 
@@ -45,6 +45,7 @@ const EnhancedComparison = () => {
     
     const [categories, setCategories] = useState([]);
     const [states, setStates] = useState([]);
+    const [lgas, setLgas] = useState({});
     const [comparisonData, setComparisonData] = useState(null);
     const [loading, setLoading] = useState(false);
     const [dataLoading, setDataLoading] = useState(true);
@@ -113,9 +114,43 @@ const EnhancedComparison = () => {
     };
 
     const updateLocation = (id, field, value) => {
-        setLocations(locations.map(loc => 
-            loc.id === id ? { ...loc, [field]: value } : loc
-        ));
+        const updatedLocations = locations.map(loc => {
+            if (loc.id === id) {
+                const updatedLoc = { ...loc, [field]: value };
+                
+                // If changing type to LGA, clear name and fetch LGAs for first available state
+                if (field === 'type' && value === 'lga') {
+                    updatedLoc.name = '';
+                    updatedLoc.state = '';
+                }
+                
+                // If setting state for LGA type, fetch LGAs for that state
+                if (field === 'state' && loc.type === 'lga') {
+                    fetchLGAsForState(value);
+                }
+                
+                return updatedLoc;
+            }
+            return loc;
+        });
+        
+        setLocations(updatedLocations);
+    };
+
+    const fetchLGAsForState = async (stateName) => {
+        if (!stateName || lgas[stateName]) {
+            return; // Already fetched or invalid state
+        }
+        
+        try {
+            const lgaData = await getLGAs(stateName);
+            setLgas(prev => ({
+                ...prev,
+                [stateName]: Array.isArray(lgaData) ? lgaData : (lgaData.lgas || [])
+            }));
+        } catch (error) {
+            console.error(`Failed to fetch LGAs for ${stateName}:`, error);
+        }
     };
 
     const runComparison = () => {
@@ -188,11 +223,16 @@ const EnhancedComparison = () => {
                                 <Grid item xs={12}>
                                     <Alert severity="info" sx={{ mb: 2 }}>
                                         <Typography variant="body2">
-                                            Debug Info: Found {states.length} states, {categories.length} categories
+                                            Debug Info: Found {states.length} states, {categories.length} categories, {Object.keys(lgas).length} states with LGAs loaded
                                         </Typography>
                                         {states.length > 0 && (
                                             <Typography variant="caption">
                                                 First 3 states: {states.slice(0, 3).join(', ')}
+                                            </Typography>
+                                        )}
+                                        {Object.keys(lgas).length > 0 && (
+                                            <Typography variant="caption" display="block">
+                                                LGAs loaded for: {Object.keys(lgas).join(', ')}
                                             </Typography>
                                         )}
                                     </Alert>
@@ -259,7 +299,7 @@ const EnhancedComparison = () => {
                                                 </Box>
 
                                                 <Grid container spacing={1}>
-                                                    <Grid item xs={6}>
+                                                    <Grid item xs={4}>
                                                         <FormControl fullWidth size="small">
                                                             <InputLabel>Type</InputLabel>
                                                             <Select
@@ -272,7 +312,25 @@ const EnhancedComparison = () => {
                                                             </Select>
                                                         </FormControl>
                                                     </Grid>
-                                                    <Grid item xs={6}>
+                                                    {location.type === 'lga' && (
+                                                        <Grid item xs={4}>
+                                                            <FormControl fullWidth size="small">
+                                                                <InputLabel>State</InputLabel>
+                                                                <Select
+                                                                    value={location.state || ''}
+                                                                    onChange={(e) => updateLocation(location.id, 'state', e.target.value)}
+                                                                    label="State"
+                                                                >
+                                                                    {states.map(state => (
+                                                                        <MenuItem key={state} value={state}>
+                                                                            {state}
+                                                                        </MenuItem>
+                                                                    ))}
+                                                                </Select>
+                                                            </FormControl>
+                                                        </Grid>
+                                                    )}
+                                                    <Grid item xs={location.type === 'lga' ? 4 : 8}>
                                                         {location.type === 'state' ? (
                                                             <FormControl fullWidth size="small">
                                                                 <InputLabel>State</InputLabel>
@@ -289,13 +347,27 @@ const EnhancedComparison = () => {
                                                                 </Select>
                                                             </FormControl>
                                                         ) : (
-                                                            <TextField
-                                                                fullWidth
-                                                                size="small"
-                                                                label="LGA Name"
-                                                                value={location.name}
-                                                                onChange={(e) => updateLocation(location.id, 'name', e.target.value)}
-                                                            />
+                                                            <FormControl fullWidth size="small">
+                                                                <InputLabel>LGA</InputLabel>
+                                                                <Select
+                                                                    value={location.name}
+                                                                    onChange={(e) => updateLocation(location.id, 'name', e.target.value)}
+                                                                    label="LGA"
+                                                                    disabled={!location.state}
+                                                                >
+                                                                    {location.state && lgas[location.state] ? (
+                                                                        lgas[location.state].map(lga => (
+                                                                            <MenuItem key={lga} value={lga}>
+                                                                                {lga}
+                                                                            </MenuItem>
+                                                                        ))
+                                                                    ) : (
+                                                                        <MenuItem disabled>
+                                                                            {location.state ? 'Loading LGAs...' : 'Select a state first'}
+                                                                        </MenuItem>
+                                                                    )}
+                                                                </Select>
+                                                            </FormControl>
                                                         )}
                                                     </Grid>
                                                 </Grid>
